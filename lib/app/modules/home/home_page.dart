@@ -33,7 +33,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           reverse: true,
           currentIndex: 2, // Use this to update the Bar giving a position
           onTap: (index) {
-            print("Selected Index: $index");
+            debugPrint("Selected Index: $index");
           },
           items: [
             TitledNavigationBarItem(
