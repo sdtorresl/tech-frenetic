@@ -1,6 +1,6 @@
-# techfrenetic
+# Tech Frenetic
 
-A new Flutter project.
+A mobile application for TechFrenetic based on Flutter 
 
 ## Getting Started
 
