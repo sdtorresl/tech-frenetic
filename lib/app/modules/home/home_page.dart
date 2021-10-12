@@ -12,6 +12,21 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
+  final List<Widget> _pages = [
+    const Text("Community"),
+    const Text("Skills"),
+    const Text("Vendors"),
+    const Text("Profile")
+  ];
+
+  int _currentIndex = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = 0;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -19,35 +34,48 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         title: const Text('Tech Frenetic'),
       ),
       endDrawer: const Drawer(),
-      body: StreamBuilder(
-        stream: store.counterStream,
-        builder: (context, snapshot) => Text('${snapshot.data}'),
+      body: AnimatedContainer(
+        duration: const Duration(seconds: 10),
+        child: _pages[_currentIndex],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          store.increment();
-        },
-        child: const Icon(Icons.article_outlined),
-      ),
-      bottomNavigationBar: TitledBottomNavigationBar(
-          reverse: true,
-          currentIndex: 2, // Use this to update the Bar giving a position
-          onTap: (index) {
-            debugPrint("Selected Index: $index");
-          },
-          items: [
-            TitledNavigationBarItem(
-                title: const Text('Community'),
-                icon: const Icon(Icons.people_alt_outlined)),
-            TitledNavigationBarItem(
-                title: const Text('Skills'), icon: const Icon(Icons.home)),
-            TitledNavigationBarItem(
-                title: const Text('T. Vendors'),
-                icon: const Icon(Icons.card_travel)),
-            TitledNavigationBarItem(
-                title: const Text('Profile'),
-                icon: const Icon(Icons.person_outline)),
-          ]),
+      floatingActionButton: _floatingActionButton(),
+      bottomNavigationBar: _bottomNavigationBar(),
+    );
+  }
+
+  FloatingActionButton _floatingActionButton() {
+    return FloatingActionButton(
+      onPressed: () {
+        store.increment();
+      },
+      child: const Icon(Icons.article_outlined),
+    );
+  }
+
+  TitledBottomNavigationBar _bottomNavigationBar() {
+    return TitledBottomNavigationBar(
+      reverse: true,
+      currentIndex:
+          _currentIndex, // Use this to update the Bar giving a position
+      onTap: (index) {
+        debugPrint("Selected Index: $index");
+        setState(() {
+          _currentIndex = index;
+        });
+      },
+      items: [
+        TitledNavigationBarItem(
+            title: const Text('Community'),
+            icon: const Icon(Icons.people_alt_outlined)),
+        TitledNavigationBarItem(
+            title: const Text('Skills'), icon: const Icon(Icons.home)),
+        TitledNavigationBarItem(
+            title: const Text('T. Vendors'),
+            icon: const Icon(Icons.card_travel)),
+        TitledNavigationBarItem(
+            title: const Text('Profile'),
+            icon: const Icon(Icons.person_outline)),
+      ],
     );
   }
 }
