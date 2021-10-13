@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'home_controller.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
+import 'package:techfrenetic/common/drawer.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -31,9 +32,50 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tech Frenetic'),
-      ),
-      endDrawer: const Drawer(),
+          title: Row(
+            children: [
+              SizedBox(width: 60),
+              Image.asset('assets/images/main-logo.png'),
+            ],
+          ),
+          // Column(
+          //   mainAxisAlignment: MainAxisAlignment.start,
+          //   crossAxisAlignment: CrossAxisAlignment.start,
+          //   children: [
+          //     Row(
+          //       children: [
+          //         SizedBox(width: 30),
+          //         Text('Tech',
+          //             style: TextStyle(
+          //                 fontWeight: FontWeight.w700,
+          //                 fontSize: 20,
+          //                 color: Color.fromRGBO(5, 20, 47, 1))),
+          //       ],
+          //     ),
+          //     Row(
+          //       children: [
+          //         Text('Frenetic',
+          //             style: TextStyle(
+          //                 fontWeight: FontWeight.w700,
+          //                 fontSize: 20,
+          //                 color: Color.fromRGBO(
+          //                   0,
+          //                   110,
+          //                   232,
+          //                   1,
+          //                 ))),
+          //         SizedBox(
+          //           width: 32,
+          //           height: 32,
+          //           child: Image.asset('assets/images/main-logo.png'),
+          //         )
+          //       ],
+          //     ),
+          //   ],
+          // ),
+          backgroundColor: Colors.white,
+          iconTheme: const IconThemeData(color: Colors.black)),
+      endDrawer: CustomDrawer(),
       body: AnimatedContainer(
         duration: const Duration(seconds: 10),
         child: _pages[_currentIndex],
