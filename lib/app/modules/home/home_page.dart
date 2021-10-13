@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/modules/community/community_page.dart';
 import 'home_controller.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
-import 'package:techfrenetic/common/drawer.dart';
+import 'package:techfrenetic/app/widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -14,7 +15,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
   final List<Widget> _pages = [
-    const Text("Community"),
+    const CommunityPage(),
     const Text("Skills"),
     const Text("Vendors"),
     const Text("Profile")
@@ -32,6 +33,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
           title: Expanded(
             child: Row(
               children: [
@@ -41,6 +43,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
               ],
             ),
           ),
+
 
           //     Row(
           //   children: [
@@ -84,7 +87,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           // ),
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Colors.black)),
-      endDrawer: CustomDrawer(),
+      endDrawer: const CustomDrawer(),
       body: AnimatedContainer(
         duration: const Duration(seconds: 10),
         child: _pages[_currentIndex],

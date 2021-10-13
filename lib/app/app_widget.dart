@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/common/theme.dart';
 
 class AppWidget extends StatelessWidget {
   const AppWidget({Key? key}) : super(key: key);
@@ -9,7 +10,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Tech Frenetic',
-      theme: ThemeData(primarySwatch: Colors.blue),
+      theme: techFreneticTheme,
     ).modular();
   }
 }
