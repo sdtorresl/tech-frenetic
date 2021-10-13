@@ -3,7 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/modules/community/community_page.dart';
 import 'home_controller.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
-import 'package:techfrenetic/common/drawer.dart';
+import 'package:techfrenetic/app/widgets/drawer.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -33,12 +33,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Row(
-            children: [
-              SizedBox(width: 60),
-              Image.asset('assets/images/main-logo.png'),
-            ],
-          ),
+          title: Image.asset('assets/img/main-logo.png'),
           // Column(
           //   mainAxisAlignment: MainAxisAlignment.start,
           //   crossAxisAlignment: CrossAxisAlignment.start,
@@ -76,7 +71,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           // ),
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Colors.black)),
-      endDrawer: CustomDrawer(),
+      endDrawer: const CustomDrawer(),
       body: AnimatedContainer(
         duration: const Duration(seconds: 10),
         child: _pages[_currentIndex],
