@@ -89,8 +89,11 @@ flutter:
     - family: NunitoSans
       fonts: 
         - asset: assets/fonts/NunitoSans-Regular.ttf
+
+    - family: NunitoSans
+      fonts:
         - asset: assets/fonts/NunitoSans-Bold.ttf
-        
+          
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
