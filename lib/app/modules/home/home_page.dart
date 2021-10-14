@@ -33,40 +33,56 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Image.asset('assets/img/main-logo.png'),
-          // Column(
-          //   mainAxisAlignment: MainAxisAlignment.start,
-          //   crossAxisAlignment: CrossAxisAlignment.start,
+
+          title: Expanded(
+            child: Row(
+              children: [
+                SizedBox(width: 60),
+                Image.asset('assets/images/main-logo.png',
+                    width: 140, height: 50, fit: BoxFit.fill),
+              ],
+            ),
+          ),
+
+
+          //     Row(
           //   children: [
-          //     Row(
-          //       children: [
-          //         SizedBox(width: 30),
-          //         Text('Tech',
-          //             style: TextStyle(
-          //                 fontWeight: FontWeight.w700,
-          //                 fontSize: 20,
-          //                 color: Color.fromRGBO(5, 20, 47, 1))),
-          //       ],
+          //     SizedBox(
+          //       width: 20,
           //     ),
-          //     Row(
+          //     Column(
           //       children: [
+          //         Row(
+          //           children: [
+          //             SizedBox(
+          //               width: 30,
+          //             ),
+          //             Text('Tech',
+          //                 style: TextStyle(
+          //                     fontWeight: FontWeight.w700,
+          //                     fontSize: 20,
+          //                     fontFamily: 'NunitoSans',
+          //                     color: Color.fromRGBO(5, 20, 47, 1))),
+          //           ],
+          //         ),
           //         Text('Frenetic',
           //             style: TextStyle(
           //                 fontWeight: FontWeight.w700,
           //                 fontSize: 20,
+          //                 fontFamily: 'NunitoSans',
           //                 color: Color.fromRGBO(
           //                   0,
           //                   110,
           //                   232,
           //                   1,
           //                 ))),
-          //         SizedBox(
-          //           width: 32,
-          //           height: 32,
-          //           child: Image.asset('assets/images/main-logo.png'),
-          //         )
           //       ],
           //     ),
+          //     SizedBox(
+          //       width: 32,
+          //       height: 32,
+          //       child: Image.asset('assets/images/main-logo.png'),
+          //     )
           //   ],
           // ),
           backgroundColor: Colors.white,
