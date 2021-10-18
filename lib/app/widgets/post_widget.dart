@@ -30,7 +30,7 @@ class _PostWidgetState extends State<PostWidget> {
                   CircleAvatar(
                     child: ClipOval(
                       child: SvgPicture.asset(
-                        'assets/img/avatars/avatar-02.svg',
+                        'assets/img/avatars/avatar-01.svg',
                         semanticsLabel: 'Acme Logo',
                       ),
                     ),
