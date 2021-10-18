@@ -38,7 +38,7 @@ class LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 30,
             ),
-            _logingButton(context),
+            _logginButton(context),
           ],
         ),
       ),
@@ -55,12 +55,15 @@ class LoginPageState extends State<LoginPage> {
               fontFamily: 'NunitoSan',
               color: Color.fromRGBO(5, 20, 47, 1),
             )),
-        Text('your account',
-            style: TextStyle(
-                fontWeight: FontWeight.w900,
-                fontSize: 50,
-                fontFamily: 'NunitoSan',
-                color: Color.fromRGBO(0, 110, 232, 1))),
+        Text(
+          'your account',
+          style: TextStyle(
+            fontWeight: FontWeight.w900,
+            fontSize: 50,
+            fontFamily: 'NunitoSan',
+            color: Color.fromRGBO(0, 110, 232, 1),
+          ),
+        ),
       ],
     );
   }
@@ -135,7 +138,7 @@ class LoginPageState extends State<LoginPage> {
     );
   }
 
-  Widget _logingButton(context) {
+  Widget _logginButton(context) {
     return GestureDetector(
       child: const Card(
         color: Color.fromRGBO(0, 110, 232, 1),
