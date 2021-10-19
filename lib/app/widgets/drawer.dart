@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/modules/login/login_page.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -15,17 +16,17 @@ class CustomDrawer extends StatelessWidget {
           DrawerHeader(
             child: Center(
               child: Column(
-                children: const [
+                children: [
                   Text(
-                    'Welcome to ',
-                    style: TextStyle(
+                    AppLocalizations.of(context)!.welcome,
+                    style: const TextStyle(
                       fontWeight: FontWeight.w700,
                       fontSize: 40,
                       fontFamily: 'NunitoSan',
                       color: Color.fromRGBO(5, 20, 47, 1),
                     ),
                   ),
-                  Text(
+                  const Text(
                     'Tech Frenetic',
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
