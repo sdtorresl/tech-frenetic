@@ -141,7 +141,7 @@ final ThemeData techFreneticTheme = ThemeData(
       fontStyle: FontStyle.normal,
     ),
     hintStyle: TextStyle(
-      color: Color(0xdd000000),
+      color: Color(0xff9e9e9e),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
