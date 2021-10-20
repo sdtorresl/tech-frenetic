@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/modules/login/login_page.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
@@ -10,52 +11,41 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          SizedBox(
-            child: Image.asset('assets/img/main-logo.png'),
-          ),
-          DrawerHeader(
-            child: Center(
-              child: Column(
-                children: [
-                  Text(
-                    AppLocalizations.of(context)!.welcome,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 40,
-                      fontFamily: 'NunitoSan',
-                      color: Color.fromRGBO(5, 20, 47, 1),
-                    ),
+
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: ListTile(
+              title: Align(
+                alignment: Alignment.topLeft,
+                child: SizedBox(
+                  child: SvgPicture.asset(
+                    'assets/img/icons/ico_brand.svg',
+                    height: 50,
+                    width: 50,
+                    semanticsLabel: 'Acme Logo',
+
                   ),
-                  const Text(
-                    'Tech Frenetic',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 40,
-                      color: Color.fromRGBO(0, 110, 232, 1),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
           ListTile(
             title: GestureDetector(
               child: const Card(
-                shape: StadiumBorder(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
                     side: BorderSide(
                         color: Color.fromRGBO(0, 110, 232, 1), width: 1)),
                 color: Color.fromRGBO(0, 110, 232, 1),
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text(
-                      'Sign up',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20,
-                          fontFamily: 'NunitoSan',
-                          color: Colors.white),
-                    ),
+                child: Padding(
+                  padding: EdgeInsets.all(8.0),
+                  child: Text(
+                    'Sign up',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 20,
+                        fontFamily: 'NunitoSan',
+                        color: Colors.white),
                   ),
                 ),
               ),
@@ -65,19 +55,19 @@ class CustomDrawer extends StatelessWidget {
           ListTile(
             title: GestureDetector(
               child: const Card(
-                shape: StadiumBorder(
-                    side: BorderSide(color: Colors.black, width: 1)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                  side: BorderSide(color: Colors.black, width: 1),
+                ),
                 child: Padding(
                   padding: EdgeInsets.all(8.0),
-                  child: Center(
-                    child: Text(
-                      'Log in',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                        fontFamily: 'NunitoSan',
-                        color: Color.fromRGBO(5, 20, 47, 1),
-                      ),
+                  child: Text(
+                    'Log in',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      fontFamily: 'NunitoSan',
+                      color: Color.fromRGBO(5, 20, 47, 1),
                     ),
                   ),
                 ),
@@ -89,7 +79,7 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           const SizedBox(
-            height: 50,
+            height: 30,
           ),
           ListTile(
             title: Container(
@@ -98,18 +88,16 @@ class CustomDrawer extends StatelessWidget {
                   top: BorderSide(width: .5, color: Colors.black),
                 ),
               ),
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(30.0),
-                  child: GestureDetector(
-                    child: const Text(
-                      'Tech Community',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                        fontFamily: 'NunitoSan',
-                        color: Color.fromRGBO(5, 20, 47, 1),
-                      ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 23, 0, 13),
+                child: GestureDetector(
+                  child: const Text(
+                    'Tech Community',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      fontFamily: 'NunitoSan',
+                      color: Color.fromRGBO(5, 20, 47, 1),
                     ),
                   ),
                 ),
@@ -121,20 +109,19 @@ class CustomDrawer extends StatelessWidget {
               decoration: const BoxDecoration(
                 border: Border(
                   top: BorderSide(width: .5, color: Colors.black),
+                  bottom: BorderSide(width: .5, color: Colors.black),
                 ),
               ),
-              child: Center(
-                child: Padding(
-                  padding: EdgeInsets.all(30.0),
-                  child: GestureDetector(
-                    child: const Text(
-                      'Tech Events',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                        fontFamily: 'NunitoSan',
-                        color: Color.fromRGBO(5, 20, 47, 1),
-                      ),
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 20.00),
+                child: GestureDetector(
+                  child: const Text(
+                    'Tech Events',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 20,
+                      fontFamily: 'NunitoSan',
+                      color: Color.fromRGBO(5, 20, 47, 1),
                     ),
                   ),
                 ),
@@ -145,12 +132,12 @@ class CustomDrawer extends StatelessWidget {
             title: Container(
               decoration: const BoxDecoration(
                 border: Border(
-                    top: BorderSide(width: .5, color: Colors.black),
-                    bottom: BorderSide(width: .5, color: Colors.black)),
+                  //top: BorderSide(width: .5, color: Colors.black),
+                  bottom: BorderSide(width: .5, color: Colors.black),
+                ),
               ),
-              child: Center(
-                  child: Padding(
-                padding: EdgeInsets.all(30.0),
+              child: Padding(
+                padding: EdgeInsets.fromLTRB(0, 15, 0, 20),
                 child: GestureDetector(
                   child: const Text('Tech Vendors',
                       style: TextStyle(
@@ -159,33 +146,30 @@ class CustomDrawer extends StatelessWidget {
                           fontFamily: 'NunitoSan',
                           color: Color.fromRGBO(5, 20, 47, 1))),
                 ),
-              )),
-            ),
-          ),
-          const SizedBox(
-            height: 40,
-          ),
-          ListTile(
-            title: Center(
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: GestureDetector(
-                  child: const Text('About Us',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 20,
-                          fontFamily: 'NunitoSan',
-                          color: Color.fromRGBO(5, 20, 47, 1))),
-                ),
               ),
             ),
           ),
           const SizedBox(
-            height: 40,
+            height: 10,
+          ),
+          ListTile(
+            title: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: GestureDetector(
+                child: const Text('About Us',
+                    style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 20,
+                        fontFamily: 'NunitoSan',
+                        color: Color.fromRGBO(5, 20, 47, 1))),
+              ),
+            ),
+          ),
+          const SizedBox(
+            height: 0,
           ),
           const ListTile(
-            title: Center(
-                child: Padding(
+            title: Padding(
               padding: EdgeInsets.all(8.0),
               child: Text('Contact Us',
                   style: TextStyle(
@@ -193,23 +177,21 @@ class CustomDrawer extends StatelessWidget {
                       fontSize: 20,
                       fontFamily: 'NunitoSan',
                       color: Color.fromRGBO(5, 20, 47, 1))),
-            )),
+            ),
           ),
           const SizedBox(
-            height: 40,
+            height: 0,
           ),
           const ListTile(
-            title: Center(
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: Text(
-                  'Newsletter',
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 20,
-                    fontFamily: 'NunitoSan',
-                    color: Color.fromRGBO(5, 20, 47, 1),
-                  ),
+            title: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'Newsletter',
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 20,
+                  fontFamily: 'NunitoSan',
+                  color: Color.fromRGBO(5, 20, 47, 1),
                 ),
               ),
             ),
