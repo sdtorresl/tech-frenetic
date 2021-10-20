@@ -5,5 +5,13 @@
     "my_activity": "My Activity",
     "saved_articles": "Saved",
     "my_account": "My Account",
-    "share": "Share"
+    "share": "Share",
+    "share_an_update": "Share an update",
+    "community": "Community",
+    "skills": "Skills",
+    "profile": "Profile",
+    "vendors": "T. Vendors",
+    "feed": "Feed",
+    "meetups": "Meetups",
+    "groups": "Groups"
 }

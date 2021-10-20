@@ -11,7 +11,6 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: ListTile(
@@ -22,8 +21,7 @@ class CustomDrawer extends StatelessWidget {
                     'assets/img/icons/ico_brand.svg',
                     height: 50,
                     width: 50,
-                    semanticsLabel: 'Acme Logo',
-
+                    semanticsLabel: 'TF Logo',
                   ),
                 ),
               ),
@@ -73,8 +71,8 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => LoginPage()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
               },
             ),
           ),
