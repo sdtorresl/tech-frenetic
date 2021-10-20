@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/modules/login/login_page.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -9,9 +10,20 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          ListTile(
-            title: SizedBox(
-              child: Image.asset('assets/img/main-logo.png'),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15),
+            child: ListTile(
+              title: Align(
+                alignment: Alignment.topLeft,
+                child: SizedBox(
+                  child: SvgPicture.asset(
+                    'assets/img/icons/ico_brand.svg',
+                    height: 50,
+                    width: 50,
+                    semanticsLabel: 'Acme Logo',
+                  ),
+                ),
+              ),
             ),
           ),
           ListTile(
@@ -74,7 +86,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 23, 0, 13),
+                padding: const EdgeInsets.fromLTRB(0, 23, 0, 13),
                 child: GestureDetector(
                   child: const Text(
                     'Tech Community',
