@@ -111,7 +111,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.00),
+                padding: const EdgeInsets.symmetric(vertical: 20.00),
                 child: GestureDetector(
                   child: const Text(
                     'Tech Events',
@@ -130,12 +130,12 @@ class CustomDrawer extends StatelessWidget {
             title: Container(
               decoration: const BoxDecoration(
                 border: Border(
-                  //top: BorderSide(width: .5, color: Colors.black),
+                  //top: BorderSide(width: 0, color: Colors.black),
                   bottom: BorderSide(width: .5, color: Colors.black),
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 15, 0, 20),
+                padding: const EdgeInsets.fromLTRB(0, 15, 0, 20),
                 child: GestureDetector(
                   child: const Text('Tech Vendors',
                       style: TextStyle(
@@ -150,54 +150,27 @@ class CustomDrawer extends StatelessWidget {
           const SizedBox(
             height: 10,
           ),
-          ListTile(
-            title: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: GestureDetector(
-                child: const Text('About Us',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20,
-                        fontFamily: 'NunitoSan',
-                        color: Color.fromRGBO(5, 20, 47, 1))),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 0,
-          ),
-          const ListTile(
-            title: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text('Contact Us',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20,
-                      fontFamily: 'NunitoSan',
-                      color: Color.fromRGBO(5, 20, 47, 1))),
-            ),
-          ),
-          const SizedBox(
-            height: 0,
-          ),
-          const ListTile(
-            title: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Newsletter',
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
-                  fontFamily: 'NunitoSan',
-                  color: Color.fromRGBO(5, 20, 47, 1),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
+          _simpleMenuItem(context, "About Us",
+              onPressed: () => {debugPrint("About us pressed")}),
+          _simpleMenuItem(context, "Contact Us",
+              onPressed: () => {debugPrint("Contact us pressed")}),
+          _simpleMenuItem(context, "Newsletter",
+              onPressed: () => {debugPrint("Newsletter us pressed")}),
         ],
+      ),
+    );
+  }
+
+  Widget _simpleMenuItem(BuildContext context, String text,
+      {required Function onPressed}) {
+    return ListTile(
+      onTap: () => onPressed,
+      title: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15),
+        ),
       ),
     );
   }

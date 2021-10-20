@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
 import 'package:techfrenetic/app/widgets/meetups.dart';
 import 'package:techfrenetic/app/widgets/groups.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class CommunityPage extends StatefulWidget {
   final String title;
@@ -139,18 +139,19 @@ class CommunityPageState extends State<CommunityPage> {
                   children: [
                     const Text('Share an update'),
                     GestureDetector(
-                      child: SvgPicture.asset(
-                        'assets/img/icons/share_video.svg',
-                        allowDrawingOutsideViewBox: true,
-                        semanticsLabel: 'Ligth Bulb',
+                      child: const Icon(
+                        TechFreneticIcons.article,
+                        size: 20,
                       ),
                       onTap: () {},
                     ),
                     GestureDetector(
-                      child: SvgPicture.asset(
-                        'assets/img/icons/write_article.svg',
-                        allowDrawingOutsideViewBox: true,
-                        semanticsLabel: 'Ligth Bulb',
+                      child: Container(
+                        color: Colors.amberAccent,
+                        child: const Icon(
+                          TechFreneticIcons.shareVideo,
+                          size: 20,
+                        ),
                       ),
                       onTap: () {},
                     ),

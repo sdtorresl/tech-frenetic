@@ -105,7 +105,7 @@ flutter:
 
     - family: TechFreneticApp
       fonts:
-       - asset: fonts/TechFreneticApp.ttf
+       - asset: assets/fonts/TechFreneticApp.ttf
           
   #
   # For details regarding fonts from package dependencies,
