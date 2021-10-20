@@ -4,6 +4,7 @@ import 'package:techfrenetic/app/modules/community/community_page.dart';
 import 'home_controller.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:techfrenetic/app/widgets/drawer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -33,59 +34,18 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // // title: Expanded(
-        // //   child: Row(
-        // //     children: [
-        // //       SizedBox(width: 60),
-        // //       Image.asset('assets/images/main-logo.png',
-        // //           width: 140, height: 50, fit: BoxFit.fill),
-        // //     ],
-        // //   ),
-        // // ),
 
-        //     Row(
-        //   children: [
-        //     SizedBox(
-        //       width: 20,
-        //     ),
-        //     Column(
-        //       children: [
-        //         Row(
-        //           children: [
-        //             SizedBox(
-        //               width: 30,
-        //             ),
-        //             Text('Tech',
-        //                 style: TextStyle(
-        //                     fontWeight: FontWeight.w700,
-        //                     fontSize: 20,
-        //                     fontFamily: 'NunitoSans',
-        //                     color: Color.fromRGBO(5, 20, 47, 1))),
-        //           ],
-        //         ),
-        //         Text('Frenetic',
-        //             style: TextStyle(
-        //                 fontWeight: FontWeight.w700,
-        //                 fontSize: 20,
-        //                 fontFamily: 'NunitoSans',
-        //                 color: Color.fromRGBO(
-        //                   0,
-        //                   110,
-        //                   232,
-        //                   1,
-        //                 ))),
-        //       ],
-        //     ),
-        //     SizedBox(
-        //       width: 32,
-        //       height: 32,
-        //       child: Image.asset('assets/images/main-logo.png'),
-        //     )
-        //   ],
-        // ),
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
-      ),
+          title: Expanded(
+            child: Row(
+              children: [
+                const SizedBox(width: 20),
+                Image.asset('assets/img/main-logo.png', fit: BoxFit.fill),
+              ],
+            ),
+          ),
+          backgroundColor: Colors.white,
+          iconTheme: const IconThemeData(color: Colors.black)),
+
       endDrawer: const CustomDrawer(),
       body: AnimatedContainer(
         duration: const Duration(seconds: 10),
@@ -118,7 +78,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       },
       items: [
         TitledNavigationBarItem(
-            title: const Text('Community'),
+            title: Text(AppLocalizations.of(context)!.share),
             icon: const Icon(Icons.people_alt_outlined)),
         TitledNavigationBarItem(
             title: const Text('Skills'), icon: const Icon(Icons.home)),

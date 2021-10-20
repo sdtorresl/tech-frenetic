@@ -14,6 +14,7 @@ class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
+
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: Container(
         decoration: BoxDecoration(
@@ -54,6 +55,7 @@ class _PostWidgetState extends State<PostWidget> {
                           'assets/img/avatars/avatar-02.svg',
                           semanticsLabel: 'Acme Logo',
                         ),
+
                       ),
                       radius: 20,
                       backgroundColor: Colors.grey[200],

@@ -275,13 +275,13 @@ final ThemeData techFreneticTheme = ThemeData(
     unselectedLabelColor: Color(0xb2ffffff),
   ),
   chipTheme: const ChipThemeData(
-    backgroundColor: Color(0x1f000000),
+    backgroundColor: Color.fromRGBO(5, 20, 47, 1),
     brightness: Brightness.light,
     deleteIconColor: Color(0xde000000),
     disabledColor: Color(0x0c000000),
     labelPadding: EdgeInsets.only(top: 0, bottom: 0, left: 8, right: 8),
     labelStyle: TextStyle(
-      color: Color(0xde000000),
+      color: Color.fromRGBO(5, 20, 47, 1),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
@@ -294,13 +294,14 @@ final ThemeData techFreneticTheme = ThemeData(
       fontStyle: FontStyle.normal,
     ),
     secondarySelectedColor: Color(0x3d006ee8),
-    selectedColor: Color(0x3d000000),
+    selectedColor: Colors.white,
     shape: StadiumBorder(
-        side: BorderSide(
-      color: Color(0xff000000),
-      width: 0,
-      style: BorderStyle.none,
-    )),
+      side: BorderSide(
+        color: Color(0xff000000),
+        width: 0,
+        style: BorderStyle.none,
+      ),
+    ),
   ),
   dialogTheme: const DialogTheme(
       shape: RoundedRectangleBorder(
