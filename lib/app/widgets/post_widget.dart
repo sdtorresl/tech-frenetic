@@ -66,10 +66,11 @@ class _PostWidgetState extends State<PostWidget> {
                           "Sergio",
                           style: Theme.of(context)
                               .textTheme
-                              .headline6!
+                              .headline1!
                               .copyWith(fontSize: 15),
                         ),
-                        const Text("Profession 1 - 13 days ago")
+                        Text("Profession 1 - 13 days ago",
+                            style: Theme.of(context).textTheme.bodyText1)
                       ],
                     )
                   ],
@@ -86,7 +87,7 @@ class _PostWidgetState extends State<PostWidget> {
                       "https://akm-img-a-in.tosshub.com/indiatoday/images/story/201810/stockvault-person-studying-and-learning---knowledge-concept178241_0-647x363.jpeg?0LocAW2E2gIBzZp0oZSWzxmQTvAPhN_v&size=1200:675",
                 ),
                 Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.symmetric(vertical: 10),
                   child: Text(
                     'territorio',
                     style: Theme.of(context)
@@ -95,18 +96,24 @@ class _PostWidgetState extends State<PostWidget> {
                         .copyWith(fontSize: 15),
                   ),
                 ),
-                Padding(
+                const Padding(
                   padding: EdgeInsets.symmetric(vertical: 10),
                   child: Text('4 viwes'),
                 ),
                 Row(
                   children: [
-                    Icon(Icons.lightbulb),
-                    Text('Cool'),
-                    Icon(Icons.lightbulb),
-                    Text('Comment'),
-                    Icon(Icons.lightbulb),
-                    Text('Share'),
+                    SizedBox(
+                      child: SvgPicture.asset(
+                        'assets/img/icons/light_bulb.svg',
+                        allowDrawingOutsideViewBox: true,
+                        semanticsLabel: 'Ligth Bulb',
+                      ),
+                    ),
+
+                    // Icon(Icons.lightbulb),
+                    // Text('Comment'),
+                    // Icon(Icons.lightbulb),
+                    // Text('Share'),
                   ],
                 )
               ],

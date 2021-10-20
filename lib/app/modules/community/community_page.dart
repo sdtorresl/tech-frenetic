@@ -73,7 +73,7 @@ class CommunityPageState extends State<CommunityPage> {
               color: Theme.of(context).unselectedWidgetColor,
               spreadRadius: -3,
               blurRadius: 5,
-              offset: Offset(0.5, 0.5),
+              offset: const Offset(0.5, 0.5),
             )
           ],
         ),
@@ -86,9 +86,9 @@ class CommunityPageState extends State<CommunityPage> {
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Column(children: <Widget>[
               Row(
-                children: [
+                children: const [
                   Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: EdgeInsets.all(8.0),
                     child: Text('Share an update'),
                   ),
                   SizedBox(
@@ -124,7 +124,7 @@ class CommunityPageState extends State<CommunityPage> {
     return ListView(
       shrinkWrap: true,
       children: [
-        SizedBox(
+        const SizedBox(
           height: 20,
         ),
         _postbox(),
