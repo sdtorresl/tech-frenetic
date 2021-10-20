@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/modules/community/community_page.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'home_controller.dart';
@@ -32,20 +33,100 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    final _scaffoldKey = GlobalKey<ScaffoldState>();
+
     return Scaffold(
+      key: _scaffoldKey,
       appBar: AppBar(
-          title: Row(
-            children: [
-              const SizedBox(width: 20),
-              Image.asset('assets/img/main-logo.png', fit: BoxFit.fill),
-            ],
-          ),
-          backgroundColor: Colors.white,
-          iconTheme: const IconThemeData(color: Colors.black)),
+        title: Row(
+          children: [
+            const SizedBox(width: 20),
+            Image.asset('assets/img/main-logo.png', fit: BoxFit.fill),
+          ],
+        ),
+        backgroundColor: Colors.white,
+        iconTheme: const IconThemeData(color: Colors.black),
+        actions: [_searchMenu(), _userMenu(), _openDrawer(_scaffoldKey)],
+      ),
       endDrawer: const CustomDrawer(),
       body: _pages[_currentIndex],
       floatingActionButton: _floatingActionButton(),
       bottomNavigationBar: _bottomNavigationBar(),
+    );
+  }
+
+  IconButton _openDrawer(GlobalKey<ScaffoldState> _scaffoldKey) {
+    return IconButton(
+      icon: const Icon(Icons.menu),
+      onPressed: () {
+        _scaffoldKey.currentState!.openEndDrawer();
+      },
+    );
+  }
+
+  PopupMenuButton<int> _searchMenu() {
+    return PopupMenuButton(
+      icon: const Icon(Icons.search),
+      color: Colors.blue,
+      itemBuilder: (context) => [
+        const PopupMenuItem<int>(
+          value: 0,
+          child: Text(
+            "Setting",
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ],
+      onSelected: (item) => {debugPrint(item.toString())},
+    );
+  }
+
+  PopupMenuButton<int> _userMenu() {
+    return PopupMenuButton(
+      child: Container(
+        width: 50,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        child: CircleAvatar(
+          child: ClipOval(
+            child: SvgPicture.asset(
+              'assets/img/avatars/avatar-01.svg',
+              semanticsLabel: 'Acme Logo',
+            ),
+          ),
+          radius: 20,
+          backgroundColor: Colors.grey[200],
+        ),
+      ),
+      offset: const Offset(0, 60),
+      color: Colors.white,
+      itemBuilder: (context) => [
+        const PopupMenuItem<int>(
+          value: 0,
+          child: Text(
+            "Notifications",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        const PopupMenuItem<int>(
+          value: 1,
+          child: Text(
+            "Profile",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+        const PopupMenuItem<int>(
+          value: 2,
+          child: Text(
+            "Logout",
+            style: TextStyle(color: Colors.black),
+          ),
+        ),
+      ],
+      onSelected: (item) => {
+        debugPrint(
+          item.toString(),
+        ),
+      },
     );
   }
 
