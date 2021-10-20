@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
 import 'package:techfrenetic/app/widgets/meetups.dart';
+import 'package:techfrenetic/app/widgets/groups.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class CommunityPage extends StatefulWidget {
   final String title;
@@ -86,19 +88,33 @@ class CommunityPageState extends State<CommunityPage> {
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Column(children: <Widget>[
               Row(
-                children: const [
-                  Padding(
+                children: [
+                  const Padding(
                     padding: EdgeInsets.all(8.0),
                     child: Text('Share an update'),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 110,
                   ),
-                  Icon(Icons.videocam),
-                  SizedBox(
+                  GestureDetector(
+                    child: SvgPicture.asset(
+                      'assets/img/icons/share_video.svg',
+                      allowDrawingOutsideViewBox: true,
+                      semanticsLabel: 'Ligth Bulb',
+                    ),
+                    onTap: () {},
+                  ),
+                  const SizedBox(
                     width: 30,
                   ),
-                  //Icon(Icons.mode_edit_outline_sharp),
+                  GestureDetector(
+                    child: SvgPicture.asset(
+                      'assets/img/icons/write_article.svg',
+                      allowDrawingOutsideViewBox: true,
+                      semanticsLabel: 'Ligth Bulb',
+                    ),
+                    onTap: () {},
+                  ),
                 ],
               ),
               TextField(
@@ -146,6 +162,6 @@ class CommunityPageState extends State<CommunityPage> {
   }
 
   Widget _groups() {
-    return const Text("Groups");
+    return GroupsWidget();
   }
 }

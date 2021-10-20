@@ -33,7 +33,7 @@ class _PostWidgetState extends State<PostWidget> {
                 color: Theme.of(context).unselectedWidgetColor,
                 spreadRadius: -5,
                 blurRadius: 5,
-                offset: Offset(1.9, 1.7),
+                offset: const Offset(1.9, 1.7),
               )
             ]),
         child: Card(
@@ -96,25 +96,50 @@ class _PostWidgetState extends State<PostWidget> {
                         .copyWith(fontSize: 15),
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 10),
-                  child: Text('4 viwes'),
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      child: SvgPicture.asset(
-                        'assets/img/icons/light_bulb.svg',
-                        allowDrawingOutsideViewBox: true,
-                        semanticsLabel: 'Ligth Bulb',
-                      ),
+                Container(
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      top: BorderSide(width: 1.00, color: Colors.black),
+                      bottom: BorderSide(width: 1.00, color: Colors.black),
                     ),
-
-                    // Icon(Icons.lightbulb),
-                    // Text('Comment'),
-                    // Icon(Icons.lightbulb),
-                    // Text('Share'),
-                  ],
+                  ),
+                  child: const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
+                    child: Text('4 viwes'),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        child: SvgPicture.asset(
+                          'assets/img/icons/light_bulb.svg',
+                          allowDrawingOutsideViewBox: true,
+                          semanticsLabel: 'Ligth Bulb',
+                        ),
+                      ),
+                      const Text('Cool'),
+                      const SizedBox(width: 20),
+                      SizedBox(
+                        child: SvgPicture.asset(
+                          'assets/img/icons/coment.svg',
+                          allowDrawingOutsideViewBox: true,
+                          semanticsLabel: 'Ligth Bulb',
+                        ),
+                      ),
+                      const Text('Comment'),
+                      const SizedBox(width: 20),
+                      SizedBox(
+                        child: SvgPicture.asset(
+                          'assets/img/icons/share.svg',
+                          allowDrawingOutsideViewBox: true,
+                          semanticsLabel: 'Ligth Bulb',
+                        ),
+                      ),
+                      const Text('Share'),
+                    ],
+                  ),
                 )
               ],
             ),
