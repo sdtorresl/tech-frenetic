@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/modules/community/community_page.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
+import 'package:techfrenetic/app/widgets/expandable_fab.dart';
 import 'home_controller.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:techfrenetic/app/widgets/drawer.dart';
@@ -130,18 +131,60 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     );
   }
 
-  FloatingActionButton _floatingActionButton() {
-    return FloatingActionButton(
-      onPressed: () {
-        store.increment();
-      },
-      child: const Icon(Icons.article_outlined),
+  Widget _floatingActionButton() {
+    List<Widget> actions = [
+      Column(
+        children: [
+          ActionButton(
+            onPressed: () {
+              debugPrint("Action pressed");
+            },
+            icon: const Icon(Icons.videocam),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            "Share a video",
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  fontSize: 15,
+                  color: Colors.white,
+                ),
+          ),
+        ],
+      ),
+      Column(
+        children: [
+          ActionButton(
+            onPressed: () {
+              debugPrint("Action pressed");
+            },
+            icon: const Icon(Icons.document_scanner),
+          ),
+          const SizedBox(
+            height: 5,
+          ),
+          Text(
+            "Share an article",
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  fontSize: 15,
+                  color: Colors.white,
+                ),
+          ),
+        ],
+      ),
+    ];
+
+    return ExpandableFab(
+      distance: 95.0,
+      children: actions,
     );
   }
 
   TitledBottomNavigationBar _bottomNavigationBar() {
     return TitledBottomNavigationBar(
       reverse: true,
+      curve: Curves.decelerate,
       currentIndex:
           _currentIndex, // Use this to update the Bar giving a position
       onTap: (index) {
