@@ -102,6 +102,10 @@ flutter:
     - family: NunitoSansBold
       fonts:
         - asset: assets/fonts/NunitoSans-Bold.ttf
+
+    - family: TechFreneticApp
+      fonts:
+       - asset: fonts/TechFreneticApp.ttf
           
   #
   # For details regarding fonts from package dependencies,
