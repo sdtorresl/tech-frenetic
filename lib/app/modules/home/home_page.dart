@@ -4,6 +4,7 @@ import 'package:techfrenetic/app/modules/community/community_page.dart';
 import 'home_controller.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:techfrenetic/app/widgets/drawer.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   final String title;
@@ -75,7 +76,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       },
       items: [
         TitledNavigationBarItem(
-            title: const Text('Community'),
+            title: Text(AppLocalizations.of(context)!.share),
             icon: const Icon(Icons.people_alt_outlined)),
         TitledNavigationBarItem(
             title: const Text('Skills'), icon: const Icon(Icons.home)),

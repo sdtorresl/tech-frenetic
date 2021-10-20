@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/modules/login/login_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -10,6 +11,7 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
+
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: ListTile(
@@ -21,6 +23,7 @@ class CustomDrawer extends StatelessWidget {
                     height: 50,
                     width: 50,
                     semanticsLabel: 'Acme Logo',
+
                   ),
                 ),
               ),
