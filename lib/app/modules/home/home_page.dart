@@ -34,6 +34,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+
           title: Expanded(
             child: Row(
               children: [
@@ -44,6 +45,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           ),
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Colors.black)),
+
       endDrawer: const CustomDrawer(),
       body: AnimatedContainer(
         duration: const Duration(seconds: 10),
