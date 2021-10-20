@@ -82,7 +82,7 @@ final ThemeData techFreneticTheme = ThemeData(
       fontStyle: FontStyle.normal,
     ),
     headline1: TextStyle(
-      color: Color(0x00000000),
+      color: Color(0xff000000),
       fontFamily: 'NunitoSansBold',
       fontSize: null,
       fontWeight: FontWeight.w400,
