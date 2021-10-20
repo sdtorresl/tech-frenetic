@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/modules/community/community_page.dart';
+import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'home_controller.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:techfrenetic/app/widgets/drawer.dart';
@@ -18,7 +19,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     const CommunityPage(),
     const Text("Skills"),
     const Text("Vendors"),
-    const Text("Profile")
+    const ProfilePage()
   ];
 
   int _currentIndex = 0;
@@ -33,21 +34,16 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Expanded(
-            child: Row(
-              children: [
-                const SizedBox(width: 20),
-                Image.asset('assets/img/main-logo.png', fit: BoxFit.fill),
-              ],
-            ),
+          title: Row(
+            children: [
+              const SizedBox(width: 20),
+              Image.asset('assets/img/main-logo.png', fit: BoxFit.fill),
+            ],
           ),
           backgroundColor: Colors.white,
           iconTheme: const IconThemeData(color: Colors.black)),
       endDrawer: const CustomDrawer(),
-      body: AnimatedContainer(
-        duration: const Duration(seconds: 10),
-        child: _pages[_currentIndex],
-      ),
+      body: _pages[_currentIndex],
       floatingActionButton: _floatingActionButton(),
       bottomNavigationBar: _bottomNavigationBar(),
     );

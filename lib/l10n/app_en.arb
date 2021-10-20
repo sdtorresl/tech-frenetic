@@ -1,6 +1,8 @@
 {
     "welcome": "Welcome to",
-    "@welcome": {
-      "description": "A welcome text"
-    }
+    "my_profile": "My Profile",
+    "my_content": "My Content",
+    "my_activity": "My Activity",
+    "saved_articles": "Saved",
+    "my_account": "My Account"
 }
