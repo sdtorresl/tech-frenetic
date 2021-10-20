@@ -52,11 +52,10 @@ class _MeetupWidgetState extends State<MeetupWidget> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Card(
-                        color: Theme.of(context).backgroundColor,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
-                        ),
+                      Container(
+                        color:
+                            Theme.of(context).backgroundColor.withOpacity(0.6),
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: Text(
                           'Upcomming',
                           style: Theme.of(context)
@@ -93,29 +92,26 @@ class _MeetupWidgetState extends State<MeetupWidget> {
                   const SizedBox(
                     height: 60,
                   ),
-                  Card(
-                    color: Theme.of(context).primaryColor,
-                    child: const Padding(
-                      padding: EdgeInsets.all(20.0),
-                      child: Text('Host a Meetup',
-                          style: TextStyle(
-                            color: Colors.white,
-                          )),
+                  ElevatedButton(
+                    onPressed: () => debugPrint("Pressed"),
+                    child: const Text(
+                      'Host a Meetup',
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                   const SizedBox(
                     height: 40,
                   ),
-                  Container(
-                    child: Row(
-                      children: const [
-                        SizedBox(width: 20),
-                        Text(
-                          '(0) ',
-                        ),
-                        Text('Meetups'),
-                      ],
-                    ),
+                  Row(
+                    children: const [
+                      SizedBox(width: 20),
+                      Text(
+                        '(0) ',
+                      ),
+                      Text('Meetups'),
+                    ],
                   ),
                   const SizedBox(
                     height: 10,

@@ -14,7 +14,6 @@ class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: Container(
         decoration: BoxDecoration(
@@ -42,12 +41,12 @@ class _PostWidgetState extends State<PostWidget> {
             borderRadius: BorderRadius.zero,
           ),
           elevation: 0,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
+                child: Row(
                   children: [
                     CircleAvatar(
                       child: ClipOval(
@@ -55,7 +54,6 @@ class _PostWidgetState extends State<PostWidget> {
                           'assets/img/avatars/avatar-02.svg',
                           semanticsLabel: 'Acme Logo',
                         ),
-
                       ),
                       radius: 20,
                       backgroundColor: Colors.grey[200],
@@ -77,74 +75,72 @@ class _PostWidgetState extends State<PostWidget> {
                     )
                   ],
                 ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 15),
-                  child: Text("Hola"),
-                ),
-                CachedNetworkImage(
-                  placeholder: (context, value) =>
-                      const LinearProgressIndicator(),
-                  errorWidget: (context, value, e) => const Icon(Icons.error),
-                  imageUrl:
-                      "https://akm-img-a-in.tosshub.com/indiatoday/images/story/201810/stockvault-person-studying-and-learning---knowledge-concept178241_0-647x363.jpeg?0LocAW2E2gIBzZp0oZSWzxmQTvAPhN_v&size=1200:675",
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
-                  child: Text(
-                    'territorio',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6!
-                        .copyWith(fontSize: 15),
-                  ),
-                ),
-                Container(
-                  decoration: const BoxDecoration(
-                    border: Border(
-                      top: BorderSide(width: 1.00, color: Colors.black),
-                      bottom: BorderSide(width: 1.00, color: Colors.black),
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                child: Text("Hola"),
+              ),
+              CachedNetworkImage(
+                placeholder: (context, value) =>
+                    const LinearProgressIndicator(),
+                errorWidget: (context, value, e) => const Icon(Icons.error),
+                imageUrl:
+                    "https://akm-img-a-in.tosshub.com/indiatoday/images/story/201810/stockvault-person-studying-and-learning---knowledge-concept178241_0-647x363.jpeg?0LocAW2E2gIBzZp0oZSWzxmQTvAPhN_v&size=1200:675",
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                child: Text('territorio',
+                    style: Theme.of(context).textTheme.headline4!),
+              ),
+              const Divider(
+                height: 0,
+                thickness: 1,
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                child: Text('4 views'),
+              ),
+              const Divider(
+                height: 0,
+                thickness: 1,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    SizedBox(
+                      child: SvgPicture.asset(
+                        'assets/img/icons/light_bulb.svg',
+                        allowDrawingOutsideViewBox: true,
+                        semanticsLabel: 'Ligth Bulb',
+                      ),
                     ),
-                  ),
-                  child: const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 15, horizontal: 0),
-                    child: Text('4 viwes'),
-                  ),
+                    const Text('Cool'),
+                    const SizedBox(width: 20),
+                    SizedBox(
+                      child: SvgPicture.asset(
+                        'assets/img/icons/coment.svg',
+                        allowDrawingOutsideViewBox: true,
+                        semanticsLabel: 'Ligth Bulb',
+                      ),
+                    ),
+                    const Text('Comment'),
+                    const SizedBox(width: 20),
+                    SizedBox(
+                      child: SvgPicture.asset(
+                        'assets/img/icons/share.svg',
+                        allowDrawingOutsideViewBox: true,
+                        semanticsLabel: 'Ligth Bulb',
+                      ),
+                    ),
+                    const Text('Share'),
+                  ],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: Row(
-                    children: [
-                      SizedBox(
-                        child: SvgPicture.asset(
-                          'assets/img/icons/light_bulb.svg',
-                          allowDrawingOutsideViewBox: true,
-                          semanticsLabel: 'Ligth Bulb',
-                        ),
-                      ),
-                      const Text('Cool'),
-                      const SizedBox(width: 20),
-                      SizedBox(
-                        child: SvgPicture.asset(
-                          'assets/img/icons/coment.svg',
-                          allowDrawingOutsideViewBox: true,
-                          semanticsLabel: 'Ligth Bulb',
-                        ),
-                      ),
-                      const Text('Comment'),
-                      const SizedBox(width: 20),
-                      SizedBox(
-                        child: SvgPicture.asset(
-                          'assets/img/icons/share.svg',
-                          allowDrawingOutsideViewBox: true,
-                          semanticsLabel: 'Ligth Bulb',
-                        ),
-                      ),
-                      const Text('Share'),
-                    ],
-                  ),
-                )
-              ],
-            ),
+              )
+            ],
           ),
         ),
       ),

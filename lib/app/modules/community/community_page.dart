@@ -56,7 +56,7 @@ class CommunityPageState extends State<CommunityPage> {
 
   Widget _postbox() {
     return Padding(
-      padding: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(15),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -87,35 +87,30 @@ class CommunityPageState extends State<CommunityPage> {
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 10),
             child: Column(children: <Widget>[
-              Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Text('Share an update'),
-                  ),
-                  const SizedBox(
-                    width: 110,
-                  ),
-                  GestureDetector(
-                    child: SvgPicture.asset(
-                      'assets/img/icons/share_video.svg',
-                      allowDrawingOutsideViewBox: true,
-                      semanticsLabel: 'Ligth Bulb',
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text('Share an update'),
+                    GestureDetector(
+                      child: SvgPicture.asset(
+                        'assets/img/icons/share_video.svg',
+                        allowDrawingOutsideViewBox: true,
+                        semanticsLabel: 'Ligth Bulb',
+                      ),
+                      onTap: () {},
                     ),
-                    onTap: () {},
-                  ),
-                  const SizedBox(
-                    width: 30,
-                  ),
-                  GestureDetector(
-                    child: SvgPicture.asset(
-                      'assets/img/icons/write_article.svg',
-                      allowDrawingOutsideViewBox: true,
-                      semanticsLabel: 'Ligth Bulb',
+                    GestureDetector(
+                      child: SvgPicture.asset(
+                        'assets/img/icons/write_article.svg',
+                        allowDrawingOutsideViewBox: true,
+                        semanticsLabel: 'Ligth Bulb',
+                      ),
+                      onTap: () {},
                     ),
-                    onTap: () {},
-                  ),
-                ],
+                  ],
+                ),
               ),
               TextField(
                 decoration: InputDecoration(
