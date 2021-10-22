@@ -115,8 +115,6 @@ class CommunityPageState extends State<CommunityPage> {
               TextField(
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    //focusedBorder: InputBorder.none,
-                    //disabledBorder: InputBorder.none,
                     hintText: "Write something...",
                     hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
                     prefixIcon: Icon(
