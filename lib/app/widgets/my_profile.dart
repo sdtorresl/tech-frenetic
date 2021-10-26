@@ -57,7 +57,7 @@ class _MyProfileState extends State<MyProfile> {
                   subtitle: Row(
                     children: const [
                       Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text('0 Followers'),
                       ),
                       Text('0 Following')
