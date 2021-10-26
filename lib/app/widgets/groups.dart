@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class GroupsWidget extends StatefulWidget {
-  GroupsWidget({Key? key}) : super(key: key);
+  const GroupsWidget({Key? key}) : super(key: key);
 
   @override
   _GroupsWidgetState createState() => _GroupsWidgetState();
@@ -129,7 +129,7 @@ class _GroupsWidgetState extends State<GroupsWidget> {
                               )),
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 70,
                       ),
                     ],

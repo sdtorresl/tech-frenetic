@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+//import 'package:flutter_svg/svg.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/my_profile.dart';
 import 'package:techfrenetic/app/widgets/my_account.dart';
+import 'package:techfrenetic/app/widgets/my_content.dart';
+import 'package:techfrenetic/app/widgets/my_activity.dart';
+import 'package:techfrenetic/app/widgets/saved_articles.dart';
 
 class ProfilePage extends StatefulWidget {
   final String title;
@@ -88,148 +91,18 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _myContent(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                top: BorderSide(
-                  width: 1.90,
-                  color: Theme.of(context).primaryColor,
-                ),
-                left: BorderSide(
-                  width: 0.50,
-                  color: Colors.grey.withOpacity(.6),
-                ),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context).unselectedWidgetColor,
-                  spreadRadius: -5,
-                  blurRadius: 5,
-                  offset: const Offset(1.9, 1.7),
-                )
-              ],
-            ),
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    AppLocalizations.of(context)!.my_content,
-                    style: Theme.of(context).textTheme.headline1!.copyWith(
-                          color: Theme.of(context).indicatorColor,
-                          backgroundColor: Theme.of(context).backgroundColor,
-                        ),
-                  ),
-                ),
-                const Text('0 Articles')
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+    return const MyContent();
   }
 
   Widget _myActivity(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                top: BorderSide(
-                  width: 1.90,
-                  color: Theme.of(context).primaryColor,
-                ),
-                left: BorderSide(
-                  width: 0.50,
-                  color: Colors.grey.withOpacity(.6),
-                ),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context).unselectedWidgetColor,
-                  spreadRadius: -5,
-                  blurRadius: 5,
-                  offset: const Offset(1.9, 1.7),
-                )
-              ],
-            ),
-            child: Card(
-              elevation: 0,
-              child: Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: Text(
-                  AppLocalizations.of(context)!.my_activity,
-                  style: Theme.of(context).textTheme.headline1!.copyWith(
-                        color: Theme.of(context).indicatorColor,
-                        backgroundColor: Theme.of(context).backgroundColor,
-                      ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+    return const MyActivity();
   }
 
   Widget _savedArticles(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ListView(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                top: BorderSide(
-                  width: 1.90,
-                  color: Theme.of(context).primaryColor,
-                ),
-                left: BorderSide(
-                  width: 0.50,
-                  color: Colors.grey.withOpacity(.6),
-                ),
-              ),
-              boxShadow: [
-                BoxShadow(
-                  color: Theme.of(context).unselectedWidgetColor,
-                  spreadRadius: -5,
-                  blurRadius: 5,
-                  offset: const Offset(1.9, 1.7),
-                )
-              ],
-            ),
-            child: Row(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    AppLocalizations.of(context)!.saved_articles,
-                    style: Theme.of(context).textTheme.headline1!.copyWith(
-                          color: Theme.of(context).indicatorColor,
-                          backgroundColor: Theme.of(context).backgroundColor,
-                        ),
-                  ),
-                ),
-                const Text(' 20 Articles')
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
+    return const SavedArticles();
   }
 
   Widget _myAccount(BuildContext context) {
-    return MyAccountPage();
+    return const MyAccountPage();
   }
 }

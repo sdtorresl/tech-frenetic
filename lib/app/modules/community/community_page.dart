@@ -151,10 +151,10 @@ class CommunityPageState extends State<CommunityPage> {
   }
 
   Widget _meetups() {
-    return MeetupWidget();
+    return const MeetupWidget();
   }
 
   Widget _groups() {
-    return GroupsWidget();
+    return const GroupsWidget();
   }
 }

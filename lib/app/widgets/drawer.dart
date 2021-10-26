@@ -11,7 +11,6 @@ class CustomDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15),
             child: ListTile(
@@ -23,7 +22,6 @@ class CustomDrawer extends StatelessWidget {
                     height: 50,
                     width: 50,
                     semanticsLabel: 'Acme Logo',
-
                   ),
                 ),
               ),
@@ -73,8 +71,8 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               onTap: () {
-                Navigator.of(context)
-                    .push(MaterialPageRoute(builder: (context) => LoginPage()));
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => const LoginPage()));
               },
             ),
           ),
@@ -113,7 +111,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.00),
+                padding: const EdgeInsets.symmetric(vertical: 20.00),
                 child: GestureDetector(
                   child: const Text(
                     'Tech Events',
@@ -137,7 +135,7 @@ class CustomDrawer extends StatelessWidget {
                 ),
               ),
               child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 15, 0, 20),
+                padding: const EdgeInsets.fromLTRB(0, 15, 0, 20),
                 child: GestureDetector(
                   child: const Text('Tech Vendors',
                       style: TextStyle(
@@ -154,7 +152,7 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             title: Padding(
-              padding: EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(8.0),
               child: GestureDetector(
                 child: const Text('About Us',
                     style: TextStyle(
