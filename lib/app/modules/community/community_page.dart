@@ -13,14 +13,53 @@ class CommunityPage extends StatefulWidget {
 }
 
 class CommunityPageState extends State<CommunityPage> {
-  final List<Tab> tabs = <Tab>[
-    const Tab(text: 'Feed'),
-    const Tab(text: 'Meetups'),
-    const Tab(text: 'Groups'),
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final List<Tab> tabs = <Tab>[
+      Tab(
+        height: 35,
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(
+                  color: Theme.of(context).chipTheme.backgroundColor,
+                  width: 1)),
+          child: const Align(
+            alignment: Alignment.center,
+            child: Text("Feed"),
+          ),
+        ),
+      ),
+      Tab(
+        height: 35,
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(
+                  color: Theme.of(context).chipTheme.backgroundColor,
+                  width: 1)),
+          child: const Align(
+            alignment: Alignment.center,
+            child: Text("Meetups"),
+          ),
+        ),
+      ),
+      Tab(
+        height: 35,
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(50),
+              border: Border.all(
+                  color: Theme.of(context).chipTheme.backgroundColor,
+                  width: 1)),
+          child: const Align(
+            alignment: Alignment.center,
+            child: Text("Groups"),
+          ),
+        ),
+      ),
+    ];
+
     return DefaultTabController(
       length: tabs.length,
       // The Builder widget is used to have a different BuildContext to access
@@ -35,9 +74,15 @@ class CommunityPageState extends State<CommunityPage> {
         });
         return Column(
           children: [
-            Container(
-              color: Theme.of(context).primaryColor,
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0, bottom: 5),
               child: TabBar(
+                unselectedLabelColor:
+                    Theme.of(context).chipTheme.backgroundColor,
+                indicatorSize: TabBarIndicatorSize.label,
+                indicator: BoxDecoration(
+                    borderRadius: BorderRadius.circular(50),
+                    color: Theme.of(context).chipTheme.backgroundColor),
                 tabs: tabs,
               ),
             ),
@@ -133,9 +178,6 @@ class CommunityPageState extends State<CommunityPage> {
     return ListView(
       shrinkWrap: true,
       children: [
-        const SizedBox(
-          height: 20,
-        ),
         _postbox(),
         const PostWidget(),
         const PostWidget(),

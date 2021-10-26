@@ -21,7 +21,9 @@ class CustomDrawer extends StatelessWidget {
                     'assets/img/icons/ico_brand.svg',
                     height: 50,
                     width: 50,
-                    semanticsLabel: 'Acme Logo',
+
+                    semanticsLabel: 'TF Logo',
+
                   ),
                 ),
               ),
