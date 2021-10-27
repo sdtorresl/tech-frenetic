@@ -49,7 +49,7 @@ class _MyContentState extends State<MyContent> {
                         ),
                   ),
                 ),
-                const Text('0 Articles')
+                Text('0' + AppLocalizations.of(context)!.articles)
               ],
             ),
           ),

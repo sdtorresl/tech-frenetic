@@ -55,12 +55,13 @@ class _MyProfileState extends State<MyProfile> {
                     ),
                   ),
                   subtitle: Row(
-                    children: const [
+                    children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text('0 Followers'),
+                        child:
+                            Text('0' + AppLocalizations.of(context)!.followers),
                       ),
-                      Text('0 Following')
+                      Text('0' + AppLocalizations.of(context)!.following)
                     ],
                   ),
                   leading: CircleAvatar(
@@ -104,7 +105,7 @@ class _MyProfileState extends State<MyProfile> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text('My dashboard',
+                      child: Text(AppLocalizations.of(context)!.my_dashboard,
                           style: Theme.of(context).textTheme.headline1),
                     ),
                     const SizedBox(
@@ -113,7 +114,7 @@ class _MyProfileState extends State<MyProfile> {
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(
-                        'Only for you',
+                        AppLocalizations.of(context)!.only_for_you,
                         style: Theme.of(context).textTheme.bodyText1,
                       ),
                     )
@@ -156,7 +157,7 @@ class _MyProfileState extends State<MyProfile> {
                             ),
                             ListTile(
                               title: Text(
-                                'Articles',
+                                AppLocalizations.of(context)!.articles,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -195,7 +196,8 @@ class _MyProfileState extends State<MyProfile> {
                               ),
                               ListTile(
                                 title: Text(
-                                  'Articles',
+                                  AppLocalizations.of(context)!
+                                      .who_viewed_your_profile,
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodyText1!
@@ -222,7 +224,7 @@ class _MyProfileState extends State<MyProfile> {
                             ),
                             ListTile(
                               title: Text(
-                                'Articles',
+                                AppLocalizations.of(context)!.post,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -242,7 +244,7 @@ class _MyProfileState extends State<MyProfile> {
                 ),
                 ListTile(
                   title: Text(
-                    'about',
+                    AppLocalizations.of(context)!.about,
                     style: Theme.of(context).textTheme.headline1,
                   ),
                   trailing: Icon(
@@ -254,14 +256,14 @@ class _MyProfileState extends State<MyProfile> {
                   alignment: Alignment.centerLeft,
                   margin: const EdgeInsets.symmetric(horizontal: 15),
                   child: Text(
-                    'view_more',
+                    AppLocalizations.of(context)!.view_more,
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: Theme.of(context).primaryColor,
                         ),
                   ),
                 ),
                 ListTile(
-                  title: Text('certifications',
+                  title: Text(AppLocalizations.of(context)!.certifications,
                       style: Theme.of(context).textTheme.headline1),
                   trailing: Icon(
                     Icons.edit,
@@ -269,7 +271,7 @@ class _MyProfileState extends State<MyProfile> {
                   ),
                 ),
                 ListTile(
-                  title: Text('interest',
+                  title: Text(AppLocalizations.of(context)!.interest,
                       style: Theme.of(context).textTheme.headline1),
                 ),
               ],
