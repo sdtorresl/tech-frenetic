@@ -66,7 +66,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
               child: Column(
                 children: [
                   Text(AppLocalizations.of(context)!.subscribtion),
-                  Text(AppLocalizations.of(context)!.you_don´t_have_a_subscribtion_yet)
+                  Text(AppLocalizations.of(context)!
+                      .you_dont_have_a_subscribtion_yet)
                 ],
               ),
             ),
@@ -96,9 +97,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
               Column(
                 children: [
                   Row(
-                    children: const [
+                    children: [
                       Text(AppLocalizations.of(context)!.email),
-                      SizedBox(
+                      const SizedBox(
                         width: 130,
                       ),
                       Text(AppLocalizations.of(context)!.your_country),
@@ -121,7 +122,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       Expanded(
                         child: TextFormField(
                           decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)!.your_country,
+                            hintText:
+                                AppLocalizations.of(context)!.your_country,
                             hintStyle: Theme.of(context)
                                 .textTheme
                                 .bodyText1!
@@ -139,7 +141,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 child: Column(
                   children: [
                     Row(
-                      children:  [
+                      children: [
                         Text(AppLocalizations.of(context)!.mobile_phone),
                         const SizedBox(
                           width: 80,
@@ -152,7 +154,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                         Expanded(
                           child: TextFormField(
                             decoration: InputDecoration(
-                              hintText: AppLocalizations.of(context)!.phone_number,
+                              hintText:
+                                  AppLocalizations.of(context)!.phone_number,
                               hintStyle: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
@@ -190,7 +193,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: ElevatedButton(
                       onPressed: () => debugPrint("Pressed"),
-                      child:  Text(AppLocalizations.of(context)!.cancel),
+                      child: Text(AppLocalizations.of(context)!.cancel),
                     ),
                   ),
                 ],
@@ -235,16 +238,17 @@ class _MyAccountPageState extends State<MyAccountPage> {
           padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: Column(
             children: [
-               Text(AppLocalizations.of(context)!.password),
+              Text(AppLocalizations.of(context)!.password),
               Row(
                 children: [
-                   Padding(
+                  Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text(AppLocalizations.of(context)!.last_changed  +': '),
+                    child:
+                        Text(AppLocalizations.of(context)!.last_changed + ': '),
                   ),
                   ElevatedButton(
                     onPressed: () => debugPrint("Pressed"),
-                    child:  Text(AppLocalizations.of(context)!.change_password),
+                    child: Text(AppLocalizations.of(context)!.change_password),
                   ),
                 ],
               )
