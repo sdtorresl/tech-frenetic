@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class MeetupWidget extends StatefulWidget {
-  MeetupWidget({Key? key}) : super(key: key);
+  const MeetupWidget({Key? key}) : super(key: key);
 
   @override
   _MeetupWidgetState createState() => _MeetupWidgetState();
@@ -36,7 +36,7 @@ class _MeetupWidgetState extends State<MeetupWidget> {
                     color: Theme.of(context).unselectedWidgetColor,
                     spreadRadius: -5,
                     blurRadius: 5,
-                    offset: Offset(1.9, 1.7),
+                    offset: const Offset(1.9, 1.7),
                   )
                 ]),
             child: Card(

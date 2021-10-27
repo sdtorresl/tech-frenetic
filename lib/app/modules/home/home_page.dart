@@ -203,15 +203,16 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       },
       items: [
         TitledNavigationBarItem(
-            title: Text(AppLocalizations.of(context)!.share),
+            title: Text(AppLocalizations.of(context)!.community),
             icon: const Icon(Icons.people_alt_outlined)),
         TitledNavigationBarItem(
-            title: const Text('Skills'), icon: const Icon(Icons.home)),
+            title: Text(AppLocalizations.of(context)!.skills),
+            icon: const Icon(Icons.home)),
         TitledNavigationBarItem(
-            title: const Text('T. Vendors'),
+            title: Text(AppLocalizations.of(context)!.vendors),
             icon: const Icon(Icons.card_travel)),
         TitledNavigationBarItem(
-            title: const Text('Profile'),
+            title: Text(AppLocalizations.of(context)!.profile),
             icon: const Icon(Icons.person_outline)),
       ],
     );
