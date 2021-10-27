@@ -33,7 +33,7 @@ class ProfilePageState extends State<ProfilePage> {
       ),
       GButton(
         icon: Icons.save,
-        text: AppLocalizations.of(context)!.saved_articles,
+        text: AppLocalizations.of(context)!.my_articles,
       ),
       GButton(
         icon: Icons.manage_accounts,

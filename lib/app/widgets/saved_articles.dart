@@ -49,7 +49,7 @@ class _SavedArticlesState extends State<SavedArticles> {
                         ),
                   ),
                 ),
-                const Text(' 0 Articles')
+                Text('0 ' + AppLocalizations.of(context)!.articles)
               ],
             ),
           ),

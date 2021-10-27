@@ -55,7 +55,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'General Account Settings',
+                AppLocalizations.of(context)!.general_account_settings,
                 style: Theme.of(context).textTheme.headline1,
               ),
             ),
@@ -64,9 +64,10 @@ class _MyAccountPageState extends State<MyAccountPage> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 50.0),
               child: Column(
-                children: const [
-                  Text('Subscribtion'),
-                  Text('You don´t have a subscribtion yet')
+                children: [
+                  Text(AppLocalizations.of(context)!.subscribtion),
+                  Text(AppLocalizations.of(context)!
+                      .you_dont_have_a_subscribtion_yet)
                 ],
               ),
             ),
@@ -96,12 +97,12 @@ class _MyAccountPageState extends State<MyAccountPage> {
               Column(
                 children: [
                   Row(
-                    children: const [
-                      Text('Email'),
-                      SizedBox(
+                    children: [
+                      Text(AppLocalizations.of(context)!.email),
+                      const SizedBox(
                         width: 130,
                       ),
-                      Text('Your country'),
+                      Text(AppLocalizations.of(context)!.your_country),
                     ],
                   ),
                   Row(
@@ -109,7 +110,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       Expanded(
                         child: TextFormField(
                           decoration: InputDecoration(
-                            hintText: "your email",
+                            hintText: AppLocalizations.of(context)!.your_email,
                             hintStyle: Theme.of(context)
                                 .textTheme
                                 .bodyText1!
@@ -121,7 +122,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       Expanded(
                         child: TextFormField(
                           decoration: InputDecoration(
-                            hintText: "Your country",
+                            hintText:
+                                AppLocalizations.of(context)!.your_country,
                             hintStyle: Theme.of(context)
                                 .textTheme
                                 .bodyText1!
@@ -139,12 +141,12 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 child: Column(
                   children: [
                     Row(
-                      children: const [
-                        Text('Mobile phone'),
-                        SizedBox(
+                      children: [
+                        Text(AppLocalizations.of(context)!.mobile_phone),
+                        const SizedBox(
                           width: 80,
                         ),
-                        Text('Birthdate'),
+                        Text(AppLocalizations.of(context)!.birthdate),
                       ],
                     ),
                     Row(
@@ -152,7 +154,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                         Expanded(
                           child: TextFormField(
                             decoration: InputDecoration(
-                              hintText: "phone number",
+                              hintText:
+                                  AppLocalizations.of(context)!.phone_number,
                               hintStyle: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
@@ -184,13 +187,13 @@ class _MyAccountPageState extends State<MyAccountPage> {
                   const SizedBox(width: 106.5),
                   ElevatedButton(
                     onPressed: () => debugPrint("Pressed"),
-                    child: const Text('Save Changes'),
+                    child: Text(AppLocalizations.of(context)!.save_changes),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: ElevatedButton(
                       onPressed: () => debugPrint("Pressed"),
-                      child: const Text('Cancel'),
+                      child: Text(AppLocalizations.of(context)!.cancel),
                     ),
                   ),
                 ],
@@ -235,16 +238,17 @@ class _MyAccountPageState extends State<MyAccountPage> {
           padding: const EdgeInsets.symmetric(vertical: 15.0),
           child: Column(
             children: [
-              const Text('Password'),
+              Text(AppLocalizations.of(context)!.password),
               Row(
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Text('Last Changed: ' ''),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                    child:
+                        Text(AppLocalizations.of(context)!.last_changed + ': '),
                   ),
                   ElevatedButton(
                     onPressed: () => debugPrint("Pressed"),
-                    child: const Text('Change Password'),
+                    child: Text(AppLocalizations.of(context)!.change_password),
                   ),
                 ],
               )
