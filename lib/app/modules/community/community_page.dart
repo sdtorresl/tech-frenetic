@@ -160,8 +160,6 @@ class CommunityPageState extends State<CommunityPage> {
               TextField(
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    //focusedBorder: InputBorder.none,
-                    //disabledBorder: InputBorder.none,
                     hintText: "Write something...",
                     hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
                     prefixIcon: Icon(
@@ -195,10 +193,10 @@ class CommunityPageState extends State<CommunityPage> {
   }
 
   Widget _meetups() {
-    return MeetupWidget();
+    return const MeetupWidget();
   }
 
   Widget _groups() {
-    return GroupsWidget();
+    return const GroupsWidget();
   }
 }
