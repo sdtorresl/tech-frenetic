@@ -58,10 +58,10 @@ class _MyProfileState extends State<MyProfile> {
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 10.0),
-                        child:
-                            Text('0' + AppLocalizations.of(context)!.followers),
+                        child: Text(
+                            '0 ' + AppLocalizations.of(context)!.followers),
                       ),
-                      Text('0' + AppLocalizations.of(context)!.following)
+                      Text('0 ' + AppLocalizations.of(context)!.following)
                     ],
                   ),
                   leading: CircleAvatar(
