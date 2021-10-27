@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-class ArticlesReleted {
-  ArticlesReleted({
+class ArticlesModel {
+  ArticlesModel({
     this.id,
     this.title,
     this.summary,
@@ -33,12 +33,12 @@ class ArticlesReleted {
   final String? thumbnail;
   final String? image;
 
-  factory ArticlesReleted.fromJson(String str) =>
-      ArticlesReleted.fromMap(json.decode(str));
+  factory ArticlesModel.fromJson(String str) =>
+      ArticlesModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory ArticlesReleted.fromMap(Map<String, dynamic> json) => ArticlesReleted(
+  factory ArticlesModel.fromMap(Map<String, dynamic> json) => ArticlesModel(
         id: json["id"],
         title: json["title"],
         summary: json["summary"],

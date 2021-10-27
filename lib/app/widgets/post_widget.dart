@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:techfrenetic/app/providers/articles_provider.dart';
+import 'package:techfrenetic/app/models/articles_model.dart';
 
 class PostWidget extends StatefulWidget {
   final String title;
@@ -11,8 +13,16 @@ class PostWidget extends StatefulWidget {
 }
 
 class _PostWidgetState extends State<PostWidget> {
+  final ArticlesProvider _articlesProvider = ArticlesProvider();
+
   @override
   Widget build(BuildContext context) {
+    List<ArticlesModel> _relatedArticles;
+
+    _articlesProvider
+        .getRelatedArticles()
+        .then((value) => debugPrint(value.toString()));
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       child: Container(
