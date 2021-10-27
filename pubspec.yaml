@@ -48,6 +48,7 @@ dependencies:
   flutter_svg: ^0.22.0
   intl: ^0.17.0
   google_nav_bar: ^5.0.5
+  global_configuration: ^2.0.0-nullsafety.1
 
 dev_dependencies:
   flutter_test:
@@ -82,6 +83,7 @@ flutter:
     - assets/img/
     - assets/img/avatars/
     - assets/img/icons/
+    - assets/cfg/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -105,7 +107,7 @@ flutter:
 
     - family: TechFreneticApp
       fonts:
-       - asset: fonts/TechFreneticApp.ttf
+       - asset: assets/fonts/TechFreneticApp.ttf
           
   #
   # For details regarding fonts from package dependencies,
