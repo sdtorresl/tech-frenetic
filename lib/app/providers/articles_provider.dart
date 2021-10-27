@@ -21,8 +21,8 @@ class ArticlesProvider {
         List<dynamic> jsonResponse = json.jsonDecode(response.body);
 
         for (var item in jsonResponse) {
-          ArticlesReleted room = ArticlesReleted.fromMap(item);
-          relatedArticles.add(room);
+          ArticlesReleted article = ArticlesReleted.fromMap(item);
+          relatedArticles.add(article);
         }
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
