@@ -5,7 +5,8 @@ import 'app/app_module.dart';
 import 'app/app_widget.dart';
 
 void main() async {
-  await GlobalConfiguration().loadFromAsset("app_settings");
+  WidgetsFlutterBinding.ensureInitialized();
+  await GlobalConfiguration().loadFromPath("assets/cfg/app_settings.json");
   runApp(
     ModularApp(
       module: AppModule(),
