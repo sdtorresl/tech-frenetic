@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:techfrenetic/app/providers/articles_provider.dart';
+//import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class PostWidget extends StatefulWidget {
   final ArticlesModel article;
@@ -15,6 +16,9 @@ class PostWidget extends StatefulWidget {
 class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
+    final fifteenAgo = widget.article.date.subtract(
+      const Duration(minutes: 15),
+    );
     Widget _summary = const SizedBox(height: 15);
     if (widget.article.summary.isNotEmpty) {
       _summary = Padding(
@@ -122,7 +126,7 @@ class _PostWidgetState extends State<PostWidget> {
                               color: Theme.of(context).primaryColor,
                             ),
                           ),
-                          Text('13 days ago',
+                          Text(timeago.format(fifteenAgo, locale: 'en_short'),
                               style: Theme.of(context).textTheme.bodyText1),
                         ],
                       )
