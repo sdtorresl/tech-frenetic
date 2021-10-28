@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/modules/login/login_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-//import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -28,27 +28,39 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: GestureDetector(
-              child: const Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                    side: BorderSide(
-                        color: Color.fromRGBO(0, 110, 232, 1), width: 1)),
-                color: Color.fromRGBO(0, 110, 232, 1),
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'Sign up',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                        fontFamily: 'NunitoSan',
-                        color: Colors.white),
-                  ),
+            title: ElevatedButton(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(AppLocalizations.of(context)!.about),
+                ],
+              ),
+              onPressed: () => debugPrint("Pressed"),
+            ),
+          ),
+          ListTile(
+            title: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    return Colors.grey; // Use the component's default.
+                  },
                 ),
               ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Login",
+                    style: Theme.of(context)
+                        .textTheme
+                        .button
+                        ?.copyWith(color: Colors.black),
+                  ),
+                ],
+              ),
+              onPressed: () => debugPrint("Pressed"),
             ),
-            onTap: () {},
           ),
           ListTile(
             title: GestureDetector(
@@ -85,15 +97,24 @@ class CustomDrawer extends StatelessWidget {
           _menuItem(
             context,
             "Tech Community",
-            onPressed: () => {debugPrint("Pressed")},
+            onPressed: () => {
+              debugPrint("Pressed TC"),
+            },
           ),
           _menuItem(
             context,
             "Tech Events",
-            onPressed: () => {debugPrint("Pressed")},
+            onPressed: () => {
+              debugPrint("Pressed events"),
+            },
           ),
-          _menuItem(context, "Tech Vendors",
-              onPressed: () => {debugPrint("Pressed")}),
+          _menuItem(
+            context,
+            "Tech Vendors",
+            onPressed: () => {
+              debugPrint("Pressed vendors"),
+            },
+          ),
           const SizedBox(
             height: 10,
           ),
@@ -111,6 +132,7 @@ class CustomDrawer extends StatelessWidget {
   Widget _menuItem(BuildContext context, String text,
       {required Function onPressed}) {
     return ListTile(
+      onTap: () => onPressed,
       title: Container(
         decoration: const BoxDecoration(
           border: Border(
@@ -119,16 +141,13 @@ class CustomDrawer extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.fromLTRB(0, 15, 0, 20),
-          child: GestureDetector(
-            onTap: () => onPressed,
-            child: Text(
-              text,
-              style: const TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 20,
-                fontFamily: 'NunitoSan',
-                color: Color.fromRGBO(5, 20, 47, 1),
-              ),
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 20,
+              fontFamily: 'NunitoSan',
+              color: Color.fromRGBO(5, 20, 47, 1),
             ),
           ),
         ),

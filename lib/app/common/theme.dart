@@ -34,7 +34,7 @@ final ThemeData techFreneticTheme = ThemeData(
         width: 0,
         style: BorderStyle.none,
       ),
-      borderRadius: BorderRadius.all(Radius.circular(2.0)),
+      borderRadius: BorderRadius.zero,
     ),
     alignedDropdown: false,
     buttonColor: Color(0xff006ee8),
@@ -126,8 +126,8 @@ final ThemeData techFreneticTheme = ThemeData(
     button: TextStyle(
       color: Color(0xdd000000),
       fontFamily: 'NunitoSans',
-      fontSize: null,
-      fontWeight: FontWeight.w400,
+      fontSize: 20,
+      fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
     ),
     subtitle1: TextStyle(
