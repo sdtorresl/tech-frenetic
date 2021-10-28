@@ -25,7 +25,7 @@ class ArticlesModel {
   final String summary;
   final String category;
   final String user;
-  final String date;
+  final DateTime date;
   final String slug;
   final String displayName;
   final bool isPremium;
@@ -49,7 +49,7 @@ class ArticlesModel {
       summary: json["summary"],
       category: json["category"],
       user: json["user"],
-      date: json["date"],
+      date: DateTime.parse(json["date"]),
       slug: json["slug"],
       displayName: json["display_name"],
       isPremium: json["is_premium"] == "True",
