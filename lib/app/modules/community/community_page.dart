@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
 import 'package:techfrenetic/app/widgets/meetups.dart';
@@ -176,20 +178,37 @@ class CommunityPageState extends State<CommunityPage> {
   }
 
   Widget _feeds() {
-    return ListView(
-      shrinkWrap: true,
-      children: [
-        _postbox(),
-        const PostWidget(),
-        const PostWidget(),
-        const PostWidget(),
-        const PostWidget(),
-        const PostWidget(),
-        const PostWidget(),
-        const PostWidget(),
-        const PostWidget(),
-        const PostWidget(),
-      ],
+    ArticlesProvider _articlesProvideer = ArticlesProvider();
+
+    return FutureBuilder(
+      future: _articlesProvideer.getRelatedArticles(),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<ArticlesModel>> snapshot) {
+        if (snapshot.hasData) {
+          List<ArticlesModel> articles = snapshot.data ?? [];
+          List<Widget> postsWidgets = [];
+
+          for (ArticlesModel article in articles) {
+            debugPrint(article.title.toString());
+            postsWidgets.add(PostWidget(
+              article: article,
+            ));
+          }
+
+          return ListView(
+            shrinkWrap: true,
+            children: [
+              _postbox(),
+              ...postsWidgets,
+              const SizedBox(
+                height: 60,
+              )
+            ],
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
+        }
+      },
     );
   }
 
