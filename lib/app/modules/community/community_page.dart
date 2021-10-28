@@ -198,7 +198,13 @@ class CommunityPageState extends State<CommunityPage> {
 
           return ListView(
             shrinkWrap: true,
-            children: [_postbox(), ...postsWidgets],
+            children: [
+              _postbox(),
+              ...postsWidgets,
+              const SizedBox(
+                height: 60,
+              )
+            ],
           );
         } else {
           return const Center(child: CircularProgressIndicator());
