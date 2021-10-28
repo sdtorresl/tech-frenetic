@@ -15,12 +15,11 @@ class ArticlesProvider {
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
-        debugPrint(response.body);
-
         List<dynamic> jsonResponse = json.jsonDecode(response.body);
 
         for (var item in jsonResponse) {
           ArticlesModel article = ArticlesModel.fromMap(item);
+          debugPrint(article.image);
           relatedArticles.add(article);
         }
       } else {
