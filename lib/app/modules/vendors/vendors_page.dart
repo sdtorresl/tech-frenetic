@@ -6,6 +6,7 @@ class VendorsPage extends StatefulWidget {
   @override
   VendorsPageState createState() => VendorsPageState();
 }
+
 class VendorsPageState extends State<VendorsPage> {
   @override
   Widget build(BuildContext context) {
@@ -14,7 +15,7 @@ class VendorsPageState extends State<VendorsPage> {
         title: Text(widget.title),
       ),
       body: Column(
-        children: <Widget>[],
+        children: const <Widget>[],
       ),
     );
   }

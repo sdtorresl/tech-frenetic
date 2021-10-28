@@ -148,7 +148,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             onPressed: () {
               debugPrint("Action pressed");
             },
-            icon: SvgPicture.asset("assets/img/icons/share_video.svg"),
+            icon: const Icon(TechFreneticIcons.shareVideo),
           ),
           const SizedBox(
             height: 5,

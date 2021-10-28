@@ -28,27 +28,39 @@ class CustomDrawer extends StatelessWidget {
             ),
           ),
           ListTile(
-            title: GestureDetector(
-              child: const Card(
-                shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                    side: BorderSide(
-                        color: Color.fromRGBO(0, 110, 232, 1), width: 1)),
-                color: Color.fromRGBO(0, 110, 232, 1),
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'Sign up',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 20,
-                        fontFamily: 'NunitoSan',
-                        color: Colors.white),
-                  ),
+            title: ElevatedButton(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(AppLocalizations.of(context)!.about),
+                ],
+              ),
+              onPressed: () => debugPrint("Pressed"),
+            ),
+          ),
+          ListTile(
+            title: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.resolveWith<Color>(
+                  (Set<MaterialState> states) {
+                    return Colors.white; // Use the component's default.
+                  },
                 ),
               ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Login",
+                    style: Theme.of(context)
+                        .textTheme
+                        .button
+                        ?.copyWith(color: Colors.black),
+                  ),
+                ],
+              ),
+              onPressed: () => debugPrint("Pressed"),
             ),
-            onTap: () {},
           ),
           ListTile(
             title: GestureDetector(
@@ -72,132 +84,87 @@ class CustomDrawer extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const LoginPage()));
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
               },
             ),
           ),
           const SizedBox(
             height: 30,
           ),
-          ListTile(
-            title: Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(width: .5, color: Colors.black),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 23, 0, 13),
-                child: GestureDetector(
-                  child: const Text(
-                    'Tech Community',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                      fontFamily: 'NunitoSan',
-                      color: Color.fromRGBO(5, 20, 47, 1),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          _menuItem(
+            context,
+            "Tech Community",
+            onPressed: () => {
+              debugPrint("Pressed TC"),
+            },
           ),
-          ListTile(
-            title: Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(width: .5, color: Colors.black),
-                  bottom: BorderSide(width: .5, color: Colors.black),
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 20.00),
-                child: GestureDetector(
-                  child: const Text(
-                    'Tech Events',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                      fontFamily: 'NunitoSan',
-                      color: Color.fromRGBO(5, 20, 47, 1),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          _menuItem(
+            context,
+            "Tech Events",
+            onPressed: () => {
+              debugPrint("Pressed events"),
+            },
           ),
-          ListTile(
-            title: Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  //top: BorderSide(width: .5, color: Colors.black),
-                  bottom: BorderSide(width: .5, color: Colors.black),
-                ),
-              ),
-              child: Padding(
-                padding: EdgeInsets.fromLTRB(0, 15, 0, 20),
-                child: GestureDetector(
-                  child: const Text('Tech Vendors',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20,
-                          fontFamily: 'NunitoSan',
-                          color: Color.fromRGBO(5, 20, 47, 1))),
-                ),
-              ),
-            ),
+          _menuItem(
+            context,
+            "Tech Vendors",
+            onPressed: () => {
+              debugPrint("Pressed vendors"),
+            },
           ),
           const SizedBox(
             height: 10,
           ),
-          ListTile(
-            title: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: GestureDetector(
-                child: const Text('About Us',
-                    style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 20,
-                        fontFamily: 'NunitoSan',
-                        color: Color.fromRGBO(5, 20, 47, 1))),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 0,
-          ),
-          const ListTile(
-            title: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text('Contact Us',
-                  style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 20,
-                      fontFamily: 'NunitoSan',
-                      color: Color.fromRGBO(5, 20, 47, 1))),
-            ),
-          ),
-          const SizedBox(
-            height: 0,
-          ),
-          const ListTile(
-            title: Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Text(
-                'Newsletter',
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 20,
-                  fontFamily: 'NunitoSan',
-                  color: Color.fromRGBO(5, 20, 47, 1),
-                ),
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 30,
-          ),
+          _simpleMenuItem(context, "About Us",
+              onPressed: () => {debugPrint("About us pressed")}),
+          _simpleMenuItem(context, "Contact Us",
+              onPressed: () => {debugPrint("Contact us pressed")}),
+          _simpleMenuItem(context, "Newsletter",
+              onPressed: () => {debugPrint("Newsletter us pressed")}),
         ],
+      ),
+    );
+  }
+
+  Widget _menuItem(BuildContext context, String text,
+      {required Function onPressed}) {
+    return ListTile(
+      onTap: () => onPressed,
+      title: Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(width: .5, color: Colors.black),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 15, 0, 20),
+          child: Text(
+            text,
+            style: const TextStyle(
+              fontWeight: FontWeight.w700,
+              fontSize: 20,
+              fontFamily: 'NunitoSan',
+              color: Color.fromRGBO(5, 20, 47, 1),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _simpleMenuItem(BuildContext context, String text,
+      {required Function onPressed}) {
+    return ListTile(
+      onTap: () => onPressed,
+      title: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.bodyText1!.copyWith(fontSize: 15),
+        ),
       ),
     );
   }

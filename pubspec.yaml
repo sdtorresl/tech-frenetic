@@ -46,6 +46,7 @@ dependencies:
   flutter_modular: ^4.1.2
   titled_navigation_bar: ^5.0.0-nullsafety.0
   flutter_svg: ^0.22.0
+  syncfusion_flutter_charts: ^19.3.46
   intl: ^0.17.0
   google_nav_bar: ^5.0.5
   global_configuration: ^2.0.0-nullsafety.1

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
+import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
 import 'package:techfrenetic/app/widgets/meetups.dart';
 import 'package:techfrenetic/app/widgets/groups.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 
 class CommunityPage extends StatefulWidget {
   final String title;
@@ -141,18 +141,19 @@ class CommunityPageState extends State<CommunityPage> {
                   children: [
                     const Text('Share an update'),
                     GestureDetector(
-                      child: SvgPicture.asset(
-                        'assets/img/icons/share_video.svg',
-                        allowDrawingOutsideViewBox: true,
-                        semanticsLabel: 'Ligth Bulb',
+                      child: const Icon(
+                        TechFreneticIcons.article,
+                        size: 20,
                       ),
                       onTap: () {},
                     ),
                     GestureDetector(
-                      child: SvgPicture.asset(
-                        'assets/img/icons/write_article.svg',
-                        allowDrawingOutsideViewBox: true,
-                        semanticsLabel: 'Ligth Bulb',
+                      child: Container(
+                        color: Colors.amberAccent,
+                        child: const Icon(
+                          TechFreneticIcons.shareVideo,
+                          size: 20,
+                        ),
                       ),
                       onTap: () {},
                     ),
@@ -162,8 +163,6 @@ class CommunityPageState extends State<CommunityPage> {
               TextField(
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    //focusedBorder: InputBorder.none,
-                    //disabledBorder: InputBorder.none,
                     hintText: "Write something...",
                     hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
                     prefixIcon: Icon(
@@ -214,10 +213,10 @@ class CommunityPageState extends State<CommunityPage> {
   }
 
   Widget _meetups() {
-    return MeetupWidget();
+    return const MeetupWidget();
   }
 
   Widget _groups() {
-    return GroupsWidget();
+    return const GroupsWidget();
   }
 }
