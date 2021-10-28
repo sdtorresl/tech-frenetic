@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/modules/login/login_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+//import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -72,81 +72,28 @@ class CustomDrawer extends StatelessWidget {
               ),
               onTap: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => const LoginPage()));
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
               },
             ),
           ),
           const SizedBox(
             height: 30,
           ),
-          ListTile(
-            title: Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(width: .5, color: Colors.black),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 23, 0, 13),
-                child: GestureDetector(
-                  child: const Text(
-                    'Tech Community',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                      fontFamily: 'NunitoSan',
-                      color: Color.fromRGBO(5, 20, 47, 1),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          _menuItem(
+            context,
+            "Tech Community",
+            onPressed: () => {debugPrint("Pressed")},
           ),
-          ListTile(
-            title: Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  top: BorderSide(width: .5, color: Colors.black),
-                  bottom: BorderSide(width: .5, color: Colors.black),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.00),
-                child: GestureDetector(
-                  child: const Text(
-                    'Tech Events',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                      fontFamily: 'NunitoSan',
-                      color: Color.fromRGBO(5, 20, 47, 1),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+          _menuItem(
+            context,
+            "Tech Events",
+            onPressed: () => {debugPrint("Pressed")},
           ),
-          ListTile(
-            title: Container(
-              decoration: const BoxDecoration(
-                border: Border(
-                  //top: BorderSide(width: 0, color: Colors.black),
-                  bottom: BorderSide(width: .5, color: Colors.black),
-                ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(0, 15, 0, 20),
-                child: GestureDetector(
-                  child: const Text('Tech Vendors',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20,
-                          fontFamily: 'NunitoSan',
-                          color: Color.fromRGBO(5, 20, 47, 1))),
-                ),
-              ),
-            ),
-          ),
+          _menuItem(context, "Tech Vendors",
+              onPressed: () => {debugPrint("Pressed")}),
           const SizedBox(
             height: 10,
           ),
@@ -157,6 +104,34 @@ class CustomDrawer extends StatelessWidget {
           _simpleMenuItem(context, "Newsletter",
               onPressed: () => {debugPrint("Newsletter us pressed")}),
         ],
+      ),
+    );
+  }
+
+  Widget _menuItem(BuildContext context, String text,
+      {required Function onPressed}) {
+    return ListTile(
+      title: Container(
+        decoration: const BoxDecoration(
+          border: Border(
+            bottom: BorderSide(width: .5, color: Colors.black),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 15, 0, 20),
+          child: GestureDetector(
+            onTap: () => onPressed,
+            child: Text(
+              text,
+              style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+                fontFamily: 'NunitoSan',
+                color: Color.fromRGBO(5, 20, 47, 1),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

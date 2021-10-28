@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
+//import 'package:flutter_svg/svg.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/widgets/my_profile.dart';
+import 'package:techfrenetic/app/widgets/my_account.dart';
+import 'package:techfrenetic/app/widgets/my_content.dart';
+import 'package:techfrenetic/app/widgets/my_activity.dart';
+import 'package:techfrenetic/app/widgets/saved_articles.dart';
 
 class ProfilePage extends StatefulWidget {
   final String title;
@@ -27,7 +33,7 @@ class ProfilePageState extends State<ProfilePage> {
       ),
       GButton(
         icon: Icons.save,
-        text: AppLocalizations.of(context)!.saved_articles,
+        text: AppLocalizations.of(context)!.my_articles,
       ),
       GButton(
         icon: Icons.manage_accounts,
@@ -81,22 +87,22 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _myProfile(BuildContext context) {
-    return Text(AppLocalizations.of(context)!.my_profile);
+    return const MyProfile();
   }
 
   Widget _myContent(BuildContext context) {
-    return Text(AppLocalizations.of(context)!.my_content);
+    return const MyContent();
   }
 
   Widget _myActivity(BuildContext context) {
-    return Text(AppLocalizations.of(context)!.my_activity);
+    return const MyActivity();
   }
 
   Widget _savedArticles(BuildContext context) {
-    return Text(AppLocalizations.of(context)!.saved_articles);
+    return const SavedArticles();
   }
 
   Widget _myAccount(BuildContext context) {
-    return Text(AppLocalizations.of(context)!.my_account);
+    return const MyAccountPage();
   }
 }
