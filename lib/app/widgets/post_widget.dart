@@ -23,6 +23,38 @@ class _PostWidgetState extends State<PostWidget> {
       );
     }
 
+    Widget _comments = const SizedBox();
+    if (widget.article.comments != '0' && widget.article.comments == '1') {
+      _comments = Row(
+        children: [
+          SizedBox(
+            child: SvgPicture.asset(
+              'assets/img/icons/dot.svg',
+              allowDrawingOutsideViewBox: true,
+              semanticsLabel: 'Dot',
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          Text(widget.article.comments + ' comment'),
+        ],
+      );
+    }
+    if (widget.article.comments != '0' && widget.article.comments != '1') {
+      _comments = Row(
+        children: [
+          SizedBox(
+            child: SvgPicture.asset(
+              'assets/img/icons/dot.svg',
+              allowDrawingOutsideViewBox: true,
+              semanticsLabel: 'Dot',
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          Text(widget.article.comments + ' comments'),
+        ],
+      );
+    }
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       decoration: BoxDecoration(
@@ -78,8 +110,22 @@ class _PostWidgetState extends State<PostWidget> {
                             .headline1!
                             .copyWith(fontSize: 15),
                       ),
-                      Text("Profession 1 - 13 days ago",
-                          style: Theme.of(context).textTheme.bodyText1)
+                      Row(
+                        children: [
+                          Text("Profession 1",
+                              style: Theme.of(context).textTheme.bodyText1),
+                          SizedBox(
+                            child: SvgPicture.asset(
+                              'assets/img/icons/dot.svg',
+                              allowDrawingOutsideViewBox: true,
+                              semanticsLabel: 'Dot',
+                              color: Theme.of(context).primaryColor,
+                            ),
+                          ),
+                          Text('13 days ago',
+                              style: Theme.of(context).textTheme.bodyText1),
+                        ],
+                      )
                     ],
                   )
                 ],
@@ -102,9 +148,25 @@ class _PostWidgetState extends State<PostWidget> {
               height: 0,
               thickness: 1,
             ),
-            const Padding(
-              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: Text('4 views'),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+              child: Row(
+                children: [
+                  _comments,
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  SizedBox(
+                    child: SvgPicture.asset(
+                      'assets/img/icons/dot.svg',
+                      allowDrawingOutsideViewBox: true,
+                      semanticsLabel: 'Dot',
+                      color: Theme.of(context).primaryColor,
+                    ),
+                  ),
+                  const Text('4 views'),
+                ],
+              ),
             ),
             const Divider(
               height: 0,
@@ -129,7 +191,7 @@ class _PostWidgetState extends State<PostWidget> {
                     child: SvgPicture.asset(
                       'assets/img/icons/coment.svg',
                       allowDrawingOutsideViewBox: true,
-                      semanticsLabel: 'Ligth Bulb',
+                      semanticsLabel: 'Text Box',
                     ),
                   ),
                   const Text('Comment'),
@@ -138,7 +200,7 @@ class _PostWidgetState extends State<PostWidget> {
                     child: SvgPicture.asset(
                       'assets/img/icons/share.svg',
                       allowDrawingOutsideViewBox: true,
-                      semanticsLabel: 'Ligth Bulb',
+                      semanticsLabel: 'Share Icon',
                     ),
                   ),
                   const Text('Share'),
