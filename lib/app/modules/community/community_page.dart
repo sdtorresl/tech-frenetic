@@ -189,10 +189,7 @@ class CommunityPageState extends State<CommunityPage> {
           List<Widget> postsWidgets = [];
 
           for (ArticlesModel article in articles) {
-            debugPrint(article.title.toString());
-            postsWidgets.add(PostWidget(
-              article: article,
-            ));
+            postsWidgets.add(PostWidget(article: article));
           }
 
           return ListView(
@@ -200,9 +197,7 @@ class CommunityPageState extends State<CommunityPage> {
             children: [
               _postbox(),
               ...postsWidgets,
-              const SizedBox(
-                height: 60,
-              )
+              const SizedBox(height: 60),
             ],
           );
         } else {

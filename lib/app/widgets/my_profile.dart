@@ -57,7 +57,7 @@ class _MyProfileState extends State<MyProfile> {
                   subtitle: Row(
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.0),
+                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
                         child: Text(
                             '0 ' + AppLocalizations.of(context)!.followers),
                       ),
@@ -102,14 +102,12 @@ class _MyProfileState extends State<MyProfile> {
             child: Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(AppLocalizations.of(context)!.my_dashboard,
                           style: Theme.of(context).textTheme.headline1),
-                    ),
-                    const SizedBox(
-                      width: 80,
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class GroupsWidget extends StatefulWidget {
   const GroupsWidget({Key? key}) : super(key: key);
@@ -13,9 +14,8 @@ class _GroupsWidgetState extends State<GroupsWidget> {
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
           child: Container(
-            //color: Colors.white,
             decoration: BoxDecoration(
                 color: Colors.white,
                 border: Border(
@@ -49,40 +49,43 @@ class _GroupsWidgetState extends State<GroupsWidget> {
                     ),
                   ),
                   child: Row(
-                    children: const [
-                      Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text('Discover groups'),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      TextButton(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text('Discover groups',
+                              style: Theme.of(context).textTheme.bodyText2),
+                        ),
+                        onPressed: () => {},
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text('My groups'),
+                      TextButton(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text('My groups',
+                              style: Theme.of(context).textTheme.bodyText2),
+                        ),
+                        onPressed: () => {},
                       ),
-                      Padding(
-                        padding: EdgeInsets.all(10.0),
-                        child: Text('Create groups'),
+                      TextButton(
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Text('Create group',
+                              style: Theme.of(context).textTheme.bodyText2),
+                        ),
+                        onPressed: () => {},
                       ),
                     ],
                   ),
                 ),
-                Card(
-                  elevation: 0,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                  ),
+                Container(
+                  padding: const EdgeInsets.symmetric(vertical: 50),
                   child: Column(
                     children: [
-                      const SizedBox(
-                        height: 40,
-                      ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Card(
-                            color: Theme.of(context).backgroundColor,
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.zero,
-                            ),
+                          HighlightContainer(
                             child: Text(
                               'My',
                               style: Theme.of(context)
@@ -103,34 +106,24 @@ class _GroupsWidgetState extends State<GroupsWidget> {
                         ],
                       ),
                       const SizedBox(
-                        height: 30,
+                        height: 50,
                       ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text(
-                          'You have no groups yet',
-                          textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1!
-                              .copyWith(fontSize: 15),
-                        ),
+                      Text(
+                        'You have no groups yet',
+                        textAlign: TextAlign.center,
+                        style: Theme.of(context).textTheme.bodyText1!,
                       ),
                       const SizedBox(
                         height: 60,
                       ),
-                      Card(
-                        color: Theme.of(context).primaryColor,
-                        child: const Padding(
-                          padding: EdgeInsets.all(20.0),
-                          child: Text('Create a group',
-                              style: TextStyle(
-                                color: Colors.white,
-                              )),
+                      ElevatedButton(
+                        onPressed: () => {},
+                        child: const Text(
+                          'Create a group',
+                          style: TextStyle(
+                            color: Colors.white,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 70,
                       ),
                     ],
                   ),

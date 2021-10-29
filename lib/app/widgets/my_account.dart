@@ -183,8 +183,8 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 ),
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  const SizedBox(width: 106.5),
                   ElevatedButton(
                     onPressed: () => debugPrint("Pressed"),
                     child: Text(AppLocalizations.of(context)!.save_changes),
@@ -205,18 +205,6 @@ class _MyAccountPageState extends State<MyAccountPage> {
     );
   }
 
-  // _selectDate(BuildContext context) async{
-  //    DateTime selected = await showDatePicker(
-  //     context: context,
-  //     initialDate: selectedDate,
-  //     firstDate: DateTime(1900),
-  //     lastDate: DateTime(2030),
-  //     );
-  //   if (selected != null && selected!= selectedDate )
-  //   setState(() {
-  //     selectedDate = selected;
-  //   });
-  // }
   Widget _passwordchange(context) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -240,6 +228,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
             children: [
               Text(AppLocalizations.of(context)!.password),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
