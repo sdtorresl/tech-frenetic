@@ -23,6 +23,7 @@ class AppWidget extends StatelessWidget {
         Locale('es', ''),
       ],
       theme: techFreneticTheme,
+      initialRoute: '/community',
     ).modular();
   }
 }

@@ -19,7 +19,6 @@ class ArticlesProvider {
 
         for (var item in jsonResponse) {
           ArticlesModel article = ArticlesModel.fromMap(item);
-          debugPrint(article.image);
           relatedArticles.add(article);
         }
       } else {

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/common/icons.dart';
-import 'package:techfrenetic/app/modules/community/community_page.dart';
-import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/widgets/expandable_fab.dart';
 import 'home_controller.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
@@ -19,12 +17,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
-  final List<Widget> _pages = [
-    const CommunityPage(),
-    const Text("Skills"),
-    const Text("Vendors"),
-    const ProfilePage()
-  ];
+  final List<String> _pages = ['/community', '/skills', '/vendors', '/profile'];
 
   int _currentIndex = 0;
 
@@ -58,7 +51,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       endDrawer: const CustomDrawer(),
       body: AnimatedContainer(
         duration: const Duration(seconds: 10),
-        child: _pages[_currentIndex],
+        child: RouterOutlet(),
       ),
       floatingActionButton: _floatingActionButton(),
       bottomNavigationBar: _bottomNavigationBar(),
@@ -196,11 +189,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       currentIndex:
           _currentIndex, // Use this to update the Bar giving a position
       onTap: (index) {
-        debugPrint("Selected Index: $index");
         setState(() {
           _currentIndex = index;
         });
+        Modular.to.navigate(_pages[index]);
       },
+      curve: Curves.easeInBack,
       items: [
         TitledNavigationBarItem(
             title: Text(AppLocalizations.of(context)!.community),
