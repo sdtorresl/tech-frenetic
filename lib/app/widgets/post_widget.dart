@@ -58,7 +58,14 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       );
     }
-
+    Widget _image = const SizedBox();
+    if (widget.article.summary.isNotEmpty) {
+      _image = CachedNetworkImage(
+        placeholder: (context, value) => const LinearProgressIndicator(),
+        errorWidget: (context, value, e) => const Icon(Icons.error),
+        imageUrl: widget.article.image,
+      );
+    }
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       decoration: BoxDecoration(
@@ -108,7 +115,7 @@ class _PostWidgetState extends State<PostWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        widget.article.user,
+                        widget.article.displayName,
                         style: Theme.of(context)
                             .textTheme
                             .headline1!
@@ -116,7 +123,7 @@ class _PostWidgetState extends State<PostWidget> {
                       ),
                       Row(
                         children: [
-                          Text("Profession 1",
+                          Text(widget.article.role,
                               style: Theme.of(context).textTheme.bodyText1),
                           SizedBox(
                             child: SvgPicture.asset(
@@ -136,15 +143,16 @@ class _PostWidgetState extends State<PostWidget> {
               ),
             ),
             _summary,
-            CachedNetworkImage(
-              placeholder: (context, value) => const LinearProgressIndicator(),
-              errorWidget: (context, value, e) => const Icon(Icons.error),
-              imageUrl: widget.article.image,
-            ),
+            _image,
+            // CachedNetworkImage(
+            //   placeholder: (context, value) => const LinearProgressIndicator(),
+            //   errorWidget: (context, value, e) => const Icon(Icons.error),
+            //   imageUrl: widget.article.image,
+            // ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
               child: Text(
-                widget.article.category,
+                widget.article.title,
                 style: Theme.of(context).textTheme.headline4!,
               ),
             ),
@@ -168,7 +176,7 @@ class _PostWidgetState extends State<PostWidget> {
                       color: Theme.of(context).primaryColor,
                     ),
                   ),
-                  const Text('4 views'),
+                  Text(widget.article.views + ' views'),
                 ],
               ),
             ),
