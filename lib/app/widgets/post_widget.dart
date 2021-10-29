@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
@@ -43,21 +44,6 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       );
     }
-    if (widget.article.comments != '0' && widget.article.comments != '1') {
-      _comments = Row(
-        children: [
-          SizedBox(
-            child: SvgPicture.asset(
-              'assets/img/icons/dot.svg',
-              allowDrawingOutsideViewBox: true,
-              semanticsLabel: 'Dot',
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          Text(widget.article.comments + ' comments'),
-        ],
-      );
-    }
 
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
@@ -81,138 +67,152 @@ class _PostWidgetState extends State<PostWidget> {
               offset: const Offset(1.9, 1.7),
             )
           ]),
-      child: Card(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.zero,
-        ),
-        elevation: 0,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    child: ClipOval(
-                      child: SvgPicture.asset(
-                        'assets/img/avatars/avatar-02.svg',
-                        semanticsLabel: 'Acme Logo',
-                      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  child: ClipOval(
+                    child: SvgPicture.asset(
+                      'assets/img/avatars/avatar-02.svg',
+                      semanticsLabel: 'Acme Logo',
                     ),
-                    radius: 20,
-                    backgroundColor: Colors.grey[200],
                   ),
-                  const SizedBox(width: 20),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        widget.article.user,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline1!
-                            .copyWith(fontSize: 15),
-                      ),
-                      Row(
-                        children: [
-                          Text("Profession 1",
-                              style: Theme.of(context).textTheme.bodyText1),
-                          SizedBox(
-                            child: SvgPicture.asset(
-                              'assets/img/icons/dot.svg',
-                              allowDrawingOutsideViewBox: true,
-                              semanticsLabel: 'Dot',
-                              color: Theme.of(context).primaryColor,
-                            ),
+                  radius: 20,
+                  backgroundColor: Colors.grey[200],
+                ),
+                const SizedBox(width: 20),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.article.user,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1!
+                          .copyWith(fontSize: 15),
+                    ),
+                    Row(
+                      children: [
+                        Text("Profession 1",
+                            style: Theme.of(context).textTheme.bodyText1),
+                        SizedBox(
+                          child: SvgPicture.asset(
+                            'assets/img/icons/dot.svg',
+                            allowDrawingOutsideViewBox: true,
+                            semanticsLabel: 'Dot',
+                            color: Theme.of(context).primaryColor,
                           ),
-                          Text(timeago.format(fifteenAgo, locale: 'en_short'),
-                              style: Theme.of(context).textTheme.bodyText1),
-                        ],
-                      )
-                    ],
-                  )
-                ],
-              ),
+                        ),
+                        Text(timeago.format(fifteenAgo, locale: 'en_short'),
+                            style: Theme.of(context).textTheme.bodyText1),
+                      ],
+                    )
+                  ],
+                )
+              ],
             ),
-            _summary,
-            CachedNetworkImage(
-              placeholder: (context, value) => const LinearProgressIndicator(),
-              errorWidget: (context, value, e) => const Icon(Icons.error),
-              imageUrl: widget.article.image,
+          ),
+          _summary,
+          CachedNetworkImage(
+            placeholder: (context, value) => const LinearProgressIndicator(),
+            errorWidget: (context, value, e) => const Icon(Icons.error),
+            imageUrl: widget.article.image,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            child: Text(
+              widget.article.category,
+              style: Theme.of(context).textTheme.headline4!,
             ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              child: Text(
-                widget.article.category,
-                style: Theme.of(context).textTheme.headline4!,
-              ),
-            ),
-            const Divider(
-              height: 0,
-              thickness: 1,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-              child: Row(
-                children: [
-                  _comments,
-                  const SizedBox(
-                    width: 10,
+          ),
+          const Divider(
+            height: 0,
+            thickness: 1,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: Row(
+              children: [
+                _comments,
+                const SizedBox(
+                  width: 10,
+                ),
+                SizedBox(
+                  child: SvgPicture.asset(
+                    'assets/img/icons/dot.svg',
+                    allowDrawingOutsideViewBox: true,
+                    semanticsLabel: 'Dot',
+                    color: Theme.of(context).primaryColor,
                   ),
-                  SizedBox(
-                    child: SvgPicture.asset(
-                      'assets/img/icons/dot.svg',
-                      allowDrawingOutsideViewBox: true,
-                      semanticsLabel: 'Dot',
-                      color: Theme.of(context).primaryColor,
-                    ),
-                  ),
-                  const Text('4 views'),
-                ],
-              ),
+                ),
+                const Text('4 views'),
+              ],
             ),
-            const Divider(
-              height: 0,
-              thickness: 1,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 15),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  SizedBox(
-                    child: SvgPicture.asset(
-                      'assets/img/icons/light_bulb.svg',
-                      allowDrawingOutsideViewBox: true,
-                      semanticsLabel: 'Ligth Bulb',
-                    ),
-                  ),
-                  const Text('Cool'),
-                  const SizedBox(width: 20),
-                  SizedBox(
-                    child: SvgPicture.asset(
-                      'assets/img/icons/coment.svg',
-                      allowDrawingOutsideViewBox: true,
-                      semanticsLabel: 'Text Box',
-                    ),
-                  ),
-                  const Text('Comment'),
-                  const SizedBox(width: 20),
-                  SizedBox(
-                    child: SvgPicture.asset(
-                      'assets/img/icons/share.svg',
-                      allowDrawingOutsideViewBox: true,
-                      semanticsLabel: 'Share Icon',
-                    ),
-                  ),
-                  const Text('Share'),
-                ],
-              ),
-            )
-          ],
-        ),
+          ),
+          const Divider(
+            height: 0,
+            thickness: 1,
+          ),
+          _actionBar(context)
+        ],
+      ),
+    );
+  }
+
+  _actionBar(context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _actionButton(
+              context: context,
+              iconAsset: 'assets/img/icons/light_bulb.svg',
+              text: 'Cool',
+              onPressed: () => {debugPrint("Like!")}),
+          _actionButton(
+              context: context,
+              iconAsset: 'assets/img/icons/coment.svg',
+              text: 'Comment',
+              onPressed: () => {
+                    Modular.to.navigate("/community/article",
+                        arguments: widget.article)
+                  }),
+          _actionButton(
+              context: context,
+              iconAsset: 'assets/img/icons/share.svg',
+              text: 'Share',
+              onPressed: () => {debugPrint("Share article")}),
+        ],
+      ),
+    );
+  }
+
+  TextButton _actionButton(
+      {required BuildContext context,
+      required String iconAsset,
+      required String text,
+      required void Function() onPressed}) {
+    return TextButton(
+      onPressed: onPressed,
+      child: Row(
+        children: [
+          SvgPicture.asset(
+            iconAsset,
+            allowDrawingOutsideViewBox: true,
+            semanticsLabel: 'Text Box',
+          ),
+          const SizedBox(width: 10),
+          Text(
+            text,
+            style: Theme.of(context).textTheme.bodyText2,
+          ),
+        ],
       ),
     );
   }
