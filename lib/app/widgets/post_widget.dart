@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 //import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/modules/articles/articles_page.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostWidget extends StatefulWidget {
@@ -171,23 +172,26 @@ class _PostWidgetState extends State<PostWidget> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _actionButton(
-              context: context,
-              iconAsset: 'assets/img/icons/light_bulb.svg',
-              text: 'Cool',
-              onPressed: () => {debugPrint("Like!")}),
+            context: context,
+            iconAsset: 'assets/img/icons/light_bulb.svg',
+            text: 'Cool',
+            onPressed: () => {debugPrint("Like!")},
+          ),
           _actionButton(
-              context: context,
-              iconAsset: 'assets/img/icons/coment.svg',
-              text: 'Comment',
-              onPressed: () => {
-                    Modular.to.navigate("/community/article",
-                        arguments: widget.article)
-                  }),
+            context: context,
+            iconAsset: 'assets/img/icons/coment.svg',
+            text: 'Comment',
+            onPressed: () {
+              Modular.to
+                  .pushNamed("/community/article", arguments: widget.article);
+            },
+          ),
           _actionButton(
-              context: context,
-              iconAsset: 'assets/img/icons/share.svg',
-              text: 'Share',
-              onPressed: () => {debugPrint("Share article")}),
+            context: context,
+            iconAsset: 'assets/img/icons/share.svg',
+            text: 'Share',
+            onPressed: () => {debugPrint("Share article")},
+          ),
         ],
       ),
     );

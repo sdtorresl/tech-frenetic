@@ -7,6 +7,7 @@ class ArticleWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("Article page!");
     return Scaffold();
   }
 }
