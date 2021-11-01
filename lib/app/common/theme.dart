@@ -23,11 +23,26 @@ final ThemeData techFreneticTheme = ThemeData(
   indicatorColor: const Color(0xff0079ff),
   hintColor: const Color(0x8a000000),
   errorColor: const Color(0xffd32f2f),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          const EdgeInsets.all(30)),
+      textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+          (Set<MaterialState> states) {
+        return const TextStyle(
+          fontFamily: 'NunitoSansBold',
+          fontSize: 20,
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.normal,
+        );
+      }),
+    ),
+  ),
   buttonTheme: const ButtonThemeData(
     textTheme: ButtonTextTheme.primary,
     minWidth: 140,
     height: 44,
-    padding: EdgeInsets.only(top: 0, bottom: 0, left: 36, right: 36),
+    padding: EdgeInsets.only(top: 20, bottom: 20, left: 36, right: 36),
     shape: RoundedRectangleBorder(
       side: BorderSide(
         color: Color(0xff000000),

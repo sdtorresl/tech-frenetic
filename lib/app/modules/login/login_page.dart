@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;
@@ -47,17 +48,17 @@ class LoginPageState extends State<LoginPage> {
 
   Widget _mainTitle(context) {
     return Column(
-      children: const [
-        Text('Login to',
-            style: TextStyle(
+      children: [
+        Text(AppLocalizations.of(context)!.login_blue_title,
+            style: const TextStyle(
               fontWeight: FontWeight.w900,
               fontSize: 50,
               fontFamily: 'NunitoSan',
               color: Color.fromRGBO(5, 20, 47, 1),
             )),
         Text(
-          'your account',
-          style: TextStyle(
+          AppLocalizations.of(context)!.login_black_title,
+          style: const TextStyle(
             fontWeight: FontWeight.w900,
             fontSize: 50,
             fontFamily: 'NunitoSan',
@@ -70,9 +71,9 @@ class LoginPageState extends State<LoginPage> {
 
   Widget _createAccount(context) {
     return Column(
-      children: const [
+      children: [
         Text(
-          'Don´t you have an account yet?',
+          AppLocalizations.of(context)!.login_intro_text,
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 20,
@@ -81,7 +82,7 @@ class LoginPageState extends State<LoginPage> {
           ),
         ),
         Text(
-          'Create one',
+          AppLocalizations.of(context)!.login_create_one,
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 20,
@@ -96,28 +97,28 @@ class LoginPageState extends State<LoginPage> {
 
   Widget _loginForm(context) {
     return Column(
-      children: const [
+      children: [
         TextField(
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
-            prefixIcon: Icon(
+            prefixIcon: const Icon(
               Icons.email_outlined,
               color: Colors.grey,
             ),
-            hintText: "Email",
-            hintStyle: TextStyle(color: Colors.grey),
+            hintText: AppLocalizations.of(context)!.login_label_email,
+            hintStyle: const TextStyle(color: Colors.grey),
           ),
         ),
-        SizedBox(height: 30),
+        const SizedBox(height: 30),
         TextField(
           keyboardType: TextInputType.text,
           decoration: InputDecoration(
-            prefixIcon: Icon(
+            prefixIcon: const Icon(
               Icons.lock,
               color: Colors.grey,
             ),
-            hintText: "Password",
-            hintStyle: TextStyle(color: Colors.grey),
+            hintText: AppLocalizations.of(context)!.login_label_pass,
+            hintStyle: const TextStyle(color: Colors.grey),
           ),
         ),
       ],
@@ -139,26 +140,16 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Widget _logginButton(context) {
-    return GestureDetector(
-      child: const Card(
-        color: Color.fromRGBO(0, 110, 232, 1),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 10,
-          ),
-          child: Center(
-            child: Text(
-              'Login',
-              style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 20,
-                  fontFamily: 'NunitoSan',
-                  color: Colors.white),
-            ),
-          ),
-        ),
+    return ElevatedButton(
+      onPressed: () => print("Login"),
+      child: Text(
+        AppLocalizations.of(context)!.login_title,
+        style: const TextStyle(
+            fontWeight: FontWeight.w700,
+            fontSize: 20,
+            fontFamily: 'NunitoSan',
+            color: Colors.white),
       ),
-      onTap: () {},
     );
   }
 }
