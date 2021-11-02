@@ -78,7 +78,7 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
       children: [
         Text(
           AppLocalizations.of(context)!.login_intro_text,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 20,
             fontFamily: 'NunitoSan',
@@ -87,7 +87,7 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
         ),
         Text(
           AppLocalizations.of(context)!.login_create_one,
-          style: TextStyle(
+          style: const TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 20,
             decoration: TextDecoration.underline,
