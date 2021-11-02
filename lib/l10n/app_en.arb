@@ -30,6 +30,7 @@
     "profile": "Profile",
     "save_changes": "Save changes",
     "saved_articles": "Saved",
+    "sign_up": "Sign up",
     "share_an_update": "Share an update",
     "share": "Share",
     "skills": "Skills",
@@ -41,7 +42,6 @@
     "you_dont_have_a_subscribtion_yet": "You don't have a subscription yet",
     "your_country": "Your country",
     "your_email": "Your email",
-
     "welcome": "Welcome to",
     "login_title": "Login",
     "login_blue_title": "Login to",
@@ -56,7 +56,6 @@
     "login_label_invalid_password": "Invalid password",
     "login_keep_me": "Keep me signed in",
     "login_forgot": "Forgot your password?",
-
     "meetups_title": "Upcomming Meetups",
     "meetups_ttl_blue": "Upcomming",
     "meetups_ttl_black": "Meetups",

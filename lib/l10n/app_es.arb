@@ -1,5 +1,5 @@
  {
-    "about": "Sobre",
+    "about": "Acerca de",
     "articles": "Artículos",
     "birthdate": "Fecha de nacimiento",
     "cancel": "Cancelar",
@@ -30,6 +30,7 @@
     "profile": "Perfil",
     "save_changes": "Guardar cambios",
     "saved_articles": "Artículos guardados",
+    "sign_up": "Unirme",
     "share_an_update": "¿Qué hay de nuevo?",
     "share": "Compartir",
     "skills": "Habilidades",

@@ -35,7 +35,7 @@ class CustomDrawer extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(AppLocalizations.of(context)!.about),
+                  Text(AppLocalizations.of(context)!.sign_up),
                 ],
               ),
               onPressed: () => debugPrint("Pressed"),
