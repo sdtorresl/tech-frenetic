@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class MyContent extends StatefulWidget {
   const MyContent({Key? key}) : super(key: key);
@@ -41,12 +42,13 @@ class _MyContentState extends State<MyContent> {
               children: [
                 Padding(
                   padding: const EdgeInsets.all(20.0),
-                  child: Text(
-                    AppLocalizations.of(context)!.my_content,
-                    style: Theme.of(context).textTheme.headline1!.copyWith(
-                          color: Theme.of(context).indicatorColor,
-                          backgroundColor: Theme.of(context).backgroundColor,
-                        ),
+                  child: HighlightContainer(
+                    child: Text(
+                      AppLocalizations.of(context)!.my_content,
+                      style: Theme.of(context).textTheme.headline1!.copyWith(
+                            color: Theme.of(context).indicatorColor,
+                          ),
+                    ),
                   ),
                 ),
                 Text('0 ' + AppLocalizations.of(context)!.articles)

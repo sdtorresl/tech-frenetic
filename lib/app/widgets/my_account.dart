@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+
+import 'package:techfrenetic/app/widgets/highlight_container.dart';
+
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyAccountPage extends StatefulWidget {
@@ -40,34 +43,50 @@ class _MyAccountPageState extends State<MyAccountPage> {
           children: [
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Card(
-                elevation: 0,
-                child: Text(
-                  AppLocalizations.of(context)!.my_account,
-                  style: Theme.of(context).textTheme.headline1!.copyWith(
-                        color: Theme.of(context).indicatorColor,
-                        backgroundColor: Theme.of(context).backgroundColor,
-                      ),
+              child: Center(
+                child: HighlightContainer(
+                  child: Text(
+                    AppLocalizations.of(context)!.my_account,
+                    style: Theme.of(context).textTheme.headline1!.copyWith(
+                          color: Theme.of(context).indicatorColor,
+                        ),
+                  ),
                 ),
               ),
             ),
             Padding(
               padding: const EdgeInsets.all(8.0),
-              child: Text(
-                AppLocalizations.of(context)!.general_account_settings,
-                style: Theme.of(context).textTheme.headline1,
+              child: Center(
+                child: Text(
+                  AppLocalizations.of(context)!.general_account_settings,
+                  style: Theme.of(context).textTheme.headline1,
+                ),
               ),
             ),
             _form(context),
             _passwordchange(context),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 50.0),
-              child: Column(
-                children: [
-                  Text(AppLocalizations.of(context)!.subscribtion),
-                  Text(AppLocalizations.of(context)!
-                      .you_dont_have_a_subscribtion_yet)
-                ],
+              child: Padding(
+                padding: const EdgeInsets.only(left: 25.0),
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        AppLocalizations.of(context)!.subscribtion,
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                    ),
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                          AppLocalizations.of(context)!
+                              .you_dont_have_a_subscribtion_yet,
+                          style: Theme.of(context).textTheme.bodyText1),
+                    )
+                  ],
+                ),
               ),
             ),
           ],
@@ -90,109 +109,121 @@ class _MyAccountPageState extends State<MyAccountPage> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15.0),
+          padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Column(
-                children: [
-                  Row(
-                    children: [
-                      Text(AppLocalizations.of(context)!.email),
-                      const SizedBox(
-                        width: 130,
-                      ),
-                      Text(AppLocalizations.of(context)!.your_country),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: AppLocalizations.of(context)!.your_email,
-                            hintStyle: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(
-                                    color: Theme.of(context).highlightColor),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText:
-                                AppLocalizations.of(context)!.your_country,
-                            hintStyle: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(
-                                    color: Theme.of(context).highlightColor),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0),
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Text(AppLocalizations.of(context)!.mobile_phone),
-                        const SizedBox(
-                          width: 80,
-                        ),
-                        Text(AppLocalizations.of(context)!.birthdate),
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText:
-                                  AppLocalizations.of(context)!.phone_number,
-                              hintStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                      color: Theme.of(context).highlightColor),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            decoration: InputDecoration(
-                              hintText: "dd/mm/yyyy",
-                              hintStyle: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                      color: Theme.of(context).highlightColor),
-                            ),
-                            onTap: () {/*_selectDate(context);*/},
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+              const SizedBox(height: 50),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  AppLocalizations.of(context)!.email,
+                  style: Theme.of(context).textTheme.bodyText1,
                 ),
               ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.your_email,
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).highlightColor),
+                ),
+              ),
+              const SizedBox(height: 40),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  AppLocalizations.of(context)!.your_country,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.your_country,
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).highlightColor),
+                ),
+              ),
+              const SizedBox(height: 50),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  AppLocalizations.of(context)!.mobile_phone,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.phone_number,
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).highlightColor),
+                ),
+              ),
+              const SizedBox(height: 40),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  AppLocalizations.of(context)!.birthdate,
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              ),
+              TextFormField(
+                decoration: InputDecoration(
+                  hintText: "dd/mm/yyyy",
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).highlightColor),
+                ),
+                onTap: () {/*_selectDate(context);*/},
+              ),
+              const SizedBox(height: 30),
               Row(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
                     onPressed: () => debugPrint("Pressed"),
-                    child: Text(AppLocalizations.of(context)!.save_changes),
+                    child: Text(
+                      AppLocalizations.of(context)!.save_changes,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1!
+                          .copyWith(color: Colors.white, fontSize: 15),
+                    ),
+                    style: ButtonStyle(
+                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                        const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.zero,
+                        ),
+                      ),
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: ElevatedButton(
                       onPressed: () => debugPrint("Pressed"),
-                      child: Text(AppLocalizations.of(context)!.cancel),
+                      child: Text(
+                        AppLocalizations.of(context)!.cancel,
+                        style: Theme.of(context).textTheme.headline1!.copyWith(
+                            color: Theme.of(context).indicatorColor,
+                            fontSize: 15),
+                      ),
+                      style: ButtonStyle(
+                        backgroundColor: MaterialStateProperty.all(
+                            Theme.of(context).backgroundColor),
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                            side: BorderSide(
+                                color: Theme.of(context).indicatorColor),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -222,24 +253,43 @@ class _MyAccountPageState extends State<MyAccountPage> {
           ),
         ),
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             children: [
-              Text(AppLocalizations.of(context)!.password),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child:
-                        Text(AppLocalizations.of(context)!.last_changed + ': '),
+              const SizedBox(height: 15.0),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  AppLocalizations.of(context)!.password,
+                  style: Theme.of(context).textTheme.headline1,
+                ),
+              ),
+              const SizedBox(height: 10),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: Text(AppLocalizations.of(context)!.last_changed +
+                    ': February 27, 2020'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () => debugPrint("Pressed"),
+                child: Text(
+                  AppLocalizations.of(context)!.change_password,
+                  style: Theme.of(context).textTheme.headline1!.copyWith(
+                      color: Theme.of(context).indicatorColor, fontSize: 15),
+                ),
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                      Theme.of(context).backgroundColor),
+                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                    RoundedRectangleBorder(
+                      borderRadius: BorderRadius.zero,
+                      side: BorderSide(color: Theme.of(context).indicatorColor),
+                    ),
                   ),
-                  ElevatedButton(
-                    onPressed: () => debugPrint("Pressed"),
-                    child: Text(AppLocalizations.of(context)!.change_password),
-                  ),
-                ],
-              )
+                ),
+              ),
+              const SizedBox(height: 30),
             ],
           ),
         ),
