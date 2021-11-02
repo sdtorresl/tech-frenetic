@@ -10,6 +10,6 @@ class CommunityModule extends Module {
     ChildRoute(
       Modular.initialRoute,
       child: (_, args) => const CommunityPage(),
-    )
+    ),
   ];
 }

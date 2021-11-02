@@ -66,7 +66,7 @@ class ArticlesModel {
         "title": title,
         "summary": summary,
         "category": category,
-        "date": date,
+        "date": date.toIso8601String(),
         "slug": slug,
         "display_name": displayName,
         "is_premium": isPremium,

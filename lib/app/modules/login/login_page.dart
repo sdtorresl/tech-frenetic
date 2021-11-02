@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/modules/login/login_controller.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;
@@ -7,7 +10,9 @@ class LoginPage extends StatefulWidget {
   LoginPageState createState() => LoginPageState();
 }
 
-class LoginPageState extends State<LoginPage> {
+class LoginPageState extends ModularState<LoginPage, LoginController> {
+  bool _isPasswordHidden = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,17 +52,17 @@ class LoginPageState extends State<LoginPage> {
 
   Widget _mainTitle(context) {
     return Column(
-      children: const [
-        Text('Login to',
-            style: TextStyle(
+      children: [
+        Text(AppLocalizations.of(context)!.login_blue_title,
+            style: const TextStyle(
               fontWeight: FontWeight.w900,
               fontSize: 50,
               fontFamily: 'NunitoSan',
               color: Color.fromRGBO(5, 20, 47, 1),
             )),
         Text(
-          'your account',
-          style: TextStyle(
+          AppLocalizations.of(context)!.login_black_title,
+          style: const TextStyle(
             fontWeight: FontWeight.w900,
             fontSize: 50,
             fontFamily: 'NunitoSan',
@@ -70,10 +75,10 @@ class LoginPageState extends State<LoginPage> {
 
   Widget _createAccount(context) {
     return Column(
-      children: const [
+      children: [
         Text(
-          'Don´t you have an account yet?',
-          style: TextStyle(
+          AppLocalizations.of(context)!.login_intro_text,
+          style: const TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 20,
             fontFamily: 'NunitoSan',
@@ -81,8 +86,8 @@ class LoginPageState extends State<LoginPage> {
           ),
         ),
         Text(
-          'Create one',
-          style: TextStyle(
+          AppLocalizations.of(context)!.login_create_one,
+          style: const TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 20,
             decoration: TextDecoration.underline,
@@ -96,39 +101,69 @@ class LoginPageState extends State<LoginPage> {
 
   Widget _loginForm(context) {
     return Column(
-      children: const [
-        TextField(
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.email_outlined,
-              color: Colors.grey,
-            ),
-            hintText: "Email",
-            hintStyle: TextStyle(color: Colors.grey),
-          ),
+      children: [
+        StreamBuilder(
+          stream: store.emailStream,
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            return TextField(
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(
+                  Icons.email_outlined,
+                  color: Colors.grey,
+                ),
+                hintText: AppLocalizations.of(context)!.login_label_email,
+                hintStyle: const TextStyle(color: Colors.grey),
+                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.red),
+              ),
+              onChanged: store.changeEmail,
+            );
+          },
         ),
-        SizedBox(height: 30),
-        TextField(
-          keyboardType: TextInputType.text,
-          decoration: InputDecoration(
-            prefixIcon: Icon(
-              Icons.lock,
-              color: Colors.grey,
-            ),
-            hintText: "Password",
-            hintStyle: TextStyle(color: Colors.grey),
-          ),
+        const SizedBox(height: 30),
+        StreamBuilder(
+          stream: store.passwordStream,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            return TextField(
+              keyboardType: TextInputType.text,
+              obscureText: _isPasswordHidden,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(
+                  Icons.lock,
+                  color: Colors.grey,
+                ),
+                hintText: AppLocalizations.of(context)!.login_label_pass,
+                hintStyle: const TextStyle(color: Colors.grey),
+                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.red),
+                suffixIcon: IconButton(
+                  icon: Icon(_isPasswordHidden
+                      ? Icons.visibility
+                      : Icons.visibility_off),
+                  onPressed: () =>
+                      setState(() => _isPasswordHidden = !_isPasswordHidden),
+                ),
+              ),
+              onChanged: store.changePassword,
+            );
+          },
         ),
       ],
     );
   }
 
   Widget _forgotPassword(context) {
-    return const Center(
+    return Center(
       child: Text(
-        'Forgot your password',
-        style: TextStyle(
+        AppLocalizations.of(context)!.login_forgot,
+        style: const TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 20,
             decoration: TextDecoration.underline,
@@ -139,26 +174,22 @@ class LoginPageState extends State<LoginPage> {
   }
 
   Widget _logginButton(context) {
-    return GestureDetector(
-      child: const Card(
-        color: Color.fromRGBO(0, 110, 232, 1),
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 10,
+    return StreamBuilder(
+      stream: store.formValidStream,
+      initialData: false,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return ElevatedButton(
+          onPressed: snapshot.hasData ? () => store.login() : null,
+          child: Text(
+            AppLocalizations.of(context)!.login_title,
+            style: const TextStyle(
+                fontWeight: FontWeight.w700,
+                fontSize: 20,
+                fontFamily: 'NunitoSan',
+                color: Colors.white),
           ),
-          child: Center(
-            child: Text(
-              'Login',
-              style: TextStyle(
-                  fontWeight: FontWeight.w700,
-                  fontSize: 20,
-                  fontFamily: 'NunitoSan',
-                  color: Colors.white),
-            ),
-          ),
-        ),
-      ),
-      onTap: () {},
+        );
+      },
     );
   }
 }
