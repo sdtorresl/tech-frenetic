@@ -224,6 +224,9 @@ class _MyProfileState extends State<MyProfile> {
                           ),
                           child: Column(
                             children: [
+                              const SizedBox(
+                                height: 15,
+                              ),
                               Text(
                                 '0',
                                 style: Theme.of(context)
