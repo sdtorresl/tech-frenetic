@@ -18,9 +18,9 @@ final ThemeData techFreneticTheme = ThemeData(
   disabledColor: const Color(0x61000000),
   toggleableActiveColor: const Color(0xff0061cc),
   secondaryHeaderColor: const Color(0xffe5f2ff),
-  backgroundColor: const Color(0xff99c9ff),
+  backgroundColor: const Color(0xFFF5F9FF),
   dialogBackgroundColor: const Color(0xffffffff),
-  indicatorColor: const Color(0xff0079ff),
+  indicatorColor: const Color(0xFF006EE8),
   hintColor: const Color(0x8a000000),
   errorColor: const Color(0xffd32f2f),
   buttonTheme: const ButtonThemeData(
