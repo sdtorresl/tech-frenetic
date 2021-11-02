@@ -26,7 +26,7 @@ final ThemeData techFreneticTheme = ThemeData(
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
       padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
-          const EdgeInsets.all(30)),
+          const EdgeInsets.all(10)),
       textStyle: MaterialStateProperty.resolveWith<TextStyle>(
           (Set<MaterialState> states) {
         return const TextStyle(
