@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
 import '../../common/validators.dart';
@@ -21,7 +22,7 @@ class LoginController extends Disposable {
   String get password => _passwordController.value;
 
   void login() {
-    print("Login");
+    debugPrint("Login");
   }
 
   @override
