@@ -179,7 +179,16 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
       initialData: false,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return ElevatedButton(
-          onPressed: snapshot.hasData ? () => store.login() : null,
+          onPressed: snapshot.hasData
+              ? () async {
+                  bool loggedIn = await store.login();
+                  if (loggedIn) {
+                    Modular.to.pushNamedAndRemoveUntil("/", (p0) => false);
+                  } else {
+                    debugPrint("Not logged");
+                  }
+                }
+              : null,
           child: Text(
             AppLocalizations.of(context)!.login_title,
             style: const TextStyle(
