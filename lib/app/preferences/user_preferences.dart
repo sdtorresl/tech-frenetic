@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/models/session_model.dart';
 
 class UserPreferences {
   static final UserPreferences _instance = UserPreferences._internal();
