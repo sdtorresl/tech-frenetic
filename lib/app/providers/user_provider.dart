@@ -9,7 +9,7 @@ import 'package:techfrenetic/app/preferences/user_preferences.dart';
 class UserProvider {
   final _prefs = UserPreferences();
   final String _baseUrl = GlobalConfiguration().getValue("api_url");
-
+  SessionModel? loggedUser;
   Future<SessionModel?> login(String email, String password) async {
     SessionModel? loggedUser;
 
@@ -17,6 +17,7 @@ class UserProvider {
       Uri _url = Uri.parse("$_baseUrl/api/user/login?_format=json");
 
       String body = json.encode({'name': email, 'pass': password});
+      SessionModel? loggedUser;
 
       var response = await http.post(
         _url,
@@ -39,27 +40,40 @@ class UserProvider {
     return loggedUser;
   }
 
-  Future <UserModel> getUserData() async {
-    final String _baseUrl = GlobalConfiguration().getValue("api_url");
-    List<UserModel> userinfo = [];
-
+  Future<UserModel> getUserData() async {
+    UserModel userinfo = UserModel(
+        uid: "",
+        uuid: "",
+        langcode: "",
+        userName: "",
+        created: DateTime.now(),
+        changed: DateTime.now(),
+        biography: "",
+        birthdate: DateTime.now(),
+        cellphone: "",
+        company: "",
+        dateSavePassword: DateTime.now(),
+        name: "",
+        userLocation: "",
+        userProfession: "",
+        userType: "",
+        useAvatar: true,
+        userPicture: "");
+    String userId = loggedUser!.currentUser!.uid;
 
     try {
-      Uri _url = Uri.parse(_baseUrl + "/api/en/user/" +  + "?_format=json");
+      Uri _url = Uri.parse("$_baseUrl/api/en/user/$userId?_format=json");
 
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = json.decode(response.body)["current_user"];
-        for (var item in jsonResponse) {
-          UserModel userid = UserModel.fromMap(item);
-          userinfo.add(userid);
-        }
+        userinfo = UserModel.fromJson(response.body);
+        debugPrint(userinfo.toString());
       } else {
-        print('Request failed with status: ${response.statusCode}.');
+        debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
-      print(e.toString());
+      debugPrint(e.toString());
     }
     return userinfo;
   }
