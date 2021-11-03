@@ -11,7 +11,7 @@ class ArticlesProvider {
     List<ArticlesModel> relatedArticles = [];
 
     try {
-      Uri _url = Uri.parse(_baseUrl + "/api/en/v1/articles-related");
+      Uri _url = Uri.parse("$_baseUrl/api/en/v1/articles-related");
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
