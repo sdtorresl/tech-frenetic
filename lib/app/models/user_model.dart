@@ -58,7 +58,7 @@ class UserModel {
   String userLocation;
   String userProfession;
   String userType;
-  String useAvatar;
+  bool useAvatar;
   String userPicture;
 
   factory UserModel.fromJson(String str) => UserModel.fromMap(json.decode(str));
@@ -68,31 +68,31 @@ class UserModel {
   factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
         uid: json["uid"][0]["value"],
         uuid: json["uuid"][0]["value"],
-        langcode: json["langcode"],
-        userName: json["name"],
-        created: json["created"],
-        changed: json["changed"],
+        langcode: json["langcode"][0]["value"],
+        userName: json["name"][0]["value"],
+        created: DateTime.parse(json["value"]),
+        changed: DateTime.parse(json["value"]),
         // defaultLangcode: json["default_langcode"],
         // contentTranslationSource: json["content_translation_source"],
         // contentTranslationOutdated: json["content_translation_outdated"],
         // contentTranslationUid: json["content_translation_uid"],
         // contentTranslationStatus: json["content_translation_status"],
         // contentTranslationCreated: json["content_translation_created"],
-        biography: json["field_biography"],
-        birthdate: json["field_birthdate"],
-        cellphone: json["field_cellphone"],
+        biography: json["field_biography"][0]["value"],
+        birthdate: DateTime.parse(json["value"]),
+        cellphone: json["field_cellphone"][0]["value"],
         //fieldCertifications: json["field_certifications"],
-        company: json["field_company"],
-        dateSavePassword: json["field_date_save_password"],
+        company: json["field_company"][0]["value"],
+        dateSavePassword: DateTime.parse(json["value"]),
         //fieldFollowing: json["field_following"],
         //fieldInterests: json["field_interests"],
-        name: json["field_name"],
+        name: json["field_name"][0]["value"],
         //fieldUserAvatar: json["field_user_Avatar"],
         //userKind: json["field_user_kind"],
-        userLocation: json["field_user_location"],
-        userProfession: json["field_user_profession"],
-        userType: json["field_user_type"],
-        useAvatar: json["field_use_avatar"],
+        userLocation: json["field_user_location"][0]["value"],
+        userProfession: json["field_user_profession"][0]["value"],
+        userType: json["field_user_type"][0]["value"],
+        useAvatar: json["field_use_avatar"][0]["value"],
         userPicture: json["user_picture"],
       );
 
