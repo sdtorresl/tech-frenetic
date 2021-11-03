@@ -1,166 +1,98 @@
 import 'dart:convert';
 
-class SessionModel {
-  SessionModel({
-    this.currentUser,
-    this.csrfToken,
-    this.logoutToken,
-  });
-
-  CurrentUserModel? currentUser;
-  String? csrfToken;
-  String? logoutToken;
-
-  factory SessionModel.fromJson(String str) =>
-      SessionModel.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory SessionModel.fromMap(Map<String, dynamic> json) => SessionModel(
-        currentUser: json["current_user"] == null
-            ? null
-            : CurrentUserModel.fromMap(json["current_user"]),
-        csrfToken: json["csrf_token"],
-        logoutToken: json["logout_token"],
-      );
-
-  Map<String, dynamic> toMap() => {
-        "current_user": currentUser == null ? null : currentUser!.toMap(),
-        "csrf_token": csrfToken,
-        "logout_token": logoutToken,
-      };
-
-  @override
-  String toString() {
-    return toJson();
-  }
-}
-
-class CurrentUserModel {
-  CurrentUserModel({
-    required this.uid,
-    required this.name,
-  });
-
-  String uid;
-  String name;
-
-  factory CurrentUserModel.fromJson(String str) =>
-      CurrentUserModel.fromMap(json.decode(str));
-
-  String toJson() => json.encode(toMap());
-
-  factory CurrentUserModel.fromMap(Map<String, dynamic> json) =>
-      CurrentUserModel(
-        uid: json["uid"],
-        name: json["name"],
-      );
-
-  Map<String, dynamic> toMap() => {
-        "uid": uid,
-        "name": name,
-      };
-
-  @override
-  toString() => toJson();
-}
-
-class PreferencesModel {
-  PreferencesModel({
+class UserModel {
+  UserModel({
     required this.uid,
     required this.uuid,
     required this.langcode,
-    required this.name,
+    required this.userName,
     required this.created,
     required this.changed,
-    required this.defaultLangcode,
-    required this.contentTranslationSource,
-    required this.contentTranslationOutdated,
-    required this.contentTranslationUid,
-    required this.contentTranslationStatus,
-    required this.contentTranslationCreated,
-    required this.fieldBiography,
-    required this.fieldBirthdate,
-    required this.fieldCellphone,
-    required this.fieldCertifications,
-    required this.fieldCompany,
-    required this.fieldDateSavePassword,
-    required this.fieldFollowing,
-    required this.fieldInterests,
-    required this.fieldName,
-    required this.fieldUserAvatar,
-    required this.fieldUserKind,
-    required this.fieldUserLocation,
-    required this.fieldUserProfession,
-    required this.fieldUserType,
-    required this.fieldUseAvatar,
+    // required this.defaultLangcode,
+    // required this.contentTranslationSource,
+    // required this.contentTranslationOutdated,
+    // required this.contentTranslationUid,
+    // required this.contentTranslationStatus,
+    // required this.contentTranslationCreated,
+    required this.biography,
+    required this.birthdate,
+    required this.cellphone,
+    //required this.fieldCertifications,
+    required this.company,
+    required this.dateSavePassword,
+    //required this.fieldFollowing,
+    //required this.fieldInterests,
+    required this.name,
+    //required this.fieldUserAvatar,
+    //required this.fieldUserKind,
+    required this.userLocation,
+    required this.userProfession,
+    required this.userType,
+    required this.useAvatar,
     required this.userPicture,
   });
 
   String uid;
   String uuid;
   String langcode;
-
+  String userName;
+  DateTime created;
+  DateTime changed;
+  // String defaultLangcode;
+  // String contentTranslationSource;
+  // String contentTranslationOutdated;
+  // String contentTranslationUid;
+  // String contentTranslationStatus;
+  // String contentTranslationCreated;
+  String biography;
+  DateTime birthdate;
+  String cellphone;
+  //String fieldCertifications;
+  String company;
+  DateTime dateSavePassword;
+  //String fieldFollowing;
+  //String fieldInterests;
   String name;
-  String created;
-  String changed;
-  String defaultLangcode;
-  String contentTranslationSource;
-  String contentTranslationOutdated;
-  String contentTranslationUid;
-  String contentTranslationStatus;
-  String contentTranslationCreated;
-  String fieldBiography;
-  String fieldBirthdate;
-  String fieldCellphone;
-  String fieldCertifications;
-  String fieldCompany;
-  String fieldDateSavePassword;
-  String fieldFollowing;
-  String fieldInterests;
-  String fieldName;
-  String fieldUserAvatar;
-  String fieldUserKind;
-  String fieldUserLocation;
-  String fieldUserProfession;
-  String fieldUserType;
-  String fieldUseAvatar;
+  //String fieldUserAvatar;
+  //String fieldUserKind;
+  String userLocation;
+  String userProfession;
+  String userType;
+  String useAvatar;
   String userPicture;
 
-  factory PreferencesModel.fromJson(String str) =>
-      PreferencesModel.fromMap(json.decode(str));
+  factory UserModel.fromJson(String str) => UserModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory PreferencesModel.fromMap(Map<String, dynamic> json) =>
-      PreferencesModel(
-        uid: json["uid"],
-        uuid: json["uuid"],
+  factory UserModel.fromMap(Map<String, dynamic> json) => UserModel(
+        uid: json["uid"][0]["value"],
+        uuid: json["uuid"][0]["value"],
         langcode: json["langcode"],
-        name: json["name"],
+        userName: json["name"],
         created: json["created"],
         changed: json["changed"],
-        defaultLangcode: json["default_langcode"],
-        contentTranslationSource: json["content_translation_source"],
-        contentTranslationOutdated: json["content_translation_outdated"],
-        contentTranslationUid: json["content_translation_uid"],
-        contentTranslationStatus: json["content_translation_status"],
-        contentTranslationCreated: json["content_translation_created"],
-        fieldBiography: json["field_biography"],
-        fieldBirthdate: json["field_birthdate"],
-        fieldCellphone: json["field_cellphone"],
-        fieldCertifications: json["field_certifications"],
-        fieldCompany: json["field_company"],
-        fieldDateSavePassword: json["field_date_save_password"],
-        fieldFollowing: json["field_following"],
-        fieldInterests: json["field_interests"],
-        fieldName: json["field_name"],
-        fieldUserAvatar: json["field_user_Avatar"],
-        fieldUserKind: json["field_user_kind"],
-        fieldUserLocation: json["field_user_location"],
-        fieldUserProfession: json["field_user_profession"],
-        fieldUserType: json["field_user_type"],
-        fieldUseAvatar: json["field_use_avatar"],
+        // defaultLangcode: json["default_langcode"],
+        // contentTranslationSource: json["content_translation_source"],
+        // contentTranslationOutdated: json["content_translation_outdated"],
+        // contentTranslationUid: json["content_translation_uid"],
+        // contentTranslationStatus: json["content_translation_status"],
+        // contentTranslationCreated: json["content_translation_created"],
+        biography: json["field_biography"],
+        birthdate: json["field_birthdate"],
+        cellphone: json["field_cellphone"],
+        //fieldCertifications: json["field_certifications"],
+        company: json["field_company"],
+        dateSavePassword: json["field_date_save_password"],
+        //fieldFollowing: json["field_following"],
+        //fieldInterests: json["field_interests"],
+        name: json["field_name"],
+        //fieldUserAvatar: json["field_user_Avatar"],
+        //userKind: json["field_user_kind"],
+        userLocation: json["field_user_location"],
+        userProfession: json["field_user_profession"],
+        userType: json["field_user_type"],
+        useAvatar: json["field_use_avatar"],
         userPicture: json["user_picture"],
       );
 
@@ -168,30 +100,30 @@ class PreferencesModel {
         "uid": uid,
         "uuid": uuid,
         "langcode": langcode,
-        "name": name,
+        "name": userName,
         "created": created,
         "changed": changed,
-        "default_langcode": defaultLangcode,
-        "content_translation_source": contentTranslationOutdated,
-        "content_translation_outdated": contentTranslationOutdated,
-        "content_translation_uid": contentTranslationUid,
-        "content_translation_status": contentTranslationStatus,
-        "content_translation_created": contentTranslationCreated,
-        "field_biography": fieldBiography,
-        "field_birthdate": fieldBirthdate,
-        "field_cellphone": fieldCellphone,
-        "field_certifications": fieldCertifications,
-        "field_company": fieldCompany,
-        "field_date_save_password": fieldDateSavePassword,
-        "field_following": fieldFollowing,
-        "field_interests": fieldInterests,
-        "field_name": fieldName,
-        "field_user_Avatar": fieldUserAvatar,
-        "field_user_kind": fieldUserKind,
-        "field_user_location": fieldUserLocation,
-        "field_user_profession": fieldUserProfession,
-        "field_user_type": fieldUserType,
-        "field_use_avatar": fieldUseAvatar,
+        // "default_langcode": defaultLangcode,
+        // "content_translation_source": contentTranslationOutdated,
+        // "content_translation_outdated": contentTranslationOutdated,
+        // "content_translation_uid": contentTranslationUid,
+        // "content_translation_status": contentTranslationStatus,
+        // "content_translation_created": contentTranslationCreated,
+        "field_biography": biography,
+        "field_birthdate": birthdate,
+        "field_cellphone": cellphone,
+        //"field_certifications": fieldCertifications,
+        "field_company": company,
+        "field_date_save_password": dateSavePassword,
+        //"field_following": fieldFollowing,
+        //"field_interests": fieldInterests,
+        "field_name": name,
+        //"field_user_Avatar": fieldUserAvatar,
+        //"field_user_kind": userKind,
+        "field_user_location": userLocation,
+        "field_user_profession": userProfession,
+        "field_user_type": userType,
+        "field_use_avatar": useAvatar,
         "user_picture": userPicture,
       };
 
