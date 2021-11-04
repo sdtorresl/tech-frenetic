@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-//import 'package:flutter_svg/svg.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/my_profile.dart';
@@ -7,10 +6,15 @@ import 'package:techfrenetic/app/widgets/my_account.dart';
 import 'package:techfrenetic/app/widgets/my_content.dart';
 import 'package:techfrenetic/app/widgets/my_activity.dart';
 import 'package:techfrenetic/app/widgets/saved_articles.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
 
 class ProfilePage extends StatefulWidget {
   final String title;
-  const ProfilePage({Key? key, this.title = 'ProfilePage'}) : super(key: key);
+  const ProfilePage({
+    Key? key,
+    this.title = 'ProfilePage',
+  }) : super(key: key);
   @override
   ProfilePageState createState() => ProfilePageState();
 }
@@ -87,7 +91,18 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _myProfile(BuildContext context) {
-    return const MyProfile();
+    UserProvider _userProvider = UserProvider();
+    return FutureBuilder(
+      future: _userProvider.getUserData(),
+      builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
+        if (snapshot.hasData) {
+          UserModel user = snapshot.data!;
+          return MyProfile(user: user);
+        }
+
+        return const CircularProgressIndicator();
+      },
+    );
   }
 
   Widget _myContent(BuildContext context) {

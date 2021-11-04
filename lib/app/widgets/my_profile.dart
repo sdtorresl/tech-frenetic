@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
 
 class MyProfile extends StatefulWidget {
-  const MyProfile({Key? key}) : super(key: key);
+  final UserModel user;
+  const MyProfile({Key? key, required this.user}) : super(key: key);
 
   @override
   _MyProfileState createState() => _MyProfileState();
@@ -62,7 +64,7 @@ class _MyProfileState extends State<MyProfile> {
                         child: Center(
                           child: HighlightContainer(
                             child: Text(
-                              'Sergio',
+                              widget.user.userName,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline1!
