@@ -30,7 +30,7 @@ class UserProvider {
         debugPrint(loggedUser.toString());
         _prefs.csrfToken = loggedUser.csrfToken;
         _prefs.logoutToken = loggedUser.logoutToken;
-        _prefs.currentUser = loggedUser.currentUser!.uid;
+        _prefs.userId = loggedUser.currentUser!.uid;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
@@ -59,7 +59,7 @@ class UserProvider {
         userType: "",
         useAvatar: true,
         userPicture: "");
-    String userId = loggedUser!.currentUser!.uid;
+    String userId = _prefs.userId!;
 
     try {
       Uri _url = Uri.parse("$_baseUrl/api/en/user/$userId?_format=json");
