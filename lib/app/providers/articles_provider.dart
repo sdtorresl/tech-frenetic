@@ -15,9 +15,11 @@ class ArticlesProvider {
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
+
         Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
         WallModel wall = WallModel.fromMap(jsonResponse);
         relatedArticles = wall.articles;
+
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }

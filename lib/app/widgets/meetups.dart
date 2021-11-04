@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class MeetupWidget extends StatefulWidget {
   const MeetupWidget({Key? key}) : super(key: key);
@@ -13,7 +15,7 @@ class _MeetupWidgetState extends State<MeetupWidget> {
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.white,
@@ -52,22 +54,18 @@ class _MeetupWidgetState extends State<MeetupWidget> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Container(
-                        color:
-                            Theme.of(context).backgroundColor.withOpacity(0.6),
-                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                      HighlightContainer(
                         child: Text(
-                          'Upcomming',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1!
-                              .copyWith(
-                                  fontSize: 25,
-                                  color: Theme.of(context).primaryColor),
+                          AppLocalizations.of(context)!.meetups_ttl_blue,
+                          style:
+                              Theme.of(context).textTheme.headline1!.copyWith(
+                                    fontSize: 25,
+                                    color: Theme.of(context).primaryColor,
+                                  ),
                         ),
                       ),
                       Text(
-                        'Meetups',
+                        AppLocalizations.of(context)!.meetups_ttl_black,
                         style: Theme.of(context)
                             .textTheme
                             .headline1!
@@ -81,7 +79,7 @@ class _MeetupWidgetState extends State<MeetupWidget> {
                   Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      'Find here upcoming from the Tech Frenetic Community in yourarea so you learn, share, and work together.',
+                      AppLocalizations.of(context)!.meetups_intro,
                       textAlign: TextAlign.center,
                       style: Theme.of(context)
                           .textTheme
@@ -94,9 +92,9 @@ class _MeetupWidgetState extends State<MeetupWidget> {
                   ),
                   ElevatedButton(
                     onPressed: () => debugPrint("Pressed"),
-                    child: const Text(
-                      'Host a Meetup',
-                      style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(context)!.meetups_cta_new,
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -105,12 +103,12 @@ class _MeetupWidgetState extends State<MeetupWidget> {
                     height: 40,
                   ),
                   Row(
-                    children: const [
-                      SizedBox(width: 20),
-                      Text(
+                    children: [
+                      const SizedBox(width: 20),
+                      const Text(
                         '(0) ',
                       ),
-                      Text('Meetups'),
+                      Text(AppLocalizations.of(context)!.meetups_ttl_black),
                     ],
                   ),
                   const SizedBox(

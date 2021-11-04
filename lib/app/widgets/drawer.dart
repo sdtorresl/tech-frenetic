@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:techfrenetic/app/modules/login/login_page.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -29,10 +29,13 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             title: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                elevation: 0,
+              ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(AppLocalizations.of(context)!.about),
+                  Text(AppLocalizations.of(context)!.sign_up),
                 ],
               ),
               onPressed: () => debugPrint("Pressed"),
@@ -40,55 +43,19 @@ class CustomDrawer extends StatelessWidget {
           ),
           ListTile(
             title: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.resolveWith<Color>(
-                  (Set<MaterialState> states) {
-                    return Colors.white; // Use the component's default.
-                  },
-                ),
+              style: ElevatedButton.styleFrom(
+                primary: Colors.white, // background
+                onPrimary: Colors.black, // foreground
+                elevation: 0,
+                side: const BorderSide(width: 1.5, color: Colors.black),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(
-                    "Login",
-                    style: Theme.of(context)
-                        .textTheme
-                        .button
-                        ?.copyWith(color: Colors.black),
-                  ),
+                  Text(AppLocalizations.of(context)!.login_title),
                 ],
               ),
-              onPressed: () => debugPrint("Pressed"),
-            ),
-          ),
-          ListTile(
-            title: GestureDetector(
-              child: const Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero,
-                  side: BorderSide(color: Colors.black, width: 1),
-                ),
-                child: Padding(
-                  padding: EdgeInsets.all(8.0),
-                  child: Text(
-                    'Log in',
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      fontSize: 20,
-                      fontFamily: 'NunitoSan',
-                      color: Color.fromRGBO(5, 20, 47, 1),
-                    ),
-                  ),
-                ),
-              ),
-              onTap: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) => const LoginPage(),
-                  ),
-                );
-              },
+              onPressed: () => Modular.to.pushNamed("/login"),
             ),
           ),
           const SizedBox(

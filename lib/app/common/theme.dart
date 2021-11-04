@@ -18,16 +18,31 @@ final ThemeData techFreneticTheme = ThemeData(
   disabledColor: const Color(0x61000000),
   toggleableActiveColor: const Color(0xff0061cc),
   secondaryHeaderColor: const Color(0xffe5f2ff),
-  backgroundColor: const Color(0xff99c9ff),
+  backgroundColor: const Color(0xFFF5F9FF),
   dialogBackgroundColor: const Color(0xffffffff),
-  indicatorColor: const Color(0xff0079ff),
+  indicatorColor: const Color(0xFF006EE8),
   hintColor: const Color(0x8a000000),
   errorColor: const Color(0xffd32f2f),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          const EdgeInsets.all(10)),
+      textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+          (Set<MaterialState> states) {
+        return const TextStyle(
+          fontFamily: 'NunitoSansBold',
+          fontSize: 20,
+          fontWeight: FontWeight.w400,
+          fontStyle: FontStyle.normal,
+        );
+      }),
+    ),
+  ),
   buttonTheme: const ButtonThemeData(
     textTheme: ButtonTextTheme.primary,
     minWidth: 140,
     height: 44,
-    padding: EdgeInsets.only(top: 0, bottom: 0, left: 36, right: 36),
+    padding: EdgeInsets.only(top: 20, bottom: 20, left: 36, right: 36),
     shape: RoundedRectangleBorder(
       side: BorderSide(
         color: Color(0xff000000),
