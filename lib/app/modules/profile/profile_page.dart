@@ -100,7 +100,13 @@ class ProfilePageState extends State<ProfilePage> {
           return MyProfile(user: user);
         }
 
-        return const CircularProgressIndicator();
+        return const Center(
+          child: SizedBox(
+            child: CircularProgressIndicator(),
+            width: 35.0,
+            height: 35.0,
+          ),
+        );
       },
     );
   }
