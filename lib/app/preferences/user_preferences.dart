@@ -17,10 +17,10 @@ class UserPreferences {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  set currentUser(String? currentUser) =>
+  set userId(String? currentUser) =>
       _prefs.setString('current_user', jsonEncode(currentUser));
 
-  String? get currentUser => _prefs.getString('current_user');
+  String? get userId => _prefs.getString('current_user');
 
   set csrfToken(String? csrfToken) =>
       _prefs.setString('csrf_token', csrfToken!);
