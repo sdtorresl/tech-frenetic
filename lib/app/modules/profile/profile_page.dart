@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:techfrenetic/app/widgets/my_profile.dart';
-import 'package:techfrenetic/app/widgets/my_account.dart';
-import 'package:techfrenetic/app/widgets/my_content.dart';
-import 'package:techfrenetic/app/widgets/my_activity.dart';
-import 'package:techfrenetic/app/widgets/saved_articles.dart';
+import 'package:techfrenetic/app/widgets/my_profile_widget.dart';
+import 'package:techfrenetic/app/widgets/my_account_widget.dart';
+import 'package:techfrenetic/app/widgets/my_content_widget.dart';
+import 'package:techfrenetic/app/widgets/my_activity_widget.dart';
+import 'package:techfrenetic/app/widgets/saved_articles_widget.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 

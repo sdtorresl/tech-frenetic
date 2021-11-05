@@ -3,7 +3,7 @@ import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
-import 'package:techfrenetic/app/widgets/meetups.dart';
+import 'package:techfrenetic/app/widgets/meetups_widget.dart';
 import 'package:techfrenetic/app/widgets/groups.dart';
 
 class CommunityPage extends StatefulWidget {
