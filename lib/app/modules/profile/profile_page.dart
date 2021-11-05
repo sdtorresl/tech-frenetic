@@ -94,7 +94,7 @@ class ProfilePageState extends State<ProfilePage> {
     UserProvider _userProvider = UserProvider();
     return FutureBuilder(
       future: _userProvider.getUserData(),
-      builder: (BuildContext context, AsyncSnapshot<UserModel> snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
         if (snapshot.hasData) {
           UserModel user = snapshot.data!;
           return MyProfile(user: user);
