@@ -214,7 +214,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                       ),
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).backgroundColor),
+                            Theme.of(context).primaryColorLight),
                         shape:
                             MaterialStateProperty.all<RoundedRectangleBorder>(
                           RoundedRectangleBorder(
@@ -280,7 +280,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 ),
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(
-                      Theme.of(context).backgroundColor),
+                      Theme.of(context).primaryColorLight),
                   shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                     RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero,
