@@ -17,7 +17,6 @@ class UserProvider {
       Uri _url = Uri.parse("$_baseUrl/api/user/login?_format=json");
 
       String body = json.encode({'name': email, 'pass': password});
-      SessionModel? loggedUser;
 
       var response = await http.post(
         _url,
@@ -40,27 +39,9 @@ class UserProvider {
     return loggedUser;
   }
 
-  Future<UserModel> getUserData() async {
-    UserModel userinfo = UserModel(
-        uid: "",
-        uuid: "",
-        langcode: "",
-        userName: "",
-        created: DateTime.now(),
-        changed: DateTime.now(),
-        biography: "",
-        birthdate: DateTime.now(),
-        cellphone: "",
-        company: "",
-        dateSavePassword: DateTime.now(),
-        name: "",
-        userLocation: "",
-        userProfession: "",
-        userType: "",
-        useAvatar: true,
-        userPicture: "");
-    String userId = _prefs.userId!;
-
+  Future<UserModel?> getUserData() async {
+    String? userId = _prefs.userId;
+    UserModel? userinfo;
     try {
       Uri _url = Uri.parse("$_baseUrl/api/en/user/$userId?_format=json");
 
