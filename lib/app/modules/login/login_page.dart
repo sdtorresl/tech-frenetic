@@ -12,6 +12,7 @@ class LoginPage extends StatefulWidget {
 
 class LoginPageState extends ModularState<LoginPage, LoginController> {
   bool _isPasswordHidden = false;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -179,9 +180,15 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
       initialData: false,
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         return ElevatedButton(
-          onPressed: snapshot.hasData
+          onPressed: snapshot.hasData && !_isLoading
               ? () async {
+                  setState(() {
+                    _isLoading = true;
+                  });
                   bool loggedIn = await store.login();
+                  setState(() {
+                    _isLoading = false;
+                  });
                   if (loggedIn) {
                     Modular.to.pushNamedAndRemoveUntil("/", (p0) => false);
                   } else {
@@ -189,13 +196,27 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
                   }
                 }
               : null,
-          child: Text(
-            AppLocalizations.of(context)!.login_title,
-            style: const TextStyle(
-                fontWeight: FontWeight.w700,
-                fontSize: 20,
-                fontFamily: 'NunitoSan',
-                color: Colors.white),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _isLoading
+                  ? Container(
+                      height: 20,
+                      width: 20,
+                      margin: const EdgeInsets.only(right: 20),
+                      child:
+                          const CircularProgressIndicator(color: Colors.white),
+                    )
+                  : const SizedBox(),
+              Text(
+                AppLocalizations.of(context)!.login_title,
+                style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 20,
+                    fontFamily: 'NunitoSan',
+                    color: Colors.white),
+              ),
+            ],
           ),
         );
       },
