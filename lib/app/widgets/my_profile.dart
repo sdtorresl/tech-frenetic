@@ -64,7 +64,7 @@ class _MyProfileState extends State<MyProfile> {
                         child: Center(
                           child: HighlightContainer(
                             child: Text(
-                              widget.user.userName,
+                              widget.user.name,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline1!
