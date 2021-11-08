@@ -180,55 +180,10 @@ class _MyProfileState extends State<MyProfile> {
                       ),
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Column(
-                          children: [
-                            Text(
-                              '0',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline1!
-                                  .copyWith(fontSize: 40),
-                            ),
-                            Row(
-                              children: [
-                                Text(
-                                  AppLocalizations.of(context)!.articles,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText1!
-                                      .copyWith(
-                                          color:
-                                              Theme.of(context).indicatorColor),
-                                ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Theme.of(context).indicatorColor,
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border(
-                              left: BorderSide(
-                                width: 0.50,
-                                color: Colors.grey.withOpacity(.6),
-                              ),
-                              right: BorderSide(
-                                width: 0.50,
-                                color: Colors.grey.withOpacity(.6),
-                              ),
-                            ),
-                          ),
+                        Expanded(
                           child: Column(
                             children: [
-                              const SizedBox(
-                                height: 15,
-                              ),
                               Text(
                                 '0',
                                 style: Theme.of(context)
@@ -237,30 +192,17 @@ class _MyProfileState extends State<MyProfile> {
                                     .copyWith(fontSize: 40),
                               ),
                               Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
-                                  Column(
-                                    children: [
-                                      Text(
-                                        AppLocalizations.of(context)!
-                                            .who_viewed,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .copyWith(
-                                                color: Theme.of(context)
-                                                    .indicatorColor),
-                                      ),
-                                      Text(
-                                        AppLocalizations.of(context)!
-                                            .your_profile,
-                                        style: Theme.of(context)
-                                            .textTheme
-                                            .bodyText1!
-                                            .copyWith(
-                                                color: Theme.of(context)
-                                                    .indicatorColor),
-                                      ),
-                                    ],
+                                  Text(
+                                    AppLocalizations.of(context)!.articles,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .indicatorColor),
                                   ),
                                   Icon(
                                     Icons.arrow_forward_ios,
@@ -271,33 +213,102 @@ class _MyProfileState extends State<MyProfile> {
                             ],
                           ),
                         ),
-                        Column(
-                          children: [
-                            Text(
-                              '0',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline1!
-                                  .copyWith(fontSize: 40),
+                        Expanded(
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              border: Border(
+                                left: BorderSide(
+                                  width: 0.50,
+                                  color: Colors.grey.withOpacity(.6),
+                                ),
+                                right: BorderSide(
+                                  width: 0.50,
+                                  color: Colors.grey.withOpacity(.6),
+                                ),
+                              ),
                             ),
-                            Row(
+                            child: Column(
                               children: [
+                                const SizedBox(
+                                  height: 15,
+                                ),
                                 Text(
-                                  AppLocalizations.of(context)!.post,
+                                  '0',
                                   style: Theme.of(context)
                                       .textTheme
-                                      .bodyText1!
-                                      .copyWith(
-                                          color:
-                                              Theme.of(context).indicatorColor),
+                                      .headline1!
+                                      .copyWith(fontSize: 40),
                                 ),
-                                Icon(
-                                  Icons.arrow_forward_ios,
-                                  color: Theme.of(context).indicatorColor,
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      children: [
+                                        Text(
+                                          AppLocalizations.of(context)!
+                                              .who_viewed,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1!
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .indicatorColor),
+                                        ),
+                                        Text(
+                                          AppLocalizations.of(context)!
+                                              .your_profile,
+                                          style: Theme.of(context)
+                                              .textTheme
+                                              .bodyText1!
+                                              .copyWith(
+                                                  color: Theme.of(context)
+                                                      .indicatorColor),
+                                        ),
+                                      ],
+                                    ),
+                                    Icon(
+                                      Icons.arrow_forward_ios,
+                                      color: Theme.of(context).indicatorColor,
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
-                          ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text(
+                                '0',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1!
+                                    .copyWith(fontSize: 40),
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  Text(
+                                    AppLocalizations.of(context)!.post,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyText1!
+                                        .copyWith(
+                                            color: Theme.of(context)
+                                                .indicatorColor),
+                                  ),
+                                  Icon(
+                                    Icons.arrow_forward_ios,
+                                    color: Theme.of(context).indicatorColor,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
