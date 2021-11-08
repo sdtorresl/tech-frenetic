@@ -44,6 +44,30 @@ class _PostWidgetState extends State<PostWidget> {
       );
     }
 
+    if (widget.article.comments != '0' && widget.article.comments != '1') {
+      _comments = Row(
+        children: [
+          SizedBox(
+            child: SvgPicture.asset(
+              'assets/img/icons/dot.svg',
+              allowDrawingOutsideViewBox: true,
+              semanticsLabel: 'Dot',
+              color: Theme.of(context).primaryColor,
+            ),
+          ),
+          Text(widget.article.comments + ' comments'),
+        ],
+      );
+    }
+    Widget _image = const SizedBox();
+    if (widget.article.summary.isNotEmpty) {
+      _image = CachedNetworkImage(
+        placeholder: (context, value) => const LinearProgressIndicator(),
+        errorWidget: (context, value, e) => const Icon(Icons.error),
+        imageUrl: widget.article.image,
+      );
+    }
+    
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       decoration: BoxDecoration(
@@ -80,39 +104,53 @@ class _PostWidgetState extends State<PostWidget> {
                       semanticsLabel: 'Acme Logo',
                     ),
                   ),
-                  radius: 20,
-                  backgroundColor: Colors.grey[200],
-                ),
-                const SizedBox(width: 20),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.article.user,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1!
-                          .copyWith(fontSize: 15),
-                    ),
-                    Row(
-                      children: [
-                        Text("Profession 1",
-                            style: Theme.of(context).textTheme.bodyText1),
-                        SizedBox(
-                          child: SvgPicture.asset(
-                            'assets/img/icons/dot.svg',
-                            allowDrawingOutsideViewBox: true,
-                            semanticsLabel: 'Dot',
-                            color: Theme.of(context).primaryColor,
+
+                  const SizedBox(width: 20),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.article.displayName,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline1!
+                            .copyWith(fontSize: 15),
+                      ),
+                      Row(
+                        children: [
+                          Text(widget.article.role,
+                              style: Theme.of(context).textTheme.bodyText1),
+                          SizedBox(
+                            child: SvgPicture.asset(
+                              'assets/img/icons/dot.svg',
+                              allowDrawingOutsideViewBox: true,
+                              semanticsLabel: 'Dot',
+                              color: Theme.of(context).primaryColor,
+                            ),
                           ),
-                        ),
-                        Text(timeago.format(fifteenAgo, locale: 'en_short'),
-                            style: Theme.of(context).textTheme.bodyText1),
-                      ],
-                    )
-                  ],
-                )
-              ],
+                          Text(timeago.format(fifteenAgo, locale: 'en_short'),
+                              style: Theme.of(context).textTheme.bodyText1),
+                        ],
+                      )
+                    ],
+                  )
+                ],
+              ),
+            ),
+            _summary,
+            _image,
+            // CachedNetworkImage(
+            //   placeholder: (context, value) => const LinearProgressIndicator(),
+            //   errorWidget: (context, value, e) => const Icon(Icons.error),
+            //   imageUrl: widget.article.image,
+            // ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+              child: Text(
+                widget.article.title,
+                style: Theme.of(context).textTheme.headline4!,
+              ),
+
             ),
           ),
           _summary,
@@ -147,9 +185,10 @@ class _PostWidgetState extends State<PostWidget> {
                     semanticsLabel: 'Dot',
                     color: Theme.of(context).primaryColor,
                   ),
-                ),
-                const Text('4 views'),
-              ],
+                  Text(widget.article.views + ' views'),
+                ],
+              ),
+
             ),
           ),
           const Divider(
