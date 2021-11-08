@@ -7,7 +7,7 @@ class HighlightContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Theme.of(context).backgroundColor.withOpacity(0.6),
+      color: Theme.of(context).backgroundColor,
       padding: const EdgeInsets.symmetric(horizontal: 5),
       child: child,
     );
