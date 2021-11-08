@@ -187,6 +187,17 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       );
     }
+<<<<<<< HEAD
+=======
+ Widget _image = const SizedBox();
+    if (widget.article.summary.isNotEmpty) {
+      _image = CachedNetworkImage(
+        placeholder: (context, value) => const LinearProgressIndicator(),
+        errorWidget: (context, value, e) => const Icon(Icons.error),
+        imageUrl: widget.article.image,
+      );
+    }
+>>>>>>> Image load error fixed
 
     return Column(
       children: [
