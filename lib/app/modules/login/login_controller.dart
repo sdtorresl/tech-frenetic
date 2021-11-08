@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:techfrenetic/app/models/session_model.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
 import '../../common/validators.dart';
 
 class LoginController extends Disposable {
@@ -21,8 +23,16 @@ class LoginController extends Disposable {
   String get email => _emailController.value;
   String get password => _passwordController.value;
 
-  void login() {
-    debugPrint("Login");
+  Future<bool> login() async {
+    UserProvider _userProvider = UserProvider();
+
+    SessionModel? session = await _userProvider.login(email, password);
+
+    if (session != null) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override

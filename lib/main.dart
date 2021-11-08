@@ -4,6 +4,7 @@ import 'package:global_configuration/global_configuration.dart';
 import 'dart:io';
 import 'app/app_module.dart';
 import 'app/app_widget.dart';
+import 'app/preferences/user_preferences.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override
@@ -17,6 +18,9 @@ class MyHttpOverrides extends HttpOverrides {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
+
+  final prefs = UserPreferences();
+  await prefs.initPrefs();
 
   await GlobalConfiguration().loadFromPath("assets/cfg/app_settings.json");
   runApp(
