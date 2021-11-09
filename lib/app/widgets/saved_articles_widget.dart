@@ -81,25 +81,28 @@ class _SavedArticlesState extends State<SavedArticles> {
                       }
 
                       debugPrint('Im working');
-                      return Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border(
-                            top: BorderSide(
-                              width: .5,
-                              color: Colors.grey.withOpacity(.6),
+                      return Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border(
+                              top: BorderSide(
+                                width: .5,
+                                color: Colors.grey.withOpacity(.6),
+                              ),
                             ),
                           ),
-                        ),
-                        child: ListView(
-                          physics: const BouncingScrollPhysics(
-                              parent: AlwaysScrollableScrollPhysics()),
-                          scrollDirection: Axis.vertical,
-                          shrinkWrap: true,
-                          children: [
-                            ...savedPostsWidgets,
-                            const SizedBox(height: 60),
-                          ],
+                          child: ListView(
+                            physics: const BouncingScrollPhysics(
+                                parent: AlwaysScrollableScrollPhysics()),
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: [
+                              ...savedPostsWidgets,
+                              const SizedBox(height: 60),
+                            ],
+                          ),
                         ),
                       );
                     } else {
