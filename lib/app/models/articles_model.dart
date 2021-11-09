@@ -95,7 +95,7 @@ class ArticlesModel {
       comments: json["comments"],
       views: json["views"],
       video: json["video"],
-      likes: json["video"],
+      likes: json["likes"],
       image: _baseUrl + json["image"],
       category: json["category"],
       // isPremium: json["is_premium"] == "True",
