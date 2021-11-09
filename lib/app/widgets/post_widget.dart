@@ -188,8 +188,12 @@ class _PostWidgetState extends State<PostWidget> {
       );
     }
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
  Widget _image = const SizedBox();
+=======
+    Widget _image = const SizedBox();
+>>>>>>> Image fixed
     if (widget.article.summary.isNotEmpty) {
       _image = CachedNetworkImage(
         placeholder: (context, value) => const LinearProgressIndicator(),
