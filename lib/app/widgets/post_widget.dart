@@ -59,7 +59,7 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       );
     }
- Widget _image = const SizedBox();
+    Widget _image = const SizedBox();
     if (widget.article.summary.isNotEmpty) {
       _image = CachedNetworkImage(
         placeholder: (context, value) => const LinearProgressIndicator(),
