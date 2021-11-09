@@ -16,14 +16,6 @@ class PostWidget extends StatefulWidget {
 class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
-    Widget _summary = const SizedBox(height: 15);
-    if (widget.article.summary.isNotEmpty) {
-      _summary = Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        child: Text(widget.article.summary),
-      );
-    }
-
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       decoration: BoxDecoration(
@@ -50,23 +42,35 @@ class _PostWidgetState extends State<PostWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _postAuthor(context),
-          _summary,
+          _postSummary(context),
           _postImage(context),
           _postTitle(context),
           _postTags(context),
           _postInteractions(context),
-          _actionBar(context)
+          _postActionBar(context)
         ],
       ),
     );
   }
 
+  Widget _postSummary(BuildContext context) {
+    Widget _summary = const SizedBox(height: 15);
+    if (widget.article.summary!.isNotEmpty) {
+      _summary = Padding(
+        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        child: Text(widget.article.summary!),
+      );
+    }
+
+    return _summary;
+  }
+
   Widget _postTags(BuildContext context) {
-    return widget.article.category.isNotEmpty
+    return widget.article.category!.isNotEmpty
         ? Padding(
             padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
             child: Text(
-              widget.article.category.toUpperCase(),
+              widget.article.category!.toUpperCase(),
               style:
                   Theme.of(context).textTheme.headline4!.copyWith(fontSize: 12),
             ),
@@ -75,9 +79,7 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   Padding _postAuthor(BuildContext context) {
-    final created = widget.article.date.subtract(
-      const Duration(minutes: 15),
-    );
+    final created = widget.article.date!;
 
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
@@ -104,7 +106,7 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               Row(
                 children: [
-                  Text(widget.article.role,
+                  Text(widget.article.role!,
                       style: Theme.of(context).textTheme.bodyText1),
                   SizedBox(
                     child: SvgPicture.asset(
@@ -127,11 +129,11 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget _postImage(BuildContext context) {
     Widget _image = const SizedBox();
-    if (widget.article.summary.isNotEmpty) {
+    if (widget.article.image != null) {
       _image = CachedNetworkImage(
         placeholder: (context, value) => const LinearProgressIndicator(),
         errorWidget: (context, value, e) => const Icon(Icons.error),
-        imageUrl: widget.article.image,
+        imageUrl: widget.article.image!,
       );
     }
 
@@ -165,7 +167,7 @@ class _PostWidgetState extends State<PostWidget> {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          Text(widget.article.comments + ' comment'),
+          Text(widget.article.comments! + ' comment'),
         ],
       );
     }
@@ -181,7 +183,7 @@ class _PostWidgetState extends State<PostWidget> {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          Text(widget.article.comments + ' comments'),
+          Text(widget.article.comments! + ' comments'),
         ],
       );
     }
@@ -209,7 +211,7 @@ class _PostWidgetState extends State<PostWidget> {
               const SizedBox(
                 width: 10,
               ),
-              Text(widget.article.views + ' views'),
+              Text(widget.article.views! + ' views'),
             ],
           ),
         ),
@@ -217,7 +219,7 @@ class _PostWidgetState extends State<PostWidget> {
     );
   }
 
-  Widget _actionBar(context) {
+  Widget _postActionBar(context) {
     return Column(
       children: [
         const Divider(

@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/articles/articles_controller.dart';
+import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ArticlesPage extends StatefulWidget {
@@ -15,137 +16,171 @@ class ArticlesPage extends StatefulWidget {
 }
 
 class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
+  ArticlesModel article = ArticlesModel.empty();
+
   @override
   Widget build(BuildContext context) {
-    ThemeData theme = Theme.of(context);
-    final createdTimeAgo = widget.article.date.subtract(
-      const Duration(minutes: 15),
-    );
+    ArticlesProvider _articlesProvider = ArticlesProvider();
+    _articlesProvider.getArticle("/articles/flutter-2-here").then((value) {
+      setState(() {
+        article = value;
+      });
+    });
 
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.close),
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-        ),
-        title: Text(
-          widget.article.category.toUpperCase(),
-          style: theme.textTheme.headline5!.copyWith(color: Colors.white),
-        ),
-        backgroundColor: Theme.of(context).primaryColorDark,
-        actions: [
-          IconButton(
-            onPressed: () => debugPrint("Like!"),
-            icon: const Icon(TechFreneticIcons.lightBulb),
-          ),
-          IconButton(
-            onPressed: () => debugPrint("Share!"),
-            icon: const Icon(TechFreneticIcons.share),
-          )
-        ],
-      ),
+      appBar: _articleAppBar(context),
       body: Column(
         children: <Widget>[
           Expanded(
             child: ListView(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(15),
-                  child: Text(
-                    widget.article.title,
-                    style: theme.textTheme.headline2,
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.only(bottom: 15, left: 20, right: 20),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        child: ClipOval(
-                          child: SvgPicture.asset(
-                            'assets/img/avatars/avatar-02.svg',
-                            semanticsLabel: 'Acme Logo',
-                          ),
-                        ),
-                        radius: 20,
-                        backgroundColor: Colors.grey[200],
-                      ),
-                      const SizedBox(width: 20),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.article.user,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline1!
-                                .copyWith(fontSize: 15),
-                          ),
-                          Row(
-                            children: [
-                              Text(
-                                "Profession 1",
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 5.0),
-                                child: SizedBox(
-                                  child: SvgPicture.asset(
-                                    'assets/img/icons/dot.svg',
-                                    allowDrawingOutsideViewBox: true,
-                                    semanticsLabel: 'Dot',
-                                    color: Theme.of(context).primaryColor,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                timeago.format(createdTimeAgo,
-                                    locale: 'en_short'),
-                                style: Theme.of(context).textTheme.bodyText1,
-                              ),
-                            ],
-                          )
-                        ],
-                      )
-                    ],
-                  ),
-                ),
-                CachedNetworkImage(
-                  placeholder: (context, value) =>
-                      const LinearProgressIndicator(),
-                  errorWidget: (context, value, e) => const Icon(Icons.error),
-                  imageUrl: widget.article.image,
-                ),
-                _comments()
+                _articleTitle(context),
+                _articleHeader(context),
+                _articleImage(context),
+                _articleSummary(context),
+                _articleComments(context),
               ],
             ),
           ),
-          _summary(),
           const _CommentForm()
         ],
       ),
     );
   }
 
-  Widget _summary() {
+  Widget _articleImage(BuildContext context) {
+    if (article.image != null) {
+      return CachedNetworkImage(
+        placeholder: (context, value) => const LinearProgressIndicator(),
+        errorWidget: (context, value, e) => const Icon(Icons.error),
+        imageUrl: article.image!,
+      );
+    } else {
+      return const SizedBox();
+    }
+  }
+
+  Widget _articleHeader(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 15, left: 20, right: 20),
+      child: Row(
+        children: [
+          CircleAvatar(
+            child: ClipOval(
+              child: SvgPicture.asset(
+                'assets/img/avatars/avatar-02.svg',
+                semanticsLabel: 'Acme Logo',
+              ),
+            ),
+            radius: 20,
+            backgroundColor: Colors.grey[200],
+          ),
+          const SizedBox(width: 20),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                article.user!,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1!
+                    .copyWith(fontSize: 15),
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Profession 1",
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                    child: SizedBox(
+                      child: SvgPicture.asset(
+                        'assets/img/icons/dot.svg',
+                        allowDrawingOutsideViewBox: true,
+                        semanticsLabel: 'Dot',
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                  ),
+                  Text(
+                    article.date != null
+                        ? timeago.format(article.date!, locale: 'en_short')
+                        : "",
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ],
+              )
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  AppBar _articleAppBar(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return AppBar(
+      leading: IconButton(
+        icon: const Icon(Icons.close),
+        onPressed: () {
+          Navigator.of(context).pop();
+        },
+      ),
+      title: Text(
+        article.category!.toUpperCase(),
+        style: theme.textTheme.headline5!.copyWith(color: Colors.white),
+      ),
+      backgroundColor: Theme.of(context).primaryColorDark,
+      actions: [
+        IconButton(
+          onPressed: () => debugPrint("Like!"),
+          icon: const Icon(TechFreneticIcons.lightBulb),
+        ),
+        IconButton(
+          onPressed: () => debugPrint("Share!"),
+          icon: const Icon(TechFreneticIcons.share),
+        )
+      ],
+    );
+  }
+
+  Widget _articleTitle(BuildContext context) {
+    ThemeData theme = Theme.of(context);
+    return Padding(
+      padding: const EdgeInsets.all(15),
+      child: Text(
+        article.title,
+        style: theme.textTheme.headline2,
+      ),
+    );
+  }
+
+  Widget _articleSummary(BuildContext context) {
+    ThemeData theme = Theme.of(context);
     Widget _summary = const SizedBox(height: 15);
-    if (widget.article.summary.isNotEmpty) {
-      _summary = Padding(
-        padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        child: Text(widget.article.summary),
+    if (article.summary!.isNotEmpty) {
+      _summary = Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+            child: Text(article.summary!, style: theme.textTheme.headline2),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+            child: Text(article.body!),
+          ),
+        ],
       );
     }
 
     return _summary;
   }
 
-  Widget _comments() {
+  Widget _articleComments(BuildContext context) {
     Widget _comments = const SizedBox();
-    if (widget.article.comments != '0' && widget.article.comments == '1') {
+    if (article.comments != '0' && article.comments == '1') {
       _comments = Row(
         children: [
           SizedBox(
@@ -156,7 +191,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          Text(widget.article.comments + ' comment'),
+          Text(article.comments! + ' comment'),
         ],
       );
     }

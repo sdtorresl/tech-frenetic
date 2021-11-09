@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="72px" height="71px" viewBox="0 0 72 71" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
+  <desc>Created with Lunacy</desc>
+  <g id="Group-11" transform="translate(0.9038696 0.9038696)">
+    <g id="Group-24">
+      <path d="M6.48299 0L70 0.05953L69.9569 42.8738L63.6096 46.7602L24.3133 46.7233L8.12793 57.6653L8.1388 46.8934L0 46.886L0.0410271 6.11028L6.48299 0Z" id="Fill-28" fill="#05142F" stroke="none" />
+      <g id="Group-5">
+        <path d="M6.45643 0L69.7133 0.0600763L69.6703 43.2672L63.349 47.1893L24.2137 47.1521L8.09464 58.1945L8.10546 47.3237L0 47.3162L0.0408591 6.16636L6.45643 0Z" id="Stroke-30" fill="none" stroke="#05142F" stroke-width="0.5445" />
+        <path d="M0.0416811 0L60.9991 0.0593772L60.9578 42.9432L22.2112 42.9056L6.28489 53.8838L6.29557 42.89L0 42.8838L0.0416811 0Z" transform="translate(6.53562 -2.196811E-14)" id="Stroke-34" fill="none" stroke="#05142F" stroke-width="0.5445" />
+      </g>
+      <path d="M0.0419984 0L61.4634 0.0598064L61.4218 43.2536L22.3803 43.2157L6.33273 54.2732L6.34349 43.2L0 43.1938L0.0419984 0Z" transform="translate(6.829268 0)" id="Fill-32" fill="#FFFFFF" stroke="none" />
+      <g id="Group" transform="translate(18.58614 10.36926)">
+        <path d="M20.2767 0.0202039L20.2722 4.68837L13.079 4.68128L13.0637 20.5293L13.0609 23.4209L7.82933 23.4156L7.8474 4.67596L0 4.66816L0.00451659 0L20.2767 0.0202039Z" id="Fill-36" fill="#05142F" stroke="#05142F" stroke-width="0.5445" />
+        <path d="M0.0223484 0L18.5296 0.0182377L18.5254 4.06843L5.12372 4.0552L5.11883 9.45498L16.6059 9.46678L16.6021 13.5166L5.11498 13.5052L5.10521 23.6303L0 23.6253L0.0223484 0Z" transform="translate(20.43706 0)" id="Fill-40" fill="#006EE8" stroke="#006EE8" stroke-width="0.5445" />
+      </g>
+    </g>
+    <path d="M0 0L29.2174 0L29.2174 1.70731L0 1.70731L0 0Z" transform="translate(0 66.58536)" id="Rectangle" fill="#021431" stroke="none" />
+  </g>
+</svg>
