@@ -97,7 +97,7 @@ class ArticlesModel {
       comments: json["comments"],
       views: json["views"],
       video: json["video"],
-      likes: json["video"],
+      likes: json["likes"],
       image: json["image"] != null && json["image"] != ""
           ? _baseUrl + json["image"]
           : null,
