@@ -86,6 +86,7 @@ class _PostWidgetState extends State<PostWidget> {
       child: Row(
         children: [
           CircleAvatar(
+            backgroundColor: Colors.grey.withOpacity(0.2),
             child: ClipOval(
               child: SvgPicture.asset(
                 'assets/img/avatars/avatar-02.svg',
