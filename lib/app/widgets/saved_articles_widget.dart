@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/models/saved_articles_model.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/providers/saved_articles_provider.dart';
@@ -67,12 +68,11 @@ class _SavedArticlesState extends State<SavedArticles> {
                 FutureBuilder(
                   future: _articlesProvideer.getSavedArticles(),
                   builder: (BuildContext context,
-                      AsyncSnapshot<List<SavedArticlesModel>> snapshot) {
+                      AsyncSnapshot<List<ArticlesModel>> snapshot) {
                     if (snapshot.hasData) {
-                      List<SavedArticlesModel> savedArticles =
-                          snapshot.data ?? [];
+                      List<ArticlesModel> savedArticles = snapshot.data ?? [];
                       List<Widget> savedPostsWidgets = [];
-                      for (SavedArticlesModel savedArticle in savedArticles) {
+                      for (ArticlesModel savedArticle in savedArticles) {
                         savedPostsWidgets
                             .add(SavedPost(savedPost: savedArticle));
                       }

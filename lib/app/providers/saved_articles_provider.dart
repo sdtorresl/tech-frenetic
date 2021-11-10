@@ -9,8 +9,8 @@ import 'package:techfrenetic/app/models/saved_articles_model.dart';
 class ArticlesProvider {
   final String _baseUrl = GlobalConfiguration().getValue("api_url");
 
-  Future<List<SavedArticlesModel>> getSavedArticles() async {
-    List<SavedArticlesModel> savedArticles = [];
+  Future<List<ArticlesModel>> getSavedArticles() async {
+    List<ArticlesModel> savedArticles = [];
 
     try {
       Uri _url = Uri.parse(_baseUrl + "/api/en/v1/saved-articles");
