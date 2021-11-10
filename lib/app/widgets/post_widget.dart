@@ -188,6 +188,7 @@ class _PostWidgetState extends State<PostWidget> {
       );
     }
 
+
     return Column(
       children: [
         const Divider(
@@ -213,6 +214,7 @@ class _PostWidgetState extends State<PostWidget> {
               ),
               Text(widget.article.views! + ' views'),
             ],
+
           ),
         ),
       ],
