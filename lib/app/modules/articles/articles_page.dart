@@ -6,7 +6,9 @@ import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/articles/articles_controller.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
+import 'package:techfrenetic/app/widgets/comments_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_html/flutter_html.dart';
 
 class ArticlesPage extends StatefulWidget {
   final ArticlesModel article;
@@ -17,29 +19,43 @@ class ArticlesPage extends StatefulWidget {
 
 class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   ArticlesModel article = ArticlesModel.empty();
+  final ArticlesProvider _articlesProvider = ArticlesProvider();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    ArticlesProvider _articlesProvider = ArticlesProvider();
-    _articlesProvider.getArticle("/articles/flutter-2-here").then((value) {
-      setState(() {
-        article = value;
-      });
-    });
-
     return Scaffold(
       appBar: _articleAppBar(context),
       body: Column(
         children: <Widget>[
           Expanded(
-            child: ListView(
-              children: [
-                _articleTitle(context),
-                _articleHeader(context),
-                _articleImage(context),
-                _articleSummary(context),
-                _articleComments(context),
-              ],
+            child: FutureBuilder(
+              future: _articlesProvider.getArticle("/articles/flutter-2-here"),
+              initialData: ArticlesModel.empty(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  article = snapshot.data;
+
+                  return ListView(
+                    children: [
+                      _articleTitle(context),
+                      _articleHeader(context),
+                      _articleImage(context),
+                      _articleSummary(context),
+                      _articleInteractions(context),
+                      CommentsWidget(articleId: article.id),
+                    ],
+                  );
+                } else {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+              },
             ),
           ),
           const _CommentForm()
@@ -88,10 +104,6 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
               ),
               Row(
                 children: [
-                  Text(
-                    "Profession 1",
-                    style: Theme.of(context).textTheme.bodyText1,
-                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5.0),
                     child: SizedBox(
@@ -157,28 +169,20 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   }
 
   Widget _articleSummary(BuildContext context) {
-    ThemeData theme = Theme.of(context);
     Widget _summary = const SizedBox(height: 15);
     if (article.summary!.isNotEmpty) {
-      _summary = Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-            child: Text(article.summary!, style: theme.textTheme.headline2),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
-            child: Text(article.body!),
-          ),
-        ],
+      _summary = Padding(
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+        child: Html(
+          data: article.body,
+        ),
       );
     }
 
     return _summary;
   }
 
-  Widget _articleComments(BuildContext context) {
+  Widget _articleInteractions(BuildContext context) {
     Widget _comments = const SizedBox();
     if (article.comments != '0' && article.comments == '1') {
       _comments = Row(

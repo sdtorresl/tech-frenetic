@@ -120,7 +120,7 @@ class ArticlesProvider extends TechFreneticProvider {
 
     try {
       Uri _url = Uri.parse("$baseUrl/api/en/v1/article?alias=$slug");
-      debugPrint("Get article from $_url...");
+      debugPrint(_url.toString());
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
@@ -134,8 +134,6 @@ class ArticlesProvider extends TechFreneticProvider {
     } catch (e) {
       debugPrint(e.toString());
     }
-
-    debugPrint(article.toString());
 
     return article;
   }
