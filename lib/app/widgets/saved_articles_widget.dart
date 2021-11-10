@@ -3,8 +3,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/models/saved_articles_model.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/providers/saved_articles_provider.dart';
-import 'package:techfrenetic/app/preferences/user_preferences.dart';
-
 import 'package:techfrenetic/app/widgets/save_post_widget.dart';
 
 class SavedArticles extends StatefulWidget {
@@ -15,7 +13,6 @@ class SavedArticles extends StatefulWidget {
 }
 
 class _SavedArticlesState extends State<SavedArticles> {
-  final _prefs = UserPreferences();
   @override
   Widget build(BuildContext context) {
     ArticlesProvider _articlesProvideer = ArticlesProvider();
@@ -24,7 +21,7 @@ class _SavedArticlesState extends State<SavedArticles> {
       child: ListView(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
-        physics: AlwaysScrollableScrollPhysics(),
+        physics: const AlwaysScrollableScrollPhysics(),
         children: [
           Container(
             decoration: BoxDecoration(
@@ -80,7 +77,6 @@ class _SavedArticlesState extends State<SavedArticles> {
                             .add(SavedPost(savedPost: savedArticle));
                       }
 
-                      debugPrint('Im working');
                       return Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -93,11 +89,7 @@ class _SavedArticlesState extends State<SavedArticles> {
                               ),
                             ),
                           ),
-                          child: ListView(
-                            physics: const BouncingScrollPhysics(
-                                parent: AlwaysScrollableScrollPhysics()),
-                            scrollDirection: Axis.vertical,
-                            shrinkWrap: true,
+                          child: Column(
                             children: [
                               ...savedPostsWidgets,
                               const SizedBox(height: 60),
