@@ -1,10 +1,9 @@
 import 'dart:convert';
-
-import 'package:global_configuration/global_configuration.dart';
+import 'package:techfrenetic/app/models/model.dart';
 
 import 'articles_model.dart';
 
-class SavedArticlesWallModel {
+class SavedArticlesWallModel extends Model {
   SavedArticlesWallModel({
     required this.results,
     required this.articles,
@@ -26,10 +25,9 @@ class SavedArticlesWallModel {
       ),
     );
   }
+
   Map<String, dynamic> toMap() => {
         "results": results,
         "articles": List<ArticlesModel>.from(articles.map((x) => x.toMap())),
       };
-  @override
-  String toString() => toJson();
 }

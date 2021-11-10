@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
-import 'package:techfrenetic/app/models/saved_articles_model.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/providers/saved_articles_provider.dart';
 import 'package:techfrenetic/app/widgets/save_post_widget.dart';
