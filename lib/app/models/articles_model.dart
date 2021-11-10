@@ -36,43 +36,45 @@ class ArticlesModel {
     required this.id,
     required this.title,
     required this.displayName,
-    required this.user,
-    required this.role,
-    required this.summary,
-    required this.type,
-    required this.date,
-    required this.url,
-    required this.comments,
-    required this.views,
-    required this.video,
-    required this.category,
-    required this.likes,
-    required this.image,
-    // this.isPremium,
-    // this.isVideo,
-    // this.duration,
-    // this.thumbnail,
+    this.user,
+    this.role,
+    this.summary,
+    this.type,
+    this.date,
+    this.url,
+    this.comments,
+    this.views,
+    this.video,
+    this.category,
+    this.likes,
+    this.image,
+    this.isPremium,
+    this.isVideo,
+    this.duration,
+    this.thumbnail,
+    this.body,
   });
 
   final String id;
   final String title;
   final String displayName;
-  final String user;
-  final String role;
-  final String summary;
-  final String type;
-  final DateTime date;
-  final String url;
-  final String comments;
-  final String views;
-  final String video;
-  final String category;
-  final String likes;
-  final String image;
-  // final bool? isPremium;
-  // final bool? isVideo;
-  // final String? duration;
-  // final String? thumbnail;
+  final String? user;
+  final String? role;
+  final String? summary;
+  final String? type;
+  final DateTime? date;
+  final String? url;
+  final String? comments;
+  final String? views;
+  final String? video;
+  final String? category;
+  final String? likes;
+  final String? image;
+  final bool? isPremium;
+  final bool? isVideo;
+  final String? duration;
+  final String? thumbnail;
+  final String? body;
 
   factory ArticlesModel.fromJson(String str) =>
       ArticlesModel.fromMap(json.decode(str));
@@ -96,14 +98,38 @@ class ArticlesModel {
       views: json["views"],
       video: json["video"],
       likes: json["likes"],
-      image: _baseUrl + json["image"],
+      image: json["image"] != null && json["image"] != ""
+          ? _baseUrl + json["image"]
+          : null,
       category: json["category"],
-      // isPremium: json["is_premium"] == "True",
-      // isVideo: json["is_video"] == "True",
-      // duration: json["duration"],
-      // thumbnail: _baseUrl + json["thumbnail"],
+      isPremium: json["is_premium"] == "True",
+      isVideo: json["is_video"] == "True",
+      duration: json["duration"],
+      thumbnail: json["thumbnail"] != null && json["thumbnail"] != ""
+          ? _baseUrl + json["thumbnail"]
+          : null,
+      body: json["body"],
     );
   }
+
+  factory ArticlesModel.empty() => ArticlesModel(
+        id: "",
+        title: "",
+        displayName: "",
+        user: "",
+        role: "",
+        summary: "",
+        type: "",
+        date: null,
+        url: "",
+        comments: "",
+        views: "",
+        video: "",
+        category: "",
+        likes: "",
+        image: null,
+        body: "",
+      );
 
   Map<String, dynamic> toMap() => {
         "id": id,
@@ -113,7 +139,7 @@ class ArticlesModel {
         "role": role,
         "summary": summary,
         "type": type,
-        "date": date,
+        "date": date!.toIso8601String(),
         "url": url,
         "comments": comments,
         "views": views,
@@ -121,10 +147,11 @@ class ArticlesModel {
         "category": category,
         "likes": likes,
         "image": image,
-        // "is_premium": isPremium,
-        // "is_video": isVideo,
-        // "duration": duration,
-        // "thumbnail": thumbnail,
+        "is_premium": isPremium,
+        "is_video": isVideo,
+        "duration": duration,
+        "thumbnail": thumbnail,
+        "body": body,
       };
 
   @override
