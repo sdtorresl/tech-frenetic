@@ -27,23 +27,27 @@ class _MyProfileState extends State<MyProfile> {
         ),
       );
     } else {
-      nameWidget = Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          HighlightContainer(
-            child: Text(
-              name[0],
-              style: Theme.of(context).textTheme.headline1!.copyWith(
-                    color: Theme.of(context).indicatorColor,
-                  ),
+      for (String words in name.getRange(1, name.length)) {
+        String nameStr = words;
+
+        nameWidget = Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            HighlightContainer(
+              child: Text(
+                name[0],
+                style: Theme.of(context).textTheme.headline1!.copyWith(
+                      color: Theme.of(context).indicatorColor,
+                    ),
+              ),
             ),
-          ),
-          const SizedBox(
-            width: 6,
-          ),
-          Text(name[1], style: Theme.of(context).textTheme.headline1),
-        ],
-      );
+            const SizedBox(
+              width: 6,
+            ),
+            Text(nameStr, style: Theme.of(context).textTheme.headline1),
+          ],
+        );
+      }
     }
 
     return ListView(
