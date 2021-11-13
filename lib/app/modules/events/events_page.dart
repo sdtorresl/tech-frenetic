@@ -78,18 +78,22 @@ class _EventsPageState extends State<EventsPage> {
                 ),
                 const SizedBox(height: 25),
                 Center(
-                  child: ElevatedButton(
-                    child: const Text('search'),
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
+                  child: SizedBox(
+                    width: 400,
+                    child: ElevatedButton(
+                      child: const Text('search'),
+                      style: ButtonStyle(
+                        shape:
+                            MaterialStateProperty.all<RoundedRectangleBorder>(
+                          const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.zero,
+                          ),
                         ),
                       ),
+                      onPressed: () {
+                        return debugPrint('Im working');
+                      },
                     ),
-                    onPressed: () {
-                      return debugPrint('Im working');
-                    },
                   ),
                 ),
               ],
