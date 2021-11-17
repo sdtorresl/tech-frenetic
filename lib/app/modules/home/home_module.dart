@@ -4,6 +4,7 @@ import 'package:techfrenetic/app/modules/articles/articles_module.dart';
 import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/login/login_module.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
+import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_page.dart';
 
 import 'home_controller.dart';
@@ -34,13 +35,10 @@ class HomeModule extends Module {
           '/profile',
           child: (context, args) => const ProfilePage(),
         ),
-        ChildRoute(
-          '/sign',
-          child: (context, args) => const SignUpPage(),
-        ),
       ],
     ),
     ModuleRoute('/community/article', module: ArticlesModule()),
     ModuleRoute('/login', module: LoginModule()),
+    ModuleRoute('/sign', module: SignUpModule()),
   ];
 }
