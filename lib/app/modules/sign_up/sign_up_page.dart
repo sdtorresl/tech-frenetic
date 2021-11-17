@@ -14,12 +14,20 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
   bool _isPasswordHidden1 = true;
   bool _isPasswordHidden2 = true;
 
-  bool checkBoxPerson = false;
-  bool checkBoxCompany = false;
+  bool? checkBoxPerson;
+  bool? checkBoxCompany;
   bool checkBoxTerms = false;
+  bool check = true;
 
   @override
   Widget build(BuildContext context) {
+    if (check) {
+      checkBoxPerson = true;
+      checkBoxCompany = false;
+    } else {
+      checkBoxPerson = false;
+      checkBoxCompany = true;
+    }
     return Scaffold(
       body: ListView(
         children: [
@@ -82,9 +90,12 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
                         onChanged: (bool? value) {
-                          setState(() {
-                            checkBoxPerson = value!;
-                          });
+                          setState(
+                            () {
+                              checkBoxPerson = value!;
+                              check = true;
+                            },
+                          );
                         }),
                     Text('Person',
                         style: Theme.of(context)
@@ -97,9 +108,12 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                         shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(15)),
                         onChanged: (bool? value) {
-                          setState(() {
-                            checkBoxCompany = value!;
-                          });
+                          setState(
+                            () {
+                              checkBoxCompany = value!;
+                              check = false;
+                            },
+                          );
                         }),
                     Text('Company',
                         style: Theme.of(context)
@@ -173,6 +187,13 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                             onPressed: () => setState(
                                 () => _isPasswordHidden1 = !_isPasswordHidden1),
                           ),
+                          errorText: snapshot.hasError
+                              ? snapshot.error.toString()
+                              : null,
+                          errorStyle: Theme.of(context)
+                              .textTheme
+                              .headline4!
+                              .copyWith(color: Colors.red),
                         ),
                         onChanged: store.changePassword,
                       );
