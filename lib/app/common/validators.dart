@@ -24,7 +24,7 @@ class Validators {
         sink.add(password);
       } else {
         sink.addError(
-          'El codigo debe ser de mínimo 8 caracteres',
+          'Debes ingresar la contraseña',
         );
       }
     },
@@ -48,6 +48,17 @@ class Validators {
       } else {
         sink.addError(
           'Las contraseñas no conciden',
+        );
+      }
+    },
+  );
+  static final validateTerms = StreamTransformer<bool, bool>.fromHandlers(
+    handleData: (termsCheck, sink) {
+      if (termsCheck == true) {
+        sink.add(termsCheck);
+      } else {
+        sink.addError(
+          'Debes aceptar los terminos y condiciones',
         );
       }
     },
