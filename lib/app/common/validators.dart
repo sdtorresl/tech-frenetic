@@ -20,11 +20,34 @@ class Validators {
   static final validatePassword =
       StreamTransformer<String, String>.fromHandlers(
     handleData: (password, sink) {
-      if (password.length >= 5) {
+      if (password.length >= 8) {
         sink.add(password);
       } else {
         sink.addError(
-          'El codigo debe ser de mínimo 5 caracteres',
+          'El codigo debe ser de mínimo 8 caracteres',
+        );
+      }
+    },
+  );
+  static final validateName = StreamTransformer<String, String>.fromHandlers(
+    handleData: (name, sink) {
+      if (name.isNotEmpty) {
+        sink.add(name);
+      } else {
+        sink.addError(
+          'Nombre no valido',
+        );
+      }
+    },
+  );
+  static final validateConfirmPasword =
+      StreamTransformer<List<String>, String>.fromHandlers(
+    handleData: (password, sink) {
+      if (password[0] == password[1]) {
+        sink.add(password[1]);
+      } else {
+        sink.addError(
+          'Las contraseñas no conciden',
         );
       }
     },
