@@ -8,14 +8,24 @@ class SignUpController extends Disposable {
   final _passwordController = BehaviorSubject<String>();
   final _nameController = BehaviorSubject<String>();
   final _termsController = BehaviorSubject<bool>();
-
-  //final _confirmPasswordController = BehaviorSubject<List<String>>();
+  final _passwordCheckController = BehaviorSubject<String>();
 
   Stream<String> get emailStream =>
       _emailController.stream.transform(Validators.validateEmail);
 
-  Stream<String> get passwordStream =>
-      _passwordController.stream.transform(Validators.validatePassword);
+  Stream<String> get passwordStream => _passwordController.stream
+          .transform(Validators.validatePassword)
+          .doOnData(
+        (String password) {
+          if (0 != _passwordCheckController.value.compareTo(password)) {
+            _passwordController.addError("Las contraseñas no coinciden");
+            debugPrint(_passwordCheckController.value);
+          } else {
+            // _passwordCheckController.sink.add(_passwordCheckController.value);
+            // print('Loop');
+          }
+        },
+      );
 
   Stream<String> get nameStream =>
       _nameController.stream.transform(Validators.validateName);
@@ -26,8 +36,8 @@ class SignUpController extends Disposable {
   // Stream<List<String>> get confirmPasswordStream =>
   //     _confirmPasswordController.stream.transform(Validators.validateConfirmPasword);
 
-  Stream<bool> get formValidStream =>
-      Rx.combineLatest2(emailStream, passwordStream, (e, p) => true);
+  Stream<bool> get formValidStream => Rx.combineLatest4(termsStream, nameStream,
+      emailStream, passwordStream, (e, p, c, d) => true);
 
   Function(String) get changeEmail => _emailController.sink.add;
   Function(String) get changePassword => _passwordController.sink.add;
@@ -38,8 +48,9 @@ class SignUpController extends Disposable {
   String get email => _emailController.value;
   String get password => _passwordController.value;
 
-  Future<bool?> sing() async {
-    debugPrint('Pressed');
+  Future<bool> sing() async {
+    debugPrint('Sing in');
+    return true;
   }
 
   @override
