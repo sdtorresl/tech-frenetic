@@ -16,8 +16,9 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
 
   bool? checkBoxPerson;
   bool? checkBoxCompany;
-  bool checkBoxTerms = false;
+
   bool check = true;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -274,13 +275,23 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                 const SizedBox(height: 15),
                 Row(
                   children: [
-                    Checkbox(
-                        value: checkBoxTerms,
-                        onChanged: (bool? value) {
-                          setState(() {
-                            checkBoxTerms = value!;
-                          });
-                        }),
+                    StreamBuilder(
+                      stream: store.termsStream,
+                      initialData: false,
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        return Checkbox(
+                          value:
+                              snapshot.hasData && snapshot.data ? true : false,
+                          onChanged: (bool? value) {
+                            setState(
+                              () {
+                                store.changeTerms(value!);
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -326,26 +337,48 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                 Center(
                   child: SizedBox(
                     width: 800,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Modular.to.pushNamed('/login');
-                      },
-                      child: Text(
-                        'Continue',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline1!
-                            .copyWith(color: Colors.white),
-                      ),
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                        ),
-                      ),
-                    ),
+                    child: StreamBuilder<Object>(
+                        stream: store.formValidStream,
+                        builder: (context, snapshot) {
+                          return ElevatedButton(
+                            onPressed: snapshot.hasData && !_isLoading
+                                ? () async {
+                                    setState(() {
+                                      _isLoading = true;
+                                    });
+                                    bool signIn = await store.sing();
+                                    setState(() {
+                                      _isLoading = false;
+                                    });
+                                    if (signIn) {
+                                      const SnackBar(
+                                        content: Text(
+                                            'You are part of the tech frenetic cummunity now'),
+                                      );
+                                      Modular.to.pushNamedAndRemoveUntil(
+                                          '/login', (p0) => false);
+                                    } else {
+                                      debugPrint("Not sign");
+                                    }
+                                  }
+                                : null,
+                            child: Text(
+                              'Continue',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline1!
+                                  .copyWith(color: Colors.white),
+                            ),
+                            style: ButtonStyle(
+                              shape: MaterialStateProperty.all<
+                                  RoundedRectangleBorder>(
+                                const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.zero,
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
                   ),
                 ),
               ],
