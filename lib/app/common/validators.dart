@@ -35,11 +35,11 @@ class Validators {
         );
       } else if (password.contains(RegExp(r'[A-Z]')) == false) {
         sink.addError(
-          'La contraseña debe tener minimo una mayuscula y una minuscula',
+          'Debe tener minimo una mayuscula',
         );
       } else if (password.contains(RegExp(r'[a-z]')) == false) {
         sink.addError(
-          'La contraseña debe tener minimo una mayuscula y una minuscula',
+          'Debe tener minimo una minuscula',
         );
       } else {
         sink.addError(
