@@ -100,6 +100,33 @@ class _MyProfileState extends State<MyProfile> {
                     ListTile(
                       title: Padding(
                         padding: const EdgeInsets.all(8.0),
+
+                        /*child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            HighlightContainer(
+                              child: Text(
+                                widget.user.name,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1!
+                                    .copyWith(
+                                      color: Theme.of(context).indicatorColor,
+                                    ),
+                              ),
+                            ),
+                            IconButton(
+                              onPressed: () {
+                                debugPrint('Im working');
+                              },
+                              icon: Icon(
+                                Icons.edit,
+                                color: Theme.of(context).indicatorColor,
+                              ),
+                            ),
+                          ],
+                        ),*/
+
                         child: Center(child: nameWidget
 
                             // HighlightContainer(
@@ -115,6 +142,7 @@ class _MyProfileState extends State<MyProfile> {
                             //   ),
                             // ),
                             ),
+
                       ),
                       subtitle: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -245,9 +273,16 @@ class _MyProfileState extends State<MyProfile> {
                                             color: Theme.of(context)
                                                 .indicatorColor),
                                   ),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: Theme.of(context).indicatorColor,
+                                  Expanded(
+                                    child: IconButton(
+                                      onPressed: () {
+                                        debugPrint('Im working');
+                                      },
+                                      icon: Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Theme.of(context).indicatorColor,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -309,9 +344,17 @@ class _MyProfileState extends State<MyProfile> {
                                         ),
                                       ],
                                     ),
-                                    Icon(
-                                      Icons.arrow_forward_ios,
-                                      color: Theme.of(context).indicatorColor,
+                                    Expanded(
+                                      child: IconButton(
+                                        onPressed: () {
+                                          debugPrint('Im working');
+                                        },
+                                        icon: Icon(
+                                          Icons.arrow_forward_ios,
+                                          color:
+                                              Theme.of(context).indicatorColor,
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -342,9 +385,16 @@ class _MyProfileState extends State<MyProfile> {
                                             color: Theme.of(context)
                                                 .indicatorColor),
                                   ),
-                                  Icon(
-                                    Icons.arrow_forward_ios,
-                                    color: Theme.of(context).indicatorColor,
+                                  Expanded(
+                                    child: IconButton(
+                                      onPressed: () {
+                                        debugPrint('Im working');
+                                      },
+                                      icon: Icon(
+                                        Icons.arrow_forward_ios,
+                                        color: Theme.of(context).indicatorColor,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -361,9 +411,14 @@ class _MyProfileState extends State<MyProfile> {
                     AppLocalizations.of(context)!.about,
                     style: Theme.of(context).textTheme.headline1,
                   ),
-                  trailing: Icon(
-                    Icons.edit,
-                    color: Theme.of(context).indicatorColor,
+                  trailing: IconButton(
+                    onPressed: () {
+                      debugPrint('Im working');
+                    },
+                    icon: Icon(
+                      Icons.edit,
+                      color: Theme.of(context).indicatorColor,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -383,9 +438,14 @@ class _MyProfileState extends State<MyProfile> {
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.certifications,
                       style: Theme.of(context).textTheme.headline1),
-                  trailing: Icon(
-                    Icons.edit,
-                    color: Theme.of(context).indicatorColor,
+                  trailing: IconButton(
+                    onPressed: () {
+                      debugPrint('Im working');
+                    },
+                    icon: Icon(
+                      Icons.edit,
+                      color: Theme.of(context).indicatorColor,
+                    ),
                   ),
                 ),
                 Container(
