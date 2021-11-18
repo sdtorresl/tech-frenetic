@@ -35,23 +35,27 @@ class Validators {
         sink.add(name);
       } else {
         sink.addError(
-          'Nombre no valido',
+          'Ingresa un nombre',
         );
       }
     },
   );
-  static final validateConfirmPasword =
-      StreamTransformer<List<String>, String>.fromHandlers(
+  static final validatePasswordCheckWrong =
+      StreamTransformer<String, String>.fromHandlers(
+    handleData: (passwordCheck, sink) {
+      sink.add(passwordCheck);
+      sink.addError("Las contraseñas no coinciden");
+    },
+  );
+
+  final validatePasswordCheck = StreamTransformer<String, String>.fromHandlers(
     handleData: (password, sink) {
-      if (password[0] == password[1]) {
-        sink.add(password[1]);
-      } else {
-        sink.addError(
-          'Las contraseñas no conciden',
-        );
-      }
+      password.length > 8
+          ? sink.add(password)
+          : sink.addError("La contraseña debe tener más de 8 caracteres");
     },
   );
+
   static final validateTerms = StreamTransformer<bool, bool>.fromHandlers(
     handleData: (termsCheck, sink) {
       if (termsCheck == true) {
@@ -63,4 +67,16 @@ class Validators {
       }
     },
   );
+  // static final validateConfirmPasword =
+  //     StreamTransformer<List<String>, String>.fromHandlers(
+  //   handleData: (password, sink) {
+  //     if (password[0] == password[1]) {
+  //       sink.add(password[1]);
+  //     } else {
+  //       sink.addError(
+  //         'Las contraseñas no conciden',
+  //       );
+  //     }
+  //   },
+  // );
 }
