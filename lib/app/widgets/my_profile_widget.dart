@@ -18,33 +18,67 @@ class _MyProfileState extends State<MyProfile> {
     List<String> name = widget.user.name.split(' ');
     Widget nameWidget = const SizedBox();
     if (name.length < 2) {
-      nameWidget = HighlightContainer(
-        child: Text(
-          widget.user.name,
-          style: Theme.of(context).textTheme.headline1!.copyWith(
-                color: Theme.of(context).indicatorColor,
-              ),
-        ),
-      );
-    } else {
-      for (String words in name.getRange(1, name.length)) {
-        String nameStr = words;
-
-        nameWidget = Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            HighlightContainer(
+      nameWidget = Stack(
+        children: [
+          Center(
+            child: HighlightContainer(
               child: Text(
-                name[0],
+                widget.user.name,
                 style: Theme.of(context).textTheme.headline1!.copyWith(
                       color: Theme.of(context).indicatorColor,
                     ),
               ),
             ),
-            const SizedBox(
-              width: 6,
+          ),
+          Align(
+            alignment: Alignment.centerRight,
+            child: IconButton(
+              onPressed: () {
+                debugPrint('Im working');
+              },
+              icon: Icon(
+                Icons.edit,
+                color: Theme.of(context).indicatorColor,
+              ),
             ),
-            Text(nameStr, style: Theme.of(context).textTheme.headline1),
+          ),
+        ],
+      );
+    } else {
+      for (String words in name.getRange(1, name.length)) {
+        String nameStr = words;
+
+        nameWidget = Stack(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                HighlightContainer(
+                  child: Text(
+                    name[0],
+                    style: Theme.of(context).textTheme.headline1!.copyWith(
+                          color: Theme.of(context).indicatorColor,
+                        ),
+                  ),
+                ),
+                const SizedBox(
+                  width: 6,
+                ),
+                Text(nameStr, style: Theme.of(context).textTheme.headline1),
+              ],
+            ),
+            Align(
+              alignment: Alignment.topRight,
+              child: IconButton(
+                onPressed: () {
+                  debugPrint('Im working');
+                },
+                icon: Icon(
+                  Icons.edit,
+                  color: Theme.of(context).indicatorColor,
+                ),
+              ),
+            ),
           ],
         );
       }
@@ -142,7 +176,6 @@ class _MyProfileState extends State<MyProfile> {
                             //   ),
                             // ),
                             ),
-
                       ),
                       subtitle: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
