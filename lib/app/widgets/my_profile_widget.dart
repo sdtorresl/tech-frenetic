@@ -15,6 +15,41 @@ class MyProfile extends StatefulWidget {
 class _MyProfileState extends State<MyProfile> {
   @override
   Widget build(BuildContext context) {
+    List<String> name = widget.user.name.split(' ');
+    Widget nameWidget = const SizedBox();
+    if (name.length < 2) {
+      nameWidget = HighlightContainer(
+        child: Text(
+          widget.user.name,
+          style: Theme.of(context).textTheme.headline1!.copyWith(
+                color: Theme.of(context).indicatorColor,
+              ),
+        ),
+      );
+    } else {
+      for (String words in name.getRange(1, name.length)) {
+        String nameStr = words;
+
+        nameWidget = Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            HighlightContainer(
+              child: Text(
+                name[0],
+                style: Theme.of(context).textTheme.headline1!.copyWith(
+                      color: Theme.of(context).indicatorColor,
+                    ),
+              ),
+            ),
+            const SizedBox(
+              width: 6,
+            ),
+            Text(nameStr, style: Theme.of(context).textTheme.headline1),
+          ],
+        );
+      }
+    }
+
     return ListView(
       children: [
         Padding(
@@ -51,7 +86,11 @@ class _MyProfileState extends State<MyProfile> {
                     CircleAvatar(
                       child: ClipOval(
                         child: SvgPicture.asset(
-                          'assets/img/avatars/avatar-01.svg',
+                          widget.user.fieldUserAvatar.isNotEmpty
+                              ? 'assets/img/avatars/' +
+                                  widget.user.fieldUserAvatar +
+                                  '.svg'
+                              : 'assets/img/avatars/avatar-01.svg',
                           semanticsLabel: 'Acme Logo',
                         ),
                       ),
@@ -61,7 +100,8 @@ class _MyProfileState extends State<MyProfile> {
                     ListTile(
                       title: Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Row(
+
+                        /*child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             HighlightContainer(
@@ -85,18 +125,35 @@ class _MyProfileState extends State<MyProfile> {
                               ),
                             ),
                           ],
-                        ),
+                        ),*/
+
+                        child: Center(child: nameWidget
+
+                            // HighlightContainer(
+                            //   child:
+                            //   Text(
+                            //     widget.user.name,
+                            //     style: Theme.of(context)
+                            //         .textTheme
+                            //         .headline1!
+                            //         .copyWith(
+                            //           color: Theme.of(context).indicatorColor,
+                            //         ),
+                            //   ),
+                            // ),
+                            ),
+
                       ),
                       subtitle: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 10.0),
-                            child: Text(
-                                '0 ' + AppLocalizations.of(context)!.followers),
-                          ),
-                          Text('0 ' + AppLocalizations.of(context)!.following)
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10.0),
+                              child: Text(widget.user.userProfession)
+                              //Text('0 ' + AppLocalizations.of(context)!.followers),
+                              ),
+                          //Text('0 ' + AppLocalizations.of(context)!.following)
                         ],
                       ),
                     ),

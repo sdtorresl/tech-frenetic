@@ -54,7 +54,7 @@ class UserModel extends Model {
   String fieldFollowing;
   String fieldInterests;
   String name;
-  bool fieldUserAvatar;
+  String fieldUserAvatar;
   String userKind;
   String userLocation;
   String userProfession;
@@ -111,7 +111,7 @@ class UserModel extends Model {
       fieldFollowing: Model.returnValue(json["field_following"], ''),
       fieldInterests: Model.returnValue(json["field_interests"], ''),
       name: Model.returnValue(json["field_name"], ''),
-      fieldUserAvatar: Model.returnValue(json["field_user_avatar"], true),
+      fieldUserAvatar: Model.returnValue(json["field_user_avatar"], ''),
       userKind: Model.returnValue(json["field_user_kind"], ''),
       userLocation: Model.returnValue(json["field_user_location"], ''),
       userProfession: Model.returnValue(json["field_user_profession"], ''),
