@@ -20,8 +20,27 @@ class Validators {
   static final validatePassword =
       StreamTransformer<String, String>.fromHandlers(
     handleData: (password, sink) {
-      if (password.length >= 8) {
+      if (password.length >= 8 &&
+          password.contains(RegExp(r'[A-Z]')) &&
+          password.contains(RegExp(r'[a-z]')) &&
+          RegExp(r'\d').hasMatch(password)) {
         sink.add(password);
+      } else if (password.length < 8) {
+        sink.addError(
+          'La contraseña debe tener 8 carecteres',
+        );
+      } else if (RegExp(r'\d').hasMatch(password) == false) {
+        sink.addError(
+          'La contraseña debe tener un numero',
+        );
+      } else if (password.contains(RegExp(r'[A-Z]')) == false) {
+        sink.addError(
+          'La contraseña debe tener minimo una mayuscula y una minuscula',
+        );
+      } else if (password.contains(RegExp(r'[a-z]')) == false) {
+        sink.addError(
+          'La contraseña debe tener minimo una mayuscula y una minuscula',
+        );
       } else {
         sink.addError(
           'Debes ingresar la contraseña',
