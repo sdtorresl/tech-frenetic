@@ -4,6 +4,7 @@ import 'package:techfrenetic/app/modules/articles/articles_module.dart';
 import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/login/login_module.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
+import 'package:techfrenetic/app/modules/events/events_page.dart';
 
 import 'home_controller.dart';
 import 'home_page.dart';
@@ -23,7 +24,7 @@ class HomeModule extends Module {
         ModuleRoute('/community/', module: CommunityModule()),
         ChildRoute(
           '/skills',
-          child: (context, args) => const Text("Skills"),
+          child: (context, args) => const EventsPage(),
         ),
         ChildRoute(
           '/vendors',
