@@ -38,7 +38,7 @@ class CustomDrawer extends StatelessWidget {
                   Text(AppLocalizations.of(context)!.sign_up),
                 ],
               ),
-              onPressed: () => debugPrint("Pressed"),
+              onPressed: () => Modular.to.pushNamed("/sign"),
             ),
           ),
           ListTile(
