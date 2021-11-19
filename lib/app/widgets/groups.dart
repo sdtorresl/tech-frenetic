@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class GroupsWidget extends StatefulWidget {
@@ -54,7 +55,8 @@ class _GroupsWidgetState extends State<GroupsWidget> {
                       TextButton(
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Text('Discover groups',
+                          child: Text(
+                              AppLocalizations.of(context)!.tab_discover,
                               style: Theme.of(context).textTheme.bodyText2),
                         ),
                         onPressed: () => {},
@@ -62,7 +64,7 @@ class _GroupsWidgetState extends State<GroupsWidget> {
                       TextButton(
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Text('My groups',
+                          child: Text(AppLocalizations.of(context)!.tab_groups,
                               style: Theme.of(context).textTheme.bodyText2),
                         ),
                         onPressed: () => {},
@@ -70,7 +72,7 @@ class _GroupsWidgetState extends State<GroupsWidget> {
                       TextButton(
                         child: Padding(
                           padding: const EdgeInsets.all(5.0),
-                          child: Text('Create group',
+                          child: Text(AppLocalizations.of(context)!.tab_create,
                               style: Theme.of(context).textTheme.bodyText2),
                         ),
                         onPressed: () => {},
@@ -87,7 +89,7 @@ class _GroupsWidgetState extends State<GroupsWidget> {
                         children: [
                           HighlightContainer(
                             child: Text(
-                              'My',
+                              AppLocalizations.of(context)!.my2,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline1!
@@ -97,7 +99,7 @@ class _GroupsWidgetState extends State<GroupsWidget> {
                             ),
                           ),
                           Text(
-                            'groups',
+                            AppLocalizations.of(context)!.groups,
                             style: Theme.of(context)
                                 .textTheme
                                 .headline1!
@@ -109,7 +111,7 @@ class _GroupsWidgetState extends State<GroupsWidget> {
                         height: 50,
                       ),
                       Text(
-                        'You have no groups yet',
+                        AppLocalizations.of(context)!.no_groups,
                         textAlign: TextAlign.center,
                         style: Theme.of(context).textTheme.bodyText1!,
                       ),
@@ -118,9 +120,9 @@ class _GroupsWidgetState extends State<GroupsWidget> {
                       ),
                       ElevatedButton(
                         onPressed: () => {},
-                        child: const Text(
-                          'Create a group',
-                          style: TextStyle(
+                        child: Text(
+                          AppLocalizations.of(context)!.btn_create,
+                          style: const TextStyle(
                             color: Colors.white,
                           ),
                         ),
