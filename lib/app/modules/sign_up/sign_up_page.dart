@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_controller.dart';
 
@@ -39,7 +40,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
               children: [
                 HighlightContainer(
                   child: Text(
-                    'Become a Frenetic.',
+                    AppLocalizations.of(context)!.become,
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                           color: Theme.of(context).indicatorColor,
                           fontSize: 30,
@@ -47,7 +48,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                   ),
                 ),
                 Text(
-                  'It´s esay!',
+                  AppLocalizations.of(context)!.its_easy,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -55,7 +56,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  'Enjoy all our public articles joining our community. You will also get access to the all content.',
+                  AppLocalizations.of(context)!.txt_claim,
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1!
@@ -76,7 +77,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Let´s prepare your singup. First, tell us who you are?',
+                  AppLocalizations.of(context)!.intro1,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -98,7 +99,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                             },
                           );
                         }),
-                    Text('Person',
+                    Text(AppLocalizations.of(context)!.person,
                         style: Theme.of(context)
                             .textTheme
                             .headline1!
@@ -116,7 +117,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                             },
                           );
                         }),
-                    Text('Company',
+                    Text(AppLocalizations.of(context)!.company,
                         style: Theme.of(context)
                             .textTheme
                             .headline1!
@@ -129,7 +130,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                     builder: (context, snapshot) {
                       return TextFormField(
                         decoration: InputDecoration(
-                          hintText: 'What´s your name?',
+                          hintText: AppLocalizations.of(context)!.your_name,
                           hintStyle: Theme.of(context)
                               .textTheme
                               .bodyText1!
@@ -152,7 +153,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                         (BuildContext context, AsyncSnapshot<String> snapshot) {
                       return TextFormField(
                         decoration: InputDecoration(
-                          hintText: 'Your Email',
+                          hintText: AppLocalizations.of(context)!.form1_email,
                           hintStyle: Theme.of(context)
                               .textTheme
                               .bodyText1!
@@ -176,7 +177,8 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                         obscureText: _isPasswordHidden1,
                         keyboardType: TextInputType.emailAddress,
                         decoration: InputDecoration(
-                          hintText: 'Create password',
+                          hintText:
+                              AppLocalizations.of(context)!.form1_password,
                           hintStyle: Theme.of(context)
                               .textTheme
                               .bodyText1!
@@ -206,7 +208,8 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                     return TextFormField(
                       obscureText: _isPasswordHidden2,
                       decoration: InputDecoration(
-                        hintText: 'Confirm your password',
+                        hintText:
+                            AppLocalizations.of(context)!.form1_repassword,
                         hintStyle: Theme.of(context)
                             .textTheme
                             .bodyText1!
@@ -224,7 +227,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                 ),
                 const SizedBox(height: 30),
                 Text(
-                  'Your password must have:',
+                  AppLocalizations.of(context)!.have_password,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -238,7 +241,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                       color: Theme.of(context).errorColor,
                     ),
                     Text(
-                      ' 8 or more characters',
+                      ' ' + AppLocalizations.of(context)!.pwd_minchars,
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: Theme.of(context).errorColor, fontSize: 15),
                     ),
@@ -252,7 +255,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                       color: Theme.of(context).errorColor,
                     ),
                     Text(
-                      ' Upper and lower case letters',
+                      ' ' + AppLocalizations.of(context)!.pwd_lowper,
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: Theme.of(context).errorColor, fontSize: 15),
                     ),
@@ -266,7 +269,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                       color: Theme.of(context).errorColor,
                     ),
                     Text(
-                      ' At least one number',
+                      ' ' + AppLocalizations.of(context)!.pwd_number,
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: Theme.of(context).errorColor, fontSize: 15),
                     ),
@@ -298,11 +301,13 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                         Row(
                           children: [
                             Text(
-                              'I have read and accept the',
+                              AppLocalizations.of(context)!.terms_line1,
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             Text(
-                              ' terms ',
+                              ' ' +
+                                  AppLocalizations.of(context)!.terms_link1 +
+                                  ' ',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
@@ -315,11 +320,11 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                         Row(
                           children: [
                             Text(
-                              'of use and',
+                              AppLocalizations.of(context)!.terms_line2,
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
                             Text(
-                              ' privacy policy.',
+                              ' ' + AppLocalizations.of(context)!.terms_link2,
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyText1!
@@ -363,7 +368,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                                   }
                                 : null,
                             child: Text(
-                              'Continue',
+                              AppLocalizations.of(context)!.continue_button,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline1!
