@@ -86,15 +86,18 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
             color: Color.fromRGBO(5, 20, 47, 1),
           ),
         ),
-        Text(
-          AppLocalizations.of(context)!.login_create_one,
-          style: const TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: 20,
-            decoration: TextDecoration.underline,
-            fontFamily: 'NunitoSan',
-            color: Color.fromRGBO(5, 113, 232, 1),
+        GestureDetector(
+          child: Text(
+            AppLocalizations.of(context)!.login_create_one,
+            style: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 20,
+              decoration: TextDecoration.underline,
+              fontFamily: 'NunitoSan',
+              color: Color.fromRGBO(5, 113, 232, 1),
+            ),
           ),
+          onTap: () => Modular.to.pushNamed("/sign"),
         ),
       ],
     );
