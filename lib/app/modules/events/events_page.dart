@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class EventsPage extends StatefulWidget {
@@ -40,13 +41,13 @@ class _EventsPageState extends State<EventsPage> {
               children: [
                 HighlightContainer(
                   child: Text(
-                    'Featured',
+                    AppLocalizations.of(context)!.featured,
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                         color: Theme.of(context).primaryColor, fontSize: 25),
                   ),
                 ),
                 Text(
-                  ' events',
+                  ' ' + AppLocalizations.of(context)!.featured_events,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -78,7 +79,7 @@ class _EventsPageState extends State<EventsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Event Serch:',
+              AppLocalizations.of(context)!.event_serch,
               style: Theme.of(context).textTheme.headline1!.copyWith(
                   fontSize: 20, color: Theme.of(context).primaryColor),
             ),
@@ -92,7 +93,7 @@ class _EventsPageState extends State<EventsPage> {
               child: SizedBox(
                 width: 400,
                 child: ElevatedButton(
-                  child: const Text('search'),
+                  child: Text(AppLocalizations.of(context)!.search),
                   style: ButtonStyle(
                     shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                       const RoundedRectangleBorder(
@@ -131,13 +132,13 @@ class _EventsPageState extends State<EventsPage> {
               children: [
                 HighlightContainer(
                   child: Text(
-                    'Upcoming',
+                    AppLocalizations.of(context)!.upcoming,
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                         color: Theme.of(context).primaryColor, fontSize: 25),
                   ),
                 ),
                 Text(
-                  ' events',
+                  ' ' + AppLocalizations.of(context)!.events,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -171,13 +172,13 @@ class _EventsPageState extends State<EventsPage> {
               children: [
                 HighlightContainer(
                   child: Text(
-                    'Recent',
+                    AppLocalizations.of(context)!.recent,
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                         color: Theme.of(context).primaryColor, fontSize: 25),
                   ),
                 ),
                 Text(
-                  ' events',
+                  ' ' + AppLocalizations.of(context)!.recent_events,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
