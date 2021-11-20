@@ -259,7 +259,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                                             'You are part of the tech frenetic cummunity now'),
                                       );
                                       Modular.to.pushNamedAndRemoveUntil(
-                                          '/login', (p0) => false);
+                                          '/create_profile', (p0) => false);
                                     } else {
                                       debugPrint("Not sign");
                                     }
