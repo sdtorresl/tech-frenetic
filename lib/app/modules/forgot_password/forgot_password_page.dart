@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_controller.dart';
 
@@ -19,7 +20,7 @@ class _ForgotPasswordPageState
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          'Back',
+          AppLocalizations.of(context)!.back,
           style: Theme.of(context).textTheme.bodyText1,
         ),
         leading: IconButton(
@@ -41,12 +42,12 @@ class _ForgotPasswordPageState
                 const SizedBox(height: 60),
                 HighlightContainer(
                     child: Text(
-                  'Reset',
+                  AppLocalizations.of(context)!.reset_blue,
                   style: Theme.of(context).textTheme.headline1!.copyWith(
                       color: Theme.of(context).indicatorColor, fontSize: 30),
                 )),
                 Text(
-                  'your password',
+                  AppLocalizations.of(context)!.reset_black,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -54,7 +55,7 @@ class _ForgotPasswordPageState
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Please enter your email address. We will send you an email to reset your password.',
+                  AppLocalizations.of(context)!.reset_instructions,
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
                 const SizedBox(height: 30),
@@ -88,7 +89,7 @@ class _ForgotPasswordPageState
                     child: ElevatedButton(
                       onPressed: () => debugPrint('hola'),
                       child: Text(
-                        'Send email',
+                        AppLocalizations.of(context)!.send_email,
                         style: Theme.of(context)
                             .textTheme
                             .headline1!
@@ -109,7 +110,7 @@ class _ForgotPasswordPageState
                 Center(
                   child: GestureDetector(
                     child: Text(
-                      'Back to loging',
+                      AppLocalizations.of(context)!.back_login,
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           decoration: TextDecoration.underline,
                           decorationThickness: 2,
