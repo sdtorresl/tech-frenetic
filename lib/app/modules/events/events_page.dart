@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
+import 'package:techfrenetic/app/widgets/post_event.dart';
 
 class EventsPage extends StatefulWidget {
   const EventsPage({Key? key}) : super(key: key);
@@ -9,6 +10,7 @@ class EventsPage extends StatefulWidget {
 }
 
 class _EventsPageState extends State<EventsPage> {
+  Widget postEvent = const PostEventWidget();
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -55,6 +57,7 @@ class _EventsPageState extends State<EventsPage> {
               ],
             ),
           ),
+          postEvent,
           const SizedBox(height: 50),
         ],
       ),
@@ -146,6 +149,7 @@ class _EventsPageState extends State<EventsPage> {
               ],
             ),
           ),
+          postEvent,
           const SizedBox(height: 50),
         ],
       ),
@@ -186,6 +190,7 @@ class _EventsPageState extends State<EventsPage> {
               ],
             ),
           ),
+          postEvent,
           const SizedBox(height: 70),
         ],
       ),
