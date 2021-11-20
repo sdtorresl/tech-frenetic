@@ -165,14 +165,17 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
 
   Widget _forgotPassword(context) {
     return Center(
-      child: Text(
-        AppLocalizations.of(context)!.login_forgot,
-        style: const TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: 20,
-            decoration: TextDecoration.underline,
-            fontFamily: 'NunitoSan',
-            color: Colors.black),
+      child: GestureDetector(
+        child: Text(
+          AppLocalizations.of(context)!.login_forgot,
+          style: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 20,
+              decoration: TextDecoration.underline,
+              fontFamily: 'NunitoSan',
+              color: Colors.black),
+        ),
+        onTap: () => Modular.to.pushNamed("/forgot"),
       ),
     );
   }
