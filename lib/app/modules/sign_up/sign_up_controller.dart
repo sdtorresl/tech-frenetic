@@ -8,24 +8,24 @@ class SignUpController extends Disposable {
   final _passwordController = BehaviorSubject<String>();
   final _nameController = BehaviorSubject<String>();
   final _termsController = BehaviorSubject<bool>();
-  final _passwordCheckController = BehaviorSubject<String>();
+  //final _passwordCheckController = BehaviorSubject<String>();
 
   Stream<String> get emailStream =>
       _emailController.stream.transform(Validators.validateEmail);
 
-  Stream<String> get passwordStream => _passwordController.stream
-          .transform(Validators.validatePassword)
-          .doOnData(
-        (String password) {
-          if (0 != _passwordCheckController.value.compareTo(password)) {
-            _passwordController.addError("Las contraseñas no coinciden");
-            debugPrint(_passwordCheckController.value);
-          } else {
-            // _passwordCheckController.sink.add(_passwordCheckController.value);
-            // print('Loop');
-          }
-        },
-      );
+  Stream<String> get passwordStream =>
+      _passwordController.stream.transform(Validators.validatePassword);
+  //   .doOnData(
+  // (String password) {
+  //   if (0 != _passwordCheckController.value.compareTo(password)) {
+  //     _passwordController.addError("Las contraseñas no coinciden");
+  //     debugPrint(_passwordCheckController.value);
+  //   } else {
+  //     // _passwordCheckController.sink.add(_passwordCheckController.value);
+  //     // print('Loop');
+  //   }
+  // },
+  //);
 
   Stream<String> get nameStream =>
       _nameController.stream.transform(Validators.validateName);
@@ -47,6 +47,8 @@ class SignUpController extends Disposable {
 
   String get email => _emailController.value;
   String get password => _passwordController.value;
+  String get name => _nameController.value;
+  bool get terms => _termsController.value;
 
   Future<bool> sing() async {
     debugPrint('Sing in');
@@ -57,5 +59,6 @@ class SignUpController extends Disposable {
   void dispose() {
     _emailController.close();
     _passwordController.close();
+    _nameController.close();
   }
 }
