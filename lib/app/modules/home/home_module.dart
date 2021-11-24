@@ -5,9 +5,9 @@ import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/login/login_module.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/modules/create_profile/create_profile_module.dart';
-
+import 'package:techfrenetic/app/modules/choose_avatar/choose_avatar_module.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
-import 'package:techfrenetic/app/modules/sign_up/sign_up_page.dart';
+import 'package:techfrenetic/app/modules/welcome/welcome_page.dart';
 
 import 'package:techfrenetic/app/modules/events/events_page.dart';
 
@@ -39,11 +39,20 @@ class HomeModule extends Module {
           '/profile',
           child: (context, args) => const ProfilePage(),
         ),
+        ChildRoute(
+          '/choose_avatar/welcome',
+          child: (context, args) => const WelcomePage(),
+        ),
       ],
+    ),
+    ChildRoute(
+      '/welcome',
+      child: (context, args) => const WelcomePage(),
     ),
     ModuleRoute('/community/article', module: ArticlesModule()),
     ModuleRoute('/login', module: LoginModule()),
     ModuleRoute('/sign', module: SignUpModule()),
     ModuleRoute('/create_profile', module: CreateProfileModule()),
+    ModuleRoute('/choose_avatar', module: ChooseAvatarModule()),
   ];
 }
