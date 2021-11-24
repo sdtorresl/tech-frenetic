@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
@@ -168,7 +169,9 @@ class _PostWidgetState extends State<PostWidget> {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          Text(widget.article.comments! + ' comment'),
+          Text(widget.article.comments! +
+              ' ' +
+              AppLocalizations.of(context)!.comment),
         ],
       );
     }
@@ -184,11 +187,12 @@ class _PostWidgetState extends State<PostWidget> {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          Text(widget.article.comments! + ' comments'),
+          Text(widget.article.comments! +
+              ' ' +
+              AppLocalizations.of(context)!.comments),
         ],
       );
     }
-
 
     return Column(
       children: [
@@ -213,9 +217,10 @@ class _PostWidgetState extends State<PostWidget> {
               const SizedBox(
                 width: 10,
               ),
-              Text(widget.article.views! + ' views'),
+              Text(widget.article.views! +
+                  ' ' +
+                  AppLocalizations.of(context)!.views),
             ],
-
           ),
         ),
       ],
@@ -244,7 +249,7 @@ class _PostWidgetState extends State<PostWidget> {
               _actionButton(
                 context: context,
                 iconAsset: 'assets/img/icons/coment.svg',
-                text: 'Comment',
+                text: AppLocalizations.of(context)!.comment2,
                 onPressed: () {
                   Modular.to.pushNamed("/community/article",
                       arguments: widget.article);
@@ -253,7 +258,7 @@ class _PostWidgetState extends State<PostWidget> {
               _actionButton(
                 context: context,
                 iconAsset: 'assets/img/icons/share.svg',
-                text: 'Share',
+                text: AppLocalizations.of(context)!.share,
                 onPressed: () => {debugPrint("Share article")},
               ),
             ],

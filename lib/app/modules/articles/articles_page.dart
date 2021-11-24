@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
@@ -195,7 +196,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          Text(article.comments! + ' comment'),
+          Text(article.comments! + ' ' + AppLocalizations.of(context)!.comment),
         ],
       );
     }

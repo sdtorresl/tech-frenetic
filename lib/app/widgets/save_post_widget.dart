@@ -131,7 +131,9 @@ class _SaveState extends State<SavedPost> {
             ),
             const SizedBox(width: 5),
             Text(
-              widget.savedPost.comments! + ' Comments',
+              widget.savedPost.comments! +
+                  ' ' +
+                  AppLocalizations.of(context)!.comments2,
               style: Theme.of(context).textTheme.bodyText1,
             ),
             const SizedBox(width: 5),
@@ -142,7 +144,7 @@ class _SaveState extends State<SavedPost> {
             ),
             const SizedBox(width: 5),
             Text(
-              '4 Share',
+              ' Share',
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ],

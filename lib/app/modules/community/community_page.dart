@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/common/icons.dart';
@@ -26,9 +27,9 @@ class CommunityPageState extends State<CommunityPage> {
               border: Border.all(
                   color: Theme.of(context).chipTheme.backgroundColor,
                   width: 1)),
-          child: const Align(
+          child: Align(
             alignment: Alignment.center,
-            child: Text("Feed"),
+            child: Text(AppLocalizations.of(context)!.feed),
           ),
         ),
       ),
@@ -40,9 +41,9 @@ class CommunityPageState extends State<CommunityPage> {
               border: Border.all(
                   color: Theme.of(context).chipTheme.backgroundColor,
                   width: 1)),
-          child: const Align(
+          child: Align(
             alignment: Alignment.center,
-            child: Text("Meetups"),
+            child: Text(AppLocalizations.of(context)!.meetups),
           ),
         ),
       ),
@@ -54,9 +55,9 @@ class CommunityPageState extends State<CommunityPage> {
               border: Border.all(
                   color: Theme.of(context).chipTheme.backgroundColor,
                   width: 1)),
-          child: const Align(
+          child: Align(
             alignment: Alignment.center,
-            child: Text("Groups"),
+            child: Text(AppLocalizations.of(context)!.groups),
           ),
         ),
       ),
@@ -139,7 +140,9 @@ class CommunityPageState extends State<CommunityPage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text('Share an update'),
+                    Text(
+                      AppLocalizations.of(context)!.share_an_update,
+                    ),
                     GestureDetector(
                       child: const Icon(
                         TechFreneticIcons.article,
@@ -163,7 +166,7 @@ class CommunityPageState extends State<CommunityPage> {
               TextField(
                 decoration: InputDecoration(
                     border: InputBorder.none,
-                    hintText: "Write something...",
+                    hintText: AppLocalizations.of(context)!.write_something,
                     hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
                     prefixIcon: Icon(
                       Icons.account_circle,
