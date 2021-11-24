@@ -5,11 +5,7 @@ class TechFreneticProvider {
   final String baseUrl = GlobalConfiguration().getValue("api_url");
   final prefs = UserPreferences();
 
-  authHeader() {
-    return {'X-CSRF-Token': prefs.csrfToken};
-  }
+  Map<String, String> get authHeader => {'X-CSRF-Token': prefs.csrfToken ?? ''};
 
-  logoutHeader() {
-    return {'token': prefs.logoutToken};
-  }
+  Map<String, String> get logutHeader => {'token': prefs.logoutToken ?? ''};
 }

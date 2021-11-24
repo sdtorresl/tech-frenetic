@@ -21,7 +21,7 @@ class UserPreferences {
   set csrfToken(String? csrfToken) =>
       _prefs.setString('csrf_token', csrfToken!);
 
-  String? get csrfToken => _prefs.getString('csrf_oken');
+  String? get csrfToken => _prefs.getString('csrf_token');
 
   set logoutToken(String? logoutToken) =>
       _prefs.setString('logout_token', logoutToken!);

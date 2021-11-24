@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/modules/community/community_controller.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
@@ -15,7 +17,8 @@ class CommunityPage extends StatefulWidget {
   CommunityPageState createState() => CommunityPageState();
 }
 
-class CommunityPageState extends State<CommunityPage> {
+class CommunityPageState
+    extends ModularState<CommunityPage, CommunityController> {
   @override
   Widget build(BuildContext context) {
     final List<Tab> tabs = <Tab>[
@@ -127,54 +130,70 @@ class CommunityPageState extends State<CommunityPage> {
             )
           ],
         ),
-        child: Card(
-          elevation: 0,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Column(children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      AppLocalizations.of(context)!.share_an_update,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child: Column(children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.share_an_update,
+                  ),
+                  GestureDetector(
+                    child: const Icon(
+                      TechFreneticIcons.article,
+                      size: 20,
                     ),
-                    GestureDetector(
-                      child: const Icon(
-                        TechFreneticIcons.article,
-                        size: 20,
-                      ),
-                      onTap: () {},
+                    onTap: () {},
+                  ),
+                  GestureDetector(
+                    child: const Icon(
+                      TechFreneticIcons.shareVideo,
+                      size: 20,
                     ),
-                    GestureDetector(
-                      child: Container(
-                        color: Colors.amberAccent,
-                        child: const Icon(
-                          TechFreneticIcons.shareVideo,
-                          size: 20,
-                        ),
-                      ),
-                      onTap: () {},
-                    ),
-                  ],
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: AppLocalizations.of(context)!.write_something,
+                hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
+                prefixIcon: Icon(
+                  Icons.account_circle,
+                  color: Theme.of(context).splashColor,
                 ),
               ),
-              TextField(
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: AppLocalizations.of(context)!.write_something,
-                    hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
-                    prefixIcon: Icon(
-                      Icons.account_circle,
-                      color: Theme.of(context).splashColor,
-                    )),
-              ),
-            ]),
-          ),
+              onChanged: store.changePost,
+            ),
+            StreamBuilder(
+              stream: store.postStream,
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.isNotEmpty) {
+                    return Container(
+                      margin: const EdgeInsets.only(top: 15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            onPressed: () => addPost(snapshot.data!),
+                            child: const Text("Publicar"),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+                }
+
+                return const SizedBox();
+              },
+            ),
+          ]),
         ),
       ),
     );
@@ -216,5 +235,12 @@ class CommunityPageState extends State<CommunityPage> {
 
   Widget _groups() {
     return const GroupsWidget();
+  }
+
+  void addPost(String post) {
+    debugPrint("Adding post with content: $post");
+
+    ArticlesProvider articlesProvider = ArticlesProvider();
+    articlesProvider.addPost(post);
   }
 }

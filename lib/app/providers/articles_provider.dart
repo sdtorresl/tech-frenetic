@@ -30,25 +30,30 @@ class ArticlesProvider extends TechFreneticProvider {
 
   Future<bool> addPost(String message) async {
     try {
-      Uri _url = Uri.parse(baseUrl + "/api/en/v1/node?_format=json");
+      Uri _url = Uri.parse(baseUrl + "/api/node?_format=json");
 
       /** TODO: Language */
       Map<String, dynamic> payload = {
-        'type': [
-          {'target_id': "post", 'target_type': "node_type"}
+        "type": [
+          {"target_id": "post", "target_type": "node_type"}
         ],
-        'title': [
-          {'value': message}
+        "title": [
+          {"value": message}
         ],
-        'langcode': [
-          {'value': 'es'}
+        "langcode": [
+          {"value": "es"}
         ],
       };
 
-      var response = await http.post(_url, headers: {}, body: payload);
+      Map<String, String> headers = {};
+      headers.addAll(authHeader);
+      headers['Content-Type'] = 'application/json';
+
+      var response = await http.post(_url,
+          headers: headers, body: json.jsonEncode(payload));
 
       if (response.statusCode == 200) {
-        Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
+        var jsonResponse = json.jsonDecode(response.body);
         debugPrint(jsonResponse.toString());
 
         return true;

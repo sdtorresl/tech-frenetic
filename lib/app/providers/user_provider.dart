@@ -10,6 +10,7 @@ class UserProvider {
   final _prefs = UserPreferences();
   final String _baseUrl = GlobalConfiguration().getValue("api_url");
   SessionModel? loggedUser;
+
   Future<SessionModel?> login(String email, String password) async {
     SessionModel? loggedUser;
 
