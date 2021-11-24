@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyAccountPage extends StatefulWidget {
@@ -267,8 +265,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
               const SizedBox(height: 10),
               Align(
                 alignment: Alignment.centerLeft,
-                child: Text(AppLocalizations.of(context)!.last_changed +
-                    ': February 27, 2020'),
+                child: Text(AppLocalizations.of(context)!.last_changed + ': '),
               ),
               const SizedBox(height: 20),
               ElevatedButton(

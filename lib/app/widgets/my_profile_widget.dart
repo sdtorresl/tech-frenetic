@@ -134,59 +134,16 @@ class _MyProfileState extends State<MyProfile> {
                     ListTile(
                       title: Padding(
                         padding: const EdgeInsets.all(8.0),
-
-                        /*child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            HighlightContainer(
-                              child: Text(
-                                widget.user.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1!
-                                    .copyWith(
-                                      color: Theme.of(context).indicatorColor,
-                                    ),
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                debugPrint('Im working');
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                color: Theme.of(context).indicatorColor,
-                              ),
-                            ),
-                          ],
-                        ),*/
-
-                        child: Center(child: nameWidget
-
-                            // HighlightContainer(
-                            //   child:
-                            //   Text(
-                            //     widget.user.name,
-                            //     style: Theme.of(context)
-                            //         .textTheme
-                            //         .headline1!
-                            //         .copyWith(
-                            //           color: Theme.of(context).indicatorColor,
-                            //         ),
-                            //   ),
-                            // ),
-                            ),
+                        child: Center(child: nameWidget),
                       ),
                       subtitle: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: Text(widget.user.userProfession)
-                              //Text('0 ' + AppLocalizations.of(context)!.followers),
-                              ),
-                          //Text('0 ' + AppLocalizations.of(context)!.following)
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text(widget.user.userProfession),
+                          ),
                         ],
                       ),
                     ),
