@@ -14,7 +14,7 @@ class SignUpController extends Disposable {
       _emailController.stream.transform(Validators.validateEmail);
 
   Stream<String> get passwordStream =>
-      _passwordController.stream.transform(Validators.validatePassword);
+      _passwordController.stream.transform(Validators.validateSignInPassword);
   //   .doOnData(
   // (String password) {
   //   if (0 != _passwordCheckController.value.compareTo(password)) {
@@ -60,5 +60,6 @@ class SignUpController extends Disposable {
     _emailController.close();
     _passwordController.close();
     _nameController.close();
+    _termsController.close();
   }
 }
