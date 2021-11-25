@@ -14,6 +14,28 @@ class CreateProfilePage extends StatefulWidget {
 class _CreateProfilePageState
     extends ModularState<CreateProfilePage, CreateProfileController> {
   bool _isLoading = false;
+  List<String> itemsProfession = [
+    'Profession 1',
+    'Profession 2',
+    'Profession 3',
+    'Profession 4',
+  ];
+  List<String> items = [
+    'Country 1',
+    'Country 2',
+    'Country 3',
+    'Country 4',
+    'Country 5',
+    'Country 6',
+    'Country 7',
+    'Country 8',
+    'Country 9',
+    'Country 10',
+    'Country 11',
+    'Country 12',
+  ];
+  String? defaultProfession;
+  String? defaultCountry;
 
   @override
   Widget build(BuildContext context) {
@@ -127,72 +149,46 @@ class _CreateProfilePageState
         ),
         const SizedBox(height: 25),
         StreamBuilder(
-          stream: null,
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            List<String> items = [
-              'profession 1',
-              'profession 2',
-              'profession 3',
-              'profession 4',
-            ];
-            String? defaultValue;
-
-            return DropdownButton<String>(
-              value: defaultValue,
-              isExpanded: true,
-              underline: Container(
-                height: 0.5,
-                color: Colors.black,
-              ),
-              onChanged: (newValue) {
-                setState(
-                  () {
-                    defaultValue = newValue!;
+            stream: null,
+            builder: (context, snapshot) {
+              return DropdownButton<String>(
+                value: defaultProfession,
+                isExpanded: true,
+                underline: Container(
+                  height: 0.5,
+                  color: Colors.black,
+                ),
+                hint: Text(
+                  'Your profession',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).hintColor),
+                ),
+                items: itemsProfession.map(
+                  (String valueItem) {
+                    return DropdownMenuItem<String>(
+                      child: Text(valueItem),
+                      value: valueItem,
+                    );
                   },
-                );
-              },
-              hint: Text(
-                'Your profession',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: Theme.of(context).hintColor),
-              ),
-              items: items.map(
-                (String valueItem) {
-                  return DropdownMenuItem<String>(
-                    child: Text(valueItem),
-                    value: valueItem,
+                ).toList(),
+                onChanged: (newValue) {
+                  setState(
+                    () {
+                      defaultProfession = newValue;
+                      debugPrint(defaultProfession);
+                    },
                   );
                 },
-              ).toList(),
-            );
-          },
-        ),
+              );
+            }),
         const SizedBox(height: 25),
         StreamBuilder(
           stream: null,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            List<String> items = [
-              'country 1',
-              'country 2',
-              'country 3',
-              'country 4',
-              'country 5',
-              'country 6',
-              'country 7',
-              'country 8',
-              'country 9',
-              'country 10',
-              'country 11',
-              'country 12',
-              'country 13',
-              'country 14',
-            ];
-            String? defaultValue;
-
             return DropdownButton<String>(
-              value: defaultValue,
+              value: defaultCountry,
               isExpanded: true,
               underline: Container(
                 height: 0.5,
@@ -201,7 +197,7 @@ class _CreateProfilePageState
               onChanged: (newValue) {
                 setState(
                   () {
-                    defaultValue = newValue!;
+                    defaultCountry = newValue;
                   },
                 );
               },
