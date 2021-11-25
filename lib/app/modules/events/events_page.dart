@@ -57,7 +57,35 @@ class _EventsPageState extends State<EventsPage> {
               ],
             ),
           ),
-          postEvent,
+          Center(
+            child: Container(
+                margin: const EdgeInsets.symmetric(
+                  vertical: 15.0,
+                  horizontal: 45,
+                ),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 1.00,
+                      color: Theme.of(context).primaryColor,
+                    ),
+                    left: BorderSide(
+                      width: 0.50,
+                      color: Colors.grey.withOpacity(.6),
+                    ),
+                    top: BorderSide(
+                      width: 0.50,
+                      color: Colors.grey.withOpacity(.6),
+                    ),
+                    right: BorderSide(
+                      width: 0.50,
+                      color: Colors.grey.withOpacity(.6),
+                    ),
+                  ),
+                ),
+                child: postEvent),
+          ),
           const SizedBox(height: 50),
         ],
       ),
@@ -149,7 +177,35 @@ class _EventsPageState extends State<EventsPage> {
               ],
             ),
           ),
-          postEvent,
+          Center(
+            child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border(
+                    bottom: BorderSide(
+                      width: 0.50,
+                      color: Theme.of(context).unselectedWidgetColor,
+                    ),
+                    left: BorderSide(
+                      width: 0.50,
+                      color: Colors.grey.withOpacity(.6),
+                    ),
+                    top: BorderSide(
+                      width: 0.50,
+                      color: Colors.grey.withOpacity(.6),
+                    ),
+                    right: BorderSide(
+                      width: 0.50,
+                      color: Colors.grey.withOpacity(.6),
+                    ),
+                  ),
+                ),
+                margin: const EdgeInsets.symmetric(
+                  vertical: 15.0,
+                  horizontal: 45,
+                ),
+                child: postEvent),
+          ),
           const SizedBox(height: 50),
         ],
       ),
@@ -190,7 +246,27 @@ class _EventsPageState extends State<EventsPage> {
               ],
             ),
           ),
-          postEvent,
+          Center(
+            child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  //border: Border(
+                  //bottom: BorderSide(
+                  //  width: 1.00,
+                  //    color: Theme.of(context).primaryColor,
+                  //  ),
+                  // left: BorderSide(
+                  //   width: 0.50,
+                  //    color: Colors.grey.withOpacity(.6),
+                  //  ),
+                  // ),
+                ),
+                margin: const EdgeInsets.symmetric(
+                  vertical: 15.0,
+                  horizontal: 45,
+                ),
+                child: postEvent),
+          ),
           const SizedBox(height: 70),
         ],
       ),
