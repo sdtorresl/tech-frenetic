@@ -93,6 +93,17 @@ class _EventsPageState extends State<EventsPage> {
   }
 
   Widget eventSerch() {
+    List<String> items = [
+      'Category',
+      'Applications',
+      'Cloud',
+      'Consulting & Sales',
+      'Cibersecurity',
+      'Networking',
+      'Servers & PCs',
+      'Storage',
+    ];
+    String? defaultValue = items.first;
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).splashColor.withOpacity(0.1),
@@ -112,6 +123,33 @@ class _EventsPageState extends State<EventsPage> {
               'Event Serch:',
               style: Theme.of(context).textTheme.headline1!.copyWith(
                   fontSize: 20, color: Theme.of(context).primaryColor),
+            ),
+            Container(
+              color: Colors.white,
+              child: DropdownButton<String>(
+                value: defaultValue,
+                isExpanded: true,
+                underline: Container(
+                  height: 2,
+                  color: Theme.of(context).primaryColor,
+                ),
+                onChanged: (newValue) {
+                  setState(
+                    () {
+                      defaultValue = newValue!;
+                    },
+                  );
+                },
+                style: Theme.of(context).textTheme.bodyText1,
+                items: items.map(
+                  (String valueItem) {
+                    return DropdownMenuItem<String>(
+                      child: Text(valueItem),
+                      value: valueItem,
+                    );
+                  },
+                ).toList(),
+              ),
             ),
             const SizedBox(height: 40),
             Container(
