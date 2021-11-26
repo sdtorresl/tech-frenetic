@@ -182,25 +182,24 @@ class _MyProfileState extends State<MyProfile> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: AppLocalizations.of(context)!.my,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1!
-                                      .copyWith(
-                                        decoration: TextDecoration.underline,
-                                        decorationColor:
-                                            Theme.of(context).primaryColor,
-                                        decorationThickness: 2.0,
-                                      )),
-                              TextSpan(
-                                  text: AppLocalizations.of(context)!.dashboard,
-                                  style: Theme.of(context).textTheme.headline1),
-                            ],
-                          ),
+                        child: Row(
+                          children: [
+                            HighlightContainer(
+                              child: Text(
+                                AppLocalizations.of(context)!.my,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1!
+                                    .copyWith(
+                                        color: Theme.of(context).primaryColor),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(AppLocalizations.of(context)!.dashboard,
+                                style: Theme.of(context).textTheme.headline1),
+                          ],
                         ),
                       ),
                       Padding(
@@ -213,7 +212,7 @@ class _MyProfileState extends State<MyProfile> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 // Summary
                 _summaryBox(context),
                 const SizedBox(height: 20),
@@ -280,9 +279,7 @@ class _MyProfileState extends State<MyProfile> {
             ),
           ),
         ),
-        const SizedBox(height: 20),
-        _summaryBox(context),
-        const SizedBox(height: 20),
+        const SizedBox(height: 40),
       ],
     );
   }
@@ -312,6 +309,7 @@ class _MyProfileState extends State<MyProfile> {
         ),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _counterBox(AppLocalizations.of(context)!.articles, 10,
               () => debugPrint("Articles")),
@@ -329,7 +327,6 @@ class _MyProfileState extends State<MyProfile> {
       flex: 1,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
           border: Border(
             left: BorderSide(
               width: 0.50,
@@ -344,16 +341,19 @@ class _MyProfileState extends State<MyProfile> {
         child: GestureDetector(
           onTap: onPressed,
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                counter.toString(),
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1!
-                    .copyWith(fontSize: 40),
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Text(
+                  counter.toString(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1!
+                      .copyWith(fontSize: 40),
+                ),
               ),
               Container(
+                constraints: const BoxConstraints(minHeight: 75),
                 padding: const EdgeInsets.all(10.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -365,7 +365,7 @@ class _MyProfileState extends State<MyProfile> {
                             .textTheme
                             .bodyText1!
                             .copyWith(color: Theme.of(context).indicatorColor),
-                        maxLines: 2,
+                        maxLines: 3,
                         overflow: TextOverflow.ellipsis,
                       ),
                     ),
