@@ -139,7 +139,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         children: [
           ActionButton(
             onPressed: () {
-              debugPrint("Action pressed");
+              Modular.to.pushNamed("/community/video");
             },
             icon: const Icon(TechFreneticIcons.shareVideo),
           ),

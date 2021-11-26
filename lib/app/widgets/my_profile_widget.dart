@@ -197,7 +197,7 @@ class _MyProfileState extends State<MyProfile> {
                                         decorationThickness: 2.0,
                                       )),
                               TextSpan(
-                                  text: AppLocalizations.of(context)!.dashboar,
+                                  text: AppLocalizations.of(context)!.dashboard,
                                   style: Theme.of(context).textTheme.headline1),
                             ],
                           ),
@@ -214,187 +214,8 @@ class _MyProfileState extends State<MyProfile> {
                   ),
                 ),
                 const SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                        left: BorderSide(
-                          width: 0.50,
-                          color: Colors.grey.withOpacity(.6),
-                        ),
-                        top: BorderSide(
-                          width: 0.50,
-                          color: Colors.grey.withOpacity(.6),
-                        ),
-                        bottom: BorderSide(
-                          width: 0.50,
-                          color: Colors.grey.withOpacity(.6),
-                        ),
-                        right: BorderSide(
-                          width: 0.50,
-                          color: Colors.grey.withOpacity(.6),
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                '0',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1!
-                                    .copyWith(fontSize: 40),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.articles,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .indicatorColor),
-                                  ),
-                                  Expanded(
-                                    child: IconButton(
-                                      onPressed: () {
-                                        debugPrint('Im working');
-                                      },
-                                      icon: Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Theme.of(context).indicatorColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border(
-                                left: BorderSide(
-                                  width: 0.50,
-                                  color: Colors.grey.withOpacity(.6),
-                                ),
-                                right: BorderSide(
-                                  width: 0.50,
-                                  color: Colors.grey.withOpacity(.6),
-                                ),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Text(
-                                  '0',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1!
-                                      .copyWith(fontSize: 40),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          AppLocalizations.of(context)!
-                                              .who_viewed,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .copyWith(
-                                                  color: Theme.of(context)
-                                                      .indicatorColor),
-                                        ),
-                                        Text(
-                                          AppLocalizations.of(context)!
-                                              .your_profile,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .copyWith(
-                                                  color: Theme.of(context)
-                                                      .indicatorColor),
-                                        ),
-                                      ],
-                                    ),
-                                    Expanded(
-                                      child: IconButton(
-                                        onPressed: () {
-                                          debugPrint('Im working');
-                                        },
-                                        icon: Icon(
-                                          Icons.arrow_forward_ios,
-                                          color:
-                                              Theme.of(context).indicatorColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                '0',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1!
-                                    .copyWith(fontSize: 40),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.post,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .indicatorColor),
-                                  ),
-                                  Expanded(
-                                    child: IconButton(
-                                      onPressed: () {
-                                        debugPrint('Im working');
-                                      },
-                                      icon: Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Theme.of(context).indicatorColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                // Summary
+                _summaryBox(context),
                 const SizedBox(height: 20),
                 ListTile(
                   title: Text(
@@ -460,7 +281,105 @@ class _MyProfileState extends State<MyProfile> {
           ),
         ),
         const SizedBox(height: 20),
+        _summaryBox(context),
+        const SizedBox(height: 20),
       ],
+    );
+  }
+
+  Widget _summaryBox(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          left: BorderSide(
+            width: 0.50,
+            color: Colors.grey.withOpacity(.6),
+          ),
+          top: BorderSide(
+            width: 0.50,
+            color: Colors.grey.withOpacity(.6),
+          ),
+          bottom: BorderSide(
+            width: 0.50,
+            color: Colors.grey.withOpacity(.6),
+          ),
+          right: BorderSide(
+            width: 0.50,
+            color: Colors.grey.withOpacity(.6),
+          ),
+        ),
+      ),
+      child: Row(
+        children: [
+          _counterBox(AppLocalizations.of(context)!.articles, 10,
+              () => debugPrint("Articles")),
+          _counterBox(AppLocalizations.of(context)!.your_profile, 0,
+              () => debugPrint("Profile")),
+          _counterBox(AppLocalizations.of(context)!.post, 100,
+              () => debugPrint("Posts")),
+        ],
+      ),
+    );
+  }
+
+  Widget _counterBox(String text, int counter, void Function() onPressed) {
+    return Flexible(
+      flex: 1,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(
+            left: BorderSide(
+              width: 0.50,
+              color: Colors.grey.withOpacity(.6),
+            ),
+            right: BorderSide(
+              width: 0.50,
+              color: Colors.grey.withOpacity(.6),
+            ),
+          ),
+        ),
+        child: GestureDetector(
+          onTap: onPressed,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Text(
+                counter.toString(),
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1!
+                    .copyWith(fontSize: 40),
+              ),
+              Container(
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        text,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Theme.of(context).indicatorColor),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Theme.of(context).indicatorColor,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
