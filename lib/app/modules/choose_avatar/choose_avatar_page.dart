@@ -12,8 +12,14 @@ class ChooseAvatarPage extends StatefulWidget {
 }
 
 class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
+  bool controlCheck2 = false;
+  List checksList = List.filled(2, null);
+
   @override
   Widget build(BuildContext context) {
+    checksList[0] = true;
+    List subCheckList = checksList.firstWhere((n) => true);
+    if (subCheckList.length == 1) {}
     return Scaffold(
       body: ListView(
         children: [
@@ -165,30 +171,64 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
             Checkbox(
-                value: false,
+                value: checksList[0],
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
-                onChanged: null),
+                onChanged: (bool? value) {
+                  setState(
+                    () {
+                      checksList[0] = value;
+
+                      debugPrint(checksList[0].toString());
+                    },
+                  );
+                }),
             Checkbox(
-                value: false,
+                value: checksList[1],
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
-                onChanged: null),
+                onChanged: (bool? value) {
+                  setState(
+                    () {
+                      checksList[1] = value;
+
+                      debugPrint(checksList.toString());
+                    },
+                  );
+                }),
             Checkbox(
-                value: false,
+                value: controlCheck2,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
-                onChanged: null),
+                onChanged: (bool? value) {
+                  setState(
+                    () {
+                      controlCheck2 = value!;
+                    },
+                  );
+                }),
             Checkbox(
-                value: false,
+                value: controlCheck2,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
-                onChanged: null),
+                onChanged: (bool? value) {
+                  setState(
+                    () {
+                      controlCheck2 = value!;
+                    },
+                  );
+                }),
             Checkbox(
-                value: false,
+                value: controlCheck2,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
-                onChanged: null),
+                onChanged: (bool? value) {
+                  setState(
+                    () {
+                      controlCheck2 = value!;
+                    },
+                  );
+                }),
           ],
         ),
         Row(
@@ -223,27 +263,57 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
                 value: false,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
-                onChanged: null),
+                onChanged: (bool? value) {
+                  setState(
+                    () {
+                      value = true;
+                    },
+                  );
+                }),
             Checkbox(
                 value: false,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
-                onChanged: null),
+                onChanged: (bool? value) {
+                  setState(
+                    () {
+                      value = true;
+                    },
+                  );
+                }),
             Checkbox(
                 value: false,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
-                onChanged: null),
+                onChanged: (bool? value) {
+                  setState(
+                    () {
+                      value = true;
+                    },
+                  );
+                }),
             Checkbox(
                 value: false,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
-                onChanged: null),
+                onChanged: (bool? value) {
+                  setState(
+                    () {
+                      value = true;
+                    },
+                  );
+                }),
             Checkbox(
                 value: false,
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(15)),
-                onChanged: null),
+                onChanged: (bool? value) {
+                  setState(
+                    () {
+                      value = true;
+                    },
+                  );
+                }),
           ],
         ),
       ],
