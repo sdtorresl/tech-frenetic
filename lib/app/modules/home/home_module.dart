@@ -8,6 +8,7 @@ import 'package:techfrenetic/app/modules/login/login_module.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
 import 'package:techfrenetic/app/modules/events/events_page.dart';
+import 'package:techfrenetic/app/modules/vendors/vendors_page.dart';
 import 'package:techfrenetic/app/modules/videos/videos_module.dart';
 
 import 'home_controller.dart';
@@ -32,7 +33,7 @@ class HomeModule extends Module {
         ),
         ChildRoute(
           '/vendors',
-          child: (context, args) => const Text("Vendors"),
+          child: (context, args) => const VendorsPage(),
         ),
         ChildRoute(
           '/profile',
