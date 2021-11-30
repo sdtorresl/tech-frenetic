@@ -12,7 +12,7 @@ class CommnentsProvider extends TechFreneticProvider {
 
     try {
       Uri _url = Uri.parse(
-          "$baseUrl/api/en/v1/comments?_format=json&article=$articleId&page=$page");
+          "$baseUrl/api/$locale/v1/comments?_format=json&article=$articleId&page=$page");
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {

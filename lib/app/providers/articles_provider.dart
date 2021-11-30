@@ -10,7 +10,7 @@ class ArticlesProvider extends TechFreneticProvider {
     List<ArticlesModel> relatedArticles = [];
 
     try {
-      Uri _url = Uri.parse(baseUrl + "/api/en/v1/wall?filters=yes");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/wall?filters=yes");
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
@@ -30,9 +30,8 @@ class ArticlesProvider extends TechFreneticProvider {
 
   Future<bool> addPost(String message) async {
     try {
-      Uri _url = Uri.parse(baseUrl + "/api/node?_format=json");
+      Uri _url = Uri.parse("$baseUrl/api/node?_format=json");
 
-      /** TODO: Language */
       Map<String, dynamic> payload = {
         "type": [
           {"target_id": "post", "target_type": "node_type"}
@@ -41,18 +40,21 @@ class ArticlesProvider extends TechFreneticProvider {
           {"value": message}
         ],
         "langcode": [
-          {"value": "es"}
+          {"value": locale}
         ],
       };
 
       Map<String, String> headers = {};
       headers.addAll(authHeader);
+      headers.addAll(sessionHeader);
       headers['Content-Type'] = 'application/json';
+
+      debugPrint(headers.toString());
 
       var response = await http.post(_url,
           headers: headers, body: json.jsonEncode(payload));
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         var jsonResponse = json.jsonDecode(response.body);
         debugPrint(jsonResponse.toString());
 
@@ -69,7 +71,7 @@ class ArticlesProvider extends TechFreneticProvider {
 
   Future<bool> addArticle(ArticlesModel article) async {
     try {
-      Uri _url = Uri.parse(baseUrl + "/api/en/v1/node?_format=json");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/node?_format=json");
 
       /**
       Map<String, dynamic> payload = {
@@ -124,7 +126,7 @@ class ArticlesProvider extends TechFreneticProvider {
     ArticlesModel article = ArticlesModel.empty();
 
     try {
-      Uri _url = Uri.parse("$baseUrl/api/en/v1/article?alias=$slug");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/article?alias=$slug");
       debugPrint(_url.toString());
       var response = await http.get(_url);
 

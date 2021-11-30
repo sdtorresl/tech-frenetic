@@ -237,10 +237,16 @@ class CommunityPageState
     return const GroupsWidget();
   }
 
-  void addPost(String post) {
+  void addPost(String post) async {
     debugPrint("Adding post with content: $post");
 
     ArticlesProvider articlesProvider = ArticlesProvider();
-    articlesProvider.addPost(post);
+    bool created = await articlesProvider.addPost(post);
+    if (created) {
+      store.changePost("");
+      setState(() {});
+    } else {
+      debugPrint("Unexpected error creating post");
+    }
   }
 }

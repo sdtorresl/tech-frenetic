@@ -1,21 +1,18 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
 import 'package:techfrenetic/app/models/session_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
-import 'package:techfrenetic/app/preferences/user_preferences.dart';
+import 'package:techfrenetic/app/providers/tf_provider.dart';
 
-class UserProvider {
-  final _prefs = UserPreferences();
-  final String _baseUrl = GlobalConfiguration().getValue("api_url");
+class UserProvider extends TechFreneticProvider {
   SessionModel? loggedUser;
 
   Future<SessionModel?> login(String email, String password) async {
     SessionModel? loggedUser;
 
     try {
-      Uri _url = Uri.parse("$_baseUrl/api/user/login?_format=json");
+      Uri _url = Uri.parse("$baseUrl/api/user/login?_format=json");
 
       String body = json.encode({'name': email, 'pass': password});
 
@@ -26,11 +23,14 @@ class UserProvider {
       );
 
       if (response.statusCode == 200) {
+        updateCookie(response);
         loggedUser = SessionModel.fromJson(response.body);
+
         debugPrint(loggedUser.toString());
-        _prefs.csrfToken = loggedUser.csrfToken;
-        _prefs.logoutToken = loggedUser.logoutToken;
-        _prefs.userId = loggedUser.currentUser!.uid;
+
+        prefs.csrfToken = loggedUser.csrfToken;
+        prefs.logoutToken = loggedUser.logoutToken;
+        prefs.userId = loggedUser.currentUser!.uid;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
@@ -41,10 +41,10 @@ class UserProvider {
   }
 
   Future<UserModel?> getUserData() async {
-    String? userId = _prefs.userId;
+    String? userId = prefs.userId;
     UserModel? userinfo;
     try {
-      Uri _url = Uri.parse("$_baseUrl/api/en/user/$userId?_format=json");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/user/$userId?_format=json");
 
       var response = await http.get(_url);
 
