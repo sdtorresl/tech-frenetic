@@ -21,6 +21,7 @@ class ArticlesPage extends StatefulWidget {
 class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   ArticlesModel article = ArticlesModel.empty();
   final ArticlesProvider _articlesProvider = ArticlesProvider();
+  TextEditingController commentTextController = TextEditingController();
 
   @override
   void initState() {
@@ -59,7 +60,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
               },
             ),
           ),
-          const _CommentForm()
+          _commentsForm()
         ],
       ),
     );
@@ -202,41 +203,51 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     }
     return _comments;
   }
-}
 
-class _CommentForm extends StatelessWidget {
-  const _CommentForm({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(10),
-          topRight: Radius.circular(10),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 5,
-            blurRadius: 7,
-            offset: const Offset(0, 3), // changes position of shadow
+  Widget _commentsForm() {
+    return StreamBuilder(
+      stream: store.commentStream,
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(10),
+              topRight: Radius.circular(10),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 5,
+                blurRadius: 7,
+                offset: const Offset(0, 3), // changes position of shadow
+              ),
+            ],
           ),
-        ],
-      ),
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-      child: Row(
-        children: [
-          const Flexible(child: TextField()),
-          IconButton(
-            onPressed: () => debugPrint("Comment!"),
-            icon: const Icon(TechFreneticIcons.coment),
-          )
-        ],
-      ),
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Row(
+            children: [
+              Flexible(
+                child: TextField(
+                  controller: commentTextController,
+                  onChanged: store.changeComment,
+                ),
+              ),
+              IconButton(
+                onPressed: submitComment,
+                icon: const Icon(TechFreneticIcons.coment),
+              )
+            ],
+          ),
+        );
+      },
     );
+  }
+
+  void submitComment() {
+    debugPrint("Comment is: ${store.comment}");
+    store.changeComment("");
+    commentTextController.text = store.comment;
+    setState(() {});
   }
 }

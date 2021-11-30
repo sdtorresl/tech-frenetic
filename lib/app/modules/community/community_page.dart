@@ -181,8 +181,24 @@ class CommunityPageState
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white, // background
+                              onPrimary: Colors.black, // foreground
+                              elevation: 0,
+                              side: const BorderSide(
+                                  width: 1, color: Colors.black),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                            ),
                             onPressed: () => addPost(snapshot.data!),
-                            child: const Text("Publicar"),
+                            child: Text(
+                              AppLocalizations.of(context)!.publish,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .button!
+                                  .copyWith(fontSize: 14),
+                            ),
                           )
                         ],
                       ),

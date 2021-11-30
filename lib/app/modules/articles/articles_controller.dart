@@ -2,20 +2,16 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
 
 class ArticlesController extends Disposable {
-  final _controller = BehaviorSubject.seeded(0);
+  final _commentController = BehaviorSubject<String>.seeded("");
 
-  ArticlesController() {
-    counterStream = _controller.stream;
-  }
+  Stream<String> get commentStream => _commentController.stream;
 
-  late Stream<int> counterStream;
+  Function(String) get changeComment => _commentController.sink.add;
 
-  void increment() {
-    _controller.add(_controller.value + 1);
-  }
+  String get comment => _commentController.value;
 
   @override
   void dispose() {
-    _controller.close();
+    _commentController.close();
   }
 }
