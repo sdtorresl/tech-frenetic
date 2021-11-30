@@ -10,6 +10,18 @@ class EventsPage extends StatefulWidget {
   _EventsPageState createState() => _EventsPageState();
 }
 
+List<String> items = [
+  'Category',
+  'Applications',
+  'Cloud',
+  'Consulting & Sales',
+  'Cibersecurity',
+  'Networking',
+  'Servers & PCs',
+  'Storage',
+];
+String? defaultValue = items.first;
+
 class _EventsPageState extends State<EventsPage> {
   Widget postEvent = const PostEventWidget();
   @override
@@ -207,17 +219,6 @@ class _EventsPageState extends State<EventsPage> {
   }
 
   Widget eventSerch() {
-    List<String> items = [
-      'Category',
-      'Applications',
-      'Cloud',
-      'Consulting & Sales',
-      'Cibersecurity',
-      'Networking',
-      'Servers & PCs',
-      'Storage',
-    ];
-    String? defaultValue = items.first;
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).splashColor.withOpacity(0.1),
@@ -244,17 +245,16 @@ class _EventsPageState extends State<EventsPage> {
                 value: defaultValue,
                 isExpanded: true,
                 underline: Container(
-                  height: 2,
-                  color: Theme.of(context).primaryColor,
+                  height: 0.5,
+                  color: Colors.black,
                 ),
-                onChanged: (newValue) {
-                  setState(
-                    () {
-                      defaultValue = newValue!;
-                    },
-                  );
-                },
-                style: Theme.of(context).textTheme.bodyText1,
+                hint: Text(
+                  'Your profession',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).hintColor),
+                ),
                 items: items.map(
                   (String valueItem) {
                     return DropdownMenuItem<String>(
@@ -263,6 +263,14 @@ class _EventsPageState extends State<EventsPage> {
                     );
                   },
                 ).toList(),
+                onChanged: (newValue) {
+                  setState(
+                    () {
+                      defaultValue = newValue;
+                      debugPrint(defaultValue);
+                    },
+                  );
+                },
               ),
             ),
             const SizedBox(height: 40),
