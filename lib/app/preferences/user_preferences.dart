@@ -27,4 +27,8 @@ class UserPreferences {
       _prefs.setString('logout_token', logoutToken!);
 
   String? get logoutToken => _prefs.getString('logout_token');
+
+  set userName(String? userName) => _prefs.setString('name', userName!);
+
+  String? get userName => _prefs.getString('name');
 }

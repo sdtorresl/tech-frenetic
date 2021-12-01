@@ -50,6 +50,7 @@ class UserProvider {
 
       if (response.statusCode == 200) {
         userinfo = UserModel.fromJson(response.body);
+        _prefs.userName = userinfo.userName;
         debugPrint(userinfo.toString());
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
