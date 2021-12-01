@@ -6,7 +6,7 @@ import 'dart:convert' as json;
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
 class ArticlesProvider extends TechFreneticProvider {
-  Future<List<ArticlesModel>> getRelatedArticles() async {
+  Future<List<ArticlesModel>> getWall() async {
     List<ArticlesModel> relatedArticles = [];
 
     try {
@@ -48,8 +48,6 @@ class ArticlesProvider extends TechFreneticProvider {
       headers.addAll(authHeader);
       headers.addAll(sessionHeader);
       headers['Content-Type'] = 'application/json';
-
-      debugPrint(headers.toString());
 
       var response = await http.post(_url,
           headers: headers, body: json.jsonEncode(payload));

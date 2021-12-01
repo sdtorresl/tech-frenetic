@@ -219,7 +219,7 @@ class CommunityPageState
     ArticlesProvider _articlesProvideer = ArticlesProvider();
 
     return FutureBuilder(
-      future: _articlesProvideer.getRelatedArticles(),
+      future: _articlesProvideer.getWall(),
       builder:
           (BuildContext context, AsyncSnapshot<List<ArticlesModel>> snapshot) {
         if (snapshot.hasData) {
