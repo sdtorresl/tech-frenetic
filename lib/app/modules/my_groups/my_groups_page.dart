@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class MyGroupPage extends StatelessWidget {
@@ -7,7 +8,7 @@ class MyGroupPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return (ListView(
+    return ListView(
       children: [
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
@@ -84,7 +85,7 @@ class MyGroupPage extends StatelessWidget {
                         height: 60,
                       ),
                       ElevatedButton(
-                        onPressed: () => {},
+                        onPressed: () => Modular.to.pushNamed("/create_groups"),
                         child: Text(
                           AppLocalizations.of(context)!.btn_create,
                           style: const TextStyle(
@@ -100,6 +101,6 @@ class MyGroupPage extends StatelessWidget {
           ),
         ),
       ],
-    ));
+    );
   }
 }
