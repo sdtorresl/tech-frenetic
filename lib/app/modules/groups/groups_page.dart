@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/modules/my_groups/my_groups_page.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_page.dart';
+import 'package:techfrenetic/app/modules/discover_groups/discover_groups_page.dart';
 
 class GroupsPage extends StatefulWidget {
   const GroupsPage({Key? key}) : super(key: key);
@@ -34,7 +35,7 @@ class _GroupsPageState extends State<GroupsPage> {
         ),
         body: const TabBarView(
           children: [
-            Text('data'),
+            DiscoverGroupsPage(),
             MyGroupPage(),
             CreateGroupsPage(),
           ],
