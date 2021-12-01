@@ -9,6 +9,7 @@ import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
 import 'package:techfrenetic/app/modules/events/events_page.dart';
 import 'package:techfrenetic/app/modules/videos/videos_module.dart';
+import 'package:techfrenetic/app/modules/create_groups/create_groups_module.dart';
 
 import 'home_controller.dart';
 import 'home_page.dart';
@@ -45,5 +46,6 @@ class HomeModule extends Module {
     ModuleRoute('/login', module: LoginModule()),
     ModuleRoute('/sign', module: SignUpModule()),
     ModuleRoute('/forgot', module: ForgotPasswordModule()),
+    ModuleRoute('/create_groups', module: CreateGroupsModule()),
   ];
 }
