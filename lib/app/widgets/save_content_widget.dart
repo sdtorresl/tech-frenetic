@@ -7,15 +7,15 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class SavedPost extends StatefulWidget {
+class SaveContent extends StatefulWidget {
   final ArticlesModel savedPost;
-  const SavedPost({Key? key, required this.savedPost}) : super(key: key);
+  const SaveContent({Key? key, required this.savedPost}) : super(key: key);
 
   @override
   _SaveState createState() => _SaveState();
 }
 
-class _SaveState extends State<SavedPost> {
+class _SaveState extends State<SaveContent> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -85,7 +85,7 @@ class _SaveState extends State<SavedPost> {
                               const LinearProgressIndicator(),
                           errorWidget: (context, value, e) =>
                               const Icon(Icons.error),
-                          imageUrl: widget.savedPost.thumbnail!,
+                          imageUrl: widget.savedPost.image!,
                         ),
                       ),
                     ],
@@ -93,7 +93,7 @@ class _SaveState extends State<SavedPost> {
                 ],
               ),
               const SizedBox(height: 30),
-              _actionBar(context),
+              //_actionBar(context),
               const SizedBox(height: 10),
             ],
           ),
@@ -102,68 +102,54 @@ class _SaveState extends State<SavedPost> {
     );
   }
 
-  Widget _actionBar(context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColor.withOpacity(.6),
-              radius: 10.0,
-              child: ClipOval(
-                child: SvgPicture.asset(
-                  'assets/img/icons/light_bulb.svg',
-                  semanticsLabel: 'Light Bulb',
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              widget.savedPost.views!,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            const SizedBox(width: 5),
-            SvgPicture.asset(
-              'assets/img/icons/dot.svg',
-              semanticsLabel: 'Dot',
-              color: Theme.of(context).primaryColor,
-            ),
-            const SizedBox(width: 5),
-            Text(
-              widget.savedPost.comments! +
-                  ' ' +
-                  AppLocalizations.of(context)!.comments2,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            const SizedBox(width: 5),
-            SvgPicture.asset(
-              'assets/img/icons/dot.svg',
-              semanticsLabel: 'Dot',
-              color: Theme.of(context).primaryColor,
-            ),
-            const SizedBox(width: 5),
-            Text(
-              ' Share',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Icon(
-              Icons.star,
-              color: Theme.of(context).primaryColor,
-            ),
-            Text(
-              widget.savedPost.votes!.isNotEmpty
-                  ? widget.savedPost.votes!
-                  : '0/5',
-              style: Theme.of(context).textTheme.bodyText1,
-            )
-          ],
-        )
-      ],
-    );
-  }
+  // Widget _actionBar(context) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       Row(
+  //         children: [
+  //           CircleAvatar(
+  //             backgroundColor: Theme.of(context).primaryColor.withOpacity(.6),
+  //             radius: 10.0,
+  //             child: ClipOval(
+  //               child: SvgPicture.asset(
+  //                 'assets/img/icons/light_bulb.svg',
+  //                 semanticsLabel: 'Light Bulb',
+  //               ),
+  //             ),
+  //           ),
+  //           const SizedBox(width: 10),
+  //           Text(
+  //             widget.savedPost.views!,
+  //             style: Theme.of(context).textTheme.bodyText1,
+  //           ),
+  //           const SizedBox(width: 5),
+  //           SvgPicture.asset(
+  //             'assets/img/icons/dot.svg',
+  //             semanticsLabel: 'Dot',
+  //             color: Theme.of(context).primaryColor,
+  //           ),
+  //           const SizedBox(width: 5),
+  //           Text(
+  //             widget.savedPost.comments! +
+  //                 ' ' +
+  //                 AppLocalizations.of(context)!.comments2,
+  //             style: Theme.of(context).textTheme.bodyText1,
+  //           ),
+  //           const SizedBox(width: 5),
+  //           SvgPicture.asset(
+  //             'assets/img/icons/dot.svg',
+  //             semanticsLabel: 'Dot',
+  //             color: Theme.of(context).primaryColor,
+  //           ),
+  //           const SizedBox(width: 5),
+  //           Text(
+  //             ' Share',
+  //             style: Theme.of(context).textTheme.bodyText1,
+  //           ),
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  //}
 }

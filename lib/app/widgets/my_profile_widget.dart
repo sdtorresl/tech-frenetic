@@ -134,59 +134,16 @@ class _MyProfileState extends State<MyProfile> {
                     ListTile(
                       title: Padding(
                         padding: const EdgeInsets.all(8.0),
-
-                        /*child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            HighlightContainer(
-                              child: Text(
-                                widget.user.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1!
-                                    .copyWith(
-                                      color: Theme.of(context).indicatorColor,
-                                    ),
-                              ),
-                            ),
-                            IconButton(
-                              onPressed: () {
-                                debugPrint('Im working');
-                              },
-                              icon: Icon(
-                                Icons.edit,
-                                color: Theme.of(context).indicatorColor,
-                              ),
-                            ),
-                          ],
-                        ),*/
-
-                        child: Center(child: nameWidget
-
-                            // HighlightContainer(
-                            //   child:
-                            //   Text(
-                            //     widget.user.name,
-                            //     style: Theme.of(context)
-                            //         .textTheme
-                            //         .headline1!
-                            //         .copyWith(
-                            //           color: Theme.of(context).indicatorColor,
-                            //         ),
-                            //   ),
-                            // ),
-                            ),
+                        child: Center(child: nameWidget),
                       ),
                       subtitle: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10.0),
-                              child: Text(widget.user.userProfession)
-                              //Text('0 ' + AppLocalizations.of(context)!.followers),
-                              ),
-                          //Text('0 ' + AppLocalizations.of(context)!.following)
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 10.0),
+                            child: Text(widget.user.userProfession),
+                          ),
                         ],
                       ),
                     ),
@@ -225,25 +182,24 @@ class _MyProfileState extends State<MyProfile> {
                     children: [
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: AppLocalizations.of(context)!.my,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1!
-                                      .copyWith(
-                                        decoration: TextDecoration.underline,
-                                        decorationColor:
-                                            Theme.of(context).primaryColor,
-                                        decorationThickness: 2.0,
-                                      )),
-                              TextSpan(
-                                  text: AppLocalizations.of(context)!.dashboar,
-                                  style: Theme.of(context).textTheme.headline1),
-                            ],
-                          ),
+                        child: Row(
+                          children: [
+                            HighlightContainer(
+                              child: Text(
+                                AppLocalizations.of(context)!.my,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline1!
+                                    .copyWith(
+                                        color: Theme.of(context).primaryColor),
+                              ),
+                            ),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(AppLocalizations.of(context)!.dashboard,
+                                style: Theme.of(context).textTheme.headline1),
+                          ],
                         ),
                       ),
                       Padding(
@@ -256,188 +212,9 @@ class _MyProfileState extends State<MyProfile> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 30),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                        left: BorderSide(
-                          width: 0.50,
-                          color: Colors.grey.withOpacity(.6),
-                        ),
-                        top: BorderSide(
-                          width: 0.50,
-                          color: Colors.grey.withOpacity(.6),
-                        ),
-                        bottom: BorderSide(
-                          width: 0.50,
-                          color: Colors.grey.withOpacity(.6),
-                        ),
-                        right: BorderSide(
-                          width: 0.50,
-                          color: Colors.grey.withOpacity(.6),
-                        ),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                '0',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1!
-                                    .copyWith(fontSize: 40),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.articles,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .indicatorColor),
-                                  ),
-                                  Expanded(
-                                    child: IconButton(
-                                      onPressed: () {
-                                        debugPrint('Im working');
-                                      },
-                                      icon: Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Theme.of(context).indicatorColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              border: Border(
-                                left: BorderSide(
-                                  width: 0.50,
-                                  color: Colors.grey.withOpacity(.6),
-                                ),
-                                right: BorderSide(
-                                  width: 0.50,
-                                  color: Colors.grey.withOpacity(.6),
-                                ),
-                              ),
-                            ),
-                            child: Column(
-                              children: [
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                Text(
-                                  '0',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline1!
-                                      .copyWith(fontSize: 40),
-                                ),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Text(
-                                          AppLocalizations.of(context)!
-                                              .who_viewed,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .copyWith(
-                                                  color: Theme.of(context)
-                                                      .indicatorColor),
-                                        ),
-                                        Text(
-                                          AppLocalizations.of(context)!
-                                              .your_profile,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyText1!
-                                              .copyWith(
-                                                  color: Theme.of(context)
-                                                      .indicatorColor),
-                                        ),
-                                      ],
-                                    ),
-                                    Expanded(
-                                      child: IconButton(
-                                        onPressed: () {
-                                          debugPrint('Im working');
-                                        },
-                                        icon: Icon(
-                                          Icons.arrow_forward_ios,
-                                          color:
-                                              Theme.of(context).indicatorColor,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Text(
-                                '0',
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headline1!
-                                    .copyWith(fontSize: 40),
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    AppLocalizations.of(context)!.post,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyText1!
-                                        .copyWith(
-                                            color: Theme.of(context)
-                                                .indicatorColor),
-                                  ),
-                                  Expanded(
-                                    child: IconButton(
-                                      onPressed: () {
-                                        debugPrint('Im working');
-                                      },
-                                      icon: Icon(
-                                        Icons.arrow_forward_ios,
-                                        color: Theme.of(context).indicatorColor,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                const SizedBox(height: 20),
+                // Summary
+                _summaryBox(context),
                 const SizedBox(height: 20),
                 ListTile(
                   title: Text(
@@ -502,8 +279,107 @@ class _MyProfileState extends State<MyProfile> {
             ),
           ),
         ),
-        const SizedBox(height: 20),
+        const SizedBox(height: 40),
       ],
+    );
+  }
+
+  Widget _summaryBox(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          left: BorderSide(
+            width: 0.50,
+            color: Colors.grey.withOpacity(.6),
+          ),
+          top: BorderSide(
+            width: 0.50,
+            color: Colors.grey.withOpacity(.6),
+          ),
+          bottom: BorderSide(
+            width: 0.50,
+            color: Colors.grey.withOpacity(.6),
+          ),
+          right: BorderSide(
+            width: 0.50,
+            color: Colors.grey.withOpacity(.6),
+          ),
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _counterBox(AppLocalizations.of(context)!.articles, 10,
+              () => debugPrint("Articles")),
+          _counterBox(AppLocalizations.of(context)!.your_profile, 0,
+              () => debugPrint("Profile")),
+          _counterBox(AppLocalizations.of(context)!.post, 100,
+              () => debugPrint("Posts")),
+        ],
+      ),
+    );
+  }
+
+  Widget _counterBox(String text, int counter, void Function() onPressed) {
+    return Flexible(
+      flex: 1,
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            left: BorderSide(
+              width: 0.50,
+              color: Colors.grey.withOpacity(.6),
+            ),
+            right: BorderSide(
+              width: 0.50,
+              color: Colors.grey.withOpacity(.6),
+            ),
+          ),
+        ),
+        child: GestureDetector(
+          onTap: onPressed,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: Text(
+                  counter.toString(),
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1!
+                      .copyWith(fontSize: 40),
+                ),
+              ),
+              Container(
+                constraints: const BoxConstraints(minHeight: 75),
+                padding: const EdgeInsets.all(10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Text(
+                        text,
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Theme.of(context).indicatorColor),
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    Icon(
+                      Icons.arrow_forward_ios,
+                      color: Theme.of(context).indicatorColor,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/common/icons.dart';
+import 'package:techfrenetic/app/modules/articles/add_articles_page.dart';
 import 'package:techfrenetic/app/widgets/expandable_fab.dart';
 import 'home_controller.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
@@ -103,25 +104,25 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       offset: const Offset(0, 60),
       color: Colors.white,
       itemBuilder: (context) => [
-        const PopupMenuItem<int>(
+        PopupMenuItem<int>(
           value: 0,
           child: Text(
-            "Notifications",
-            style: TextStyle(color: Colors.black),
+            AppLocalizations.of(context)!.notification_button,
+            style: const TextStyle(color: Colors.black),
           ),
         ),
-        const PopupMenuItem<int>(
+        PopupMenuItem<int>(
           value: 1,
           child: Text(
-            "Profile",
-            style: TextStyle(color: Colors.black),
+            AppLocalizations.of(context)!.profile,
+            style: const TextStyle(color: Colors.black),
           ),
         ),
-        const PopupMenuItem<int>(
+        PopupMenuItem<int>(
           value: 2,
           child: Text(
-            "Logout",
-            style: TextStyle(color: Colors.black),
+            AppLocalizations.of(context)!.logout_button,
+            style: const TextStyle(color: Colors.black),
           ),
         ),
       ],
@@ -139,7 +140,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         children: [
           ActionButton(
             onPressed: () {
-              debugPrint("Action pressed");
+              Modular.to.pushNamed("/community/video");
             },
             icon: const Icon(TechFreneticIcons.shareVideo),
           ),
@@ -147,7 +148,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             height: 5,
           ),
           Text(
-            "Share a video",
+            AppLocalizations.of(context)!.share_video,
             style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   fontSize: 15,
                   color: Colors.white,
@@ -159,7 +160,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         children: [
           ActionButton(
             onPressed: () {
-              debugPrint("Action pressed");
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const AddArticlesPage();
+                },
+              );
             },
             icon: const Icon(TechFreneticIcons.article),
           ),
@@ -167,7 +173,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             height: 5,
           ),
           Text(
-            "Share an article",
+            AppLocalizations.of(context)!.share_article,
             style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   fontSize: 15,
                   color: Colors.white,

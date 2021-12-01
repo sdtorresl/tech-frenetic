@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/modules/articles/add_articles_page.dart';
+import 'package:techfrenetic/app/modules/community/community_controller.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
@@ -14,7 +18,8 @@ class CommunityPage extends StatefulWidget {
   CommunityPageState createState() => CommunityPageState();
 }
 
-class CommunityPageState extends State<CommunityPage> {
+class CommunityPageState
+    extends ModularState<CommunityPage, CommunityController> {
   @override
   Widget build(BuildContext context) {
     final List<Tab> tabs = <Tab>[
@@ -26,9 +31,9 @@ class CommunityPageState extends State<CommunityPage> {
               border: Border.all(
                   color: Theme.of(context).chipTheme.backgroundColor,
                   width: 1)),
-          child: const Align(
+          child: Align(
             alignment: Alignment.center,
-            child: Text("Feed"),
+            child: Text(AppLocalizations.of(context)!.feed),
           ),
         ),
       ),
@@ -40,9 +45,9 @@ class CommunityPageState extends State<CommunityPage> {
               border: Border.all(
                   color: Theme.of(context).chipTheme.backgroundColor,
                   width: 1)),
-          child: const Align(
+          child: Align(
             alignment: Alignment.center,
-            child: Text("Meetups"),
+            child: Text(AppLocalizations.of(context)!.meetups),
           ),
         ),
       ),
@@ -54,9 +59,9 @@ class CommunityPageState extends State<CommunityPage> {
               border: Border.all(
                   color: Theme.of(context).chipTheme.backgroundColor,
                   width: 1)),
-          child: const Align(
+          child: Align(
             alignment: Alignment.center,
-            child: Text("Groups"),
+            child: Text(AppLocalizations.of(context)!.groups),
           ),
         ),
       ),
@@ -126,52 +131,90 @@ class CommunityPageState extends State<CommunityPage> {
             )
           ],
         ),
-        child: Card(
-          elevation: 0,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 10),
-            child: Column(children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text('Share an update'),
-                    GestureDetector(
-                      child: const Icon(
-                        TechFreneticIcons.article,
-                        size: 20,
-                      ),
-                      onTap: () {},
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+          child: Column(children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.share_an_update,
+                  ),
+                  GestureDetector(
+                    child: const Icon(
+                      TechFreneticIcons.article,
+                      size: 20,
                     ),
-                    GestureDetector(
-                      child: Container(
-                        color: Colors.amberAccent,
-                        child: const Icon(
-                          TechFreneticIcons.shareVideo,
-                          size: 20,
-                        ),
-                      ),
-                      onTap: () {},
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const AddArticlesPage();
+                        },
+                      );
+                    },
+                  ),
+                  GestureDetector(
+                    child: const Icon(
+                      TechFreneticIcons.shareVideo,
+                      size: 20,
                     ),
-                  ],
+                    onTap: () {},
+                  ),
+                ],
+              ),
+            ),
+            TextField(
+              decoration: InputDecoration(
+                border: InputBorder.none,
+                hintText: AppLocalizations.of(context)!.write_something,
+                hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
+                prefixIcon: Icon(
+                  Icons.account_circle,
+                  color: Theme.of(context).splashColor,
                 ),
               ),
-              TextField(
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: "Write something...",
-                    hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
-                    prefixIcon: Icon(
-                      Icons.account_circle,
-                      color: Theme.of(context).splashColor,
-                    )),
-              ),
-            ]),
-          ),
+              onChanged: store.changePost,
+            ),
+            StreamBuilder(
+              stream: store.postStream,
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                if (snapshot.hasData) {
+                  if (snapshot.data!.isNotEmpty) {
+                    return Container(
+                      margin: const EdgeInsets.only(top: 15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white, // background
+                              onPrimary: Colors.black, // foreground
+                              elevation: 0,
+                              side: const BorderSide(
+                                  width: 1, color: Colors.black),
+                            ),
+                            onPressed: () => addPost(snapshot.data!),
+                            child: Text(
+                              AppLocalizations.of(context)!.publish,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .button!
+                                  .copyWith(fontSize: 14),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  }
+                }
+
+                return const SizedBox();
+              },
+            ),
+          ]),
         ),
       ),
     );
@@ -181,7 +224,7 @@ class CommunityPageState extends State<CommunityPage> {
     ArticlesProvider _articlesProvideer = ArticlesProvider();
 
     return FutureBuilder(
-      future: _articlesProvideer.getRelatedArticles(),
+      future: _articlesProvideer.getWall(),
       builder:
           (BuildContext context, AsyncSnapshot<List<ArticlesModel>> snapshot) {
         if (snapshot.hasData) {
@@ -213,5 +256,18 @@ class CommunityPageState extends State<CommunityPage> {
 
   Widget _groups() {
     return const GroupsWidget();
+  }
+
+  void addPost(String post) async {
+    debugPrint("Adding post with content: $post");
+
+    ArticlesProvider articlesProvider = ArticlesProvider();
+    bool created = await articlesProvider.addPost(post);
+    if (created) {
+      store.changePost("");
+      setState(() {});
+    } else {
+      debugPrint("Unexpected error creating post");
+    }
   }
 }

@@ -6,11 +6,11 @@ import 'dart:convert' as json;
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
 class ArticlesProvider extends TechFreneticProvider {
-  Future<List<ArticlesModel>> getRelatedArticles() async {
+  Future<List<ArticlesModel>> getWall() async {
     List<ArticlesModel> relatedArticles = [];
 
     try {
-      Uri _url = Uri.parse(baseUrl + "/api/en/v1/wall?filters=yes");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/wall?filters=yes");
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
@@ -30,25 +30,30 @@ class ArticlesProvider extends TechFreneticProvider {
 
   Future<bool> addPost(String message) async {
     try {
-      Uri _url = Uri.parse(baseUrl + "/api/en/v1/node?_format=json");
+      Uri _url = Uri.parse("$baseUrl/api/node?_format=json");
 
-      /** TODO: Language */
       Map<String, dynamic> payload = {
-        'type': [
-          {'target_id': "post", 'target_type': "node_type"}
+        "type": [
+          {"target_id": "post", "target_type": "node_type"}
         ],
-        'title': [
-          {'value': message}
+        "title": [
+          {"value": message}
         ],
-        'langcode': [
-          {'value': 'es'}
+        "langcode": [
+          {"value": locale}
         ],
       };
 
-      var response = await http.post(_url, headers: {}, body: payload);
+      Map<String, String> headers = {};
+      headers.addAll(authHeader);
+      headers.addAll(sessionHeader);
+      headers['Content-Type'] = 'application/json';
 
-      if (response.statusCode == 200) {
-        Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
+      var response = await http.post(_url,
+          headers: headers, body: json.jsonEncode(payload));
+
+      if (response.statusCode == 201) {
+        var jsonResponse = json.jsonDecode(response.body);
         debugPrint(jsonResponse.toString());
 
         return true;
@@ -64,7 +69,7 @@ class ArticlesProvider extends TechFreneticProvider {
 
   Future<bool> addArticle(ArticlesModel article) async {
     try {
-      Uri _url = Uri.parse(baseUrl + "/api/en/v1/node?_format=json");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/node?_format=json");
 
       /**
       Map<String, dynamic> payload = {
@@ -119,7 +124,7 @@ class ArticlesProvider extends TechFreneticProvider {
     ArticlesModel article = ArticlesModel.empty();
 
     try {
-      Uri _url = Uri.parse("$baseUrl/api/en/v1/article?alias=$slug");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/article?alias=$slug");
       debugPrint(_url.toString());
       var response = await http.get(_url);
 

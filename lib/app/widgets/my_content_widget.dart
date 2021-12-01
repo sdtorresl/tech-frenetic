@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/preferences/user_preferences.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
+import 'package:techfrenetic/app/providers/articles_provider.dart';
+import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/widgets/save_content_widget.dart';
 
 class MyContent extends StatefulWidget {
   const MyContent({Key? key}) : super(key: key);
@@ -12,6 +16,8 @@ class MyContent extends StatefulWidget {
 class _MyContentState extends State<MyContent> {
   @override
   Widget build(BuildContext context) {
+    ArticlesProvider _articlesProvideer = ArticlesProvider();
+    final _prefs = UserPreferences();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView(
@@ -54,6 +60,48 @@ class _MyContentState extends State<MyContent> {
                 Text('0 ' + AppLocalizations.of(context)!.articles)
               ],
             ),
+          ),
+          FutureBuilder(
+            future: _articlesProvideer.getWall(),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<ArticlesModel>> snapshot) {
+              if (snapshot.hasData) {
+                List<ArticlesModel> contents = snapshot.data ?? [];
+                List<Widget> savedPostsWidgets = [];
+                for (ArticlesModel content in contents) {
+                  if (content.type == 'Article' &&
+                      _prefs.userName == content.user) {
+                    debugPrint(content.toString());
+                    savedPostsWidgets.add(
+                      SaveContent(savedPost: content),
+                    );
+                  }
+                }
+
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      border: Border(
+                        top: BorderSide(
+                          width: .5,
+                          color: Colors.grey.withOpacity(.6),
+                        ),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        ...savedPostsWidgets,
+                        const SizedBox(height: 60),
+                      ],
+                    ),
+                  ),
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
           ),
         ],
       ),

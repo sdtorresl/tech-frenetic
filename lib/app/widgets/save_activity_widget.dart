@@ -6,15 +6,15 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
-class PostWidget extends StatefulWidget {
+class SaveActivityWidget extends StatefulWidget {
   final ArticlesModel article;
-  const PostWidget({Key? key, required this.article}) : super(key: key);
+  const SaveActivityWidget({Key? key, required this.article}) : super(key: key);
 
   @override
-  State<PostWidget> createState() => _PostWidgetState();
+  State<SaveActivityWidget> createState() => _SaveActivityWidgetState();
 }
 
-class _PostWidgetState extends State<PostWidget> {
+class _SaveActivityWidgetState extends State<SaveActivityWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -47,7 +47,6 @@ class _PostWidgetState extends State<PostWidget> {
           _postImage(context),
           _postTitle(context),
           _postTags(context),
-          _postInteractions(context),
           _postActionBar(context)
         ],
       ),
@@ -156,79 +155,6 @@ class _PostWidgetState extends State<PostWidget> {
     }
   }
 
-  Widget _postInteractions(BuildContext context) {
-    debugPrint("Likes: ${widget.article.likes}");
-
-    Widget _comments = const SizedBox();
-    if (widget.article.comments != '0' && widget.article.comments == '1') {
-      _comments = Row(
-        children: [
-          SizedBox(
-            child: SvgPicture.asset(
-              'assets/img/icons/dot.svg',
-              allowDrawingOutsideViewBox: true,
-              semanticsLabel: 'Dot',
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          Text(widget.article.comments! +
-              ' ' +
-              AppLocalizations.of(context)!.comment),
-        ],
-      );
-    }
-
-    if (widget.article.comments != '0' && widget.article.comments != '1') {
-      _comments = Row(
-        children: [
-          SizedBox(
-            child: SvgPicture.asset(
-              'assets/img/icons/dot.svg',
-              allowDrawingOutsideViewBox: true,
-              semanticsLabel: 'Dot',
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          Text(widget.article.comments! +
-              ' ' +
-              AppLocalizations.of(context)!.comments),
-        ],
-      );
-    }
-
-    return Column(
-      children: [
-        const Divider(
-          height: 0,
-          thickness: 1,
-        ),
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
-          child: Row(
-            children: [
-              _comments,
-              const SizedBox(
-                width: 10,
-              ),
-              SvgPicture.asset(
-                'assets/img/icons/dot.svg',
-                allowDrawingOutsideViewBox: true,
-                semanticsLabel: 'Dot',
-                color: Theme.of(context).primaryColor,
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(widget.article.views! +
-                  ' ' +
-                  AppLocalizations.of(context)!.views),
-            ],
-          ),
-        ),
-      ],
-    );
-  }
-
   Widget _postActionBar(context) {
     return Column(
       children: [
@@ -256,12 +182,6 @@ class _PostWidgetState extends State<PostWidget> {
                   Modular.to.pushNamed("/community/article",
                       arguments: widget.article);
                 },
-              ),
-              _actionButton(
-                context: context,
-                iconAsset: 'assets/img/icons/share.svg',
-                text: AppLocalizations.of(context)!.share,
-                onPressed: () => {debugPrint("Share article")},
               ),
             ],
           ),

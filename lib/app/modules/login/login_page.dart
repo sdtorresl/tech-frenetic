@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/modules/login/login_controller.dart';
 
 class LoginPage extends StatefulWidget {
@@ -11,7 +12,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends ModularState<LoginPage, LoginController> {
-  bool _isPasswordHidden = false;
+  bool _isPasswordHidden = true;
   bool _isLoading = false;
 
   @override
@@ -87,7 +88,9 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
           ),
         ),
         GestureDetector(
+
           onTap: () => Modular.to.pushNamed("/sign"),
+
           child: Text(
             AppLocalizations.of(context)!.login_create_one,
             style: const TextStyle(
@@ -98,6 +101,7 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
               color: Color.fromRGBO(5, 113, 232, 1),
             ),
           ),
+          onTap: () => Modular.to.pushNamed("/sign"),
         ),
       ],
     );
@@ -165,14 +169,17 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
 
   Widget _forgotPassword(context) {
     return Center(
-      child: Text(
-        AppLocalizations.of(context)!.login_forgot,
-        style: const TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: 20,
-            decoration: TextDecoration.underline,
-            fontFamily: 'NunitoSan',
-            color: Colors.black),
+      child: GestureDetector(
+        child: Text(
+          AppLocalizations.of(context)!.login_forgot,
+          style: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 20,
+              decoration: TextDecoration.underline,
+              fontFamily: 'NunitoSan',
+              color: Colors.black),
+        ),
+        onTap: () => Modular.to.pushNamed("/forgot"),
       ),
     );
   }
@@ -195,7 +202,25 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
                   if (loggedIn) {
                     Modular.to.pushNamedAndRemoveUntil("/", (p0) => false);
                   } else {
-                    debugPrint("Not logged");
+                    Widget content = Text(AppLocalizations.of(context)!
+                        .error_sorry_unrecognized_username_or_password);
+                    List<Widget> actions = [
+                      TextButton(
+                        child: Text(
+                          AppLocalizations.of(context)!.close.toUpperCase(),
+                          style: Theme.of(context).textTheme.button!.copyWith(
+                              fontSize: 12,
+                              color: Theme.of(context).primaryColor),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ];
+                    showMessage(context,
+                        title: AppLocalizations.of(context)!.error,
+                        content: content,
+                        actions: actions);
                   }
                 }
               : null,
