@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/recommended_groups_widget.dart';
+import 'package:techfrenetic/app/widgets/groups_cards_widget.dart';
 
 class DiscoverGroupsPage extends StatefulWidget {
   const DiscoverGroupsPage({Key? key}) : super(key: key);
@@ -27,10 +28,35 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
                 Text(
                   'Groups you may like',
                   style: Theme.of(context).textTheme.headline1!.copyWith(
-                        fontSize: 25,
+                        fontSize: 20,
                       ),
                 ),
-                RecommendedGroupsWidget(),
+                const RecommendedGroupsWidget(),
+                Center(
+                  child: Container(
+                    color: Theme.of(context).primaryColor,
+                    width: 290,
+                    height: 1.5,
+                  ),
+                ),
+                const RecommendedGroupsWidget(),
+                Center(
+                  child: Container(
+                    color: Theme.of(context).primaryColor,
+                    width: 290,
+                    height: 1.5,
+                  ),
+                ),
+                const RecommendedGroupsWidget(),
+                Center(
+                  child: Container(
+                    color: Theme.of(context).primaryColor,
+                    width: 290,
+                    height: 1.5,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                GroupsCardsWidget()
               ],
             ),
           ),
