@@ -88,9 +88,6 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
           ),
         ),
         GestureDetector(
-
-          onTap: () => Modular.to.pushNamed("/sign"),
-
           child: Text(
             AppLocalizations.of(context)!.login_create_one,
             style: const TextStyle(
