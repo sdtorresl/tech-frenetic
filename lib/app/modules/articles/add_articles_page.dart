@@ -11,12 +11,12 @@ class AddArticlesPage extends StatefulWidget {
 }
 
 class AddArticlesPageState extends State<AddArticlesPage> {
-  List<String> _selectedTags = [];
+  late List<String> _selectedTags;
   TextEditingController tagsController = TextEditingController();
 
   @override
   void initState() {
-    _selectedTags = ["Facebook", "Twitter", "Instagram"];
+    _selectedTags = [];
     super.initState();
   }
 
@@ -96,6 +96,7 @@ class AddArticlesPageState extends State<AddArticlesPage> {
           _titleField(context),
           _descriptionField(context),
           _articleField(context),
+          _categoriesField(context),
           _tagsField(context),
           const SizedBox(
             height: 20,
@@ -107,18 +108,34 @@ class AddArticlesPageState extends State<AddArticlesPage> {
   }
 
   _titleField(BuildContext context) {
-    return TextField();
+    return const TextField(
+      maxLines: 5,
+      minLines: 3,
+      decoration: InputDecoration(labelText: "Título"),
+    );
   }
 
   _articleField(BuildContext context) {
-    return TextField();
+    return const TextField(
+      maxLines: 20,
+      minLines: 5,
+      decoration: InputDecoration(labelText: "Contenido"),
+    );
+  }
+
+  _categoriesField(BuildContext context) {
+    return const TextField(
+      maxLines: 5,
+      minLines: 3,
+      decoration: InputDecoration(labelText: "Categorías"),
+    );
   }
 
   _descriptionField(BuildContext context) {
     return const TextField(
       maxLines: 5,
       minLines: 3,
-      decoration: InputDecoration(labelText: "Description"),
+      decoration: InputDecoration(labelText: "Descripción corta"),
     );
   }
 
@@ -182,8 +199,8 @@ class AddArticlesPageState extends State<AddArticlesPage> {
             child: Text(AppLocalizations.of(context)!.cancel),
             style: ElevatedButton.styleFrom(
               primary: Colors.white, // background
-              onPrimary: Colors.black, // foreground
-              side: const BorderSide(width: 1, color: Colors.black),
+              onPrimary: Theme.of(context).primaryColor,
+              side: BorderSide(width: 1, color: Theme.of(context).primaryColor),
             ),
           ),
         )

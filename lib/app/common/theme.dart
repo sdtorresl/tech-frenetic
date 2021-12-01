@@ -174,7 +174,7 @@ final ThemeData techFreneticTheme = ThemeData(
   ),
   inputDecorationTheme: const InputDecorationTheme(
     labelStyle: TextStyle(
-      color: Color(0xff006ee8),
+      color: Color(0xdd000000),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
@@ -223,8 +223,8 @@ final ThemeData techFreneticTheme = ThemeData(
     fillColor: Color(0x00000000),
     errorBorder: UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Color(0xff000000),
-        width: 1,
+        color: Colors.red,
+        width: 2,
         style: BorderStyle.solid,
       ),
       borderRadius: BorderRadius.all(Radius.circular(4.0)),
@@ -240,7 +240,7 @@ final ThemeData techFreneticTheme = ThemeData(
     focusedErrorBorder: UnderlineInputBorder(
       borderSide: BorderSide(
         color: Color(0xff000000),
-        width: 1,
+        width: 2,
         style: BorderStyle.solid,
       ),
       borderRadius: BorderRadius.all(Radius.circular(4.0)),
@@ -248,7 +248,7 @@ final ThemeData techFreneticTheme = ThemeData(
     disabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(
         color: Color(0xff000000),
-        width: 1,
+        width: 2,
         style: BorderStyle.solid,
       ),
       borderRadius: BorderRadius.all(Radius.circular(4.0)),
@@ -256,7 +256,7 @@ final ThemeData techFreneticTheme = ThemeData(
     enabledBorder: UnderlineInputBorder(
       borderSide: BorderSide(
         color: Color(0xff000000),
-        width: 1,
+        width: 2,
         style: BorderStyle.solid,
       ),
       borderRadius: BorderRadius.all(Radius.circular(4.0)),
@@ -264,7 +264,7 @@ final ThemeData techFreneticTheme = ThemeData(
     border: UnderlineInputBorder(
       borderSide: BorderSide(
         color: Color(0xff000000),
-        width: 1,
+        width: 2,
         style: BorderStyle.solid,
       ),
       borderRadius: BorderRadius.all(Radius.circular(4.0)),
