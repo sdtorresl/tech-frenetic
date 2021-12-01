@@ -62,7 +62,7 @@ class _MyContentState extends State<MyContent> {
             ),
           ),
           FutureBuilder(
-            future: _articlesProvideer.getRelatedArticles(),
+            future: _articlesProvideer.getWall(),
             builder: (BuildContext context,
                 AsyncSnapshot<List<ArticlesModel>> snapshot) {
               if (snapshot.hasData) {

@@ -63,7 +63,7 @@ class _MyActivityState extends State<MyActivity> {
             ),
           ),
           FutureBuilder(
-            future: _articlesProvideer.getRelatedArticles(),
+            future: _articlesProvideer.getWall(),
             builder: (BuildContext context,
                 AsyncSnapshot<List<ArticlesModel>> snapshot) {
               if (snapshot.hasData) {

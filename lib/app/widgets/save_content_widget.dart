@@ -93,7 +93,7 @@ class _SaveState extends State<SaveContent> {
                 ],
               ),
               const SizedBox(height: 30),
-              _actionBar(context),
+              //_actionBar(context),
               const SizedBox(height: 10),
             ],
           ),
@@ -102,62 +102,54 @@ class _SaveState extends State<SaveContent> {
     );
   }
 
-  Widget _actionBar(context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Row(
-          children: [
-            CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColor.withOpacity(.6),
-              radius: 10.0,
-              child: ClipOval(
-                child: SvgPicture.asset(
-                  'assets/img/icons/light_bulb.svg',
-                  semanticsLabel: 'Light Bulb',
-                ),
-              ),
-            ),
-            const SizedBox(width: 10),
-            Text(
-              widget.savedPost.views!,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            const SizedBox(width: 5),
-            SvgPicture.asset(
-              'assets/img/icons/dot.svg',
-              semanticsLabel: 'Dot',
-              color: Theme.of(context).primaryColor,
-            ),
-            const SizedBox(width: 5),
-            Text(
-              widget.savedPost.comments! +
-                  ' ' +
-                  AppLocalizations.of(context)!.comments2,
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-            const SizedBox(width: 5),
-            SvgPicture.asset(
-              'assets/img/icons/dot.svg',
-              semanticsLabel: 'Dot',
-              color: Theme.of(context).primaryColor,
-            ),
-            const SizedBox(width: 5),
-            Text(
-              ' Share',
-              style: Theme.of(context).textTheme.bodyText1,
-            ),
-          ],
-        ),
-        Row(
-          children: [
-            Icon(
-              Icons.star,
-              color: Theme.of(context).primaryColor,
-            ),
-          ],
-        )
-      ],
-    );
-  }
+  // Widget _actionBar(context) {
+  //   return Row(
+  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //     children: [
+  //       Row(
+  //         children: [
+  //           CircleAvatar(
+  //             backgroundColor: Theme.of(context).primaryColor.withOpacity(.6),
+  //             radius: 10.0,
+  //             child: ClipOval(
+  //               child: SvgPicture.asset(
+  //                 'assets/img/icons/light_bulb.svg',
+  //                 semanticsLabel: 'Light Bulb',
+  //               ),
+  //             ),
+  //           ),
+  //           const SizedBox(width: 10),
+  //           Text(
+  //             widget.savedPost.views!,
+  //             style: Theme.of(context).textTheme.bodyText1,
+  //           ),
+  //           const SizedBox(width: 5),
+  //           SvgPicture.asset(
+  //             'assets/img/icons/dot.svg',
+  //             semanticsLabel: 'Dot',
+  //             color: Theme.of(context).primaryColor,
+  //           ),
+  //           const SizedBox(width: 5),
+  //           Text(
+  //             widget.savedPost.comments! +
+  //                 ' ' +
+  //                 AppLocalizations.of(context)!.comments2,
+  //             style: Theme.of(context).textTheme.bodyText1,
+  //           ),
+  //           const SizedBox(width: 5),
+  //           SvgPicture.asset(
+  //             'assets/img/icons/dot.svg',
+  //             semanticsLabel: 'Dot',
+  //             color: Theme.of(context).primaryColor,
+  //           ),
+  //           const SizedBox(width: 5),
+  //           Text(
+  //             ' Share',
+  //             style: Theme.of(context).textTheme.bodyText1,
+  //           ),
+  //         ],
+  //       ),
+  //     ],
+  //   );
+  //}
 }
