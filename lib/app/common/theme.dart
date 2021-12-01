@@ -36,6 +36,11 @@ final ThemeData techFreneticTheme = ThemeData(
           fontStyle: FontStyle.normal,
         );
       }),
+      shape: MaterialStateProperty.all<OutlinedBorder>(
+        const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+        ),
+      ),
     ),
   ),
   buttonTheme: const ButtonThemeData(
@@ -169,7 +174,7 @@ final ThemeData techFreneticTheme = ThemeData(
   ),
   inputDecorationTheme: const InputDecorationTheme(
     labelStyle: TextStyle(
-      color: Color(0xdd000000),
+      color: Color(0xff006ee8),
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
@@ -187,7 +192,7 @@ final ThemeData techFreneticTheme = ThemeData(
       fontStyle: FontStyle.normal,
     ),
     errorStyle: TextStyle(
-      color: Color(0xdd000000),
+      color: Colors.red,
       fontSize: null,
       fontWeight: FontWeight.w400,
       fontStyle: FontStyle.normal,
@@ -226,8 +231,8 @@ final ThemeData techFreneticTheme = ThemeData(
     ),
     focusedBorder: UnderlineInputBorder(
       borderSide: BorderSide(
-        color: Color(0xff000000),
-        width: 1,
+        color: Color(0xff006ee8),
+        width: 2,
         style: BorderStyle.solid,
       ),
       borderRadius: BorderRadius.all(Radius.circular(4.0)),

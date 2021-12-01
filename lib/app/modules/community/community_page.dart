@@ -187,9 +187,6 @@ class CommunityPageState
                               elevation: 0,
                               side: const BorderSide(
                                   width: 1, color: Colors.black),
-                              shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                              ),
                             ),
                             onPressed: () => addPost(snapshot.data!),
                             child: Text(
