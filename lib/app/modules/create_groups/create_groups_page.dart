@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
+import 'package:techfrenetic/app/modules/create_groups/create_groups_controller.dart';
 
 class CreateGroupsPage extends StatefulWidget {
   const CreateGroupsPage({Key? key}) : super(key: key);
@@ -9,7 +11,8 @@ class CreateGroupsPage extends StatefulWidget {
   _CreateGroupsPageState createState() => _CreateGroupsPageState();
 }
 
-class _CreateGroupsPageState extends State<CreateGroupsPage> {
+class _CreateGroupsPageState
+    extends ModularState<CreateGroupsPage, CreateGroupsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,20 +139,25 @@ class _CreateGroupsPageState extends State<CreateGroupsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextFormField(
-            decoration: InputDecoration(
-              hintText: 'Write the group name',
-              hintStyle: Theme.of(context)
-                  .textTheme
-                  .bodyText1!
-                  .copyWith(color: Theme.of(context).hintColor),
-              //errorText: snapshot.hasError ? snapshot.error.toString() : null,
-              errorStyle: Theme.of(context)
-                  .textTheme
-                  .headline4!
-                  .copyWith(color: Colors.red),
-            ),
-          ),
+          StreamBuilder<Object>(
+              stream: store.nameStream,
+              builder: (context, snapshot) {
+                return TextFormField(
+                  decoration: InputDecoration(
+                    hintText: 'Write the group name',
+                    hintStyle: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: Theme.of(context).hintColor),
+                    errorText:
+                        snapshot.hasError ? snapshot.error.toString() : null,
+                    errorStyle: Theme.of(context)
+                        .textTheme
+                        .headline4!
+                        .copyWith(color: Colors.red),
+                  ),
+                );
+              }),
           const SizedBox(height: 40),
           TextFormField(
             decoration: InputDecoration(
