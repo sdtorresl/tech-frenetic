@@ -157,8 +157,6 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   Widget _postInteractions(BuildContext context) {
-    debugPrint("Likes: ${widget.article.likes}");
-
     Widget _comments = const SizedBox();
     if (widget.article.comments != '0' && widget.article.comments == '1') {
       _comments = Row(

@@ -136,55 +136,27 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
 
   Widget _floatingActionButton() {
     List<Widget> actions = [
-      Column(
-        children: [
-          ActionButton(
-            onPressed: () {
-              Modular.to.pushNamed("/community/video");
-            },
-            icon: const Icon(TechFreneticIcons.shareVideo),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            AppLocalizations.of(context)!.share_video,
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                  fontSize: 15,
-                  color: Colors.white,
-                ),
-          ),
-        ],
+      ActionButton(
+        onPressed: () {
+          Modular.to.pushNamed("/community/video");
+        },
+        icon: const Icon(TechFreneticIcons.shareVideo),
       ),
-      Column(
-        children: [
-          ActionButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const AddArticlesPage();
-                },
-              );
+      ActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return const AddArticlesPage();
             },
-            icon: const Icon(TechFreneticIcons.article),
-          ),
-          const SizedBox(
-            height: 5,
-          ),
-          Text(
-            AppLocalizations.of(context)!.share_article,
-            style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                  fontSize: 15,
-                  color: Colors.white,
-                ),
-          ),
-        ],
+          );
+        },
+        icon: const Icon(TechFreneticIcons.article),
       ),
     ];
 
     return ExpandableFab(
-      distance: 95.0,
+      distance: 70.0,
       children: actions,
     );
   }

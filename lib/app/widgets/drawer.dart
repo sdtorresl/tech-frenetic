@@ -27,52 +27,20 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
           ),
-          ListTile(
-            title: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(AppLocalizations.of(context)!.sign_up),
-                ],
-              ),
-              onPressed: () => Modular.to.pushNamed("/sign"),
-            ),
-          ),
-          ListTile(
-            title: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white, // background
-                onPrimary: Colors.black, // foreground
-                elevation: 0,
-                side: const BorderSide(width: 1.5, color: Colors.black),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(AppLocalizations.of(context)!.login_title),
-                ],
-              ),
-              onPressed: () => Modular.to.pushNamed("/login"),
-            ),
-          ),
           const SizedBox(
             height: 30,
           ),
           _menuItem(
             context,
             "Tech Community",
-            onPressed: () => {
-              debugPrint("Pressed TC"),
-            },
+            onPressed: () => Modular.to.popAndPushNamed("/community"),
           ),
           _menuItem(
             context,
             "Tech Events",
-            onPressed: () => {
-              debugPrint("Pressed events"),
+            onPressed: () {
+              debugPrint("Pressed events");
+              Modular.to.popAndPushNamed("/events");
             },
           ),
           _menuItem(
@@ -97,9 +65,9 @@ class CustomDrawer extends StatelessWidget {
   }
 
   Widget _menuItem(BuildContext context, String text,
-      {required Function onPressed}) {
+      {required void Function() onPressed}) {
     return ListTile(
-      onTap: () => onPressed,
+      onTap: onPressed,
       title: Container(
         decoration: const BoxDecoration(
           border: Border(
