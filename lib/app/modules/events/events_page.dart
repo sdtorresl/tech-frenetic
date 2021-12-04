@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/models/events_model.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:techfrenetic/app/widgets/post_event_widget.dart';
+import 'package:techfrenetic/app/widgets/post_recent_event_widget.dart';
+import 'package:techfrenetic/app/widgets/featured_events_widget.dart';
+import 'package:techfrenetic/app/widgets/recent_events_widget.dart';
+import 'package:techfrenetic/app/widgets/upcoming_events_widget.dart';
 
 class EventsPage extends StatefulWidget {
   const EventsPage({Key? key}) : super(key: key);
@@ -24,7 +28,6 @@ List<String> items = [
 String? defaultValue = items.first;
 
 class _EventsPageState extends State<EventsPage> {
-  Widget postEvent = const PostEventWidget();
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -142,80 +145,11 @@ class _EventsPageState extends State<EventsPage> {
             ],
           ),
         ),
-        featureEvents(),
+        const FeaturedEventsWidget(),
         eventSerch(),
-        upcomingEvents(),
-        recentEvents(),
+        const UpcomingEventsWidget(),
+        const RecentEventsWidget(),
       ],
-    );
-  }
-
-  Widget featureEvents() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(
-            width: 1.00,
-            color: Colors.grey.withOpacity(.3),
-          ),
-        ),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: Row(
-              children: [
-                HighlightContainer(
-                  child: Text(
-                    AppLocalizations.of(context)!.featured,
-                    style: Theme.of(context).textTheme.headline1!.copyWith(
-                        color: Theme.of(context).primaryColor, fontSize: 25),
-                  ),
-                ),
-                Text(
-                  ' ' + AppLocalizations.of(context)!.featured_events,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1!
-                      .copyWith(fontSize: 25),
-                ),
-              ],
-            ),
-          ),
-          Center(
-            child: Container(
-                margin: const EdgeInsets.symmetric(
-                  vertical: 15.0,
-                  horizontal: 45,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border(
-                    bottom: BorderSide(
-                      width: 1.00,
-                      color: Theme.of(context).primaryColor,
-                    ),
-                    left: BorderSide(
-                      width: 0.50,
-                      color: Colors.grey.withOpacity(.6),
-                    ),
-                    top: BorderSide(
-                      width: 0.50,
-                      color: Colors.grey.withOpacity(.6),
-                    ),
-                    right: BorderSide(
-                      width: 0.50,
-                      color: Colors.grey.withOpacity(.6),
-                    ),
-                  ),
-                ),
-                child: postEvent),
-          ),
-          const SizedBox(height: 50),
-        ],
-      ),
     );
   }
 
@@ -300,136 +234,6 @@ class _EventsPageState extends State<EventsPage> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget upcomingEvents() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(
-            width: 1.00,
-            color: Colors.grey.withOpacity(.3),
-          ),
-        ),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: Row(
-              children: [
-                HighlightContainer(
-                  child: Text(
-                    AppLocalizations.of(context)!.upcoming,
-                    style: Theme.of(context).textTheme.headline1!.copyWith(
-                        color: Theme.of(context).primaryColor, fontSize: 25),
-                  ),
-                ),
-                Text(
-                  ' ' + AppLocalizations.of(context)!.events,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1!
-                      .copyWith(fontSize: 25),
-                ),
-              ],
-            ),
-          ),
-          Center(
-            child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border(
-                    bottom: BorderSide(
-                      width: 0.50,
-                      color: Theme.of(context).unselectedWidgetColor,
-                    ),
-                    left: BorderSide(
-                      width: 0.50,
-                      color: Colors.grey.withOpacity(.6),
-                    ),
-                    top: BorderSide(
-                      width: 0.50,
-                      color: Colors.grey.withOpacity(.6),
-                    ),
-                    right: BorderSide(
-                      width: 0.50,
-                      color: Colors.grey.withOpacity(.6),
-                    ),
-                  ),
-                ),
-                margin: const EdgeInsets.symmetric(
-                  vertical: 15.0,
-                  horizontal: 45,
-                ),
-                child: postEvent),
-          ),
-          const SizedBox(height: 50),
-        ],
-      ),
-    );
-  }
-
-  Widget recentEvents() {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).splashColor.withOpacity(0.1),
-        border: Border(
-          bottom: BorderSide(
-            width: 1.00,
-            color: Colors.grey.withOpacity(.3),
-          ),
-        ),
-      ),
-      child: Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.all(25.0),
-            child: Row(
-              children: [
-                HighlightContainer(
-                  child: Text(
-                    AppLocalizations.of(context)!.recent,
-                    style: Theme.of(context).textTheme.headline1!.copyWith(
-                        color: Theme.of(context).primaryColor, fontSize: 25),
-                  ),
-                ),
-                Text(
-                  ' ' + AppLocalizations.of(context)!.recent_events,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1!
-                      .copyWith(fontSize: 25),
-                ),
-              ],
-            ),
-          ),
-          Center(
-            child: Container(
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  //border: Border(
-                  //bottom: BorderSide(
-                  //  width: 1.00,
-                  //    color: Theme.of(context).primaryColor,
-                  //  ),
-                  // left: BorderSide(
-                  //   width: 0.50,
-                  //    color: Colors.grey.withOpacity(.6),
-                  //  ),
-                  // ),
-                ),
-                margin: const EdgeInsets.symmetric(
-                  vertical: 15.0,
-                  horizontal: 45,
-                ),
-                child: postEvent),
-          ),
-          const SizedBox(height: 70),
-        ],
       ),
     );
   }
