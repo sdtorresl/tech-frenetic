@@ -8,7 +8,7 @@ class WallModel {
     required this.articles,
   });
 
-  final String results;
+  final dynamic results;
   final List<ArticlesModel> articles;
 
   factory WallModel.fromJson(String str) => WallModel.fromMap(json.decode(str));
