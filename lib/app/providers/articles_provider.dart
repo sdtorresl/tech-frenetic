@@ -28,6 +28,77 @@ class ArticlesProvider extends TechFreneticProvider {
     return relatedArticles;
   }
 
+  Future<List<ArticlesModel>> getFeatureArticle() async {
+    try {
+      Uri _url =
+          Uri.parse("$baseUrl/api/$locale/v1/articles-featured?filters=yes");
+      var response = await http.get(_url);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.jsonDecode(response.body);
+        List<ArticlesModel> articles = [];
+        for (var item in jsonResponse) {
+          ArticlesModel article = ArticlesModel.fromMap(item);
+          articles.add(article);
+          debugPrint(articles.toString());
+        }
+        return articles;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return [];
+  }
+
+  Future<List<ArticlesModel>> getLatestArticle() async {
+    List<ArticlesModel> article = [];
+
+    try {
+      Uri _url =
+          Uri.parse("$baseUrl/api/$locale/v1/articles-latest?filters=yes");
+      var response = await http.get(_url);
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
+        WallModel wall = WallModel.fromMap(jsonResponse);
+        article = wall.articles;
+        debugPrint(article.toString());
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return article;
+  }
+
+  Future<List<ArticlesModel>> getMostPopular() async {
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/articles-popular");
+      var response = await http.get(_url);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.jsonDecode(response.body);
+        List<ArticlesModel> articles = [];
+        for (var item in jsonResponse) {
+          ArticlesModel article = ArticlesModel.fromMap(item);
+          articles.add(article);
+        }
+        return articles;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return [];
+  }
+
   Future<bool> addPost(String message) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/node?_format=json");
