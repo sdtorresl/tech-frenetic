@@ -38,11 +38,11 @@ class HomeModule extends Module {
           '/profile',
           child: (context, args) => const ProfilePage(),
         ),
-        ChildRoute(
-          '/about_us',
-          child: (context, args) => const AboutUsWidget(),
-        ),
       ],
+    ),
+    ChildRoute(
+      '/about_us',
+      child: (context, args) => const AboutUsWidget(),
     ),
     ModuleRoute('/community/article', module: ArticlesModule()),
     ModuleRoute('/community/video', module: VideosModule()),
