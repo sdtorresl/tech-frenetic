@@ -17,7 +17,7 @@ class UpcomingEventsWidget extends StatefulWidget {
 class _UpcomingEventsWidgetState extends State<UpcomingEventsWidget> {
   @override
   Widget build(BuildContext context) {
-    UpcomingProvider _upcomingEventsprovider = UpcomingProvider();
+    UpcomingEventsProvider _upcomingEventsprovider = UpcomingEventsProvider();
 
     return Container(
       decoration: BoxDecoration(

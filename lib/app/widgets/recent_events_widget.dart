@@ -16,7 +16,7 @@ class RecentEventsWidget extends StatefulWidget {
 class _RecentEventsWidgetState extends State<RecentEventsWidget> {
   @override
   Widget build(BuildContext context) {
-    EventsProvider _eventsprovider = EventsProvider();
+    RecentEventsProvider _eventsprovider = RecentEventsProvider();
 
     return Container(
       decoration: BoxDecoration(

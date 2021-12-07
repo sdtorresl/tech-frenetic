@@ -16,7 +16,7 @@ class FeaturedEventsWidget extends StatefulWidget {
 class _FeaturedEventsWidgetState extends State<FeaturedEventsWidget> {
   @override
   Widget build(BuildContext context) {
-    EventsProvider _eventsprovider = EventsProvider();
+    FeaturedEventsProvider _eventsprovider = FeaturedEventsProvider();
 
     return Container(
       decoration: BoxDecoration(

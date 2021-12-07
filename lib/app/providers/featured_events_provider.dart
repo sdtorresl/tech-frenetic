@@ -4,7 +4,7 @@ import 'package:techfrenetic/app/providers/tf_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as json;
 
-class EventsProvider extends TechFreneticProvider {
+class FeaturedEventsProvider extends TechFreneticProvider {
   Future<List<EventsModel>> getFeaturedEvents() async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/v1/events-featured");
