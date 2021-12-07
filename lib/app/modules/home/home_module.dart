@@ -45,11 +45,11 @@ class HomeModule extends Module {
           '/choose_avatar/welcome',
           child: (context, args) => const WelcomePage(),
         ),
+        ChildRoute(
+          '/events',
+          child: (context, args) => const EventsPage(),
+        ),
       ],
-    ),
-    ChildRoute(
-      '/events',
-      child: (context, args) => const EventsPage(),
     ),
     ChildRoute(
       '/welcome',

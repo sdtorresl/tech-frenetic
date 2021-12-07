@@ -97,9 +97,9 @@ class CustomDrawer extends StatelessWidget {
   }
 
   Widget _menuItem(BuildContext context, String text,
-      {required Function onPressed}) {
+      {required void Function() onPressed}) {
     return ListTile(
-      onTap: () => onPressed,
+      onTap: onPressed,
       title: Container(
         decoration: const BoxDecoration(
           border: Border(
