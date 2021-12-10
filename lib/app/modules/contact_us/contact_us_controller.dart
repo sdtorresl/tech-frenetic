@@ -31,8 +31,8 @@ class ContactUsController extends Disposable {
   String get description => _descriptionController.value;
   bool get terms => _termsController.value;
 
-  Future<bool> createProfile() async {
-    debugPrint('Sing in');
+  Future<bool> contactUs() async {
+    debugPrint('The contact email was send');
     return true;
   }
 
