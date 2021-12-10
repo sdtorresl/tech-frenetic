@@ -22,6 +22,8 @@ String? defaultValue = items.first;
 
 class _ContactUsPageState
     extends ModularState<ContactUsPage, ContactUsController> {
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -173,22 +175,48 @@ class _ContactUsPageState
             Center(
               child: SizedBox(
                 width: 400,
-                child: ElevatedButton(
-                  onPressed: () => debugPrint('Send'),
-                  child: Text(
-                    'Finish',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline1!
-                        .copyWith(color: Colors.white),
-                  ),
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero),
-                    ),
-                  ),
-                ),
+                child: StreamBuilder<Object>(
+                    stream: store.formValidStream,
+                    builder: (context, snapshot) {
+                      return ElevatedButton(
+                        onPressed: snapshot.hasData && !_isLoading
+                            ? () async {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                bool createProfile = await store.contactUs();
+                                setState(() {
+                                  _isLoading = false;
+                                });
+                                if (createProfile) {
+                                  const SnackBar(
+                                    content: Text(
+                                        'You are part of the tech frenetic cummunity now'),
+                                  );
+                                  debugPrint('Email Send');
+                                  // Modular.to.pushNamedAndRemoveUntil(
+                                  //     '/choose_avatar', (p0) => false);
+                                } else {
+                                  debugPrint("Email not Send");
+                                }
+                              }
+                            : null,
+                        child: Text(
+                          'Send',
+                          style: Theme.of(context)
+                              .textTheme
+                              .headline1!
+                              .copyWith(color: Colors.white),
+                        ),
+                        style: ButtonStyle(
+                          shape:
+                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                            const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero),
+                          ),
+                        ),
+                      );
+                    }),
               ),
             ),
             const SizedBox(height: 70),
@@ -224,23 +252,23 @@ class _ContactUsPageState
         ),
         const SizedBox(height: 40),
         StreamBuilder(
-          stream: null,
+          stream: store.emailStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
-              decoration: InputDecoration(
-                hintText: 'What´s your email?',
-                hintStyle: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: Theme.of(context).hintColor),
-                errorText: snapshot.hasError ? snapshot.error.toString() : null,
-                errorStyle: Theme.of(context)
-                    .textTheme
-                    .headline4!
-                    .copyWith(color: Colors.red),
-              ),
-              onChanged: null,
-            );
+                decoration: InputDecoration(
+                  hintText: 'What´s your email?',
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).hintColor),
+                  errorText:
+                      snapshot.hasError ? snapshot.error.toString() : null,
+                  errorStyle: Theme.of(context)
+                      .textTheme
+                      .headline4!
+                      .copyWith(color: Colors.red),
+                ),
+                onChanged: store.changeEmail);
           },
         ),
         const SizedBox(height: 40),
@@ -299,7 +327,7 @@ class _ContactUsPageState
         ),
         const SizedBox(height: 10),
         StreamBuilder(
-          stream: null,
+          stream: store.descriptionStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
@@ -308,13 +336,13 @@ class _ContactUsPageState
                     .textTheme
                     .bodyText1!
                     .copyWith(color: Theme.of(context).hintColor),
-                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorText: snapshot.hasError ? 'Write a message' : null,
                 errorStyle: Theme.of(context)
                     .textTheme
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: null,
+              onChanged: store.changeDescription,
             );
           },
         ),
@@ -322,19 +350,18 @@ class _ContactUsPageState
         Row(
           children: [
             StreamBuilder(
-              stream: null,
+              stream: store.termsStream,
               initialData: false,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 return Checkbox(
                   value: snapshot.hasData && snapshot.data ? true : false,
-                  onChanged: null,
-                  // (bool? value) {
-                  //   setState(
-                  //     () {
-                  //       store.changeTerms(value!);
-                  //     },
-                  //   );
-                  // },
+                  onChanged: (bool? value) {
+                    setState(
+                      () {
+                        store.changeTerms(value!);
+                      },
+                    );
+                  },
                 );
               },
             ),
