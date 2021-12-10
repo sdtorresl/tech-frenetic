@@ -8,6 +8,7 @@ import 'package:techfrenetic/app/modules/privacy_policy/privacy_poicy_page.dart'
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/modules/create_profile/create_profile_module.dart';
 import 'package:techfrenetic/app/modules/choose_avatar/choose_avatar_module.dart';
+import 'package:techfrenetic/app/modules/terms/terms_page.dart';
 import 'package:techfrenetic/app/modules/welcome/welcome_page.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
 import 'package:techfrenetic/app/modules/events/events_page.dart';
@@ -55,6 +56,10 @@ class HomeModule extends Module {
     ChildRoute(
       '/privacy_policy',
       child: (context, args) => const PrivacyPolicyPage(),
+    ),
+    ChildRoute(
+      '/terms',
+      child: (context, args) => const TermsPage(),
     ),
     ModuleRoute('/community/article', module: ArticlesModule()),
     ModuleRoute('/community/video', module: VideosModule()),

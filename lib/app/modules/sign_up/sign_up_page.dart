@@ -205,16 +205,19 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                               AppLocalizations.of(context)!.terms_line1,
                               style: Theme.of(context).textTheme.bodyText1,
                             ),
-                            Text(
-                              ' ' +
-                                  AppLocalizations.of(context)!.terms_link1 +
-                                  ' ',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                      decoration: TextDecoration.underline,
-                                      decorationThickness: 1.5),
+                            GestureDetector(
+                              child: Text(
+                                ' ' +
+                                    AppLocalizations.of(context)!.terms_link1 +
+                                    ' ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(
+                                        decoration: TextDecoration.underline,
+                                        decorationThickness: 1.5),
+                              ),
+                              onTap: () => Modular.to.pushNamed('/terms'),
                             ),
                           ],
                         ),
