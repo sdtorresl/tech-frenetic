@@ -23,7 +23,7 @@ class CreateProfileController extends Disposable {
   String get description => _descriptionController.value;
 
   Future<bool> createProfile() async {
-    debugPrint('Sing in');
+    debugPrint('Profile not created');
     return true;
   }
 
