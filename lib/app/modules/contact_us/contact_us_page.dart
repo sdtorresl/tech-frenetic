@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/modules/contact_us/contact_us_controller.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -19,7 +20,8 @@ List<String> items = [
 ];
 String? defaultValue = items.first;
 
-class _ContactUsPageState extends State<ContactUsPage> {
+class _ContactUsPageState
+    extends ModularState<ContactUsPage, ContactUsController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -201,7 +203,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         StreamBuilder(
-          stream: null,
+          stream: store.nameStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
@@ -216,7 +218,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: null,
+              onChanged: store.changeName,
             );
           },
         ),
