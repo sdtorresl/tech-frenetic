@@ -6,7 +6,7 @@ import 'dart:convert' as json;
 
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
-class TermsAndPolicyProvider extends TechFreneticProvider {
+class PrivacyPolicyProvider extends TechFreneticProvider {
   Future<TermsAndPolicyModel> getPolicyPrivacy() async {
     TermsAndPolicyModel policyPrivacy = TermsAndPolicyModel.empty();
 

@@ -14,22 +14,24 @@ class PrivacyPolicyPage extends StatefulWidget {
 class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
   @override
   Widget build(BuildContext context) {
-    TermsAndPolicyProvider _termsAndPolicyProvideer = TermsAndPolicyProvider();
+    PrivacyPolicyProvider _privacyPolicyProvideer = PrivacyPolicyProvider();
 
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: Icon(
-          Icons.arrow_back_ios,
-          color: Theme.of(context).primaryColor,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back_ios,
+            color: Theme.of(context).primaryColor,
+          ),
+          onPressed: () => Navigator.pop(context),
         ),
       ),
       body: ListView(
         children: [
           FutureBuilder(
-            future: _termsAndPolicyProvideer.getPolicyPrivacy(),
-            //initialData: ArticlesModel.empty(),
+            future: _privacyPolicyProvideer.getPolicyPrivacy(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               if (snapshot.hasData) {
                 debugPrint(snapshot.data.toString());
