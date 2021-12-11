@@ -7,12 +7,12 @@ import 'package:techfrenetic/app/modules/login/login_module.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/modules/create_profile/create_profile_module.dart';
 import 'package:techfrenetic/app/modules/choose_avatar/choose_avatar_module.dart';
+import 'package:techfrenetic/app/modules/vendors_search/vendors_search_page.dart';
 import 'package:techfrenetic/app/modules/welcome/welcome_page.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
 import 'package:techfrenetic/app/modules/events/events_page.dart';
 import 'package:techfrenetic/app/modules/vendors/vendors_page.dart';
 import 'package:techfrenetic/app/modules/videos/videos_module.dart';
-
 
 import 'home_controller.dart';
 import 'home_page.dart';
@@ -39,6 +39,10 @@ class HomeModule extends Module {
           child: (context, args) => const VendorsPage(),
         ),
         ChildRoute(
+          '/vendors_search',
+          child: (context, args) => const VendorsSearchPage(),
+        ),
+        ChildRoute(
           '/profile',
           child: (context, args) => const ProfilePage(),
         ),
@@ -59,6 +63,5 @@ class HomeModule extends Module {
     ModuleRoute('/create_profile', module: CreateProfileModule()),
     ModuleRoute('/choose_avatar', module: ChooseAvatarModule()),
     ModuleRoute('/forgot', module: ForgotPasswordModule()),
-
   ];
 }

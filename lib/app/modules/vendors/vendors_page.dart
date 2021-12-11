@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class VendorsPage extends StatefulWidget {
@@ -155,7 +156,7 @@ class VendorsPageState extends State<VendorsPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 ElevatedButton(
-                  onPressed: () => null,
+                  onPressed: () => Modular.to.pushNamed("/vendors_search"),
                   child: Text('Applications',
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: Theme.of(context).primaryColor,
@@ -172,7 +173,7 @@ class VendorsPageState extends State<VendorsPage> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () => null,
+                  onPressed: () => Modular.to.pushNamed("/vendors_search"),
                   child: Text('Cloud',
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: Theme.of(context).primaryColor,
@@ -189,7 +190,7 @@ class VendorsPageState extends State<VendorsPage> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () => null,
+                  onPressed: () => Modular.to.pushNamed("/vendors_search"),
                   child: Text('Cybersecurity',
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: Theme.of(context).primaryColor,
@@ -212,7 +213,7 @@ class VendorsPageState extends State<VendorsPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () => null,
+                  onPressed: () => Modular.to.pushNamed("/vendors_search"),
                   child: Text('Networking',
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: Theme.of(context).primaryColor,
@@ -230,7 +231,7 @@ class VendorsPageState extends State<VendorsPage> {
                 ),
                 const SizedBox(width: 20),
                 ElevatedButton(
-                  onPressed: () => null,
+                  onPressed: () => Modular.to.pushNamed("/vendors_search"),
                   child: Text('Servers & PCs',
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: Theme.of(context).primaryColor,
@@ -251,7 +252,7 @@ class VendorsPageState extends State<VendorsPage> {
             const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
-                onPressed: () => null,
+                onPressed: () => Modular.to.pushNamed("/vendors_search"),
                 child: Text('Storage',
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           color: Theme.of(context).primaryColor,
@@ -309,21 +310,24 @@ class VendorsPageState extends State<VendorsPage> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 60),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'View all vendors ',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(color: Theme.of(context).primaryColor),
-                ),
-                Icon(
-                  Icons.arrow_forward,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ],
+            GestureDetector(
+              onTap: () => Modular.to.pushNamed("/vendors_search"),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'View all vendors ',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: Theme.of(context).primaryColor),
+                  ),
+                  Icon(
+                    Icons.arrow_forward,
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ],
+              ),
             ),
             const SizedBox(height: 20),
           ],
