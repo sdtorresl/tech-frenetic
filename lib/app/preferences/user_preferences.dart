@@ -23,8 +23,16 @@ class UserPreferences {
 
   String? get csrfToken => _prefs.getString('csrf_token');
 
+  set cookies(String? cookies) => _prefs.setString('cookies', cookies!);
+
+  String? get cookies => _prefs.getString('cookies');
+
   set logoutToken(String? logoutToken) =>
       _prefs.setString('logout_token', logoutToken!);
 
   String? get logoutToken => _prefs.getString('logout_token');
+
+  set userName(String? userName) => _prefs.setString('name', userName!);
+
+  String? get userName => _prefs.getString('name');
 }

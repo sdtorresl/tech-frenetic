@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/common/icons.dart';
+import 'package:techfrenetic/app/modules/articles/add_articles_page.dart';
 import 'package:techfrenetic/app/widgets/expandable_fab.dart';
 import 'home_controller.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
@@ -159,7 +160,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         children: [
           ActionButton(
             onPressed: () {
-              debugPrint("Action pressed");
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const AddArticlesPage();
+                },
+              );
             },
             icon: const Icon(TechFreneticIcons.article),
           ),

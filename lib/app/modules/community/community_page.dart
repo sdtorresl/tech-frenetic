@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/modules/articles/add_articles_page.dart';
 import 'package:techfrenetic/app/modules/community/community_controller.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/common/icons.dart';
@@ -146,7 +147,14 @@ class CommunityPageState
                       TechFreneticIcons.article,
                       size: 20,
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const AddArticlesPage();
+                        },
+                      );
+                    },
                   ),
                   GestureDetector(
                     child: const Icon(
@@ -181,8 +189,21 @@ class CommunityPageState
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.white, // background
+                              onPrimary: Colors.black, // foreground
+                              elevation: 0,
+                              side: const BorderSide(
+                                  width: 1, color: Colors.black),
+                            ),
                             onPressed: () => addPost(snapshot.data!),
-                            child: const Text("Publicar"),
+                            child: Text(
+                              AppLocalizations.of(context)!.publish,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .button!
+                                  .copyWith(fontSize: 14),
+                            ),
                           )
                         ],
                       ),
@@ -203,7 +224,7 @@ class CommunityPageState
     ArticlesProvider _articlesProvideer = ArticlesProvider();
 
     return FutureBuilder(
-      future: _articlesProvideer.getRelatedArticles(),
+      future: _articlesProvideer.getWall(),
       builder:
           (BuildContext context, AsyncSnapshot<List<ArticlesModel>> snapshot) {
         if (snapshot.hasData) {
@@ -237,10 +258,16 @@ class CommunityPageState
     return const GroupsWidget();
   }
 
-  void addPost(String post) {
+  void addPost(String post) async {
     debugPrint("Adding post with content: $post");
 
     ArticlesProvider articlesProvider = ArticlesProvider();
-    articlesProvider.addPost(post);
+    bool created = await articlesProvider.addPost(post);
+    if (created) {
+      store.changePost("");
+      setState(() {});
+    } else {
+      debugPrint("Unexpected error creating post");
+    }
   }
 }

@@ -125,106 +125,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                   ],
                 ),
                 const SizedBox(height: 20),
-                StreamBuilder<Object>(
-                    stream: store.nameStream,
-                    builder: (context, snapshot) {
-                      return TextFormField(
-                        decoration: InputDecoration(
-                          hintText: AppLocalizations.of(context)!.your_name,
-                          hintStyle: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(color: Theme.of(context).hintColor),
-                          errorText: snapshot.hasError
-                              ? snapshot.error.toString()
-                              : null,
-                          errorStyle: Theme.of(context)
-                              .textTheme
-                              .headline4!
-                              .copyWith(color: Colors.red),
-                        ),
-                        onChanged: store.changeName,
-                      );
-                    }),
-                const SizedBox(height: 20),
-                StreamBuilder(
-                    stream: store.emailStream,
-                    builder:
-                        (BuildContext context, AsyncSnapshot<String> snapshot) {
-                      return TextFormField(
-                        decoration: InputDecoration(
-                          hintText: AppLocalizations.of(context)!.form1_email,
-                          hintStyle: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(color: Theme.of(context).hintColor),
-                          errorText: snapshot.hasError
-                              ? snapshot.error.toString()
-                              : null,
-                          errorStyle: Theme.of(context)
-                              .textTheme
-                              .headline4!
-                              .copyWith(color: Colors.red),
-                        ),
-                        onChanged: store.changeEmail,
-                      );
-                    }),
-                const SizedBox(height: 20),
-                StreamBuilder(
-                    stream: store.passwordStream,
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      return TextFormField(
-                        obscureText: _isPasswordHidden1,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          hintText:
-                              AppLocalizations.of(context)!.form1_password,
-                          hintStyle: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(color: Theme.of(context).hintColor),
-                          suffixIcon: IconButton(
-                            icon: Icon(_isPasswordHidden1
-                                ? Icons.visibility_off
-                                : Icons.visibility),
-                            onPressed: () => setState(
-                                () => _isPasswordHidden1 = !_isPasswordHidden1),
-                          ),
-                          errorText: snapshot.hasError
-                              ? snapshot.error.toString()
-                              : null,
-                          errorStyle: Theme.of(context)
-                              .textTheme
-                              .headline4!
-                              .copyWith(color: Colors.red),
-                        ),
-                        onChanged: store.changePassword,
-                      );
-                    }),
-                const SizedBox(height: 20),
-                StreamBuilder(
-                  stream: store.passwordStream,
-                  builder: (BuildContext context, AsyncSnapshot snapshot) {
-                    return TextFormField(
-                      obscureText: _isPasswordHidden2,
-                      decoration: InputDecoration(
-                        hintText:
-                            AppLocalizations.of(context)!.form1_repassword,
-                        hintStyle: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(color: Theme.of(context).hintColor),
-                        suffixIcon: IconButton(
-                          icon: Icon(_isPasswordHidden2
-                              ? Icons.visibility_off
-                              : Icons.visibility),
-                          onPressed: () => setState(
-                              () => _isPasswordHidden2 = !_isPasswordHidden2),
-                        ),
-                      ),
-                    );
-                  },
-                ),
+                form(),
                 const SizedBox(height: 30),
                 Text(
                   AppLocalizations.of(context)!.have_password,
@@ -361,7 +262,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                                             'You are part of the tech frenetic cummunity now'),
                                       );
                                       Modular.to.pushNamedAndRemoveUntil(
-                                          '/login', (p0) => false);
+                                          '/create_profile', (p0) => false);
                                     } else {
                                       debugPrint("Not sign");
                                     }
@@ -392,6 +293,107 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
           const SizedBox(height: 80),
         ],
       ),
+    );
+  }
+
+  Widget form() {
+    return Column(
+      children: [
+        StreamBuilder<Object>(
+            stream: store.nameStream,
+            builder: (context, snapshot) {
+              return TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'What´s your name?',
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).hintColor),
+                  errorText:
+                      snapshot.hasError ? snapshot.error.toString() : null,
+                  errorStyle: Theme.of(context)
+                      .textTheme
+                      .headline4!
+                      .copyWith(color: Colors.red),
+                ),
+                onChanged: store.changeName,
+              );
+            }),
+        const SizedBox(height: 20),
+        StreamBuilder(
+            stream: store.emailStream,
+            builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+              return TextFormField(
+                decoration: InputDecoration(
+                  hintText: 'Your Email',
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).hintColor),
+                  errorText:
+                      snapshot.hasError ? snapshot.error.toString() : null,
+                  errorStyle: Theme.of(context)
+                      .textTheme
+                      .headline4!
+                      .copyWith(color: Colors.red),
+                ),
+                onChanged: store.changeEmail,
+              );
+            }),
+        const SizedBox(height: 20),
+        StreamBuilder(
+          stream: store.passwordStream,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            return TextFormField(
+              obscureText: _isPasswordHidden1,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                hintText: 'Create password',
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Theme.of(context).hintColor),
+                suffixIcon: IconButton(
+                  icon: Icon(_isPasswordHidden1
+                      ? Icons.visibility_off
+                      : Icons.visibility),
+                  onPressed: () =>
+                      setState(() => _isPasswordHidden1 = !_isPasswordHidden1),
+                ),
+                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.red),
+              ),
+              onChanged: store.changePassword,
+            );
+          },
+        ),
+        const SizedBox(height: 20),
+        StreamBuilder(
+          stream: store.passwordStream,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            return TextFormField(
+              obscureText: _isPasswordHidden2,
+              decoration: InputDecoration(
+                hintText: 'Confirm your password',
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Theme.of(context).hintColor),
+                suffixIcon: IconButton(
+                  icon: Icon(_isPasswordHidden2
+                      ? Icons.visibility_off
+                      : Icons.visibility),
+                  onPressed: () =>
+                      setState(() => _isPasswordHidden2 = !_isPasswordHidden2),
+                ),
+              ),
+            );
+          },
+        ),
+      ],
     );
   }
 }

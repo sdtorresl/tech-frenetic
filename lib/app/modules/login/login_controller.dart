@@ -12,7 +12,7 @@ class LoginController extends Disposable {
   Stream<String> get emailStream =>
       _emailController.stream.transform(Validators.validateEmail);
   Stream<String> get passwordStream =>
-      _passwordController.stream.transform(Validators.validatePassword);
+      _passwordController.stream.transform(Validators.validateLoginPassword);
 
   Stream<bool> get formValidStream =>
       Rx.combineLatest2(emailStream, passwordStream, (e, p) => true);

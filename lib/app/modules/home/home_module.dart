@@ -6,9 +6,14 @@ import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.
 import 'package:techfrenetic/app/widgets/about_us_widget.dart';
 import 'package:techfrenetic/app/modules/login/login_module.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
+import 'package:techfrenetic/app/modules/create_profile/create_profile_module.dart';
+import 'package:techfrenetic/app/modules/choose_avatar/choose_avatar_module.dart';
+import 'package:techfrenetic/app/modules/welcome/welcome_page.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
 import 'package:techfrenetic/app/modules/events/events_page.dart';
+import 'package:techfrenetic/app/modules/vendors/vendors_page.dart';
 import 'package:techfrenetic/app/modules/videos/videos_module.dart';
+
 
 import 'home_controller.dart';
 import 'home_page.dart';
@@ -32,22 +37,33 @@ class HomeModule extends Module {
         ),
         ChildRoute(
           '/vendors',
-          child: (context, args) => const Text("Vendors"),
+          child: (context, args) => const VendorsPage(),
         ),
         ChildRoute(
           '/profile',
           child: (context, args) => const ProfilePage(),
+        ),
+        ChildRoute(
+          '/choose_avatar/welcome',
+          child: (context, args) => const WelcomePage(),
         ),
       ],
     ),
     ChildRoute(
       '/about_us',
       child: (context, args) => const AboutUsWidget(),
+      ),
+    ChildRoute(
+      '/welcome',
+      child: (context, args) => const WelcomePage(),
     ),
     ModuleRoute('/community/article', module: ArticlesModule()),
     ModuleRoute('/community/video', module: VideosModule()),
     ModuleRoute('/login', module: LoginModule()),
     ModuleRoute('/sign', module: SignUpModule()),
+    ModuleRoute('/create_profile', module: CreateProfileModule()),
+    ModuleRoute('/choose_avatar', module: ChooseAvatarModule()),
     ModuleRoute('/forgot', module: ForgotPasswordModule()),
+
   ];
 }
