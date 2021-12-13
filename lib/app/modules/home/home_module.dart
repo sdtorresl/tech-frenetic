@@ -10,6 +10,7 @@ import 'package:techfrenetic/app/modules/privacy_policy/privacy_poicy_page.dart'
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/modules/create_profile/create_profile_module.dart';
 import 'package:techfrenetic/app/modules/choose_avatar/choose_avatar_module.dart';
+import 'package:techfrenetic/app/modules/vendors_search/vendors_search_page.dart';
 import 'package:techfrenetic/app/modules/terms/terms_page.dart';
 import 'package:techfrenetic/app/modules/skills/skills_page.dart';
 import 'package:techfrenetic/app/modules/welcome/welcome_page.dart';
@@ -42,6 +43,10 @@ class HomeModule extends Module {
         ChildRoute(
           '/vendors',
           child: (context, args) => const VendorsPage(),
+        ),
+        ChildRoute(
+          '/vendors_search',
+          child: (context, args) => const VendorsSearchPage(),
         ),
         ChildRoute(
           '/profile',

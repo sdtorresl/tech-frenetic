@@ -17,12 +17,16 @@ class WallModel {
 
   factory WallModel.fromMap(Map<String, dynamic> json) {
     return WallModel(
-      results: json["results"],
+      results: json["results"] = '1',
       articles: List<ArticlesModel>.from(
         json["articles"].map((x) => ArticlesModel.fromMap(x)),
       ),
     );
   }
+  factory WallModel.empty() => WallModel(
+        results: "0",
+        articles: [],
+      );
   Map<String, dynamic> toMap() => {
         "results": results,
         "articles": List<ArticlesModel>.from(articles.map((x) => x.toMap())),
