@@ -14,6 +14,8 @@ class TechFreneticProvider {
 
   Map<String, String> get logutHeader => {'token': prefs.logoutToken ?? ''};
 
+  Map<String, String> get jsonHeader => {'content-type': 'application/json'};
+
   String get locale => Intl.getCurrentLocale().startsWith("es") ? "es" : "en";
 
   void updateCookie(http.Response response) {
@@ -24,5 +26,9 @@ class TechFreneticProvider {
       prefs.cookies = (index == -1) ? rawCookie : rawCookie.substring(0, index);
       debugPrint("Cookie: ${prefs.cookies}");
     }
+  }
+
+  void cleanCookies() {
+    prefs.cookies = '';
   }
 }

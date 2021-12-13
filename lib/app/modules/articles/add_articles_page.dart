@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image/image.dart' as img;
 
 class AddArticlesPage extends StatefulWidget {
   final String title;
@@ -94,6 +98,7 @@ class AddArticlesPageState extends State<AddArticlesPage> {
       child: ListView(
         children: [
           _titleField(context),
+          _imageField(context),
           _descriptionField(context),
           _articleField(context),
           _categoriesField(context),
@@ -112,6 +117,41 @@ class AddArticlesPageState extends State<AddArticlesPage> {
       maxLines: 5,
       minLines: 3,
       decoration: InputDecoration(labelText: "Título"),
+    );
+  }
+
+  _imageField(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        const SizedBox(
+          height: 10,
+        ),
+        const Text("Selecciona una imagen"),
+        GestureDetector(
+          onTap: () async {
+            debugPrint("Pressed");
+            final ImagePicker _picker = ImagePicker();
+            // Pick an image
+            final XFile? image =
+                await _picker.pickImage(source: ImageSource.camera);
+
+            final path = image!.path;
+            final bytes = await File(path).readAsBytes();
+            final img.Image? imagFile = img.decodeImage(bytes);
+          },
+          child: Container(
+            color: Colors.blueGrey,
+            margin: const EdgeInsets.symmetric(vertical: 10),
+            padding: const EdgeInsets.all(50),
+            child: const Icon(
+              Icons.camera,
+              color: Colors.white,
+              size: 50,
+            ),
+          ),
+        ),
+      ],
     );
   }
 

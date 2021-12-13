@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/common/alert_dialog.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -27,54 +29,19 @@ class CustomDrawer extends StatelessWidget {
               ),
             ),
           ),
-          ListTile(
-            title: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                elevation: 0,
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(AppLocalizations.of(context)!.sign_up),
-                ],
-              ),
-              onPressed: () => Modular.to.pushNamed("/sign"),
-            ),
-          ),
-          ListTile(
-            title: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                primary: Colors.white, // background
-                onPrimary: Colors.black, // foreground
-                elevation: 0,
-                side: const BorderSide(width: 1.5, color: Colors.black),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(AppLocalizations.of(context)!.login_title),
-                ],
-              ),
-              onPressed: () => Modular.to.pushNamed("/login"),
-            ),
-          ),
           const SizedBox(
             height: 30,
           ),
           _menuItem(
             context,
             "Tech Community",
-            onPressed: () => {
-              debugPrint("Pressed TC"),
-            },
+            onPressed: () => Modular.to.popAndPushNamed("/community"),
           ),
           _menuItem(
             context,
             "Tech Events",
             onPressed: () => {
-
               Modular.to.popAndPushNamed("/events"),
-
             },
           ),
           _menuItem(
@@ -93,6 +60,40 @@ class CustomDrawer extends StatelessWidget {
               onPressed: () => {Modular.to.popAndPushNamed("/contact_us")}),
           _simpleMenuItem(context, "Newsletter",
               onPressed: () => {debugPrint("Newsletter us pressed")}),
+          const SizedBox(
+            height: 50,
+          ),
+          ListTile(
+            title: ElevatedButton(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(AppLocalizations.of(context)!.logout_button),
+                ],
+              ),
+              onPressed: () async {
+                UserProvider userProvider = UserProvider();
+                if (await userProvider.logout()) {
+                  Modular.to.pushReplacementNamed("/login");
+                } else {
+                  showMessage(
+                    context,
+                    title: AppLocalizations.of(context)!.error,
+                    content: Text(AppLocalizations.of(context)!.error_logout),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text(AppLocalizations.of(context)!.close),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Modular.to.pushReplacementNamed("/login");
+                        },
+                      ),
+                    ],
+                  );
+                }
+              },
+            ),
+          ),
         ],
       ),
     );
