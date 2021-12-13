@@ -93,7 +93,7 @@ class _CreateProfilePageState
                                       Modular.to.pushNamedAndRemoveUntil(
                                           '/choose_avatar', (p0) => false);
                                     } else {
-                                      debugPrint("Not sign");
+                                      debugPrint("Profile not created");
                                     }
                                   }
                                 : null,
