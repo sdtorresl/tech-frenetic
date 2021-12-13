@@ -16,8 +16,19 @@ class Validators {
       }
     },
   );
-
-  static final validatePassword =
+  static final validateLoginPassword =
+      StreamTransformer<String, String>.fromHandlers(
+    handleData: (password, sink) {
+      if (password.length >= 8) {
+        sink.add(password);
+      } else {
+        sink.addError(
+          'La contraseña debe tener 8 carecteres',
+        );
+      }
+    },
+  );
+  static final validateSignInPassword =
       StreamTransformer<String, String>.fromHandlers(
     handleData: (password, sink) {
       if (password.length >= 8 &&
