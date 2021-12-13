@@ -44,25 +44,15 @@ class HomeModule extends Module {
           child: (context, args) => const ProfilePage(),
         ),
         ChildRoute(
-          '/choose_avatar/welcome',
-          child: (context, args) => const WelcomePage(),
-        ),
-        ChildRoute(
           '/events',
           child: (context, args) => const EventsPage(),
         ),
       ],
     ),
     ChildRoute(
-      '/events',
-      child: (context, args) => const EventsPage(),
-    ),
-
-    ChildRoute(
       '/about_us',
       child: (context, args) => const AboutUsWidget(),
-      ),
-
+    ),
     ChildRoute(
       '/welcome',
       child: (context, args) => const WelcomePage(),
