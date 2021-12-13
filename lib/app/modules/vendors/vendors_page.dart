@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class VendorsPage extends StatefulWidget {
@@ -17,6 +19,30 @@ class VendorsPageState extends State<VendorsPage> {
           Column(
             children: [
               paetners(),
+              // FutureBuilder(
+              //   future: categoriesProvider.getCategories(),
+              //   builder: (BuildContext context,
+              //       AsyncSnapshot<List<CategoriesModel>> snapshot) {
+              //     if (snapshot.hasData) {
+              //       List<CategoriesModel> categories = snapshot.data ?? [];
+              //       List<Widget> postsWidgets = [];
+
+              //       for (CategoriesModel category in categories) {
+              //         postsWidgets.add(searchByCategory(category));
+              //       }
+
+              //       return ListView(
+              //         shrinkWrap: true,
+              //         children: [
+              //           ...postsWidgets,
+              //           const SizedBox(height: 60),
+              //         ],
+              //       );
+              //     } else {
+              //       return const Center(child: CircularProgressIndicator());
+              //     }
+              //   },
+              // ),
               searchByCategory(),
               searchByVendor(),
             ],
@@ -117,6 +143,7 @@ class VendorsPageState extends State<VendorsPage> {
   }
 
   Widget searchByCategory() {
+    CategoriesProvider categoriesProvider = CategoriesProvider();
     return Container(
       color: Colors.white,
       child: Padding(
@@ -151,126 +178,153 @@ class VendorsPageState extends State<VendorsPage> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                  onPressed: () => null,
-                  child: Text('Applications',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          )),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                        side:
-                            BorderSide(color: Theme.of(context).indicatorColor),
-                      ),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => null,
-                  child: Text('Cloud',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          )),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                        side:
-                            BorderSide(color: Theme.of(context).indicatorColor),
-                      ),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => null,
-                  child: Text('Cybersecurity',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          )),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                        side:
-                            BorderSide(color: Theme.of(context).indicatorColor),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () => null,
-                  child: Text('Networking',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          )),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                        side:
-                            BorderSide(color: Theme.of(context).indicatorColor),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () => null,
-                  child: Text('Servers & PCs',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          )),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                        side:
-                            BorderSide(color: Theme.of(context).indicatorColor),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () => null,
-                child: Text('Storage',
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          color: Theme.of(context).primaryColor,
-                        )),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                      side: BorderSide(color: Theme.of(context).indicatorColor),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            // FutureBuilder(
+            //   future: categoriesProvider.getCategories(),
+            //   builder: (BuildContext context,
+            //       AsyncSnapshot<List<CategoriesModel>> snapshot) {
+            //     if (snapshot.hasData) {
+            //       List<CategoriesModel> categories = snapshot.data ?? [];
+            //       List<Widget> postsWidgets = [];
+
+            //       for (CategoriesModel category in categories) {
+            //         postsWidgets.add(categoriesButtons());
+            //       }
+
+            //       return ListView(
+            //         shrinkWrap: true,
+            //         children: [
+            //           ...postsWidgets,
+            //           const SizedBox(height: 60),
+            //         ],
+            //       );
+            //     } else {
+            //       return const Center(child: CircularProgressIndicator());
+            //     }
+            //   },
+            // ),
+            categoriesButtons(),
             const SizedBox(height: 20),
           ],
         ),
       ),
+    );
+  }
+
+  Widget categoriesButtons(/*CategoriesModel category*/) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton(
+              onPressed: () => null,
+              child: Text('Applications',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                      )),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                    side: BorderSide(color: Theme.of(context).indicatorColor),
+                  ),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => null,
+              child: Text('Cloud',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                      )),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                    side: BorderSide(color: Theme.of(context).indicatorColor),
+                  ),
+                ),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () => null,
+              child: Text('Cybersecurity',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                      )),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                    side: BorderSide(color: Theme.of(context).indicatorColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () => null,
+              child: Text('Networking',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                      )),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                    side: BorderSide(color: Theme.of(context).indicatorColor),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 20),
+            ElevatedButton(
+              onPressed: () => null,
+              child: Text('Servers & PCs',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                      )),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                    side: BorderSide(color: Theme.of(context).indicatorColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Center(
+          child: ElevatedButton(
+            onPressed: () => null,
+            child: Text('Storage',
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Theme.of(context).primaryColor,
+                    )),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                  side: BorderSide(color: Theme.of(context).indicatorColor),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
