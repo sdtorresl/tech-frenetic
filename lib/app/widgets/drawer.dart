@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/common/alert_dialog.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
 
 class CustomDrawer extends StatelessWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -59,6 +61,40 @@ class CustomDrawer extends StatelessWidget {
               onPressed: () => {debugPrint("Contact us pressed")}),
           _simpleMenuItem(context, "Newsletter",
               onPressed: () => {debugPrint("Newsletter us pressed")}),
+          const SizedBox(
+            height: 50,
+          ),
+          ListTile(
+            title: ElevatedButton(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(AppLocalizations.of(context)!.logout_button),
+                ],
+              ),
+              onPressed: () async {
+                UserProvider userProvider = UserProvider();
+                if (await userProvider.logout()) {
+                  Modular.to.pushReplacementNamed("/login");
+                } else {
+                  showMessage(
+                    context,
+                    title: AppLocalizations.of(context)!.error,
+                    content: Text(AppLocalizations.of(context)!.error_logout),
+                    actions: <Widget>[
+                      TextButton(
+                        child: Text(AppLocalizations.of(context)!.close),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          Modular.to.pushReplacementNamed("/login");
+                        },
+                      ),
+                    ],
+                  );
+                }
+              },
+            ),
+          ),
         ],
       ),
     );

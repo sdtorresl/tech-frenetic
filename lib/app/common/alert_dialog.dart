@@ -9,7 +9,7 @@ Future<void> showMessage(BuildContext context,
     barrierDismissible: false, // user must tap button!
     builder: (BuildContext context) {
       return AlertDialog(
-        title: Text(title),
+        title: Text(title.toUpperCase()),
         content: SingleChildScrollView(child: content),
         actions: actions,
       );

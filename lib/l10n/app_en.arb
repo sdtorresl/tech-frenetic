@@ -34,6 +34,7 @@
     "error_group_person": "You must write the name of the person",
     "error_group_rules": "You must write the group rules",
     "error_group_status": "You must write the group status",
+    "error_logout": "It seems that you went into an unexpected error when trying to logout.",
     "error_meetup_api": "There is a problem with the server",
     "error_name_new_pass_and_temp_pass_fields_are_required": "You  must provide a valid token",
     "error_name_required_company": "You must type the company's name",

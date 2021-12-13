@@ -40,11 +40,43 @@ class UserProvider extends TechFreneticProvider {
     return loggedUser;
   }
 
+  Future<bool> logout() async {
+    String token = prefs.csrfToken ?? '';
+    Uri _url = Uri.parse("$baseUrl/api/user/logout?_format=json&token=$token");
+
+    Map<String, String> headers = authHeader;
+    headers.addAll(sessionHeader);
+    headers.addAll(logutHeader);
+    headers.addAll(jsonHeader);
+    try {
+      var response = await http.post(
+        _url,
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        cleanCookies();
+
+        prefs.csrfToken = null;
+        prefs.logoutToken = null;
+        prefs.userId = null;
+
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {}
+
+    return false;
+  }
+
   Future<UserModel?> getUserData() async {
     String? userId = prefs.userId;
     UserModel? userinfo;
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/user/$userId?_format=json");
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
 
       var response = await http.get(_url);
 

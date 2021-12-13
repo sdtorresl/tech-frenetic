@@ -33,6 +33,7 @@
     "error_group_person": "Debes escribir el nombre de la persona",
     "error_group_rules": "Debes escribir las reglas del grupo",
     "error_group_status": "Debes escribir el estado del grupo ",
+    "error_logout": "Parece que se produjo un error inesperado al intentar cerrar la sesión.",
     "error_meetup_api": "Hay un problema con el servidor",
     "error_name_new_pass_and_temp_pass_fields_are_required": "Debe proporcionar un token válido",
     "error_name_required_company": "Debes escribir el nombre de la compañia",
