@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
@@ -18,6 +20,30 @@ class VendorsPageState extends State<VendorsPage> {
           Column(
             children: [
               paetners(),
+              // FutureBuilder(
+              //   future: categoriesProvider.getCategories(),
+              //   builder: (BuildContext context,
+              //       AsyncSnapshot<List<CategoriesModel>> snapshot) {
+              //     if (snapshot.hasData) {
+              //       List<CategoriesModel> categories = snapshot.data ?? [];
+              //       List<Widget> postsWidgets = [];
+
+              //       for (CategoriesModel category in categories) {
+              //         postsWidgets.add(searchByCategory(category));
+              //       }
+
+              //       return ListView(
+              //         shrinkWrap: true,
+              //         children: [
+              //           ...postsWidgets,
+              //           const SizedBox(height: 60),
+              //         ],
+              //       );
+              //     } else {
+              //       return const Center(child: CircularProgressIndicator());
+              //     }
+              //   },
+              // ),
               searchByCategory(),
               searchByVendor(),
             ],
@@ -118,6 +144,7 @@ class VendorsPageState extends State<VendorsPage> {
   }
 
   Widget searchByCategory() {
+    CategoriesProvider categoriesProvider = CategoriesProvider();
     return Container(
       color: Colors.white,
       child: Padding(
@@ -152,6 +179,42 @@ class VendorsPageState extends State<VendorsPage> {
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 30),
+
+            // FutureBuilder(
+            //   future: categoriesProvider.getCategories(),
+            //   builder: (BuildContext context,
+            //       AsyncSnapshot<List<CategoriesModel>> snapshot) {
+            //     if (snapshot.hasData) {
+            //       List<CategoriesModel> categories = snapshot.data ?? [];
+            //       List<Widget> postsWidgets = [];
+
+            //       for (CategoriesModel category in categories) {
+            //         postsWidgets.add(categoriesButtons());
+            //       }
+
+            //       return ListView(
+            //         shrinkWrap: true,
+            //         children: [
+            //           ...postsWidgets,
+            //           const SizedBox(height: 60),
+            //         ],
+            //       );
+            //     } else {
+            //       return const Center(child: CircularProgressIndicator());
+            //     }
+            //   },
+            // ),
+            categoriesButtons(),
+            const SizedBox(height: 20),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget categoriesButtons(/*CategoriesModel category*/) {
+    return Column(
+      children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -206,8 +269,9 @@ class VendorsPageState extends State<VendorsPage> {
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
+
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -247,7 +311,7 @@ class VendorsPageState extends State<VendorsPage> {
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
             const SizedBox(height: 20),
             Center(
@@ -264,14 +328,33 @@ class VendorsPageState extends State<VendorsPage> {
                       borderRadius: BorderRadius.zero,
                       side: BorderSide(color: Theme.of(context).indicatorColor),
                     ),
+
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
           ],
         ),
-      ),
+        const SizedBox(height: 20),
+        Center(
+          child: ElevatedButton(
+            onPressed: () => null,
+            child: Text('Storage',
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Theme.of(context).primaryColor,
+                    )),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                  side: BorderSide(color: Theme.of(context).indicatorColor),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
