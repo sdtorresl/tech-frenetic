@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/modules/articles/articles_module.dart';
 import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
+import 'package:techfrenetic/app/widgets/about_us_widget.dart';
 import 'package:techfrenetic/app/modules/login/login_module.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/modules/create_profile/create_profile_module.dart';
@@ -48,6 +49,10 @@ class HomeModule extends Module {
         ),
       ],
     ),
+    ChildRoute(
+      '/about_us',
+      child: (context, args) => const AboutUsWidget(),
+      ),
     ChildRoute(
       '/welcome',
       child: (context, args) => const WelcomePage(),
