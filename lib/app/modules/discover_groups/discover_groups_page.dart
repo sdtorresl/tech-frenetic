@@ -48,19 +48,78 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
                   ),
                 ),
                 const RecommendedGroupsWidget(),
-                Center(
-                  child: Container(
-                    color: Theme.of(context).primaryColor,
-                    width: 290,
-                    height: 1.5,
-                  ),
-                ),
-                const SizedBox(height: 10),
-                GroupsCardsWidget()
               ],
             ),
           ),
         ),
+        Center(
+          child: Container(
+            color: Theme.of(context).unselectedWidgetColor,
+            width: 400,
+            height: .5,
+          ),
+        ),
+        const SizedBox(height: 30),
+        const GroupsCardsWidget(),
+        const SizedBox(height: 10),
+        Center(
+          child: Container(
+            color: Theme.of(context).unselectedWidgetColor,
+            width: 300,
+            height: .5,
+          ),
+        ),
+        const SizedBox(height: 10),
+        const GroupsCardsWidget(),
+        const SizedBox(height: 10),
+        Center(
+          child: Container(
+            color: Theme.of(context).unselectedWidgetColor,
+            width: 300,
+            height: .5,
+          ),
+        ),
+        const SizedBox(height: 10),
+        const GroupsCardsWidget(),
+        const SizedBox(height: 10),
+        Center(
+          child: Container(
+            color: Theme.of(context).unselectedWidgetColor,
+            width: 300,
+            height: .5,
+          ),
+        ),
+        const SizedBox(height: 10),
+        const GroupsCardsWidget(),
+        const SizedBox(height: 10),
+        Center(
+          child: Container(
+            color: Theme.of(context).unselectedWidgetColor,
+            width: 300,
+            height: .5,
+          ),
+        ),
+        const SizedBox(height: 10),
+        const GroupsCardsWidget(),
+        const SizedBox(height: 10),
+        Center(
+          child: Container(
+            color: Theme.of(context).unselectedWidgetColor,
+            width: 300,
+            height: .5,
+          ),
+        ),
+        const SizedBox(height: 10),
+        const GroupsCardsWidget(),
+        const SizedBox(height: 10),
+        Center(
+          child: Container(
+            color: Theme.of(context).unselectedWidgetColor,
+            width: 300,
+            height: .5,
+          ),
+        ),
+        const SizedBox(height: 60),
       ],
     );
   }
