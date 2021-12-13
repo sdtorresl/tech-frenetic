@@ -215,120 +215,92 @@ class VendorsPageState extends State<VendorsPage> {
   Widget categoriesButtons(/*CategoriesModel category*/) {
     return Column(
       children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                ElevatedButton(
-                  onPressed: () => Modular.to.pushNamed("/vendors_search"),
-                  child: Text('Applications',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          )),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                        side:
-                            BorderSide(color: Theme.of(context).indicatorColor),
-                      ),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => Modular.to.pushNamed("/vendors_search"),
-                  child: Text('Cloud',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          )),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                        side:
-                            BorderSide(color: Theme.of(context).indicatorColor),
-                      ),
-                    ),
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () => Modular.to.pushNamed("/vendors_search"),
-                  child: Text('Cybersecurity',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          )),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                        side:
-                            BorderSide(color: Theme.of(context).indicatorColor),
-                      ),
-                    ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            ElevatedButton(
+              onPressed: () => Modular.to.pushNamed("/vendors_search"),
+              child: Text('Applications',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                      )),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                    side: BorderSide(color: Theme.of(context).indicatorColor),
                   ),
                 ),
               ),
             ),
-
-            const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () => Modular.to.pushNamed("/vendors_search"),
-                  child: Text('Networking',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          )),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                        side:
-                            BorderSide(color: Theme.of(context).indicatorColor),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 20),
-                ElevatedButton(
-                  onPressed: () => Modular.to.pushNamed("/vendors_search"),
-                  child: Text('Servers & PCs',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: Theme.of(context).primaryColor,
-                          )),
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                        side:
-                            BorderSide(color: Theme.of(context).indicatorColor),
-                      ),
-                    ),
+            ElevatedButton(
+              onPressed: () => Modular.to.pushNamed("/vendors_search"),
+              child: Text('Cloud',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                      )),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                    side: BorderSide(color: Theme.of(context).indicatorColor),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 20),
-            Center(
-              child: ElevatedButton(
-                onPressed: () => Modular.to.pushNamed("/vendors_search"),
-                child: Text('Storage',
-                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          color: Theme.of(context).primaryColor,
-                        )),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                      side: BorderSide(color: Theme.of(context).indicatorColor),
-                    ),
-
+            ElevatedButton(
+              onPressed: () => Modular.to.pushNamed("/vendors_search"),
+              child: Text('Cybersecurity',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                      )),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                    side: BorderSide(color: Theme.of(context).indicatorColor),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ElevatedButton(
+              onPressed: () => Modular.to.pushNamed("/vendors_search"),
+              child: Text('Networking',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                      )),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                    side: BorderSide(color: Theme.of(context).indicatorColor),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 20),
+            ElevatedButton(
+              onPressed: () => Modular.to.pushNamed("/vendors_search"),
+              child: Text('Servers & PCs',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).primaryColor,
+                      )),
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(Colors.white),
+                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.zero,
+                    side: BorderSide(color: Theme.of(context).indicatorColor),
                   ),
                 ),
               ),
@@ -338,7 +310,7 @@ class VendorsPageState extends State<VendorsPage> {
         const SizedBox(height: 20),
         Center(
           child: ElevatedButton(
-            onPressed: () => null,
+            onPressed: () => Modular.to.pushNamed("/vendors_search"),
             child: Text('Storage',
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(
                       color: Theme.of(context).primaryColor,
