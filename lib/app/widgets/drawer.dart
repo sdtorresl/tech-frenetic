@@ -72,7 +72,9 @@ class CustomDrawer extends StatelessWidget {
             context,
             "Tech Events",
             onPressed: () => {
+
               Modular.to.popAndPushNamed("/events"),
+
             },
           ),
           _menuItem(
