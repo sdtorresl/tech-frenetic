@@ -72,7 +72,9 @@ class CustomDrawer extends StatelessWidget {
             context,
             "Tech Events",
             onPressed: () => {
-              debugPrint("Pressed events"),
+
+              Modular.to.popAndPushNamed("/events"),
+
             },
           ),
           _menuItem(
@@ -86,9 +88,9 @@ class CustomDrawer extends StatelessWidget {
             height: 10,
           ),
           _simpleMenuItem(context, "About Us",
-              onPressed: () => {debugPrint("About us pressed")}),
+              onPressed: () => {Modular.to.popAndPushNamed("/about_us")}),
           _simpleMenuItem(context, "Contact Us",
-              onPressed: () => {debugPrint("Contact us pressed")}),
+              onPressed: () => {Modular.to.popAndPushNamed("/contact_us")}),
           _simpleMenuItem(context, "Newsletter",
               onPressed: () => {debugPrint("Newsletter us pressed")}),
         ],
@@ -97,9 +99,9 @@ class CustomDrawer extends StatelessWidget {
   }
 
   Widget _menuItem(BuildContext context, String text,
-      {required Function onPressed}) {
+      {required void Function() onPressed}) {
     return ListTile(
-      onTap: () => onPressed,
+      onTap: onPressed,
       title: Container(
         decoration: const BoxDecoration(
           border: Border(
@@ -123,9 +125,9 @@ class CustomDrawer extends StatelessWidget {
   }
 
   Widget _simpleMenuItem(BuildContext context, String text,
-      {required Function onPressed}) {
+      {required void Function() onPressed}) {
     return ListTile(
-      onTap: () => onPressed,
+      onTap: onPressed,
       title: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         child: Text(
