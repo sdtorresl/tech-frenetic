@@ -20,30 +20,6 @@ class VendorsPageState extends State<VendorsPage> {
           Column(
             children: [
               paetners(),
-              // FutureBuilder(
-              //   future: categoriesProvider.getCategories(),
-              //   builder: (BuildContext context,
-              //       AsyncSnapshot<List<CategoriesModel>> snapshot) {
-              //     if (snapshot.hasData) {
-              //       List<CategoriesModel> categories = snapshot.data ?? [];
-              //       List<Widget> postsWidgets = [];
-
-              //       for (CategoriesModel category in categories) {
-              //         postsWidgets.add(searchByCategory(category));
-              //       }
-
-              //       return ListView(
-              //         shrinkWrap: true,
-              //         children: [
-              //           ...postsWidgets,
-              //           const SizedBox(height: 60),
-              //         ],
-              //       );
-              //     } else {
-              //       return const Center(child: CircularProgressIndicator());
-              //     }
-              //   },
-              // ),
               searchByCategory(),
               searchByVendor(),
             ],
