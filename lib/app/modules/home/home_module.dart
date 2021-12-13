@@ -14,7 +14,6 @@ import 'package:techfrenetic/app/modules/events/events_page.dart';
 import 'package:techfrenetic/app/modules/vendors/vendors_page.dart';
 import 'package:techfrenetic/app/modules/videos/videos_module.dart';
 
-
 import 'home_controller.dart';
 import 'home_page.dart';
 
@@ -33,7 +32,7 @@ class HomeModule extends Module {
         ModuleRoute('/community/', module: CommunityModule()),
         ChildRoute(
           '/skills',
-          child: (context, args) => const EventsPage(),
+          child: (context, args) => const Text('Skills'),
         ),
         ChildRoute(
           '/vendors',
@@ -46,6 +45,10 @@ class HomeModule extends Module {
         ChildRoute(
           '/choose_avatar/welcome',
           child: (context, args) => const WelcomePage(),
+        ),
+        ChildRoute(
+          '/events',
+          child: (context, args) => const EventsPage(),
         ),
       ],
     ),
@@ -64,6 +67,5 @@ class HomeModule extends Module {
     ModuleRoute('/create_profile', module: CreateProfileModule()),
     ModuleRoute('/choose_avatar', module: ChooseAvatarModule()),
     ModuleRoute('/forgot', module: ForgotPasswordModule()),
-
   ];
 }
