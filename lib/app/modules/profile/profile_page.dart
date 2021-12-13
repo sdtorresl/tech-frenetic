@@ -10,11 +10,14 @@ import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 
 class ProfilePage extends StatefulWidget {
+  final int selectedPage;
   final String title;
   const ProfilePage({
     Key? key,
+    required this.selectedPage,
     this.title = 'ProfilePage',
   }) : super(key: key);
+
   @override
   ProfilePageState createState() => ProfilePageState();
 }
@@ -46,6 +49,7 @@ class ProfilePageState extends State<ProfilePage> {
     ];
 
     return DefaultTabController(
+      initialIndex: widget.selectedPage,
       length: tabs.length,
       // The Builder widget is used to have a different BuildContext to access
       // closest DefaultTabController.

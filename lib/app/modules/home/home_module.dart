@@ -51,7 +51,9 @@ class HomeModule extends Module {
         ),
         ChildRoute(
           '/profile',
-          child: (context, args) => const ProfilePage(),
+          child: (context, args) => const ProfilePage(
+            selectedPage: 0,
+          ),
         ),
         ChildRoute(
           '/events',

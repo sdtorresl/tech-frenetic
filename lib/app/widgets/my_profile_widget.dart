@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 
@@ -311,12 +312,28 @@ class _MyProfileState extends State<MyProfile> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _counterBox(AppLocalizations.of(context)!.articles, 10,
-              () => debugPrint("Articles")),
+          _counterBox(
+            AppLocalizations.of(context)!.articles,
+            10,
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ProfilePage(selectedPage: 1),
+              ),
+            ),
+          ),
           _counterBox(AppLocalizations.of(context)!.your_profile, 0,
               () => debugPrint("Profile")),
-          _counterBox(AppLocalizations.of(context)!.post, 100,
-              () => debugPrint("Posts")),
+          _counterBox(
+            AppLocalizations.of(context)!.post,
+            100,
+            () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const ProfilePage(selectedPage: 1),
+              ),
+            ),
+          ),
         ],
       ),
     );
