@@ -90,7 +90,7 @@ class CustomDrawer extends StatelessWidget {
           _simpleMenuItem(context, "About Us",
               onPressed: () => {Modular.to.popAndPushNamed("/about_us")}),
           _simpleMenuItem(context, "Contact Us",
-              onPressed: () => {debugPrint("Contact us pressed")}),
+              onPressed: () => {Modular.to.popAndPushNamed("/contact_us")}),
           _simpleMenuItem(context, "Newsletter",
               onPressed: () => {debugPrint("Newsletter us pressed")}),
         ],
