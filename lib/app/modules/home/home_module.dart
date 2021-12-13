@@ -18,6 +18,7 @@ import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
 import 'package:techfrenetic/app/modules/events/events_page.dart';
 import 'package:techfrenetic/app/modules/vendors/vendors_page.dart';
 import 'package:techfrenetic/app/modules/videos/videos_module.dart';
+import 'package:techfrenetic/app/modules/create_groups/create_groups_module.dart';
 
 import 'home_controller.dart';
 import 'home_page.dart';
@@ -81,5 +82,6 @@ class HomeModule extends Module {
     ModuleRoute('/create_profile', module: CreateProfileModule()),
     ModuleRoute('/choose_avatar', module: ChooseAvatarModule()),
     ModuleRoute('/forgot', module: ForgotPasswordModule()),
+    ModuleRoute('/create_groups', module: CreateGroupsModule()),
   ];
 }

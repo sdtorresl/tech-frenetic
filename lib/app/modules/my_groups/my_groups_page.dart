@@ -1,15 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
-class GroupsWidget extends StatefulWidget {
-  const GroupsWidget({Key? key}) : super(key: key);
+class MyGroupPage extends StatelessWidget {
+  const MyGroupPage({Key? key}) : super(key: key);
 
-  @override
-  _GroupsWidgetState createState() => _GroupsWidgetState();
-}
-
-class _GroupsWidgetState extends State<GroupsWidget> {
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -48,36 +44,6 @@ class _GroupsWidgetState extends State<GroupsWidget> {
                     border: Border(
                       bottom: BorderSide(width: .5, color: Colors.grey),
                     ),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      TextButton(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(
-                              AppLocalizations.of(context)!.tab_discover,
-                              style: Theme.of(context).textTheme.bodyText2),
-                        ),
-                        onPressed: () => {},
-                      ),
-                      TextButton(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(AppLocalizations.of(context)!.tab_groups,
-                              style: Theme.of(context).textTheme.bodyText2),
-                        ),
-                        onPressed: () => {},
-                      ),
-                      TextButton(
-                        child: Padding(
-                          padding: const EdgeInsets.all(5.0),
-                          child: Text(AppLocalizations.of(context)!.tab_create,
-                              style: Theme.of(context).textTheme.bodyText2),
-                        ),
-                        onPressed: () => {},
-                      ),
-                    ],
                   ),
                 ),
                 Container(
@@ -119,7 +85,7 @@ class _GroupsWidgetState extends State<GroupsWidget> {
                         height: 60,
                       ),
                       ElevatedButton(
-                        onPressed: () => {},
+                        onPressed: () => Modular.to.pushNamed("/create_groups"),
                         child: Text(
                           AppLocalizations.of(context)!.btn_create,
                           style: const TextStyle(
