@@ -25,6 +25,5 @@ class VendorsSearchProvider extends TechFreneticProvider {
     }
 
     return WallModel.empty();
-    ;
   }
 }
