@@ -53,25 +53,30 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
   }
 
   Widget _mainTitle(context) {
-    return Column(
-      children: [
-        Text(AppLocalizations.of(context)!.login_blue_title,
-            style: const TextStyle(
+    return RichText(
+      textAlign: TextAlign.center,
+      text: TextSpan(
+        style: Theme.of(context).textTheme.headline1!.copyWith(
               fontWeight: FontWeight.w900,
               fontSize: 50,
               fontFamily: 'NunitoSan',
+            ),
+        children: [
+          TextSpan(
+            text: AppLocalizations.of(context)!.login_blue_title,
+            style: const TextStyle(
               color: Color.fromRGBO(5, 20, 47, 1),
-            )),
-        Text(
-          AppLocalizations.of(context)!.login_black_title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w900,
-            fontSize: 50,
-            fontFamily: 'NunitoSan',
-            color: Color.fromRGBO(0, 110, 232, 1),
+            ),
           ),
-        ),
-      ],
+          const TextSpan(text: ' '),
+          TextSpan(
+            text: AppLocalizations.of(context)!.login_black_title,
+            style: const TextStyle(
+              color: Color.fromRGBO(0, 110, 232, 1),
+            ),
+          ),
+        ],
+      ),
     );
   }
 

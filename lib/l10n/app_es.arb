@@ -27,6 +27,7 @@
     "error_description_required": "Debes escribir una descripción",
     "error_email_format": "El email no es válido",
     "error_email_required": "Debes escribir tu email",
+    "error_group_api": "Hubo un problema con el servidor",
     "error_group_description": "Debes escribir la descripción del grupo",
     "error_group_image": "Debes seleccionar una imagen",
     "error_group_name": "Debes escribir el nombre del grupo",

@@ -17,17 +17,13 @@ class _ForgotPasswordPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0,
+        foregroundColor: Theme.of(context).colorScheme.primary,
         backgroundColor: Colors.white,
-        title: Text(
-          AppLocalizations.of(context)!.back,
-          style: Theme.of(context).textTheme.bodyText1,
-        ),
         leading: IconButton(
           onPressed: () => Modular.to.pushNamed("/login"),
-          icon: const Icon(
+          icon: Icon(
             Icons.arrow_back,
-            color: Colors.black,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
       ),

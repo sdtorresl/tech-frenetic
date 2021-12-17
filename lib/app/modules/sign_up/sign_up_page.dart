@@ -31,6 +31,10 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
       checkBoxCompany = true;
     }
     return Scaffold(
+      appBar: AppBar(
+        foregroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Colors.white,
+      ),
       body: ListView(
         children: [
           Container(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/terms_and_privacy_policy_model.dart';
 import 'package:techfrenetic/app/providers/privacy_policy_provider.dart';
 
@@ -19,7 +18,6 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        elevation: 0,
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -28,27 +26,21 @@ class _PrivacyPolicyPageState extends State<PrivacyPolicyPage> {
           onPressed: () => Navigator.pop(context),
         ),
       ),
-      body: ListView(
-        children: [
-          FutureBuilder(
-            future: _privacyPolicyProvideer.getPolicyPrivacy(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
-                debugPrint(snapshot.data.toString());
-
-                return Column(
-                  children: [
-                    text(snapshot.data),
-                  ],
-                );
-              } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              }
-            },
-          ),
-        ],
+      body: FutureBuilder(
+        future: _privacyPolicyProvideer.getPolicyPrivacy(),
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          if (snapshot.hasData) {
+            return ListView(
+              children: [
+                text(snapshot.data),
+              ],
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
       ),
     );
   }
