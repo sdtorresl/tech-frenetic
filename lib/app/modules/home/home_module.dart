@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/modules/articles/articles_module.dart';
 import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/contact_us/contact_us_module.dart';
+import 'package:techfrenetic/app/modules/create_meetups/create_meetups_module.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
 import 'package:techfrenetic/app/widgets/about_us_widget.dart';
 import 'package:techfrenetic/app/modules/login/login_module.dart';
@@ -37,6 +38,7 @@ class HomeModule extends Module {
       children: [
         ModuleRoute('/community/', module: CommunityModule()),
         ModuleRoute('/contact_us', module: ContactUsModule()),
+        ModuleRoute('/create_meetups', module: CreateMeetupsModule()),
         ChildRoute(
           '/skills',
           child: (context, args) => const SkillsPage(),

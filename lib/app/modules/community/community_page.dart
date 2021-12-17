@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/articles/add_articles_page.dart';
 import 'package:techfrenetic/app/modules/community/community_controller.dart';
+import 'package:techfrenetic/app/modules/meetups/meetups_page.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
@@ -251,7 +252,7 @@ class CommunityPageState
   }
 
   Widget _meetups() {
-    return const MeetupWidget();
+    return const MetupsPage();
   }
 
   Widget _groups() {
