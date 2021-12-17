@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/models/meetups_model.dart';
 import 'package:techfrenetic/app/providers/meetups_provider.dart';
@@ -93,7 +94,7 @@ class _MetupsPageState extends State<MetupsPage> {
                     height: 60,
                   ),
                   ElevatedButton(
-                    onPressed: () => debugPrint("Pressed"),
+                    onPressed: () => Modular.to.pushNamed('/create_meetups'),
                     child: Text(
                       AppLocalizations.of(context)!.meetups_cta_new,
                       style: const TextStyle(
