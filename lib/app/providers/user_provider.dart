@@ -8,6 +8,8 @@ import 'package:techfrenetic/app/providers/tf_provider.dart';
 class UserProvider extends TechFreneticProvider {
   SessionModel? loggedUser;
 
+  bool get isLogged => prefs.csrfToken!.isNotEmpty;
+
   Future<SessionModel?> login(String email, String password) async {
     SessionModel? loggedUser;
 
