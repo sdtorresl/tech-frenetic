@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
@@ -18,14 +20,28 @@ class AddArticlesPageState extends State<AddArticlesPage> {
   late List<String> _selectedTags;
   TextEditingController tagsController = TextEditingController();
 
+  File? image;
+
   @override
   void initState() {
     _selectedTags = [];
     super.initState();
   }
 
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      setState(() => this.image = imageTemporary);
+    } on PlatformException catch (e) {
+      debugPrint('Failed to pick image: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    ArticlesProvider postArticle = ArticlesProvider();
     return AlertDialog(
       insetPadding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
       contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -129,27 +145,19 @@ class AddArticlesPageState extends State<AddArticlesPage> {
         ),
         const Text("Selecciona una imagen"),
         GestureDetector(
-          onTap: () async {
-            debugPrint("Pressed");
-            final ImagePicker _picker = ImagePicker();
-            // Pick an image
-            final XFile? image =
-                await _picker.pickImage(source: ImageSource.camera);
-
-            final path = image!.path;
-            final bytes = await File(path).readAsBytes();
-            final img.Image? imagFile = img.decodeImage(bytes);
-          },
-          child: Container(
-            color: Colors.blueGrey,
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            padding: const EdgeInsets.all(50),
-            child: const Icon(
-              Icons.camera,
-              color: Colors.white,
-              size: 50,
-            ),
-          ),
+          onTap: () => pickImage(),
+          child: image != null
+              ? Image.file(image!)
+              : Container(
+                  color: Colors.blueGrey,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.all(50),
+                  child: const Icon(
+                    Icons.camera,
+                    color: Colors.white,
+                    size: 50,
+                  ),
+                ),
         ),
       ],
     );
