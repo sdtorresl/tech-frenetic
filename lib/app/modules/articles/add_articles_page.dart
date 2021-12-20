@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
+import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
@@ -16,6 +18,8 @@ class AddArticlesPage extends StatefulWidget {
   @override
   AddArticlesPageState createState() => AddArticlesPageState();
 }
+
+CategoriesProvider categories = CategoriesProvider();
 
 class AddArticlesPageState extends State<AddArticlesPage> {
   late List<String> _selectedTags;
@@ -120,7 +124,9 @@ class AddArticlesPageState extends State<AddArticlesPage> {
           _imageField(context),
           _descriptionField(context),
           _articleField(context),
+          const SizedBox(height: 60),
           _categoriesField(context),
+          const SizedBox(height: 50),
           _tagsField(context),
           const SizedBox(
             height: 20,
@@ -182,16 +188,53 @@ class AddArticlesPageState extends State<AddArticlesPage> {
   }
 
   _categoriesField(BuildContext context) {
-    return TextField(
-      maxLines: 5,
-      minLines: 3,
-      decoration: const InputDecoration(labelText: "Categorías"),
-      onChanged: (text) {
-        setState(
-          () {
-            category = text;
-          },
-        );
+    return FutureBuilder(
+      future: categories.getCategories(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        List<String> categoriesNames = [];
+        if (snapshot.hasData) {
+          List<CategoriesModel> categoriesModel = snapshot.data;
+          for (var models in categoriesModel) {
+            categoriesNames.add(models.category);
+          }
+          String? defaultValue = categoriesNames.first;
+          return DropdownButtonFormField<String>(
+            decoration: const InputDecoration(
+              labelText: "Categorías",
+            ),
+            value: defaultValue,
+            isExpanded: true,
+            items: categoriesNames.map(
+              (String valueItem) {
+                return DropdownMenuItem<String>(
+                  child: Text(valueItem),
+                  value: valueItem,
+                );
+              },
+            ).toList(),
+            onChanged: (newValue) {
+              setState(
+                () {
+                  for (var model in categoriesModel) {
+                    if (model.category == newValue) {
+                      category = model.id;
+                    }
+                  }
+                  defaultValue = newValue;
+                  debugPrint(defaultValue);
+                },
+              );
+            },
+          );
+        } else {
+          return Text(
+            'Loading categories...',
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1!
+                .copyWith(color: Theme.of(context).errorColor),
+          );
+        }
       },
     );
   }
