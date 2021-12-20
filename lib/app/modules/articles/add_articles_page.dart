@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,8 +20,11 @@ class AddArticlesPage extends StatefulWidget {
 class AddArticlesPageState extends State<AddArticlesPage> {
   late List<String> _selectedTags;
   TextEditingController tagsController = TextEditingController();
-
+  String? title;
   File? image;
+  String? category;
+  String? description;
+  String? tag;
 
   @override
   void initState() {
@@ -41,7 +45,6 @@ class AddArticlesPageState extends State<AddArticlesPage> {
 
   @override
   Widget build(BuildContext context) {
-    ArticlesProvider postArticle = ArticlesProvider();
     return AlertDialog(
       insetPadding: const EdgeInsets.fromLTRB(0, 40, 0, 0),
       contentPadding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
@@ -129,10 +132,17 @@ class AddArticlesPageState extends State<AddArticlesPage> {
   }
 
   _titleField(BuildContext context) {
-    return const TextField(
+    return TextField(
       maxLines: 5,
       minLines: 3,
       decoration: InputDecoration(labelText: "Título"),
+      onChanged: (text) {
+        setState(
+          () {
+            title = text;
+          },
+        );
+      },
     );
   }
 
@@ -172,18 +182,32 @@ class AddArticlesPageState extends State<AddArticlesPage> {
   }
 
   _categoriesField(BuildContext context) {
-    return const TextField(
+    return TextField(
       maxLines: 5,
       minLines: 3,
-      decoration: InputDecoration(labelText: "Categorías"),
+      decoration: const InputDecoration(labelText: "Categorías"),
+      onChanged: (text) {
+        setState(
+          () {
+            category = text;
+          },
+        );
+      },
     );
   }
 
   _descriptionField(BuildContext context) {
-    return const TextField(
+    return TextField(
       maxLines: 5,
       minLines: 3,
-      decoration: InputDecoration(labelText: "Descripción corta"),
+      decoration: const InputDecoration(labelText: "Descripción corta"),
+      onChanged: (text) {
+        setState(
+          () {
+            description = text;
+          },
+        );
+      },
     );
   }
 
@@ -201,6 +225,13 @@ class AddArticlesPageState extends State<AddArticlesPage> {
               _selectedTags.add(value);
               tagsController.text = "";
             });
+          },
+          onChanged: (text) {
+            setState(
+              () {
+                tag = text;
+              },
+            );
           },
         ),
         Wrap(
@@ -230,12 +261,29 @@ class AddArticlesPageState extends State<AddArticlesPage> {
   }
 
   _formButtons(BuildContext context) {
+    bool isCompleted = title != '' &&
+        image != null &&
+        category != "" &&
+        description != "" &&
+        tag != "";
+    final ArticlesProvider articlesProvider = ArticlesProvider();
+
     return Row(
       children: [
         Expanded(
           flex: 4,
           child: ElevatedButton(
-            onPressed: () => debugPrint("Publish"),
+            onPressed: () async {
+              if (isCompleted) {
+                bool article = await articlesProvider.addArticle(
+                    title!, image!, int.parse(category!), description!, tag!);
+                if (article == true) {
+                  Modular.to.popAndPushNamed("/community");
+                } else {
+                  debugPrint('no');
+                }
+              }
+            },
             child: Text(AppLocalizations.of(context)!.publish),
           ),
         ),
@@ -251,7 +299,7 @@ class AddArticlesPageState extends State<AddArticlesPage> {
               side: BorderSide(width: 1, color: Theme.of(context).primaryColor),
             ),
           ),
-        )
+        ),
       ],
     );
   }

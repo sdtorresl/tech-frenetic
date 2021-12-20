@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:http/http.dart' as http;
@@ -138,43 +140,45 @@ class ArticlesProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool> addArticle(ArticlesModel article) async {
+  Future<bool> addArticle(String title, File image, int category,
+      String description, String tag) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/v1/node?_format=json");
 
-      /**
       Map<String, dynamic> payload = {
         'type': [
           {'target_id': "article", 'target_type': "node_type"}
         ],
         'title': [
-          {'value': article.title}
+          {'value': title}
         ],
         'langcode': [
-          {'value': lang}
+          {'value': locale}
         ],
         'field_image': [
-          {'target_id': image.fid[0].value, 'alt': article.title}
+          {'target_id': image}
         ],
         'field_frenetic_content': [
           {'value': true}
         ],
         'field_main_category': [
-          {'target_id': article.category}
-        ],
-        'field_summary': [
-          {'value': article.description}
+          {'target_id': category}
         ],
         'field_draft': [
           {'value': false}
         ],
-        'body': [
-          {'value': article.body}
+        'field_summary': [
+          {'value': description}
         ],
+        "field_tag": [
+          {"value": tag},
+        ]
       };
-      */
-
-      var response = await http.post(_url, headers: {}, body: "");
+      Map<String, String> headers = {};
+      headers.addAll(authHeader);
+      headers.addAll(sessionHeader);
+      headers['Content-Type'] = 'application/json';
+      var response = await http.post(_url, headers: headers, body: payload);
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
