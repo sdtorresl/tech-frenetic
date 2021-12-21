@@ -140,10 +140,13 @@ class ArticlesProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool> addArticle(String title, File image, int category,
-      String description, String tag) async {
+  Future<bool> addArticle(
+    String title,
+    int category,
+    String description,
+  ) async {
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/node?_format=json");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/entity/node?_format=json");
 
       Map<String, dynamic> payload = {
         'type': [
@@ -156,7 +159,7 @@ class ArticlesProvider extends TechFreneticProvider {
           {'value': locale}
         ],
         'field_image': [
-          {'target_id': image}
+          {'target_id': '10', "alt": "Imagen base  64 foto"}
         ],
         'field_frenetic_content': [
           {'value': true}
@@ -170,17 +173,26 @@ class ArticlesProvider extends TechFreneticProvider {
         'field_summary': [
           {'value': description}
         ],
+        "body": [
+          {"value": "<p> contenido soporte etiquetas html</p>"}
+        ],
         "field_tag": [
-          {"value": tag},
+          {"value": 'aplications'}
         ]
       };
+
       Map<String, String> headers = {};
+      headers['Content-Type'] = 'application/json';
       headers.addAll(authHeader);
       headers.addAll(sessionHeader);
-      headers['Content-Type'] = 'application/json';
-      var response = await http.post(_url, headers: headers, body: payload);
 
-      if (response.statusCode == 200) {
+      debugPrint(payload.toString());
+      debugPrint(headers.toString());
+
+      var response = await http.post(_url,
+          headers: headers, body: json.jsonEncode(payload));
+
+      if (response.statusCode == 201) {
         Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
         debugPrint(jsonResponse.toString());
 
@@ -203,7 +215,7 @@ class ArticlesProvider extends TechFreneticProvider {
       debugPrint(_url.toString());
       var response = await http.get(_url);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         List<dynamic> jsonResponse = json.jsonDecode(response.body);
         if (jsonResponse.isNotEmpty) {
           article = ArticlesModel.fromMap(jsonResponse[0]);
