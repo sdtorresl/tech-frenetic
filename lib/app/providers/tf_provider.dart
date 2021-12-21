@@ -10,11 +10,11 @@ class TechFreneticProvider {
 
   Map<String, String> get authHeader => {'X-CSRF-Token': prefs.csrfToken ?? ''};
 
-  Map<String, String> get sessionHeader => {'cookie': prefs.cookies ?? ''};
+  Map<String, String> get sessionHeader => {'Cookie': prefs.cookies ?? ''};
 
   Map<String, String> get logutHeader => {'token': prefs.logoutToken ?? ''};
 
-  Map<String, String> get jsonHeader => {'content-type': 'application/json'};
+  Map<String, String> get jsonHeader => {'Content-Type': 'application/json'};
 
   String get locale => Intl.getCurrentLocale().startsWith("es") ? "es" : "en";
 
