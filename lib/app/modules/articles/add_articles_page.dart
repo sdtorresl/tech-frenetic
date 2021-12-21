@@ -26,9 +26,10 @@ class AddArticlesPageState extends State<AddArticlesPage> {
   TextEditingController tagsController = TextEditingController();
   String? title;
   File? image;
-  String? category;
+  String? category = '1';
   String? description;
   String? tag;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -219,6 +220,8 @@ class AddArticlesPageState extends State<AddArticlesPage> {
                     if (model.category == newValue) {
                       category = model.id;
                     }
+
+                    debugPrint(category);
                   }
                   defaultValue = newValue;
                   debugPrint(defaultValue);
@@ -232,7 +235,7 @@ class AddArticlesPageState extends State<AddArticlesPage> {
             style: Theme.of(context)
                 .textTheme
                 .bodyText1!
-                .copyWith(color: Theme.of(context).errorColor),
+                .copyWith(color: Theme.of(context).primaryColor),
           );
         }
       },
@@ -316,17 +319,23 @@ class AddArticlesPageState extends State<AddArticlesPage> {
         Expanded(
           flex: 4,
           child: ElevatedButton(
-            onPressed: () async {
-              if (isCompleted) {
-                bool article = await articlesProvider.addArticle(
-                    title!, image!, int.parse(category!), description!, tag!);
-                if (article == true) {
-                  Modular.to.popAndPushNamed("/community");
-                } else {
-                  debugPrint('no');
-                }
-              }
-            },
+            onPressed: isCompleted && !_isLoading
+                ? () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    bool article = await articlesProvider.addArticle(
+                        title!, int.parse(category!), description!);
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    if (article == true) {
+                      Modular.to.popAndPushNamed("/community");
+                    } else {
+                      debugPrint('Article not post');
+                    }
+                  }
+                : null,
             child: Text(AppLocalizations.of(context)!.publish),
           ),
         ),
