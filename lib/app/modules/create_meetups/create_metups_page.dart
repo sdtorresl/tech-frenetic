@@ -17,6 +17,10 @@ class _CreateMeetupsPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        foregroundColor: Theme.of(context).colorScheme.primary,
+        backgroundColor: Colors.white,
+      ),
       body: ListView(
         children: [
           Padding(
