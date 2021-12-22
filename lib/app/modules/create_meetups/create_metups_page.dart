@@ -155,7 +155,7 @@ class _CreateMeetupsPageState
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
-                hintText: 'What´s your name?',
+                hintText: 'Where is going to be?',
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!

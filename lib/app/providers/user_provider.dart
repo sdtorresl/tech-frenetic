@@ -81,6 +81,7 @@ class UserProvider extends TechFreneticProvider {
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
+        debugPrint(response.body);
         userinfo = UserModel.fromJson(response.body);
         prefs.userName = userinfo.userName;
         debugPrint(userinfo.toString());
@@ -91,5 +92,11 @@ class UserProvider extends TechFreneticProvider {
       debugPrint(e.toString());
     }
     return userinfo;
+  }
+
+  bool isLogged() {
+    bool tokenExists = prefs.csrfToken?.isNotEmpty ?? false;
+    bool isNotExpired = DateTime.now().isBefore(prefs.sessionExpirationDate);
+    return tokenExists && isNotExpired;
   }
 }

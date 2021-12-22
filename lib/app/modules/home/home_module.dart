@@ -1,10 +1,11 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/core/auth_guard.dart';
 import 'package:techfrenetic/app/modules/articles/articles_module.dart';
 import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/contact_us/contact_us_module.dart';
 import 'package:techfrenetic/app/modules/create_meetups/create_meetups_module.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/about_us_widget.dart';
 import 'package:techfrenetic/app/modules/login/login_module.dart';
 import 'package:techfrenetic/app/modules/privacy_policy/privacy_poicy_page.dart';
@@ -28,6 +29,7 @@ class HomeModule extends Module {
   @override
   final List<Bind> binds = [
     Bind.lazySingleton((i) => HomeController()),
+    Bind.lazySingleton((i) => UserProvider()),
   ];
 
   @override
@@ -38,6 +40,7 @@ class HomeModule extends Module {
       children: [
         ModuleRoute('/community/', module: CommunityModule()),
         ModuleRoute('/contact_us', module: ContactUsModule()),
+        
         ChildRoute(
           '/skills',
           child: (context, args) => const SkillsPage(),
@@ -61,31 +64,83 @@ class HomeModule extends Module {
           child: (context, args) => const EventsPage(),
         ),
       ],
+      guards: [AuthGuard()],
     ),
     ChildRoute(
       '/about_us',
       child: (context, args) => const AboutUsWidget(),
+      guards: [
+        AuthGuard(),
+      ],
     ),
     ChildRoute(
       '/welcome',
       child: (context, args) => const WelcomePage(),
+      guards: [
+        AuthGuard(),
+      ],
     ),
     ChildRoute(
       '/privacy_policy',
       child: (context, args) => const PrivacyPolicyPage(),
+      guards: [
+        AuthGuard(),
+      ],
     ),
     ChildRoute(
       '/terms',
       child: (context, args) => const TermsPage(),
+      guards: [
+        AuthGuard(),
+      ],
     ),
-    ModuleRoute('/create_meetups', module: CreateMeetupsModule()),
-    ModuleRoute('/community/article', module: ArticlesModule()),
-    ModuleRoute('/community/video', module: VideosModule()),
-    ModuleRoute('/login', module: LoginModule()),
-    ModuleRoute('/sign', module: SignUpModule()),
-    ModuleRoute('/create_profile', module: CreateProfileModule()),
-    ModuleRoute('/choose_avatar', module: ChooseAvatarModule()),
-    ModuleRoute('/forgot', module: ForgotPasswordModule()),
-    ModuleRoute('/create_groups', module: CreateGroupsModule()),
+    ModuleRoute(
+      '/create_meetups',
+      module: CreateMeetupsModule(),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
+    ModuleRoute(
+      '/community/article',
+      module: ArticlesModule(),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
+    ModuleRoute(
+      '/community/video',
+      module: VideosModule(),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
+    ModuleRoute(
+      '/login',
+      module: LoginModule(),
+    ),
+    ModuleRoute(
+      '/sign',
+      module: SignUpModule(),
+    ),
+    ModuleRoute(
+      '/create_profile',
+      module: CreateProfileModule(),
+    ),
+    ModuleRoute(
+      '/choose_avatar',
+      module: ChooseAvatarModule(),
+    ),
+    ModuleRoute(
+      '/forgot',
+      module: ForgotPasswordModule(),
+    ),
+    ModuleRoute(
+      '/create_groups',
+      module: CreateGroupsModule(),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
   ];
 }

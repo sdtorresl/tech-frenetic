@@ -17,9 +17,9 @@ class SkillsPage extends StatefulWidget {
 }
 
 class _SkillsPageState extends State<SkillsPage> {
-  @override
-  ArticlesProvider _articlesProvideer = ArticlesProvider();
+  final ArticlesProvider _articlesProvideer = ArticlesProvider();
 
+  @override
   Widget build(BuildContext context) {
     return ListView(
       children: [

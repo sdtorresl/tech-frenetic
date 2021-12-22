@@ -79,25 +79,24 @@ class _ForgotPasswordPageState
                   },
                 ),
                 const SizedBox(height: 50),
-                Center(
-                  child: SizedBox(
-                    width: 250,
-                    child: ElevatedButton(
-                      onPressed: () => debugPrint('hola'),
-                      child: Text(
+                ElevatedButton(
+                  onPressed: () => debugPrint('hola'),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
                         AppLocalizations.of(context)!.send_email,
                         style: Theme.of(context)
                             .textTheme
                             .headline1!
                             .copyWith(color: Colors.white),
                       ),
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                        ),
+                    ],
+                  ),
+                  style: ButtonStyle(
+                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                      const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.zero,
                       ),
                     ),
                   ),
