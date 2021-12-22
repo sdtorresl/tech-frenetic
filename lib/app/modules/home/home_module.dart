@@ -38,7 +38,6 @@ class HomeModule extends Module {
       children: [
         ModuleRoute('/community/', module: CommunityModule()),
         ModuleRoute('/contact_us', module: ContactUsModule()),
-        ModuleRoute('/create_meetups', module: CreateMeetupsModule()),
         ChildRoute(
           '/skills',
           child: (context, args) => const SkillsPage(),
@@ -79,6 +78,7 @@ class HomeModule extends Module {
       '/terms',
       child: (context, args) => const TermsPage(),
     ),
+    ModuleRoute('/create_meetups', module: CreateMeetupsModule()),
     ModuleRoute('/community/article', module: ArticlesModule()),
     ModuleRoute('/community/video', module: VideosModule()),
     ModuleRoute('/login', module: LoginModule()),
