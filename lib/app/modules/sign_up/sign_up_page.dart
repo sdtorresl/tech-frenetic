@@ -20,13 +20,19 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
 
   bool check = true;
   bool _isLoading = false;
+  String? person;
+  String? company;
 
   @override
   Widget build(BuildContext context) {
-    if (check) {
+    if (check == true) {
+      person = 'person';
+      company = '';
       checkBoxPerson = true;
       checkBoxCompany = false;
-    } else {
+    } else if (check == false) {
+      company = 'company';
+      person = '';
       checkBoxPerson = false;
       checkBoxCompany = true;
     }
@@ -91,36 +97,49 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                 Row(
                   children: [
                     const SizedBox(width: 5),
-                    Checkbox(
-                        value: checkBoxPerson,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        onChanged: (bool? value) {
-                          setState(
-                            () {
-                              checkBoxPerson = value!;
-                              check = true;
-                            },
-                          );
-                        }),
+                    StreamBuilder(
+                      stream: store.personStream,
+                      builder: (context, snapshot) {
+                        store.changePerson(person!);
+                        return Checkbox(
+                          value: checkBoxPerson,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          onChanged: (bool? value) {
+                            setState(
+                              () {
+                                check = true;
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
                     Text(AppLocalizations.of(context)!.person,
                         style: Theme.of(context)
                             .textTheme
                             .headline1!
                             .copyWith(fontSize: 16)),
                     const SizedBox(width: 30),
-                    Checkbox(
-                        value: checkBoxCompany,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        onChanged: (bool? value) {
-                          setState(
-                            () {
-                              checkBoxCompany = value!;
-                              check = false;
-                            },
-                          );
-                        }),
+                    StreamBuilder(
+                      stream: store.companyStream,
+                      builder: (context, snapshot) {
+                        store.changeCompany(company!);
+
+                        return Checkbox(
+                          value: checkBoxCompany,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          onChanged: (bool? value) {
+                            setState(
+                              () {
+                                check = false;
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
                     Text(AppLocalizations.of(context)!.company,
                         style: Theme.of(context)
                             .textTheme
@@ -263,7 +282,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                                     setState(() {
                                       _isLoading = true;
                                     });
-                                    bool signIn = await store.sing();
+                                    bool signIn = await store.sign();
                                     setState(() {
                                       _isLoading = false;
                                     });
