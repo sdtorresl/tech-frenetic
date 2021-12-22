@@ -19,7 +19,7 @@ class ArticlesPage extends StatefulWidget {
 }
 
 class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
-  ArticlesModel article = ArticlesModel.empty();
+  ArticlesModel emptyArticle = ArticlesModel.empty();
   final ArticlesProvider _articlesProvider = ArticlesProvider();
   TextEditingController commentTextController = TextEditingController();
 
@@ -36,11 +36,11 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
         children: <Widget>[
           Expanded(
             child: FutureBuilder(
-              future: _articlesProvider.getArticle("/articles/flutter-2-here"),
+              future: _articlesProvider.getArticle(widget.article.id),
               initialData: ArticlesModel.empty(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
-                  article = snapshot.data;
+                  emptyArticle = snapshot.data;
 
                   return ListView(
                     children: [
@@ -49,7 +49,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
                       _articleImage(context),
                       _articleSummary(context),
                       _articleInteractions(context),
-                      CommentsWidget(articleId: article.id),
+                      CommentsWidget(articleId: widget.article.id),
                     ],
                   );
                 } else {
@@ -67,11 +67,11 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   }
 
   Widget _articleImage(BuildContext context) {
-    if (article.image != null) {
+    if (emptyArticle.image != null) {
       return CachedNetworkImage(
         placeholder: (context, value) => const LinearProgressIndicator(),
         errorWidget: (context, value, e) => const Icon(Icons.error),
-        imageUrl: article.image!,
+        imageUrl: emptyArticle.image!,
       );
     } else {
       return const SizedBox();
@@ -98,7 +98,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                article.user!,
+                emptyArticle.user!,
                 style: Theme.of(context)
                     .textTheme
                     .headline1!
@@ -118,8 +118,8 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
                     ),
                   ),
                   Text(
-                    article.date != null
-                        ? timeago.format(article.date!, locale: 'en_short')
+                    emptyArticle.date != null
+                        ? timeago.format(emptyArticle.date!, locale: 'en_short')
                         : "",
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
@@ -142,7 +142,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
         },
       ),
       title: Text(
-        article.category!.toUpperCase(),
+        emptyArticle.category!.toUpperCase(),
         style: theme.textTheme.headline5!.copyWith(color: Colors.white),
       ),
       backgroundColor: Theme.of(context).primaryColorDark,
@@ -164,7 +164,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Text(
-        article.title,
+        emptyArticle.title,
         style: theme.textTheme.headline2,
       ),
     );
@@ -172,11 +172,11 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
 
   Widget _articleSummary(BuildContext context) {
     Widget _summary = const SizedBox(height: 15);
-    if (article.summary!.isNotEmpty) {
+    if (emptyArticle.summary!.isNotEmpty) {
       _summary = Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         child: Html(
-          data: article.body,
+          data: emptyArticle.body,
         ),
       );
     }
@@ -186,7 +186,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
 
   Widget _articleInteractions(BuildContext context) {
     Widget _comments = const SizedBox();
-    if (article.comments != '0' && article.comments == '1') {
+    if (emptyArticle.comments != '0' && emptyArticle.comments == '1') {
       _comments = Row(
         children: [
           SizedBox(
@@ -197,7 +197,9 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          Text(article.comments! + ' ' + AppLocalizations.of(context)!.comment),
+          Text(emptyArticle.comments! +
+              ' ' +
+              AppLocalizations.of(context)!.comment),
         ],
       );
     }

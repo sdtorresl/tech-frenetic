@@ -146,7 +146,7 @@ class ArticlesModel {
         "role": role,
         "summary": summary,
         "type": type,
-        "date": date!.toIso8601String(),
+        "date": date != null ? date!.toIso8601String() : null,
         "url": url,
         "comments": comments,
         "views": views,

@@ -7,7 +7,7 @@ import 'package:techfrenetic/app/providers/tf_provider.dart';
 
 class ArticlesProvider extends TechFreneticProvider {
   Future<List<ArticlesModel>> getWall() async {
-    List<ArticlesModel> relatedArticles = [];
+    List<ArticlesModel> articles = [];
 
     try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/v1/wall?filters=yes");
@@ -16,7 +16,7 @@ class ArticlesProvider extends TechFreneticProvider {
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
         WallModel wall = WallModel.fromMap(jsonResponse);
-        relatedArticles = wall.articles;
+        articles = wall.articles;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
@@ -25,7 +25,7 @@ class ArticlesProvider extends TechFreneticProvider {
       rethrow;
     }
 
-    return relatedArticles;
+    return articles;
   }
 
   Future<List<ArticlesModel>> getFeatureArticle() async {
@@ -191,11 +191,11 @@ class ArticlesProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<ArticlesModel> getArticle(String slug) async {
+  Future<ArticlesModel> getArticle(String id) async {
     ArticlesModel article = ArticlesModel.empty();
 
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/article?alias=$slug");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/article/$id");
       debugPrint(_url.toString());
       var response = await http.get(_url);
 
