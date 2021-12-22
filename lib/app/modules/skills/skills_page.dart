@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/featured_content_widget.dart';
+import 'package:techfrenetic/app/widgets/featured_events_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
@@ -222,14 +223,8 @@ class _SkillsPageState extends State<SkillsPage> {
             ),
           ),
         ),
-
         featuredContent(),
-        Container(
-          color: Colors.grey,
-          width: 400,
-          height: 200,
-        ),
-        //aqui va feature_events_widget.dart
+        featureEvents(),
         leatestContents(),
         mostPopular(),
         contentFrenetics(),
@@ -289,6 +284,10 @@ class _SkillsPageState extends State<SkillsPage> {
         ),
       ),
     );
+  }
+
+  Widget featureEvents() {
+    return const FeaturedEventsWidget();
   }
 
   Widget leatestContents() {
