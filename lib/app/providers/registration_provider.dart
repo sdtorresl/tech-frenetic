@@ -62,4 +62,39 @@ class RegistrationProvider extends TechFreneticProvider {
     }
     return null;
   }
+
+  Future<String?> createProfile(String companyName, String profession,
+      String country, String description) async {
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
+
+      Map<String, dynamic> body = {
+        "field_biography": {"value": "Prueba interfaz "},
+        "field_company": {"value": "Acme 2"},
+        "field_user_location": {"value": "Country 4"},
+        "field_user_profession": {"value": "Profile 3 "}
+      };
+
+      Map<String, String> headers = {};
+      headers.addAll(authHeader);
+      headers.addAll(headers);
+
+      var response = await http.patch(
+        _url,
+        body: json.encode(body),
+        headers: headers,
+      );
+      debugPrint(response.statusCode.toString());
+
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        return true.toString();
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
+  }
 }
