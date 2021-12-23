@@ -1,6 +1,11 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/providers/articles_provider.dart';
+import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
@@ -14,14 +19,33 @@ class AddArticlesPage extends StatefulWidget {
   AddArticlesPageState createState() => AddArticlesPageState();
 }
 
+CategoriesProvider categories = CategoriesProvider();
+
 class AddArticlesPageState extends State<AddArticlesPage> {
   late List<String> _selectedTags;
   TextEditingController tagsController = TextEditingController();
+  String? title;
+  File? image;
+  String? category = '1';
+  String? description;
+  String? tag;
+  bool _isLoading = false;
 
   @override
   void initState() {
     _selectedTags = [];
     super.initState();
+  }
+
+  Future pickImage() async {
+    try {
+      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      if (image == null) return;
+      final imageTemporary = File(image.path);
+      setState(() => this.image = imageTemporary);
+    } on PlatformException catch (e) {
+      debugPrint('Failed to pick image: $e');
+    }
   }
 
   @override
@@ -101,7 +125,9 @@ class AddArticlesPageState extends State<AddArticlesPage> {
           _imageField(context),
           _descriptionField(context),
           _articleField(context),
+          const SizedBox(height: 60),
           _categoriesField(context),
+          const SizedBox(height: 50),
           _tagsField(context),
           const SizedBox(
             height: 20,
@@ -113,10 +139,17 @@ class AddArticlesPageState extends State<AddArticlesPage> {
   }
 
   _titleField(BuildContext context) {
-    return const TextField(
+    return TextField(
       maxLines: 5,
       minLines: 3,
       decoration: InputDecoration(labelText: "Título"),
+      onChanged: (text) {
+        setState(
+          () {
+            title = text;
+          },
+        );
+      },
     );
   }
 
@@ -129,27 +162,19 @@ class AddArticlesPageState extends State<AddArticlesPage> {
         ),
         const Text("Selecciona una imagen"),
         GestureDetector(
-          onTap: () async {
-            debugPrint("Pressed");
-            final ImagePicker _picker = ImagePicker();
-            // Pick an image
-            final XFile? image =
-                await _picker.pickImage(source: ImageSource.camera);
-
-            final path = image!.path;
-            final bytes = await File(path).readAsBytes();
-            final img.Image? imagFile = img.decodeImage(bytes);
-          },
-          child: Container(
-            color: Colors.blueGrey,
-            margin: const EdgeInsets.symmetric(vertical: 10),
-            padding: const EdgeInsets.all(50),
-            child: const Icon(
-              Icons.camera,
-              color: Colors.white,
-              size: 50,
-            ),
-          ),
+          onTap: () => pickImage(),
+          child: image != null
+              ? Image.file(image!)
+              : Container(
+                  color: Colors.blueGrey,
+                  margin: const EdgeInsets.symmetric(vertical: 10),
+                  padding: const EdgeInsets.all(50),
+                  child: const Icon(
+                    Icons.camera,
+                    color: Colors.white,
+                    size: 50,
+                  ),
+                ),
         ),
       ],
     );
@@ -164,18 +189,71 @@ class AddArticlesPageState extends State<AddArticlesPage> {
   }
 
   _categoriesField(BuildContext context) {
-    return const TextField(
-      maxLines: 5,
-      minLines: 3,
-      decoration: InputDecoration(labelText: "Categorías"),
+    return FutureBuilder(
+      future: categories.getCategories(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        List<String> categoriesNames = [];
+        if (snapshot.hasData) {
+          List<CategoriesModel> categoriesModel = snapshot.data;
+          for (var models in categoriesModel) {
+            categoriesNames.add(models.category);
+          }
+          String? defaultValue = categoriesNames.first;
+          return DropdownButtonFormField<String>(
+            decoration: const InputDecoration(
+              labelText: "Categorías",
+            ),
+            value: defaultValue,
+            isExpanded: true,
+            items: categoriesNames.map(
+              (String valueItem) {
+                return DropdownMenuItem<String>(
+                  child: Text(valueItem),
+                  value: valueItem,
+                );
+              },
+            ).toList(),
+            onChanged: (newValue) {
+              setState(
+                () {
+                  for (var model in categoriesModel) {
+                    if (model.category == newValue) {
+                      category = model.id;
+                    }
+
+                    debugPrint(category);
+                  }
+                  defaultValue = newValue;
+                  debugPrint(defaultValue);
+                },
+              );
+            },
+          );
+        } else {
+          return Text(
+            'Loading categories...',
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1!
+                .copyWith(color: Theme.of(context).primaryColor),
+          );
+        }
+      },
     );
   }
 
   _descriptionField(BuildContext context) {
-    return const TextField(
+    return TextField(
       maxLines: 5,
       minLines: 3,
-      decoration: InputDecoration(labelText: "Descripción corta"),
+      decoration: const InputDecoration(labelText: "Descripción corta"),
+      onChanged: (text) {
+        setState(
+          () {
+            description = text;
+          },
+        );
+      },
     );
   }
 
@@ -193,6 +271,13 @@ class AddArticlesPageState extends State<AddArticlesPage> {
               _selectedTags.add(value);
               tagsController.text = "";
             });
+          },
+          onChanged: (text) {
+            setState(
+              () {
+                tag = text;
+              },
+            );
           },
         ),
         Wrap(
@@ -222,12 +307,35 @@ class AddArticlesPageState extends State<AddArticlesPage> {
   }
 
   _formButtons(BuildContext context) {
+    bool isCompleted = title != '' &&
+        image != null &&
+        category != "" &&
+        description != "" &&
+        tag != "";
+    final ArticlesProvider articlesProvider = ArticlesProvider();
+
     return Row(
       children: [
         Expanded(
           flex: 4,
           child: ElevatedButton(
-            onPressed: () => debugPrint("Publish"),
+            onPressed: isCompleted && !_isLoading
+                ? () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    bool article = await articlesProvider.addArticle(
+                        title!, int.parse(category!), description!);
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    if (article == true) {
+                      Modular.to.popAndPushNamed("/community");
+                    } else {
+                      debugPrint('Article not post');
+                    }
+                  }
+                : null,
             child: Text(AppLocalizations.of(context)!.publish),
           ),
         ),
@@ -243,7 +351,7 @@ class AddArticlesPageState extends State<AddArticlesPage> {
               side: BorderSide(width: 1, color: Theme.of(context).primaryColor),
             ),
           ),
-        )
+        ),
       ],
     );
   }

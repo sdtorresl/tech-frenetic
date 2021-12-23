@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:http/http.dart' as http;
@@ -138,45 +140,59 @@ class ArticlesProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool> addArticle(ArticlesModel article) async {
+  Future<bool> addArticle(
+    String title,
+    int category,
+    String description,
+  ) async {
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/node?_format=json");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/entity/node?_format=json");
 
-      /**
       Map<String, dynamic> payload = {
         'type': [
           {'target_id': "article", 'target_type': "node_type"}
         ],
         'title': [
-          {'value': article.title}
+          {'value': title}
         ],
         'langcode': [
-          {'value': lang}
+          {'value': locale}
         ],
         'field_image': [
-          {'target_id': image.fid[0].value, 'alt': article.title}
+          {'target_id': '10', "alt": "Imagen base  64 foto"}
         ],
         'field_frenetic_content': [
           {'value': true}
         ],
         'field_main_category': [
-          {'target_id': article.category}
-        ],
-        'field_summary': [
-          {'value': article.description}
+          {'target_id': category}
         ],
         'field_draft': [
           {'value': false}
         ],
-        'body': [
-          {'value': article.body}
+        'field_summary': [
+          {'value': description}
         ],
+        "body": [
+          {"value": "<p> contenido soporte etiquetas html</p>"}
+        ],
+        "field_tag": [
+          {"value": 'aplications'}
+        ]
       };
-      */
 
-      var response = await http.post(_url, headers: {}, body: "");
+      Map<String, String> headers = {};
+      headers['Content-Type'] = 'application/json';
+      headers.addAll(authHeader);
+      headers.addAll(sessionHeader);
 
-      if (response.statusCode == 200) {
+      debugPrint(payload.toString());
+      debugPrint(headers.toString());
+
+      var response = await http.post(_url,
+          headers: headers, body: json.jsonEncode(payload));
+
+      if (response.statusCode == 201) {
         Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
         debugPrint(jsonResponse.toString());
 
@@ -199,7 +215,7 @@ class ArticlesProvider extends TechFreneticProvider {
       debugPrint(_url.toString());
       var response = await http.get(_url);
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         List<dynamic> jsonResponse = json.jsonDecode(response.body);
         if (jsonResponse.isNotEmpty) {
           article = ArticlesModel.fromMap(jsonResponse[0]);
