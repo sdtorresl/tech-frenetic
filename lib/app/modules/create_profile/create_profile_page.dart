@@ -132,7 +132,7 @@ class _CreateProfilePageState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         StreamBuilder(
-          stream: store.nameStream,
+          stream: store.companynameStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
@@ -147,13 +147,13 @@ class _CreateProfilePageState
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: store.changeName,
+              onChanged: store.changeCompanyName,
             );
           },
         ),
         const SizedBox(height: 25),
-        StreamBuilder(
-            stream: null,
+        StreamBuilder<Object>(
+            stream: store.professionStream,
             builder: (context, snapshot) {
               return DropdownButton<String>(
                 value: defaultProfession,
@@ -182,6 +182,8 @@ class _CreateProfilePageState
                     () {
                       defaultProfession = newValue;
                       debugPrint(defaultProfession);
+                      store.changeProfession(defaultProfession!);
+                      debugPrint(defaultProfession);
                     },
                   );
                 },
@@ -189,7 +191,7 @@ class _CreateProfilePageState
             }),
         const SizedBox(height: 25),
         StreamBuilder(
-          stream: null,
+          stream: store.countryStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return DropdownButton<String>(
               value: defaultCountry,
@@ -202,6 +204,7 @@ class _CreateProfilePageState
                 setState(
                   () {
                     defaultCountry = newValue;
+                    store.changeCountry(defaultCountry!);
                   },
                 );
               },
