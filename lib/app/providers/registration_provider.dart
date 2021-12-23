@@ -63,20 +63,22 @@ class RegistrationProvider extends TechFreneticProvider {
     return null;
   }
 
-  Future<String?> createProfile(String companyName, String profession,
+  Future<bool?> createProfile(String companyName, String profession,
       String country, String description) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
 
       Map<String, dynamic> body = {
-        "field_biography": {"value": "Prueba interfaz "},
-        "field_company": {"value": "Acme 2"},
-        "field_user_location": {"value": "Country 4"},
-        "field_user_profession": {"value": "Profile 3 "}
+        "field_biography": {"value": description},
+        "field_company": {"value": companyName},
+        "field_user_location": {"value": country},
+        "field_user_profession": {"value": profession}
       };
 
       Map<String, String> headers = {};
       headers.addAll(authHeader);
+      headers.addAll(jsonHeader);
+      headers.addAll(sessionHeader);
       headers.addAll(headers);
 
       var response = await http.patch(
@@ -88,7 +90,7 @@ class RegistrationProvider extends TechFreneticProvider {
 
       if (response.statusCode == 200) {
         debugPrint(response.body);
-        return true.toString();
+        return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
@@ -96,5 +98,43 @@ class RegistrationProvider extends TechFreneticProvider {
       debugPrint(e.toString());
     }
     return null;
+  }
+
+  Future<bool?> selectAvatar(bool useAvatar, String userAvatar) async {
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
+
+      Map<String, dynamic> body = {
+        "field_use_avatar": [
+          {"value": useAvatar}
+        ],
+        "field_user_avatar": [
+          {"value": userAvatar}
+        ],
+      };
+
+      Map<String, String> headers = {};
+      headers.addAll(authHeader);
+      headers.addAll(jsonHeader);
+      headers.addAll(sessionHeader);
+      headers.addAll(headers);
+
+      var response = await http.patch(
+        _url,
+        body: json.encode(body),
+        headers: headers,
+      );
+      debugPrint(response.statusCode.toString());
+
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return false;
   }
 }
