@@ -8,6 +8,7 @@ import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/articles/articles_controller.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/widgets/comments_widget.dart';
+import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_html/flutter_html.dart';
 
@@ -19,7 +20,7 @@ class ArticlesPage extends StatefulWidget {
 }
 
 class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
-  ArticlesModel emptyArticle = ArticlesModel.empty();
+  ArticlesModel article = ArticlesModel.empty();
   final ArticlesProvider _articlesProvider = ArticlesProvider();
   TextEditingController commentTextController = TextEditingController();
 
@@ -37,10 +38,10 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
           Expanded(
             child: FutureBuilder(
               future: _articlesProvider.getArticle(widget.article.id),
-              initialData: ArticlesModel.empty(),
+              initialData: article,
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
-                  emptyArticle = snapshot.data;
+                  article = snapshot.data;
 
                   return ListView(
                     children: [
@@ -67,11 +68,11 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   }
 
   Widget _articleImage(BuildContext context) {
-    if (emptyArticle.image != null) {
+    if (article.image != null) {
       return CachedNetworkImage(
         placeholder: (context, value) => const LinearProgressIndicator(),
         errorWidget: (context, value, e) => const Icon(Icons.error),
-        imageUrl: emptyArticle.image!,
+        imageUrl: article.image!,
       );
     } else {
       return const SizedBox();
@@ -83,22 +84,15 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
       padding: const EdgeInsets.only(bottom: 15, left: 20, right: 20),
       child: Row(
         children: [
-          CircleAvatar(
-            child: ClipOval(
-              child: SvgPicture.asset(
-                'assets/img/avatars/avatar-02.svg',
-                semanticsLabel: 'Acme Logo',
-              ),
-            ),
-            radius: 20,
-            backgroundColor: Colors.grey[200],
+          UserAvatarWidget(
+            username: widget.article.user!,
           ),
           const SizedBox(width: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                emptyArticle.user!,
+                article.user!,
                 style: Theme.of(context)
                     .textTheme
                     .headline1!
@@ -118,8 +112,8 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
                     ),
                   ),
                   Text(
-                    emptyArticle.date != null
-                        ? timeago.format(emptyArticle.date!, locale: 'en_short')
+                    article.date != null
+                        ? timeago.format(article.date!, locale: 'en_short')
                         : "",
                     style: Theme.of(context).textTheme.bodyText1,
                   ),
@@ -142,7 +136,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
         },
       ),
       title: Text(
-        emptyArticle.category!.toUpperCase(),
+        article.category!.toUpperCase(),
         style: theme.textTheme.headline5!.copyWith(color: Colors.white),
       ),
       backgroundColor: Theme.of(context).primaryColorDark,
@@ -164,7 +158,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     return Padding(
       padding: const EdgeInsets.all(15),
       child: Text(
-        emptyArticle.title,
+        article.title,
         style: theme.textTheme.headline2,
       ),
     );
@@ -172,11 +166,11 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
 
   Widget _articleSummary(BuildContext context) {
     Widget _summary = const SizedBox(height: 15);
-    if (emptyArticle.summary!.isNotEmpty) {
+    if (article.summary!.isNotEmpty) {
       _summary = Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         child: Html(
-          data: emptyArticle.body,
+          data: article.body,
         ),
       );
     }
@@ -186,7 +180,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
 
   Widget _articleInteractions(BuildContext context) {
     Widget _comments = const SizedBox();
-    if (emptyArticle.comments != '0' && emptyArticle.comments == '1') {
+    if (article.comments != '0' && article.comments == '1') {
       _comments = Row(
         children: [
           SizedBox(
@@ -197,9 +191,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          Text(emptyArticle.comments! +
-              ' ' +
-              AppLocalizations.of(context)!.comment),
+          Text(article.comments! + ' ' + AppLocalizations.of(context)!.comment),
         ],
       );
     }

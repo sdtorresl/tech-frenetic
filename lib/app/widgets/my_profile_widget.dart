@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
 
 class MyProfile extends StatefulWidget {
   final UserModel user;
@@ -118,19 +119,9 @@ class _MyProfileState extends State<MyProfile> {
                 elevation: 0,
                 child: Column(
                   children: [
-                    CircleAvatar(
-                      child: ClipOval(
-                        child: SvgPicture.asset(
-                          widget.user.fieldUserAvatar.isNotEmpty
-                              ? 'assets/img/avatars/' +
-                                  widget.user.fieldUserAvatar +
-                                  '.svg'
-                              : 'assets/img/avatars/avatar-01.svg',
-                          semanticsLabel: 'Acme Logo',
-                        ),
-                      ),
+                    UserAvatarWidget(
+                      username: widget.user.name,
                       radius: 40,
-                      backgroundColor: Colors.grey[200],
                     ),
                     ListTile(
                       title: Padding(

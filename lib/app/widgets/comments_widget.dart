@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/models/comment_model.dart';
 import 'package:techfrenetic/app/providers/comments_provider.dart';
+import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:bubble/bubble.dart';
 
 class CommentsWidget extends StatefulWidget {
   final String articleId;
@@ -50,30 +53,24 @@ class _CommentsWidgetState extends State<CommentsWidget> {
       children: [
         Container(
           margin: const EdgeInsets.only(left: 20, top: 10),
-          child: CircleAvatar(
-            child: ClipOval(
-              child: SvgPicture.asset(
-                'assets/img/avatars/avatar-02.svg',
-                semanticsLabel: 'Acme Logo',
-              ),
-            ),
-            radius: 20,
-            backgroundColor: Colors.grey[200],
-          ),
+          child: UserAvatarWidget(username: comment.author),
         ),
         Expanded(
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          child: Bubble(
+            margin: const BubbleEdges.symmetric(horizontal: 20, vertical: 10),
+            nip: BubbleNip.leftTop,
             color: Theme.of(context).backgroundColor,
-            padding: const EdgeInsets.all(15),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    Text(
-                      comment.user,
-                      style: Theme.of(context).textTheme.headline3,
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        comment.user,
+                        style: Theme.of(context).textTheme.headline3,
+                      ),
                     ),
                     Container(
                       margin: const EdgeInsets.symmetric(horizontal: 5),
@@ -88,7 +85,7 @@ class _CommentsWidgetState extends State<CommentsWidget> {
                         style: Theme.of(context).textTheme.bodyText1),
                   ],
                 ),
-                Text(comment.body),
+                Html(data: comment.body),
               ],
             ),
           ),

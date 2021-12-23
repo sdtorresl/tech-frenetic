@@ -1,9 +1,10 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:techfrenetic/app/models/profile_model.dart';
 import 'package:techfrenetic/app/models/session_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
+import 'dart:convert' as json;
 
 class UserProvider extends TechFreneticProvider {
   SessionModel? loggedUser;
@@ -14,7 +15,7 @@ class UserProvider extends TechFreneticProvider {
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/login?_format=json");
 
-      String body = json.encode({'name': email, 'pass': password});
+      String body = json.jsonEncode({'name': email, 'pass': password});
 
       var response = await http.post(
         _url,
@@ -85,6 +86,34 @@ class UserProvider extends TechFreneticProvider {
         userinfo = UserModel.fromJson(response.body);
         prefs.userName = userinfo.userName;
         debugPrint(userinfo.toString());
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return userinfo;
+  }
+
+  Future<ProfileModel?> getProfile(String userId) async {
+    ProfileModel userinfo = ProfileModel.empty();
+
+    try {
+      Uri _url =
+          Uri.parse("$baseUrl/api/en/v1/full-profile?_format=json&id=$userId");
+      debugPrint(_url.toString());
+
+      var response = await http.get(_url);
+
+      if (response.statusCode == 200) {
+        List<dynamic> profiles = json.jsonDecode(response.body);
+
+        if (profiles.isNotEmpty) {
+          userinfo = ProfileModel.fromJson(profiles[0]);
+          if (!userinfo.useAvatar) {
+            userinfo.picture = baseUrl + userinfo.picture;
+          }
+        }
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
