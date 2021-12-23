@@ -8,6 +8,7 @@ import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/widgets/latest_contents_widget.dart';
 import 'package:techfrenetic/app/widgets/most_popular_widget.dart';
+import 'package:techfrenetic/app/widgets/section_header_widget.dart';
 
 class SkillsPage extends StatefulWidget {
   const SkillsPage({Key? key}) : super(key: key);
@@ -224,7 +225,7 @@ class _SkillsPageState extends State<SkillsPage> {
           ),
         ),
         featuredContent(),
-        featureEvents(),
+        const FeaturedEventsWidget(),
         leatestContents(),
         mostPopular(),
         contentFrenetics(),
@@ -234,106 +235,84 @@ class _SkillsPageState extends State<SkillsPage> {
   }
 
   Widget featuredContent() {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Featured content',
-              style:
-                  Theme.of(context).textTheme.headline1!.copyWith(fontSize: 25),
-            ),
-            Container(
-              color: Colors.black,
-              height: 1.5,
-              width: 400,
-            ),
-            const SizedBox(height: 30),
-            FutureBuilder(
-              future: _articlesProvideer.getFeatureArticle(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<ArticlesModel>> snapshot) {
-                if (snapshot.hasData) {
-                  List<ArticlesModel> featureArticles = snapshot.data ?? [];
-                  List<Widget> featurePost = [];
-
-                  for (ArticlesModel article in featureArticles) {
-                    featurePost.add(FeaturedArticleWidget(article: article));
-                  }
-
-                  return Column(
-                    children: [
-                      ...featurePost,
-                      const SizedBox(height: 30),
-                    ],
-                  );
-                } else {
-                  return const Center(child: CircularProgressIndicator());
-                }
-              },
-            ),
-            Container(
-              color: Colors.black,
-              height: 1.5,
-              width: 400,
-            ),
-          ],
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        SectionHeaderWidget(
+          child: Text(
+            "Featured Content",
+            style:
+                Theme.of(context).textTheme.headline1!.copyWith(fontSize: 25),
+          ),
         ),
-      ),
+        FutureBuilder(
+          future: _articlesProvideer.getFeatureArticle(),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<ArticlesModel>> snapshot) {
+            if (snapshot.hasData) {
+              List<ArticlesModel> featureArticles = snapshot.data ?? [];
+              List<Widget> featurePost = [];
+
+              for (ArticlesModel article in featureArticles) {
+                featurePost.add(FeaturedArticleWidget(article: article));
+              }
+
+              return Column(
+                children: [
+                  ...featurePost,
+                  const SizedBox(height: 30),
+                ],
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        ),
+      ],
     );
   }
 
-  Widget featureEvents() {
-    return const FeaturedEventsWidget();
-  }
-
   Widget leatestContents() {
-    return Container(
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Latest content',
-              style:
-                  Theme.of(context).textTheme.headline1!.copyWith(fontSize: 25),
-            ),
-            Container(
-              color: Colors.black,
-              height: 1.5,
-              width: 400,
-            ),
-            const SizedBox(height: 30),
-            FutureBuilder(
-              future: _articlesProvideer.getLatestArticle(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<ArticlesModel>> snapshot) {
-                if (snapshot.hasData) {
-                  List<ArticlesModel> latestArticles = snapshot.data ?? [];
-                  List<Widget> latestPost = [];
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            'Latest content',
+            style:
+                Theme.of(context).textTheme.headline1!.copyWith(fontSize: 25),
+          ),
+          Container(
+            color: Colors.black,
+            height: 1.5,
+            width: 400,
+          ),
+          const SizedBox(height: 30),
+          FutureBuilder(
+            future: _articlesProvideer.getLatestArticle(),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<ArticlesModel>> snapshot) {
+              if (snapshot.hasData) {
+                List<ArticlesModel> latestArticles = snapshot.data ?? [];
+                List<Widget> latestPost = [];
 
-                  for (ArticlesModel article in latestArticles) {
-                    latestPost.add(LatestArticleWidget(article: article));
-                  }
-
-                  return Column(
-                    children: [
-                      ...latestPost,
-                      const SizedBox(height: 30),
-                    ],
-                  );
-                } else {
-                  return const Center(child: CircularProgressIndicator());
+                for (ArticlesModel article in latestArticles) {
+                  latestPost.add(LatestArticleWidget(article: article));
                 }
-              },
-            ),
-          ],
-        ),
+
+                return Column(
+                  children: [
+                    ...latestPost,
+                    const SizedBox(height: 30),
+                  ],
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
+              }
+            },
+          ),
+        ],
       ),
     );
   }
@@ -401,58 +380,56 @@ class _SkillsPageState extends State<SkillsPage> {
   }
 
   Widget contentFrenetics() {
-    return Container(
-      child: Column(
-        children: [
-          HighlightContainer(
-            child: Text(
-              'Content',
-              style: Theme.of(context).textTheme.headline1!.copyWith(
-                  color: Theme.of(context).primaryColor, fontSize: 25),
-            ),
+    return Column(
+      children: [
+        HighlightContainer(
+          child: Text(
+            'Content',
+            style: Theme.of(context)
+                .textTheme
+                .headline1!
+                .copyWith(color: Theme.of(context).primaryColor, fontSize: 25),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              HighlightContainer(
-                child: Text(
-                  'from',
-                  style: Theme.of(context).textTheme.headline1!.copyWith(
-                      color: Theme.of(context).primaryColor, fontSize: 25),
-                ),
-              ),
-              Text(
-                'Frenetics',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1!
-                    .copyWith(fontSize: 25),
-              ),
-            ],
-          ),
-          const SizedBox(height: 30),
-          SizedBox(
-            width: 250,
-            child: ElevatedButton(
-              onPressed: () => Modular.to.pushNamed("/community"),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            HighlightContainer(
               child: Text(
-                'Explore more',
+                'from',
                 style: Theme.of(context).textTheme.headline1!.copyWith(
-                    color: Theme.of(context).indicatorColor, fontSize: 16),
+                    color: Theme.of(context).primaryColor, fontSize: 25),
               ),
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(Colors.white),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.zero,
-                    side: BorderSide(color: Theme.of(context).indicatorColor),
-                  ),
+            ),
+            Text(
+              'Frenetics',
+              style:
+                  Theme.of(context).textTheme.headline1!.copyWith(fontSize: 25),
+            ),
+          ],
+        ),
+        const SizedBox(height: 30),
+        SizedBox(
+          width: 250,
+          child: ElevatedButton(
+            onPressed: () => Modular.to.pushNamed("/community"),
+            child: Text(
+              'Explore more',
+              style: Theme.of(context).textTheme.headline1!.copyWith(
+                  color: Theme.of(context).indicatorColor, fontSize: 16),
+            ),
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(Colors.white),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                  side: BorderSide(color: Theme.of(context).indicatorColor),
                 ),
               ),
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

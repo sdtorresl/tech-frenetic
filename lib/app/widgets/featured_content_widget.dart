@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:cached_network_image/cached_network_image.dart';
@@ -19,57 +20,76 @@ class _FeaturedArticleWidgetState extends State<FeaturedArticleWidget> {
   Widget build(BuildContext context) {
     final created = widget.article.date!;
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Card(
+      elevation: 3,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              Text(
-                widget.article.category!.toUpperCase(),
-                style: Theme.of(context).textTheme.headline4!.copyWith(
-                    color: Theme.of(context).primaryColor, fontSize: 18),
-              ),
-              SvgPicture.asset(
-                'assets/img/icons/dot.svg',
-                allowDrawingOutsideViewBox: true,
-                semanticsLabel: 'Dot',
-                color: Theme.of(context).primaryColor,
-              ),
-              Text(
+          Padding(
+            padding: const EdgeInsets.all(10),
+            child: Wrap(
+              runAlignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
+              children: [
+                Text(
+                  widget.article.category!.toUpperCase(),
+                  style: Theme.of(context).textTheme.headline4!.copyWith(
+                      color: Theme.of(context).primaryColor, fontSize: 18),
+                ),
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 10),
+                  child: SvgPicture.asset(
+                    'assets/img/icons/dot.svg',
+                    allowDrawingOutsideViewBox: true,
+                    semanticsLabel: 'Dot',
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+                Text(
                   timeago.format(
                     created,
                   ),
-                  style: Theme.of(context).textTheme.bodyText1),
-            ],
+                  style: Theme.of(context).textTheme.bodyText1,
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 15),
-          CachedNetworkImage(
+          GestureDetector(
+            onTap: () => Modular.to
+                .pushNamed('/community/article', arguments: widget.article),
+            child: CachedNetworkImage(
               placeholder: (context, value) => const LinearProgressIndicator(),
               errorWidget: (context, value, e) => const Icon(Icons.error),
-              imageUrl: widget.article.thumbnail!),
-          const SizedBox(height: 15),
-          Text(
-            widget.article.title,
-            style:
-                Theme.of(context).textTheme.headline1!.copyWith(fontSize: 20),
+              imageUrl: widget.article.thumbnail!,
+            ),
           ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                widget.article.displayName,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1!
-                    .copyWith(fontSize: 15),
-              ),
-              const IconButton(
-                icon: Icon(Icons.shield_outlined),
-                onPressed: null,
-              ),
-            ],
+          const SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Text(
+              widget.article.title,
+              style:
+                  Theme.of(context).textTheme.headline1!.copyWith(fontSize: 20),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  widget.article.displayName,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1!
+                      .copyWith(fontSize: 15),
+                ),
+                const IconButton(
+                  icon: Icon(Icons.shield_outlined),
+                  onPressed: null,
+                ),
+              ],
+            ),
           )
         ],
       ),

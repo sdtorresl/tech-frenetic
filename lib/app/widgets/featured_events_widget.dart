@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:techfrenetic/app/models/events_model.dart';
 import 'package:techfrenetic/app/widgets/post_featured_event_widget.dart';
 import 'package:techfrenetic/app/providers/featured_events_provider.dart';
+import 'package:techfrenetic/app/widgets/section_header_widget.dart';
 
 class FeaturedEventsWidget extends StatefulWidget {
   const FeaturedEventsWidget({Key? key}) : super(key: key);
@@ -18,20 +18,11 @@ class _FeaturedEventsWidgetState extends State<FeaturedEventsWidget> {
   Widget build(BuildContext context) {
     FeaturedEventsProvider _eventsprovider = FeaturedEventsProvider();
 
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        border: Border(
-          bottom: BorderSide(
-            width: 1.00,
-            color: Colors.grey.withOpacity(.3),
-          ),
-        ),
-      ),
+    return Padding(
+      padding: const EdgeInsets.all(20),
       child: Column(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(25.0),
+          SectionHeaderWidget(
             child: Row(
               children: [
                 HighlightContainer(
@@ -66,7 +57,6 @@ class _FeaturedEventsWidgetState extends State<FeaturedEventsWidget> {
                 return Column(
                   children: [
                     ...postsEventWidgets,
-                    const SizedBox(height: 60),
                   ],
                 );
               } else {
@@ -74,10 +64,8 @@ class _FeaturedEventsWidgetState extends State<FeaturedEventsWidget> {
               }
             },
           ),
-          const SizedBox(height: 20),
         ],
       ),
     );
-    ;
   }
 }
