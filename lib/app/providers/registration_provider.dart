@@ -63,7 +63,7 @@ class RegistrationProvider extends TechFreneticProvider {
     return null;
   }
 
-  Future<String?> createProfile(String companyName, String profession,
+  Future<bool> createProfile(String companyName, String profession,
       String country, String description) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
@@ -88,13 +88,13 @@ class RegistrationProvider extends TechFreneticProvider {
 
       if (response.statusCode == 200) {
         debugPrint(response.body);
-        return true.toString();
+        return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
       debugPrint(e.toString());
     }
-    return null;
+    return false;
   }
 }
