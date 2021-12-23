@@ -39,8 +39,10 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
     }
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: ListView(
         children: [
