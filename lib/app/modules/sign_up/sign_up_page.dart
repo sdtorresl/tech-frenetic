@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
@@ -20,20 +21,28 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
 
   bool check = true;
   bool _isLoading = false;
+  String? person;
+  String? company;
 
   @override
   Widget build(BuildContext context) {
-    if (check) {
+    if (check == true) {
+      person = 'person';
+      company = '';
       checkBoxPerson = true;
       checkBoxCompany = false;
-    } else {
+    } else if (check == false) {
+      company = 'company';
+      person = '';
       checkBoxPerson = false;
       checkBoxCompany = true;
     }
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
       ),
       body: ListView(
         children: [
@@ -91,36 +100,49 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                 Row(
                   children: [
                     const SizedBox(width: 5),
-                    Checkbox(
-                        value: checkBoxPerson,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        onChanged: (bool? value) {
-                          setState(
-                            () {
-                              checkBoxPerson = value!;
-                              check = true;
-                            },
-                          );
-                        }),
+                    StreamBuilder(
+                      stream: store.personStream,
+                      builder: (context, snapshot) {
+                        store.changePerson(person!);
+                        return Checkbox(
+                          value: checkBoxPerson,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          onChanged: (bool? value) {
+                            setState(
+                              () {
+                                check = true;
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
                     Text(AppLocalizations.of(context)!.person,
                         style: Theme.of(context)
                             .textTheme
                             .headline1!
                             .copyWith(fontSize: 16)),
                     const SizedBox(width: 30),
-                    Checkbox(
-                        value: checkBoxCompany,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(15)),
-                        onChanged: (bool? value) {
-                          setState(
-                            () {
-                              checkBoxCompany = value!;
-                              check = false;
-                            },
-                          );
-                        }),
+                    StreamBuilder(
+                      stream: store.companyStream,
+                      builder: (context, snapshot) {
+                        store.changeCompany(company!);
+
+                        return Checkbox(
+                          value: checkBoxCompany,
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(15)),
+                          onChanged: (bool? value) {
+                            setState(
+                              () {
+                                check = false;
+                              },
+                            );
+                          },
+                        );
+                      },
+                    ),
                     Text(AppLocalizations.of(context)!.company,
                         style: Theme.of(context)
                             .textTheme
@@ -263,18 +285,71 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                                     setState(() {
                                       _isLoading = true;
                                     });
-                                    bool signIn = await store.sing();
+                                    String signIn = await store.sign();
                                     setState(() {
                                       _isLoading = false;
                                     });
-                                    if (signIn) {
+                                    if (signIn == 'true') {
                                       const SnackBar(
                                         content: Text(
                                             'You are part of the tech frenetic cummunity now'),
                                       );
                                       Modular.to.pushNamedAndRemoveUntil(
                                           '/create_profile', (p0) => false);
+                                    } else if (signIn == 'alredy use email') {
+                                      Widget content = const Text(
+                                          'The email entered already exists, please verify your email');
+                                      List<Widget> actions = [
+                                        TextButton(
+                                          child: Text(
+                                            AppLocalizations.of(context)!
+                                                .close
+                                                .toUpperCase(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .button!
+                                                .copyWith(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ];
+                                      showMessage(context,
+                                          title: AppLocalizations.of(context)!
+                                              .error,
+                                          content: content,
+                                          actions: actions);
                                     } else {
+                                      Widget content = const Text(
+                                          'Sign up error please try again later');
+                                      List<Widget> actions = [
+                                        TextButton(
+                                          child: Text(
+                                            AppLocalizations.of(context)!
+                                                .close
+                                                .toUpperCase(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .button!
+                                                .copyWith(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ];
+                                      showMessage(context,
+                                          title: AppLocalizations.of(context)!
+                                              .error,
+                                          content: content,
+                                          actions: actions);
                                       debugPrint("Not sign");
                                     }
                                   }

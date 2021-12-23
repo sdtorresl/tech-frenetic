@@ -4,22 +4,22 @@ import 'package:rxdart/rxdart.dart';
 import '../../common/validators.dart';
 
 class ChooseAvatarController extends Disposable {
-  final _termsController = BehaviorSubject<bool>();
+  final _avatarController = BehaviorSubject<bool>();
 
-  Stream<bool> get termsStream =>
-      _termsController.stream.transform(Validators.validateTerms);
+  Stream<bool> get avatarStream =>
+      _avatarController.stream.transform(Validators.validateTerms);
 
-  Function(bool) get changeTerms => _termsController.sink.add;
+  Function(bool) get changeaAvatar => _avatarController.sink.add;
 
-  bool get terms => _termsController.value;
+  bool get terms => _avatarController.value;
 
-  Future<bool> sing() async {
+  Future<bool> chooseAvatar() async {
     debugPrint('Sing in');
     return true;
   }
 
   @override
   void dispose() {
-    _termsController.close();
+    _avatarController.close();
   }
 }

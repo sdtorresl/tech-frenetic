@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
@@ -8,6 +10,16 @@ class TechFreneticProvider {
   final String baseUrl = GlobalConfiguration().getValue("api_url");
   final prefs = UserPreferences();
 
+  String authentication() {
+    String username = 'kerlynhans@gmail.com';
+    String password = 'aii28XGaHLxaSGR';
+    String basicAuthValue =
+        'Basic' + base64Encode(utf8.encode('$username:$password'));
+    return basicAuthValue;
+  }
+
+  Map<String, String> get basicAuth => {'Authorization': authentication()};
+
   Map<String, String> get authHeader => {'X-CSRF-Token': prefs.csrfToken ?? ''};
 
   Map<String, String> get sessionHeader => {'Cookie': prefs.cookies ?? ''};
@@ -17,6 +29,8 @@ class TechFreneticProvider {
   Map<String, String> get jsonHeader => {'Content-Type': 'application/json'};
 
   String get locale => Intl.getCurrentLocale().startsWith("es") ? "es" : "en";
+
+  String? get userId => prefs.userId;
 
   void updateCookie(http.Response response) {
     String? rawCookie = response.headers['set-cookie'];

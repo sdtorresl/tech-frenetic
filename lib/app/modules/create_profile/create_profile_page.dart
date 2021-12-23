@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -41,8 +42,45 @@ class _CreateProfilePageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        backgroundColor: Colors.white,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Widget content =
+                Text('Are you sure you don´t want to create a profile?');
+            List<Widget> actions = [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel.toUpperCase(),
+                      style: Theme.of(context).textTheme.button!.copyWith(
+                          fontSize: 12, color: Theme.of(context).primaryColor),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: Text(
+                      'I will do it later'.toUpperCase(),
+                      style: Theme.of(context).textTheme.button!.copyWith(
+                          fontSize: 12, color: Theme.of(context).primaryColor),
+                    ),
+                    onPressed: () {
+                      Modular.to.pushNamedAndRemoveUntil(
+                          "/community/", (p0) => false);
+                    },
+                  ),
+                ],
+              ),
+            ];
+            showMessage(context,
+                title: 'message'.toUpperCase(),
+                content: content,
+                actions: actions);
+          },
+        ),
       ),
       body: ListView(
         children: [
@@ -132,7 +170,7 @@ class _CreateProfilePageState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         StreamBuilder(
-          stream: store.nameStream,
+          stream: store.companynameStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
@@ -147,13 +185,13 @@ class _CreateProfilePageState
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: store.changeName,
+              onChanged: store.changeCompanyName,
             );
           },
         ),
         const SizedBox(height: 25),
-        StreamBuilder(
-            stream: null,
+        StreamBuilder<Object>(
+            stream: store.professionStream,
             builder: (context, snapshot) {
               return DropdownButton<String>(
                 value: defaultProfession,
@@ -182,6 +220,8 @@ class _CreateProfilePageState
                     () {
                       defaultProfession = newValue;
                       debugPrint(defaultProfession);
+                      store.changeProfession(defaultProfession!);
+                      debugPrint(defaultProfession);
                     },
                   );
                 },
@@ -189,7 +229,7 @@ class _CreateProfilePageState
             }),
         const SizedBox(height: 25),
         StreamBuilder(
-          stream: null,
+          stream: store.countryStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return DropdownButton<String>(
               value: defaultCountry,
@@ -202,6 +242,7 @@ class _CreateProfilePageState
                 setState(
                   () {
                     defaultCountry = newValue;
+                    store.changeCountry(defaultCountry!);
                   },
                 );
               },
