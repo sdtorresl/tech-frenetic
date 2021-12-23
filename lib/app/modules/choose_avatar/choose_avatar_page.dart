@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/common/alert_dialog.dart';
+import 'package:techfrenetic/app/providers/registration_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class ChooseAvatarPage extends StatefulWidget {
@@ -13,11 +15,53 @@ class ChooseAvatarPage extends StatefulWidget {
 
 class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
   String selectedAvatar = 'avatar-01';
+  bool? useAvatar = true;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Widget content =
+                const Text('Are you sure you don´t want to choose an avatar?');
+            List<Widget> actions = [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    child: Text(
+                      AppLocalizations.of(context)!.cancel.toUpperCase(),
+                      style: Theme.of(context).textTheme.button!.copyWith(
+                          fontSize: 12, color: Theme.of(context).primaryColor),
+                    ),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                  ),
+                  TextButton(
+                    child: Text(
+                      'I will do it later'.toUpperCase(),
+                      style: Theme.of(context).textTheme.button!.copyWith(
+                          fontSize: 12, color: Theme.of(context).primaryColor),
+                    ),
+                    onPressed: () {
+                      Modular.to.pushNamedAndRemoveUntil(
+                          "/community/", (p0) => false);
+                    },
+                  ),
+                ],
+              ),
+            ];
+            showMessage(context,
+                title: 'message'.toUpperCase(),
+                content: content,
+                actions: actions);
+          },
+        ),
+      ),
       body: ListView(
         children: [
           Padding(
@@ -48,30 +92,6 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
             ),
           )
         ],
-      ),
-    );
-  }
-
-  Widget _nextStep(BuildContext context) {
-    return Center(
-      child: SizedBox(
-        width: 400,
-        child: ElevatedButton(
-          onPressed: () =>
-              Modular.to.pushNamed("/welcome", arguments: selectedAvatar),
-          child: Text(
-            'Finish',
-            style: Theme.of(context)
-                .textTheme
-                .headline1!
-                .copyWith(color: Colors.white),
-          ),
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -108,26 +128,26 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
                     ),
                   ],
                 ),
-                Column(
-                  children: [
-                    const SizedBox(height: 25),
-                    Text(
-                      'Upload photo',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1!
-                          .copyWith(fontSize: 13),
-                    ),
-                    IconButton(
-                      onPressed: () => debugPrint('Im working'),
-                      icon: Icon(
-                        Icons.add_circle,
-                        size: 40,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ],
-                ),
+                // Column(
+                //   children: [
+                //     const SizedBox(height: 25),
+                //     Text(
+                //       'Upload photo',
+                //       style: Theme.of(context)
+                //           .textTheme
+                //           .headline1!
+                //           .copyWith(fontSize: 13),
+                //     ),
+                //     IconButton(
+                //       onPressed: () => debugPrint('Im working'),
+                //       icon: Icon(
+                //         Icons.add_circle,
+                //         size: 40,
+                //         color: Theme.of(context).primaryColor,
+                //       ),
+                //     ),
+                //   ],
+                // ),
               ],
             ),
             const SizedBox(height: 20),
@@ -156,6 +176,7 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
     List<Widget> avatarWidgets = avatars
         .map((avatar) => singleAvatar(avatar, avatar == selectedAvatar))
         .toList();
+
     return Wrap(
       alignment: WrapAlignment.spaceBetween,
       spacing: 10,
@@ -179,13 +200,55 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
               () {
                 if (value = true) {
                   selectedAvatar = avatar;
-                  debugPrint(selectedAvatar);
+                  useAvatar = value;
                 }
               },
             );
           },
         ),
       ],
+    );
+  }
+
+  Widget _nextStep(BuildContext context) {
+    bool isCompleted = selectedAvatar != '' && useAvatar! != false;
+    RegistrationProvider articlesProvider = RegistrationProvider();
+
+    return Center(
+      child: SizedBox(
+        width: 400,
+        child: ElevatedButton(
+          onPressed: isCompleted && !_isLoading
+              ? () async {
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  bool? created = await articlesProvider.selectAvatar(
+                      useAvatar!, selectedAvatar);
+                  setState(() {
+                    _isLoading = false;
+                  });
+                  if (created!) {
+                    Modular.to.pushNamed("/welcome", arguments: selectedAvatar);
+                  } else {
+                    debugPrint('no choose avatar');
+                  }
+                }
+              : null,
+          child: Text(
+            'Finish',
+            style: Theme.of(context)
+                .textTheme
+                .headline1!
+                .copyWith(color: Colors.white),
+          ),
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
