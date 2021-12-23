@@ -28,10 +28,9 @@ class RegistrationProvider extends TechFreneticProvider {
       };
       Map<String, String> headers = {
         'X-CSRF-Token': '',
-        'Cookie':
-            'SSESS7f59a8f509c4d9881fec690f43e729f1=MF-VYE99RBwuMe-jalhilriuypEsi4tiQw8ePQ6ANKc'
       };
-      headers['Content-Type'] = 'application/json';
+      headers.addAll(basicAuth);
+      headers.addAll(jsonHeader);
 
       headers.addAll(headers);
       var response = await http.post(

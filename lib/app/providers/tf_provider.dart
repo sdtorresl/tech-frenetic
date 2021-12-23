@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:techfrenetic/app/preferences/user_preferences.dart';
@@ -7,6 +9,16 @@ import 'package:intl/intl.dart';
 class TechFreneticProvider {
   final String baseUrl = GlobalConfiguration().getValue("api_url");
   final prefs = UserPreferences();
+
+  String authentication() {
+    String username = 'kerlynhans@gmail.com';
+    String password = 'aii28XGaHLxaSGR';
+    String basicAuthValue =
+        'Basic' + base64Encode(utf8.encode('$username:$password'));
+    return basicAuthValue;
+  }
+
+  Map<String, String> get basicAuth => {'Authorization': authentication()};
 
   Map<String, String> get authHeader => {'X-CSRF-Token': prefs.csrfToken ?? ''};
 
