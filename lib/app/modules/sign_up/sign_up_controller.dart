@@ -2,8 +2,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/models/session_model.dart';
 import 'package:techfrenetic/app/providers/registration_provider.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
 import '../../common/validators.dart';
 
 class SignUpController extends Disposable {
@@ -64,13 +65,13 @@ class SignUpController extends Disposable {
   String get company => _companyController.value;
   bool get terms => _termsController.value;
 
-  Future<bool> sign() async {
+  Future<String> sign() async {
     String? userType;
     List<String> emailSplit = email.split('@');
     Random randomNumber = Random();
-    String? userName = emailSplit[0] + randomNumber.nextInt(100).toString();
-
+    String? userName = emailSplit[0] + randomNumber.nextInt(1000).toString();
     RegistrationProvider _registrationProvider = RegistrationProvider();
+    UserProvider _userProvider = UserProvider();
     if (person == 'person') {
       userType = 'person';
     }
@@ -78,17 +79,41 @@ class SignUpController extends Disposable {
       userType = 'company';
     }
 
-    debugPrint(email);
-    debugPrint(password);
-    debugPrint(name);
-    debugPrint(userType);
-    UserModel? session = await _registrationProvider.signUp(
+    String? session = await _registrationProvider.signUp(
         userName, email, password, name, userType);
 
-    if (session != null) {
-      return true;
+    if (session == userName) {
+      Random randomNumber = Random();
+      userName = emailSplit[0] + randomNumber.nextInt(1000).toString();
+      String? session = await _registrationProvider.signUp(
+          userName, email, password, name, userType);
+      if (session == email) {
+        return 'alredy use email';
+      }
+      if (session == 'true') {
+        SessionModel? login = await _userProvider.login(email, password);
+        if (login != null) {
+          return 'true';
+        } else {
+          return 'false';
+        }
+      } else {
+        return 'false';
+      }
+    }
+    if (session == email) {
+      return 'alredy use email';
+    }
+
+    if (session == 'true') {
+      SessionModel? login = await _userProvider.login(email, password);
+      if (login != null) {
+        return 'true';
+      } else {
+        return 'false';
+      }
     } else {
-      return false;
+      return 'false';
     }
   }
 
