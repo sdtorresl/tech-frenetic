@@ -18,6 +18,8 @@ class TechFreneticProvider {
 
   String get locale => Intl.getCurrentLocale().startsWith("es") ? "es" : "en";
 
+  String? get userId => prefs.userId;
+
   void updateCookie(http.Response response) {
     String? rawCookie = response.headers['set-cookie'];
     debugPrint("Cookie: $rawCookie");
