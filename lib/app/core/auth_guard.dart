@@ -1,5 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:techfrenetic/app/preferences/user_preferences.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 
 class AuthGuard extends RouteGuard {

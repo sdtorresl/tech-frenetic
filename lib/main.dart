@@ -4,7 +4,7 @@ import 'package:global_configuration/global_configuration.dart';
 import 'dart:io';
 import 'app/app_module.dart';
 import 'app/app_widget.dart';
-import 'app/preferences/user_preferences.dart';
+import 'app/core/user_preferences.dart';
 
 class MyHttpOverrides extends HttpOverrides {
   @override

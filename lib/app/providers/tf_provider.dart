@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
-import 'package:techfrenetic/app/preferences/user_preferences.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
