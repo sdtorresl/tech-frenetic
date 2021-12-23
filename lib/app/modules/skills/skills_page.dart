@@ -235,40 +235,42 @@ class _SkillsPageState extends State<SkillsPage> {
   }
 
   Widget featuredContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        SectionHeaderWidget(
-          child: Text(
-            "Featured Content",
-            style:
-                Theme.of(context).textTheme.headline1!.copyWith(fontSize: 25),
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          SectionHeaderWidget(
+            child: Text(
+              "Featured Content",
+              style:
+                  Theme.of(context).textTheme.headline1!.copyWith(fontSize: 25),
+            ),
           ),
-        ),
-        FutureBuilder(
-          future: _articlesProvideer.getFeatureArticle(),
-          builder: (BuildContext context,
-              AsyncSnapshot<List<ArticlesModel>> snapshot) {
-            if (snapshot.hasData) {
-              List<ArticlesModel> featureArticles = snapshot.data ?? [];
-              List<Widget> featurePost = [];
+          FutureBuilder(
+            future: _articlesProvideer.getFeatureArticle(),
+            builder: (BuildContext context,
+                AsyncSnapshot<List<ArticlesModel>> snapshot) {
+              if (snapshot.hasData) {
+                List<ArticlesModel> featureArticles = snapshot.data ?? [];
+                List<Widget> featurePost = [];
 
-              for (ArticlesModel article in featureArticles) {
-                featurePost.add(FeaturedArticleWidget(article: article));
+                for (ArticlesModel article in featureArticles) {
+                  featurePost.add(FeaturedArticleWidget(article: article));
+                }
+
+                return Column(
+                  children: [
+                    ...featurePost,
+                  ],
+                );
+              } else {
+                return const Center(child: CircularProgressIndicator());
               }
-
-              return Column(
-                children: [
-                  ...featurePost,
-                  const SizedBox(height: 30),
-                ],
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
-      ],
+            },
+          ),
+        ],
+      ),
     );
   }
 
