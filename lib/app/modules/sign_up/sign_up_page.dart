@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
@@ -282,18 +283,71 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                                     setState(() {
                                       _isLoading = true;
                                     });
-                                    bool signIn = await store.sign();
+                                    String signIn = await store.sign();
                                     setState(() {
                                       _isLoading = false;
                                     });
-                                    if (signIn) {
+                                    if (signIn == 'true') {
                                       const SnackBar(
                                         content: Text(
                                             'You are part of the tech frenetic cummunity now'),
                                       );
                                       Modular.to.pushNamedAndRemoveUntil(
                                           '/create_profile', (p0) => false);
+                                    } else if (signIn == 'alredy use email') {
+                                      Widget content = const Text(
+                                          'The email entered already exists, please verify your email');
+                                      List<Widget> actions = [
+                                        TextButton(
+                                          child: Text(
+                                            AppLocalizations.of(context)!
+                                                .close
+                                                .toUpperCase(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .button!
+                                                .copyWith(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ];
+                                      showMessage(context,
+                                          title: AppLocalizations.of(context)!
+                                              .error,
+                                          content: content,
+                                          actions: actions);
                                     } else {
+                                      Widget content = const Text(
+                                          'Sign up error please try again later');
+                                      List<Widget> actions = [
+                                        TextButton(
+                                          child: Text(
+                                            AppLocalizations.of(context)!
+                                                .close
+                                                .toUpperCase(),
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .button!
+                                                .copyWith(
+                                                    fontSize: 12,
+                                                    color: Theme.of(context)
+                                                        .primaryColor),
+                                          ),
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                        ),
+                                      ];
+                                      showMessage(context,
+                                          title: AppLocalizations.of(context)!
+                                              .error,
+                                          content: content,
+                                          actions: actions);
                                       debugPrint("Not sign");
                                     }
                                   }
