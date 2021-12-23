@@ -5,8 +5,11 @@ import 'package:techfrenetic/app/models/articles_model.dart';
 
 class MostPopularWidget extends StatefulWidget {
   final ArticlesModel article;
+  final int potition;
 
-  const MostPopularWidget({Key? key, required this.article}) : super(key: key);
+  const MostPopularWidget(
+      {Key? key, required this.article, required this.potition})
+      : super(key: key);
 
   @override
   _MostPopularWidgetState createState() => _MostPopularWidgetState();
@@ -16,7 +19,7 @@ class _MostPopularWidgetState extends State<MostPopularWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.symmetric(vertical: 40.0, horizontal: 8.0),
       child: Column(
         children: [
           Row(
@@ -24,7 +27,7 @@ class _MostPopularWidgetState extends State<MostPopularWidget> {
             children: [
               const SizedBox(width: 20),
               Text(
-                '1.',
+                widget.potition.toString(),
                 style: Theme.of(context)
                     .textTheme
                     .headline1!

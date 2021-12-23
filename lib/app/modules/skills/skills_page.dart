@@ -353,9 +353,14 @@ class _SkillsPageState extends State<SkillsPage> {
                 if (snapshot.hasData) {
                   List<ArticlesModel> latestArticles = snapshot.data ?? [];
                   List<Widget> latestPost = [];
+                  int num = 0;
 
                   for (ArticlesModel article in latestArticles) {
-                    latestPost.add(MostPopularWidget(article: article));
+                    num++;
+                    latestPost.add(MostPopularWidget(
+                      article: article,
+                      potition: num,
+                    ));
                   }
 
                   return Column(

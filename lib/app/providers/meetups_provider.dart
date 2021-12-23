@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:techfrenetic/app/models/meetups_model.dart';
 import 'dart:convert' as json;

@@ -8,7 +8,6 @@ import 'package:techfrenetic/app/modules/meetups/meetups_page.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
-import 'package:techfrenetic/app/widgets/meetups_widget.dart';
 import 'package:techfrenetic/app/modules/groups/groups_page.dart';
 
 class CommunityPage extends StatefulWidget {

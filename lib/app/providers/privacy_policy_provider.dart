@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/terms_and_privacy_policy_model.dart';
 import 'package:http/http.dart' as http;
-import 'package:html/parser.dart';
 import 'dart:convert' as json;
 
 import 'package:techfrenetic/app/providers/tf_provider.dart';

@@ -9,7 +9,6 @@ import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:image/image.dart' as img;
 
 class AddArticlesPage extends StatefulWidget {
   final String title;
@@ -142,7 +141,7 @@ class AddArticlesPageState extends State<AddArticlesPage> {
     return TextField(
       maxLines: 5,
       minLines: 3,
-      decoration: InputDecoration(labelText: "Título"),
+      decoration: const InputDecoration(labelText: "Título"),
       onChanged: (text) {
         setState(
           () {
