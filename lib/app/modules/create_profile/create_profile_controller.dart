@@ -37,9 +37,13 @@ class CreateProfileController extends Disposable {
 
   Future<bool> createProfile() async {
     RegistrationProvider _registrationProvider = RegistrationProvider();
-    String? profile = await _registrationProvider.createProfile(
+    bool? profile = await _registrationProvider.createProfile(
         companyName, profession, country, description);
-    return true;
+    if (profile == true) {
+      return true;
+    } else {
+      return false;
+    }
   }
 
   @override
