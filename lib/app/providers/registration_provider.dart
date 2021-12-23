@@ -97,7 +97,7 @@ class RegistrationProvider extends TechFreneticProvider {
     } catch (e) {
       debugPrint(e.toString());
     }
-    return null;
+    return false;
   }
 
   Future<bool?> selectAvatar(bool useAvatar, String userAvatar) async {
