@@ -3,6 +3,7 @@ import 'package:techfrenetic/app/core/auth_guard.dart';
 import 'package:techfrenetic/app/modules/articles/articles_module.dart';
 import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/contact_us/contact_us_module.dart';
+import 'package:techfrenetic/app/modules/create_groups/create_groups_page.dart';
 import 'package:techfrenetic/app/modules/create_meetups/create_meetups_module.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
@@ -20,7 +21,6 @@ import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
 import 'package:techfrenetic/app/modules/events/events_page.dart';
 import 'package:techfrenetic/app/modules/vendors/vendors_page.dart';
 import 'package:techfrenetic/app/modules/videos/videos_module.dart';
-import 'package:techfrenetic/app/modules/create_groups/create_groups_module.dart';
 
 import 'home_controller.dart';
 import 'home_page.dart';
@@ -40,7 +40,6 @@ class HomeModule extends Module {
       children: [
         ModuleRoute('/community/', module: CommunityModule()),
         ModuleRoute('/contact_us', module: ContactUsModule()),
-        
         ChildRoute(
           '/skills',
           child: (context, args) => const SkillsPage(),
@@ -94,6 +93,14 @@ class HomeModule extends Module {
         AuthGuard(),
       ],
     ),
+    ChildRoute(
+      '/create_groups',
+      child: (context, args) => const CreateGroupsPage(),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
+
     ModuleRoute(
       '/create_meetups',
       module: CreateMeetupsModule(),
@@ -135,12 +142,10 @@ class HomeModule extends Module {
       '/forgot',
       module: ForgotPasswordModule(),
     ),
-    ModuleRoute(
-      '/create_groups',
-      module: CreateGroupsModule(),
-      guards: [
-        AuthGuard(),
-      ],
-    ),
+    // ModuleRoute(
+    //   '/create_groups',
+    //   module: CreateGroupsModule(),
+
+    // ),
   ];
 }

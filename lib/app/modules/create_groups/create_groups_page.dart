@@ -11,8 +11,7 @@ class CreateGroupsPage extends StatefulWidget {
   _CreateGroupsPageState createState() => _CreateGroupsPageState();
 }
 
-class _CreateGroupsPageState
-    extends ModularState<CreateGroupsPage, CreateGroupsController> {
+class _CreateGroupsPageState extends State<CreateGroupsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,7 +139,7 @@ class _CreateGroupsPageState
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           StreamBuilder<Object>(
-              stream: store.nameStream,
+              stream: null, //store.nameStream,
               builder: (context, snapshot) {
                 return TextFormField(
                   decoration: InputDecoration(
