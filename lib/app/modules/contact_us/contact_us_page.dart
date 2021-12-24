@@ -49,20 +49,20 @@ class _ContactUsPageState
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 5),
               child: Text(
-                'Contact Us',
+                AppLocalizations.of(context)!.contact,
                 style: Theme.of(context).textTheme.headline1!.copyWith(
                     color: Theme.of(context).indicatorColor, fontSize: 30),
               ),
             ),
             const SizedBox(height: 20),
             Text(
-              'Call us',
+              AppLocalizations.of(context)!.call_us,
               style: Theme.of(context)
                   .textTheme
                   .headline2!
                   .copyWith(color: Colors.white),
             ),
-            Text('Phone: (+57 3104655112)',
+            Text(AppLocalizations.of(context)!.phone + '(+57 3104655112)',
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(
                       color: Colors.white,
                     )),
@@ -89,7 +89,7 @@ class _ContactUsPageState
             ),
             const SizedBox(height: 20),
             Text(
-              'Write Us',
+              AppLocalizations.of(context)!.write_us,
               style: Theme.of(context)
                   .textTheme
                   .headline2!
@@ -109,7 +109,7 @@ class _ContactUsPageState
             ),
             const SizedBox(height: 20),
             Text(
-              'Find Us',
+              AppLocalizations.of(context)!.find_us,
               style: Theme.of(context)
                   .textTheme
                   .headline2!
@@ -144,13 +144,13 @@ class _ContactUsPageState
               children: [
                 HighlightContainer(
                   child: Text(
-                    'Get in',
+                    AppLocalizations.of(context)!.get_in,
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                         color: Theme.of(context).indicatorColor, fontSize: 30),
                   ),
                 ),
                 Text(
-                  ' Touch',
+                  ' ' + AppLocalizations.of(context)!.touch,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -160,7 +160,7 @@ class _ContactUsPageState
             ),
             const SizedBox(height: 20),
             Text(
-              'Complete the information and we will contact you shortly.',
+              AppLocalizations.of(context)!.compleate_the_information,
               style: Theme.of(context).textTheme.bodyText1,
             ),
             const SizedBox(height: 10),
@@ -189,10 +189,6 @@ class _ContactUsPageState
                                   _isLoading = false;
                                 });
                                 if (createProfile) {
-                                  const SnackBar(
-                                    content: Text(
-                                        'You are part of the tech frenetic cummunity now'),
-                                  );
                                   debugPrint('Email Send');
                                   // Modular.to.pushNamedAndRemoveUntil(
                                   //     '/choose_avatar', (p0) => false);
@@ -202,7 +198,7 @@ class _ContactUsPageState
                               }
                             : null,
                         child: Text(
-                          'Send',
+                          AppLocalizations.of(context)!.send,
                           style: Theme.of(context)
                               .textTheme
                               .headline1!
@@ -235,7 +231,7 @@ class _ContactUsPageState
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
-                hintText: 'What´s your name?',
+                hintText: AppLocalizations.of(context)!.your_name,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -256,7 +252,7 @@ class _ContactUsPageState
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'What´s your email?',
+                  hintText: AppLocalizations.of(context)!.whats_your_name,
                   hintStyle: Theme.of(context)
                       .textTheme
                       .bodyText1!
@@ -277,7 +273,7 @@ class _ContactUsPageState
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
-                hintText: 'What´s your phone?',
+                hintText: AppLocalizations.of(context)!.your_phone,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -319,7 +315,7 @@ class _ContactUsPageState
         ),
         const SizedBox(height: 40),
         Text(
-          'Message',
+          AppLocalizations.of(context)!.message2,
           style: Theme.of(context)
               .textTheme
               .bodyText1!
@@ -331,12 +327,14 @@ class _ContactUsPageState
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
-                hintText: 'Write...',
+                hintText: AppLocalizations.of(context)!.write + '...',
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
                     .copyWith(color: Theme.of(context).hintColor),
-                errorText: snapshot.hasError ? 'Write a message' : null,
+                errorText: snapshot.hasError
+                    ? AppLocalizations.of(context)!.write_a_message
+                    : null,
                 errorStyle: Theme.of(context)
                     .textTheme
                     .headline4!

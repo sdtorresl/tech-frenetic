@@ -46,7 +46,7 @@ class _CreateProfilePageState
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Widget content =
-                Text('Are you sure you don´t want to create a profile?');
+                Text(AppLocalizations.of(context)!.create_profile_message);
             List<Widget> actions = [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,7 +63,9 @@ class _CreateProfilePageState
                   ),
                   TextButton(
                     child: Text(
-                      'I will do it later'.toUpperCase(),
+                      AppLocalizations.of(context)!
+                          .message_btn_later
+                          .toUpperCase(),
                       style: Theme.of(context).textTheme.button!.copyWith(
                           fontSize: 12, color: Theme.of(context).primaryColor),
                     ),
@@ -76,7 +78,7 @@ class _CreateProfilePageState
               ),
             ];
             showMessage(context,
-                title: 'message'.toUpperCase(),
+                title: AppLocalizations.of(context)!.message.toUpperCase(),
                 content: content,
                 actions: actions);
           },
@@ -95,13 +97,13 @@ class _CreateProfilePageState
                 const SizedBox(height: 40),
                 HighlightContainer(
                   child: Text(
-                    'Create your',
+                    AppLocalizations.of(context)!.blue_create,
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                         color: Theme.of(context).indicatorColor, fontSize: 30),
                   ),
                 ),
                 Text(
-                  'TechFrenetic Profile',
+                  AppLocalizations.of(context)!.black_create,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -128,10 +130,6 @@ class _CreateProfilePageState
                                       _isLoading = false;
                                     });
                                     if (createProfile) {
-                                      const SnackBar(
-                                        content: Text(
-                                            'You are part of the tech frenetic cummunity now'),
-                                      );
                                       Modular.to.pushNamedAndRemoveUntil(
                                           '/choose_avatar', (p0) => false);
                                     } else {
@@ -140,7 +138,7 @@ class _CreateProfilePageState
                                   }
                                 : null,
                             child: Text(
-                              'Continue',
+                              AppLocalizations.of(context)!.continue_button,
                               style: Theme.of(context)
                                   .textTheme
                                   .headline1!
@@ -174,7 +172,7 @@ class _CreateProfilePageState
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
-                hintText: 'What´s your company name?',
+                hintText: AppLocalizations.of(context)!.your_company,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -201,7 +199,7 @@ class _CreateProfilePageState
                   color: Colors.black,
                 ),
                 hint: Text(
-                  'Your profession',
+                  AppLocalizations.of(context)!.yout_profession,
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1!
@@ -247,7 +245,7 @@ class _CreateProfilePageState
                 );
               },
               hint: Text(
-                'Your country',
+                AppLocalizations.of(context)!.your_country,
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -264,7 +262,7 @@ class _CreateProfilePageState
         ),
         const SizedBox(height: 25),
         Text(
-          'Description',
+          AppLocalizations.of(context)!.meetups_lbl_description,
           style: Theme.of(context)
               .textTheme
               .bodyText1!
@@ -275,14 +273,14 @@ class _CreateProfilePageState
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
-                hintText:
-                    'Tech passionate in Developing advanced solutions for businesses to eneable transformation and evolution.',
+                hintText: AppLocalizations.of(context)!.tech_passionate,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
                     .copyWith(color: Theme.of(context).hintColor),
-                errorText:
-                    snapshot.hasError ? 'Ingresa una descripcion corta' : null,
+                errorText: snapshot.hasError
+                    ? AppLocalizations.of(context)!.enter_description
+                    : null,
                 errorStyle: Theme.of(context)
                     .textTheme
                     .headline4!

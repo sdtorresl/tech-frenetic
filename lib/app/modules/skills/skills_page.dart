@@ -33,7 +33,7 @@ class _SkillsPageState extends State<SkillsPage> {
               children: [
                 const SizedBox(height: 30),
                 Text(
-                  'Improve your skills',
+                  AppLocalizations.of(context)!.skills_title,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -47,7 +47,7 @@ class _SkillsPageState extends State<SkillsPage> {
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  '¿What do you want to learn?',
+                  AppLocalizations.of(context)!.what_do_you,
                   textAlign: TextAlign.center,
                   style: Theme.of(context)
                       .textTheme
@@ -242,7 +242,7 @@ class _SkillsPageState extends State<SkillsPage> {
         children: [
           SectionHeaderWidget(
             child: Text(
-              "Featured Content",
+              AppLocalizations.of(context)!.featured_content,
               style:
                   Theme.of(context).textTheme.headline1!.copyWith(fontSize: 25),
             ),
@@ -281,7 +281,7 @@ class _SkillsPageState extends State<SkillsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Latest content',
+            AppLocalizations.of(context)!.latest_content,
             style:
                 Theme.of(context).textTheme.headline1!.copyWith(fontSize: 25),
           ),
@@ -331,13 +331,13 @@ class _SkillsPageState extends State<SkillsPage> {
               children: [
                 HighlightContainer(
                   child: Text(
-                    'Most',
+                    AppLocalizations.of(context)!.most,
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                         color: Theme.of(context).primaryColor, fontSize: 25),
                   ),
                 ),
                 Text(
-                  'Popular',
+                  AppLocalizations.of(context)!.popular,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -391,7 +391,7 @@ class _SkillsPageState extends State<SkillsPage> {
       children: [
         HighlightContainer(
           child: Text(
-            'Content',
+            AppLocalizations.of(context)!.tab_content,
             style: Theme.of(context)
                 .textTheme
                 .headline1!
@@ -403,7 +403,7 @@ class _SkillsPageState extends State<SkillsPage> {
           children: [
             HighlightContainer(
               child: Text(
-                'from',
+                AppLocalizations.of(context)!.from,
                 style: Theme.of(context).textTheme.headline1!.copyWith(
                     color: Theme.of(context).primaryColor, fontSize: 25),
               ),
@@ -421,7 +421,7 @@ class _SkillsPageState extends State<SkillsPage> {
           child: ElevatedButton(
             onPressed: () => Modular.to.pushNamed("/community"),
             child: Text(
-              'Explore more',
+              AppLocalizations.of(context)!.explore_more,
               style: Theme.of(context).textTheme.headline1!.copyWith(
                   color: Theme.of(context).indicatorColor, fontSize: 16),
             ),

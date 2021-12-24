@@ -25,8 +25,7 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Widget content =
-                const Text('Are you sure you don´t want to choose an avatar?');
+            Widget content = Text(AppLocalizations.of(context)!.avatar_message);
             List<Widget> actions = [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -43,7 +42,9 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
                   ),
                   TextButton(
                     child: Text(
-                      'I will do it later'.toUpperCase(),
+                      AppLocalizations.of(context)!
+                          .message_btn_later
+                          .toUpperCase(),
                       style: Theme.of(context).textTheme.button!.copyWith(
                           fontSize: 12, color: Theme.of(context).primaryColor),
                     ),
@@ -56,7 +57,7 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
               ),
             ];
             showMessage(context,
-                title: 'message'.toUpperCase(),
+                title: AppLocalizations.of(context)!.message.toUpperCase(),
                 content: content,
                 actions: actions);
           },
@@ -72,13 +73,13 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
               children: [
                 HighlightContainer(
                   child: Text(
-                    'Hi',
+                    AppLocalizations.of(context)!.say_hi,
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                         color: Theme.of(context).indicatorColor, fontSize: 30),
                   ),
                 ),
                 Text(
-                  'Choose an image',
+                  AppLocalizations.of(context)!.choose_image,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -113,14 +114,14 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
                 Column(
                   children: [
                     Text(
-                      'Choose',
+                      AppLocalizations.of(context)!.choose_blue,
                       style: Theme.of(context)
                           .textTheme
                           .headline1!
                           .copyWith(fontSize: 17),
                     ),
                     Text(
-                      'avatar',
+                      AppLocalizations.of(context)!.avatar,
                       style: Theme.of(context)
                           .textTheme
                           .headline1!
@@ -236,7 +237,7 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
                 }
               : null,
           child: Text(
-            'Finish',
+            AppLocalizations.of(context)!.finish,
             style: Theme.of(context)
                 .textTheme
                 .headline1!

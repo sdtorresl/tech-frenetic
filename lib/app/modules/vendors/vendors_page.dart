@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class VendorsPage extends StatefulWidget {
@@ -38,7 +38,7 @@ class VendorsPageState extends State<VendorsPage> {
           children: [
             const SizedBox(height: 40),
             Text(
-              'Tech Vendors & Partners',
+              AppLocalizations.of(context)!.vendors_title,
               style: Theme.of(context).textTheme.headline1!.copyWith(
                     color: Colors.white,
                     fontSize: 25,
@@ -47,7 +47,7 @@ class VendorsPageState extends State<VendorsPage> {
             ),
             const SizedBox(height: 20),
             Text(
-              'Expand your networking and contact tech Vendors and partners.',
+              AppLocalizations.of(context)!.expand_intro,
               style: Theme.of(context)
                   .textTheme
                   .bodyText1!
@@ -60,7 +60,7 @@ class VendorsPageState extends State<VendorsPage> {
               decoration: InputDecoration(
                 suffixIcon: Icon(Icons.search,
                     color: Theme.of(context).unselectedWidgetColor),
-                hintText: 'What are you looking for',
+                hintText: AppLocalizations.of(context)!.looking,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -78,7 +78,7 @@ class VendorsPageState extends State<VendorsPage> {
               decoration: InputDecoration(
                 suffixIcon: Icon(Icons.search,
                     color: Theme.of(context).unselectedWidgetColor),
-                hintText: 'Where are you from',
+                hintText: AppLocalizations.of(context)!.where_you_from,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -103,7 +103,7 @@ class VendorsPageState extends State<VendorsPage> {
                       color: Theme.of(context).scaffoldBackgroundColor,
                     ),
                     Text(
-                      'search',
+                      AppLocalizations.of(context)!.search2,
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1!
@@ -134,13 +134,13 @@ class VendorsPageState extends State<VendorsPage> {
               children: [
                 HighlightContainer(
                   child: Text(
-                    'Serch by',
+                    AppLocalizations.of(context)!.search_by,
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                         color: Theme.of(context).primaryColor, fontSize: 25),
                   ),
                 ),
                 Text(
-                  ' Category',
+                  ' ' + AppLocalizations.of(context)!.category,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -320,13 +320,13 @@ class VendorsPageState extends State<VendorsPage> {
               children: [
                 HighlightContainer(
                   child: Text(
-                    'Search by',
+                    AppLocalizations.of(context)!.search_by,
                     style: Theme.of(context).textTheme.headline1!.copyWith(
                         color: Theme.of(context).primaryColor, fontSize: 25),
                   ),
                 ),
                 Text(
-                  ' Vendor',
+                  AppLocalizations.of(context)!.vendor,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -347,7 +347,7 @@ class VendorsPageState extends State<VendorsPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'View all vendors ',
+                    AppLocalizations.of(context)!.all_vendors + ' ',
                     style: Theme.of(context)
                         .textTheme
                         .bodyText1!
