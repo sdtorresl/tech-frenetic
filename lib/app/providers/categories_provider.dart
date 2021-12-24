@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
-import 'package:techfrenetic/app/models/comment_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
 import 'package:http/http.dart' as http;

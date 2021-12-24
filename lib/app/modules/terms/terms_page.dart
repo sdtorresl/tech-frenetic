@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:techfrenetic/app/providers/terms_provider.dart';
 
 class TermsPage extends StatefulWidget {
   const TermsPage({Key? key}) : super(key: key);

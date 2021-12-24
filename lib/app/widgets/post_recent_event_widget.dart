@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:techfrenetic/app/models/events_model.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class PostRecentEventWidget extends StatefulWidget {
   final EventsModel event;
@@ -16,7 +15,7 @@ class PostRecentEventWidget extends StatefulWidget {
 class _PostRecentEventWidgetState extends State<PostRecentEventWidget> {
   @override
   Widget build(BuildContext context) {
-    final startDate = widget.event.startDate;
+    //final startDate = widget.event.startDate;
     return Container(
       decoration: const BoxDecoration(
         color: Colors.white,

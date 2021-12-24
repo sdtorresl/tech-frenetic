@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:techfrenetic/app/providers/categories_provider.dart';
+
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
@@ -120,7 +120,7 @@ class VendorsPageState extends State<VendorsPage> {
   }
 
   Widget searchByCategory() {
-    CategoriesProvider categoriesProvider = CategoriesProvider();
+    //CategoriesProvider categoriesProvider = CategoriesProvider();
     return Container(
       color: Colors.white,
       child: Padding(

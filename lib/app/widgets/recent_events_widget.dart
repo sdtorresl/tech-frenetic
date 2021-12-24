@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:techfrenetic/app/models/events_model.dart';
 import 'package:techfrenetic/app/providers/recent_events_provider.dart';
 import 'package:techfrenetic/app/widgets/post_recent_event_widget.dart';

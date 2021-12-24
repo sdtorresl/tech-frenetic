@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:http/http.dart' as http;

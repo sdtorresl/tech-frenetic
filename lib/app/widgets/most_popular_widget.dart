@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:timeago/timeago.dart' as timeago;
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 
 class MostPopularWidget extends StatefulWidget {

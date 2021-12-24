@@ -193,7 +193,7 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
                   width: 300,
                   child: ElevatedButton(
                     onPressed: () => debugPrint('Im working'),
-                    child: Text('search'),
+                    child: const Text('search'),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                           Theme.of(context).primaryColorDark),
@@ -307,7 +307,7 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
           width: 300,
           child: ElevatedButton(
             onPressed: () => debugPrint('Im working'),
-            child: Text('Filter'),
+            child: const Text('Filter'),
             style: ButtonStyle(
               backgroundColor:
                   MaterialStateProperty.all(Theme.of(context).primaryColor),

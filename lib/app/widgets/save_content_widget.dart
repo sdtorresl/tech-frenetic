@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
-import 'package:techfrenetic/app/models/saved_articles_model.dart';
+
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SaveContent extends StatefulWidget {
   final ArticlesModel savedPost;
