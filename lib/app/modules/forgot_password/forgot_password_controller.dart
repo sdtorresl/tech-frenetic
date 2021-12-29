@@ -1,7 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
-// import 'package:techfrenetic/app/models/session_model.dart';
-// import 'package:techfrenetic/app/providers/user_provider.dart';
 import '../../common/validators.dart';
 
 class ForgotPasswordController extends Disposable {
