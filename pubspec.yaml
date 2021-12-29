@@ -56,6 +56,7 @@ dependencies:
   flutter_html: ^2.1.0
   image_picker: ^0.8.4+4
   bubble: ^1.2.1
+  syncfusion_flutter_datepicker: ^19.4.40
 
 dev_dependencies:
   flutter_test:
