@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/modules/my_account/my_account_page.dart';
 import 'package:techfrenetic/app/widgets/my_profile_widget.dart';
-import 'package:techfrenetic/app/widgets/my_account_widget.dart';
 import 'package:techfrenetic/app/widgets/my_content_widget.dart';
 import 'package:techfrenetic/app/widgets/my_activity_widget.dart';
 import 'package:techfrenetic/app/widgets/saved_articles_widget.dart';
@@ -45,6 +46,7 @@ class ProfilePageState extends State<ProfilePage> {
       GButton(
         icon: Icons.manage_accounts,
         text: AppLocalizations.of(context)!.my_account,
+        onPressed: () => Modular.to.pushNamed('/profile/my_account'),
       ),
     ];
 

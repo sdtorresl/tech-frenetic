@@ -6,11 +6,11 @@ import 'package:techfrenetic/app/modules/contact_us/contact_us_module.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_page.dart';
 import 'package:techfrenetic/app/modules/create_meetups/create_meetups_module.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
+import 'package:techfrenetic/app/modules/profile/profile_module.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/about_us_widget.dart';
 import 'package:techfrenetic/app/modules/login/login_module.dart';
 import 'package:techfrenetic/app/modules/privacy_policy/privacy_poicy_page.dart';
-import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/modules/create_profile/create_profile_module.dart';
 import 'package:techfrenetic/app/modules/choose_avatar/choose_avatar_module.dart';
 import 'package:techfrenetic/app/modules/vendors_search/vendors_search_page.dart';
@@ -52,12 +52,7 @@ class HomeModule extends Module {
           '/vendors_search',
           child: (context, args) => const VendorsSearchPage(),
         ),
-        ChildRoute(
-          '/profile',
-          child: (context, args) => const ProfilePage(
-            selectedPage: 0,
-          ),
-        ),
+        ModuleRoute('/profile', module: ProfileModule()),
         ChildRoute(
           '/events',
           child: (context, args) => const EventsPage(),
