@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
+import 'package:techfrenetic/app/modules/my_account/my_account_controller.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:syncfusion_flutter_datepicker/datepicker.dart';
 
 class MyAccountPage extends StatefulWidget {
   const MyAccountPage({Key? key}) : super(key: key);
@@ -9,7 +13,31 @@ class MyAccountPage extends StatefulWidget {
   _MyAccountPageState createState() => _MyAccountPageState();
 }
 
-class _MyAccountPageState extends State<MyAccountPage> {
+class _MyAccountPageState
+    extends ModularState<MyAccountPage, MyAccountController> {
+  final prefs = UserPreferences();
+
+  DateTime _date = DateTime.now();
+
+  List<String> items = [
+    'Country 1',
+    'Country 2',
+    'Country 3',
+    'Country 4',
+    'Country 5',
+    'Country 6',
+    'Country 7',
+    'Country 8',
+    'Country 9',
+    'Country 10',
+    'Country 11',
+    'Country 12',
+  ];
+  // DateTime? birthdate;
+  // String? cellphone;
+  String? defaultCountry;
+  bool _isLoading = false;
+
   DateTime selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
@@ -94,6 +122,7 @@ class _MyAccountPageState extends State<MyAccountPage> {
   }
 
   Widget _form(context) {
+    String? email = prefs.userEmail;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
@@ -118,15 +147,21 @@ class _MyAccountPageState extends State<MyAccountPage> {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context)!.your_email,
-                  hintStyle: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(color: Theme.of(context).highlightColor),
-                ),
-              ),
+              StreamBuilder(
+                  stream: store.emailStream,
+                  builder: (context, snapshot) {
+                    store.changeEmail(email!);
+                    return TextFormField(
+                      decoration: InputDecoration(
+                        hintText: prefs.userEmail,
+                        hintStyle: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Theme.of(context).highlightColor),
+                      ),
+                      onChanged: store.changeEmail,
+                    );
+                  }),
               const SizedBox(height: 40),
               Align(
                 alignment: Alignment.centerLeft,
@@ -135,14 +170,40 @@ class _MyAccountPageState extends State<MyAccountPage> {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context)!.your_country,
-                  hintStyle: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(color: Theme.of(context).highlightColor),
-                ),
+              StreamBuilder(
+                stream: store.countryStream,
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  return DropdownButton<String>(
+                    value: defaultCountry,
+                    isExpanded: true,
+                    underline: Container(
+                      height: 0.5,
+                      color: Colors.black,
+                    ),
+                    onChanged: (newValue) {
+                      setState(
+                        () {
+                          defaultCountry = newValue;
+                          store.changeCountry(defaultCountry!);
+                        },
+                      );
+                    },
+                    hint: Text(
+                      AppLocalizations.of(context)!.your_country,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(color: Theme.of(context).hintColor),
+                    ),
+                    items: items.map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        child: Text(value),
+                        value: value,
+                      );
+                    }).toList(),
+                  );
+                },
               ),
               const SizedBox(height: 50),
               Align(
@@ -152,14 +213,20 @@ class _MyAccountPageState extends State<MyAccountPage> {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context)!.phone_number,
-                  hintStyle: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(color: Theme.of(context).highlightColor),
-                ),
+              StreamBuilder(
+                stream: store.cellphoneStream,
+                builder: (context, snapshot) {
+                  return TextFormField(
+                    decoration: InputDecoration(
+                      hintText: AppLocalizations.of(context)!.phone_number,
+                      hintStyle: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(color: Theme.of(context).highlightColor),
+                    ),
+                    onChanged: store.changeCellphone,
+                  );
+                },
               ),
               const SizedBox(height: 40),
               Align(
@@ -169,37 +236,40 @@ class _MyAccountPageState extends State<MyAccountPage> {
                   style: Theme.of(context).textTheme.bodyText1,
                 ),
               ),
-              TextFormField(
-                decoration: InputDecoration(
-                  hintText: "dd/mm/yyyy",
-                  hintStyle: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(color: Theme.of(context).highlightColor),
-                ),
-                onTap: () {/*_selectDate(context);*/},
+              StreamBuilder(
+                stream: store.birthdateStream,
+                builder: (context, snapshot) {
+                  return TextFormField(
+                    decoration: InputDecoration(
+                      hintText: "dd/mm/yyyy",
+                      hintStyle: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(color: Theme.of(context).highlightColor),
+                    ),
+                    onTap: () async {
+                      final DateTime? picked = await showDatePicker(
+                        context: context,
+                        initialDate: _date,
+                        firstDate: DateTime(1900),
+                        lastDate: DateTime(2100),
+                      );
+                      if (picked != null) {
+                        setState(() {
+                          _date = picked;
+                          debugPrint(_date.toString());
+                        });
+                      }
+                    },
+                    onChanged: store.changeBirthdate(_date),
+                  );
+                },
               ),
               const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  ElevatedButton(
-                    onPressed: () => debugPrint("Pressed"),
-                    child: Text(
-                      AppLocalizations.of(context)!.save_changes,
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1!
-                          .copyWith(color: Colors.white, fontSize: 15),
-                    ),
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.zero,
-                        ),
-                      ),
-                    ),
-                  ),
+                  updateButton(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
                     child: ElevatedButton(
@@ -292,5 +362,44 @@ class _MyAccountPageState extends State<MyAccountPage> {
         ),
       ),
     );
+  }
+
+  Widget updateButton() {
+    return StreamBuilder<Object>(
+        stream: store.formValidStream,
+        builder: (context, snapshot) {
+          return ElevatedButton(
+            onPressed: snapshot.hasData && !_isLoading
+                ? () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    bool article = await store.update();
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    if (article == true) {
+                      Modular.to.popAndPushNamed("/community");
+                    } else {
+                      debugPrint('Article not post');
+                    }
+                  }
+                : null,
+            child: Text(
+              AppLocalizations.of(context)!.save_changes,
+              style: Theme.of(context)
+                  .textTheme
+                  .headline1!
+                  .copyWith(color: Colors.white, fontSize: 15),
+            ),
+            style: ButtonStyle(
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.zero,
+                ),
+              ),
+            ),
+          );
+        });
   }
 }
