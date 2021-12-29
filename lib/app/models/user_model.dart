@@ -7,6 +7,7 @@ class UserModel extends Model {
     required this.uuid,
     required this.langcode,
     required this.userName,
+    required this.mail,
     required this.created,
     required this.changed,
     required this.defaultLangcode,
@@ -37,6 +38,7 @@ class UserModel extends Model {
   String uuid;
   String langcode;
   String userName;
+  String mail;
   DateTime? created;
   DateTime? changed;
   bool defaultLangcode;
@@ -90,6 +92,7 @@ class UserModel extends Model {
       uuid: Model.returnValue(json["uuid"], ''),
       langcode: Model.returnValue(json["langcode"], ''),
       userName: Model.returnValue(json["name"], ''),
+      mail: Model.returnValue(json["mail"], ''),
       created: DateTime.tryParse(createdStr),
       changed: DateTime.tryParse(changedStr),
       defaultLangcode: Model.returnValue(json["default_langcode"], true),
@@ -126,6 +129,7 @@ class UserModel extends Model {
         "uuid": uuid,
         "langcode": langcode,
         "name": userName,
+        "mail": mail,
         "created": created != null ? created!.toIso8601String() : created,
         "changed": changed != null ? changed!.toIso8601String() : changed,
         "default_langcode": defaultLangcode,
