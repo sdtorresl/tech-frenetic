@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AboutUsWidget extends StatelessWidget {
   const AboutUsWidget({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class AboutUsWidget extends StatelessWidget {
                   children: [
                     const SizedBox(height: 10),
                     Text(
-                      'Hey, we´re',
+                      AppLocalizations.of(context)!.hey,
                       style: Theme.of(context).textTheme.headline1!.copyWith(
                             color: Colors.white,
                             fontSize: 26,
@@ -56,7 +57,7 @@ class AboutUsWidget extends StatelessWidget {
                 child: Column(
                   children: [
                     Text(
-                      'Whats the DNA of a Tech Frenetic?',
+                      AppLocalizations.of(context)!.about_us_title,
                       style: Theme.of(context).textTheme.headline1!.copyWith(
                           color: Theme.of(context).indicatorColor,
                           fontSize: 30),
@@ -72,7 +73,7 @@ class AboutUsWidget extends StatelessWidget {
                         const SizedBox(width: 10),
                         Flexible(
                           child: Text(
-                            'We love to Learn everryday',
+                            AppLocalizations.of(context)!.love_to_learn,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1!
@@ -91,12 +92,16 @@ class AboutUsWidget extends StatelessWidget {
                           color: Theme.of(context).indicatorColor,
                         ),
                         const SizedBox(width: 10),
-                        Text(
-                          'We are tech passionate',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(fontSize: 20),
+                        Flexible(
+                          child: Text(
+                            AppLocalizations.of(context)!.tech_passionate,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(fontSize: 20),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
                       ],
                     ),
@@ -110,7 +115,7 @@ class AboutUsWidget extends StatelessWidget {
                         const SizedBox(width: 10),
                         Flexible(
                           child: Text(
-                            'We are community lovers',
+                            AppLocalizations.of(context)!.community_lovers,
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1!
@@ -127,7 +132,7 @@ class AboutUsWidget extends StatelessWidget {
                       child: ElevatedButton(
                         onPressed: () => Modular.to.pushNamed("/community/"),
                         child: Text(
-                          'Become frenetic',
+                          AppLocalizations.of(context)!.become,
                           style: Theme.of(context)
                               .textTheme
                               .button!

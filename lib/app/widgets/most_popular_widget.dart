@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MostPopularWidget extends StatefulWidget {
   final ArticlesModel article;
@@ -55,7 +56,7 @@ class _MostPopularWidgetState extends State<MostPopularWidget> {
                     const SizedBox(height: 10),
                     Row(
                       children: [
-                        Text('By ',
+                        Text(AppLocalizations.of(context)!.by + ' ',
                             style: Theme.of(context)
                                 .textTheme
                                 .headline1!

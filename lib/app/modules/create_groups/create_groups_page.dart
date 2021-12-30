@@ -10,6 +10,12 @@ class CreateGroupsPage extends StatefulWidget {
   _CreateGroupsPageState createState() => _CreateGroupsPageState();
 }
 
+List<String> items = [
+  'Private',
+  'Public',
+];
+String? defaultValue = items.first;
+
 class _CreateGroupsPageState extends State<CreateGroupsPage> {
   @override
   Widget build(BuildContext context) {
@@ -102,9 +108,9 @@ class _CreateGroupsPageState extends State<CreateGroupsPage> {
                           width: 250,
                           child: ElevatedButton(
                             onPressed: () => {},
-                            child: const Text(
-                              'Create group',
-                              style: TextStyle(
+                            child: Text(
+                              AppLocalizations.of(context)!.btn_create,
+                              style: const TextStyle(
                                 color: Colors.white,
                               ),
                             ),
@@ -142,7 +148,7 @@ class _CreateGroupsPageState extends State<CreateGroupsPage> {
               builder: (context, snapshot) {
                 return TextFormField(
                   decoration: InputDecoration(
-                    hintText: 'Write the group name',
+                    hintText: AppLocalizations.of(context)!.group_name,
                     hintStyle: Theme.of(context)
                         .textTheme
                         .bodyText1!
@@ -159,7 +165,7 @@ class _CreateGroupsPageState extends State<CreateGroupsPage> {
           const SizedBox(height: 40),
           TextFormField(
             decoration: InputDecoration(
-              hintText: 'Write the group name',
+              hintText: AppLocalizations.of(context)!.group_description,
               hintStyle: Theme.of(context)
                   .textTheme
                   .bodyText1!
@@ -174,22 +180,7 @@ class _CreateGroupsPageState extends State<CreateGroupsPage> {
           const SizedBox(height: 40),
           TextFormField(
             decoration: InputDecoration(
-              hintText: 'Write short description group name',
-              hintStyle: Theme.of(context)
-                  .textTheme
-                  .bodyText1!
-                  .copyWith(color: Theme.of(context).hintColor),
-              //errorText: snapshot.hasError ? snapshot.error.toString() : null,
-              errorStyle: Theme.of(context)
-                  .textTheme
-                  .headline4!
-                  .copyWith(color: Colors.red),
-            ),
-          ),
-          const SizedBox(height: 40),
-          TextFormField(
-            decoration: InputDecoration(
-              hintText: 'Group rules',
+              hintText: AppLocalizations.of(context)!.group_rules,
               hintStyle: Theme.of(context)
                   .textTheme
                   .bodyText1!
@@ -203,13 +194,13 @@ class _CreateGroupsPageState extends State<CreateGroupsPage> {
           ),
           const SizedBox(height: 60),
           Text(
-            'Write the name of person',
+            AppLocalizations.of(context)!.group_person,
             style:
                 Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
           ),
           TextFormField(
             decoration: InputDecoration(
-              hintText: 'Write the name of person',
+              hintText: AppLocalizations.of(context)!.group_person,
               hintStyle: Theme.of(context)
                   .textTheme
                   .bodyText1!
@@ -220,6 +211,36 @@ class _CreateGroupsPageState extends State<CreateGroupsPage> {
                   .headline4!
                   .copyWith(color: Colors.red),
             ),
+          ),
+          const SizedBox(height: 60),
+          Text(
+            AppLocalizations.of(context)!.select,
+            style:
+                Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
+          ),
+          DropdownButton<String>(
+            value: defaultValue,
+            isExpanded: true,
+            underline: Container(
+              height: 0.5,
+              color: Colors.black,
+            ),
+            items: items.map(
+              (String valueItem) {
+                return DropdownMenuItem<String>(
+                  child: Text(valueItem),
+                  value: valueItem,
+                );
+              },
+            ).toList(),
+            onChanged: (newValue) {
+              setState(
+                () {
+                  defaultValue = newValue;
+                  debugPrint(defaultValue);
+                },
+              );
+            },
           ),
           const SizedBox(height: 60),
         ],

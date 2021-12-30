@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class RecommendedGroupsWidget extends StatefulWidget {
   const RecommendedGroupsWidget({Key? key}) : super(key: key);
@@ -81,7 +82,7 @@ class _RecommendedGroupsWidgetState extends State<RecommendedGroupsWidget> {
                       ElevatedButton(
                         onPressed: null,
                         child: Text(
-                          'Join Group',
+                          AppLocalizations.of(context)!.btn_join,
                           style: Theme.of(context)
                               .textTheme
                               .headline1!

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/providers/vendors_search_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class VendorsSearchPage extends StatefulWidget {
   const VendorsSearchPage({Key? key}) : super(key: key);
@@ -29,7 +30,7 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
         leading: const SizedBox(),
         backgroundColor: Colors.white,
         title: Text(
-          'Result',
+          AppLocalizations.of(context)!.results,
           style: Theme.of(context).textTheme.headline1,
         ),
       ),
@@ -41,26 +42,21 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    HighlightContainer(
-                      child: Text(
-                        'Tech Vendors',
-                        style: Theme.of(context).textTheme.headline1!.copyWith(
-                              fontSize: 25,
-                              color: Theme.of(context).indicatorColor,
-                            ),
-                      ),
-                    ),
-                    Text(
-                      ' & Partners',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1!
-                          .copyWith(fontSize: 25),
-                    ),
-                  ],
+                HighlightContainer(
+                  child: Text(
+                    AppLocalizations.of(context)!.blue_vendors,
+                    style: Theme.of(context).textTheme.headline1!.copyWith(
+                          fontSize: 25,
+                          color: Theme.of(context).indicatorColor,
+                        ),
+                  ),
+                ),
+                Text(
+                  AppLocalizations.of(context)!.black_tech,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1!
+                      .copyWith(fontSize: 25),
                 ),
                 const SizedBox(height: 20),
                 Container(
@@ -97,7 +93,7 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'What are you looking for',
+                        AppLocalizations.of(context)!.looking,
                         style: Theme.of(context)
                             .textTheme
                             .headline1!
@@ -110,7 +106,8 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
                           focusedErrorBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           border: InputBorder.none,
-                          hintText: 'Write the area,service or provider',
+                          hintText:
+                              AppLocalizations.of(context)!.write_provider,
                           hintStyle: Theme.of(context)
                               .textTheme
                               .bodyText1!
@@ -160,7 +157,7 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Where',
+                        AppLocalizations.of(context)!.meetups_lbl_where,
                         style: Theme.of(context)
                             .textTheme
                             .headline1!
@@ -173,7 +170,7 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
                           focusedErrorBorder: InputBorder.none,
                           enabledBorder: InputBorder.none,
                           border: InputBorder.none,
-                          hintText: 'Write the city or location',
+                          hintText: AppLocalizations.of(context)!.where_desc,
                           hintStyle: Theme.of(context)
                               .textTheme
                               .bodyText1!
@@ -193,7 +190,7 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
                   width: 300,
                   child: ElevatedButton(
                     onPressed: () => debugPrint('Im working'),
-                    child: const Text('search'),
+                    child: Text(AppLocalizations.of(context)!.search2),
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
                           Theme.of(context).primaryColorDark),
@@ -233,22 +230,16 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
     String results = wall.results;
     return Column(
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              'Search results',
-              style:
-                  Theme.of(context).textTheme.headline1!.copyWith(fontSize: 19),
-            ),
-            Text(
-              '$results results',
-              style: Theme.of(context).textTheme.headline1!.copyWith(
-                    fontSize: 17,
-                    color: Theme.of(context).indicatorColor,
-                  ),
-            ),
-          ],
+        Text(
+          AppLocalizations.of(context)!.search_results,
+          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 19),
+        ),
+        Text(
+          '$results ' + AppLocalizations.of(context)!.results2,
+          style: Theme.of(context).textTheme.headline1!.copyWith(
+                fontSize: 17,
+                color: Theme.of(context).indicatorColor,
+              ),
         ),
         const SizedBox(height: 30),
         Container(
@@ -277,13 +268,6 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
             value: defaultValue,
             isExpanded: true,
             underline: const SizedBox(),
-            hint: Text(
-              'Your profession',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1!
-                  .copyWith(color: Theme.of(context).hintColor),
-            ),
             items: items.map(
               (String valueItem) {
                 return DropdownMenuItem<String>(
@@ -307,7 +291,7 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
           width: 300,
           child: ElevatedButton(
             onPressed: () => debugPrint('Im working'),
-            child: const Text('Filter'),
+            child: Text(AppLocalizations.of(context)!.ttl_filter),
             style: ButtonStyle(
               backgroundColor:
                   MaterialStateProperty.all(Theme.of(context).primaryColor),

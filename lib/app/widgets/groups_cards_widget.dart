@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class GroupsCardsWidget extends StatefulWidget {
   const GroupsCardsWidget({Key? key}) : super(key: key);
@@ -57,7 +58,7 @@ class _GroupsCardsWidgetState extends State<GroupsCardsWidget> {
           trailing: ElevatedButton(
             onPressed: null,
             child: Text(
-              'Join Group',
+              AppLocalizations.of(context)!.btn_join,
               style:
                   Theme.of(context).textTheme.headline1!.copyWith(fontSize: 13),
             ),
