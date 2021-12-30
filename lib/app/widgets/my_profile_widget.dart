@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
@@ -119,9 +120,12 @@ class _MyProfileState extends State<MyProfile> {
                 elevation: 0,
                 child: Column(
                   children: [
-                    UserAvatarWidget(
-                      username: widget.user.name,
-                      radius: 40,
+                    GestureDetector(
+                      onTap: () => Modular.to.pushNamed('/choose_avatar'),
+                      child: UserAvatarWidget(
+                        username: widget.user.name,
+                        radius: 40,
+                      ),
                     ),
                     ListTile(
                       title: Padding(
