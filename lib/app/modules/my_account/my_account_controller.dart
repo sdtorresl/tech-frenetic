@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/providers/user_actualizations_provider.dart';
 import '../../common/validators.dart';
 
@@ -35,16 +36,25 @@ class MyAccountController extends Disposable {
   DateTime get birthdate => _birthdateController.value;
 
   Future<bool> update() async {
+    UserPreferences prefs = UserPreferences();
     UserActualizationsProvider _actualizationsProvider =
         UserActualizationsProvider();
-
-    bool? update = await _actualizationsProvider.userUpdate(
-        birthdate, cellphone, country, email);
-
-    if (update == true) {
-      return true;
+    if (prefs.userEmail == email) {
+      bool? update =
+          await _actualizationsProvider.update(birthdate, cellphone, country);
+      if (update == true) {
+        return true;
+      } else {
+        return false;
+      }
     } else {
-      return false;
+      bool? update = await _actualizationsProvider.userUpdate(
+          birthdate, cellphone, country, email);
+      if (update == true) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 
