@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/modules/my_account/my_account_controller.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:syncfusion_flutter_datepicker/datepicker.dart';
+import 'package:intl/intl.dart';
 
 class MyAccountPage extends StatefulWidget {
   const MyAccountPage({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _MyAccountPageState
     extends ModularState<MyAccountPage, MyAccountController> {
   final prefs = UserPreferences();
 
-  DateTime _date = DateTime.now();
+  DateTime? datePicked;
 
   List<String> items = [
     'Country 1',
@@ -33,12 +34,13 @@ class _MyAccountPageState
     'Country 11',
     'Country 12',
   ];
-  // DateTime? birthdate;
-  // String? cellphone;
+  DateTime? birthdate;
+  String? cellphone;
   String? defaultCountry;
   bool _isLoading = false;
+  final emailController = TextEditingController();
+  final cellphoneController = TextEditingController();
 
-  DateTime selectedDate = DateTime.now();
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -123,6 +125,8 @@ class _MyAccountPageState
 
   Widget _form(context) {
     String? email = prefs.userEmail;
+    //String? dateformat = DateFormat('EEEE, MMM dd').format(datePicked);
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
       child: Container(
@@ -152,12 +156,20 @@ class _MyAccountPageState
                   builder: (context, snapshot) {
                     store.changeEmail(email!);
                     return TextFormField(
+                      controller: emailController,
                       decoration: InputDecoration(
                         hintText: prefs.userEmail,
                         hintStyle: Theme.of(context)
                             .textTheme
                             .bodyText1!
                             .copyWith(color: Theme.of(context).highlightColor),
+                        errorText: snapshot.hasError
+                            ? snapshot.error.toString()
+                            : null,
+                        errorStyle: Theme.of(context)
+                            .textTheme
+                            .headline4!
+                            .copyWith(color: Colors.red),
                       ),
                       onChanged: store.changeEmail,
                     );
@@ -217,12 +229,21 @@ class _MyAccountPageState
                 stream: store.cellphoneStream,
                 builder: (context, snapshot) {
                   return TextFormField(
+                    controller: cellphoneController,
+                    keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       hintText: AppLocalizations.of(context)!.phone_number,
                       hintStyle: Theme.of(context)
                           .textTheme
                           .bodyText1!
                           .copyWith(color: Theme.of(context).highlightColor),
+                      errorText: snapshot.hasError
+                          ? 'Ingrese un numero de telefono'
+                          : null,
+                      errorStyle: Theme.of(context)
+                          .textTheme
+                          .headline4!
+                          .copyWith(color: Colors.red),
                     ),
                     onChanged: store.changeCellphone,
                   );
@@ -240,28 +261,40 @@ class _MyAccountPageState
                 stream: store.birthdateStream,
                 builder: (context, snapshot) {
                   return TextFormField(
+                    readOnly: true,
+                    showCursor: true,
                     decoration: InputDecoration(
-                      hintText: "dd/mm/yyyy",
+                      hintText: datePicked == null
+                          ? "dd/mm/yyyy"
+                          : DateFormat('dd/MMM/yyyy').format(datePicked!),
                       hintStyle: Theme.of(context)
                           .textTheme
                           .bodyText1!
                           .copyWith(color: Theme.of(context).highlightColor),
+                      errorText:
+                          snapshot.hasError ? snapshot.error.toString() : null,
+                      errorStyle: Theme.of(context)
+                          .textTheme
+                          .headline4!
+                          .copyWith(color: Colors.red),
                     ),
+
                     onTap: () async {
-                      final DateTime? picked = await showDatePicker(
+                      showDatePicker(
                         context: context,
-                        initialDate: _date,
+                        initialDate: DateTime.now(),
                         firstDate: DateTime(1900),
                         lastDate: DateTime(2100),
-                      );
-                      if (picked != null) {
+                      ).then((date) {
                         setState(() {
-                          _date = picked;
-                          debugPrint(_date.toString());
+                          datePicked = date;
+                          store.changeBirthdate(date!);
                         });
-                      }
+                      });
                     },
-                    onChanged: store.changeBirthdate(_date),
+                    // onChanged: (text) {
+                    //   store.changeBirthdate(datePicked!);
+                    // }
                   );
                 },
               ),
@@ -272,27 +305,7 @@ class _MyAccountPageState
                   updateButton(),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: ElevatedButton(
-                      onPressed: () => debugPrint("Pressed"),
-                      child: Text(
-                        AppLocalizations.of(context)!.cancel,
-                        style: Theme.of(context).textTheme.headline1!.copyWith(
-                            color: Theme.of(context).indicatorColor,
-                            fontSize: 15),
-                      ),
-                      style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).primaryColorLight),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                            side: BorderSide(
-                                color: Theme.of(context).indicatorColor),
-                          ),
-                        ),
-                      ),
-                    ),
+                    child: cancelUpdate(),
                   ),
                 ],
               ),
@@ -338,24 +351,7 @@ class _MyAccountPageState
                 child: Text(AppLocalizations.of(context)!.last_changed + ': '),
               ),
               const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () => debugPrint("Pressed"),
-                child: Text(
-                  AppLocalizations.of(context)!.change_password,
-                  style: Theme.of(context).textTheme.headline1!.copyWith(
-                      color: Theme.of(context).indicatorColor, fontSize: 15),
-                ),
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                      Theme.of(context).primaryColorLight),
-                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                      side: BorderSide(color: Theme.of(context).indicatorColor),
-                    ),
-                  ),
-                ),
-              ),
+              changePasswordButton(),
               const SizedBox(height: 30),
             ],
           ),
@@ -366,40 +362,115 @@ class _MyAccountPageState
 
   Widget updateButton() {
     return StreamBuilder<Object>(
-        stream: store.formValidStream,
-        builder: (context, snapshot) {
-          return ElevatedButton(
-            onPressed: snapshot.hasData && !_isLoading
-                ? () async {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    bool article = await store.update();
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    if (article == true) {
-                      Modular.to.popAndPushNamed("/community");
-                    } else {
-                      debugPrint('Article not post');
-                    }
+      stream: store.formValidStream,
+      builder: (context, snapshot) {
+        return ElevatedButton(
+          onPressed: !_isLoading
+              ? () async {
+                  debugPrint(snapshot.data.toString());
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  bool article = await store.update();
+                  setState(() {
+                    _isLoading = true;
+                  });
+                  if (article == true) {
+                    Modular.to.popAndPushNamed("/community");
+                  } else {
+                    Widget content = Text(AppLocalizations.of(context)!
+                        .error_sorry_unrecognized_username_or_password);
+                    List<Widget> actions = [
+                      TextButton(
+                        child: Text(
+                          AppLocalizations.of(context)!.close.toUpperCase(),
+                          style: Theme.of(context).textTheme.button!.copyWith(
+                              fontSize: 12,
+                              color: Theme.of(context).primaryColor),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                    ];
+                    showMessage(context,
+                        title: AppLocalizations.of(context)!.error,
+                        content: content,
+                        actions: actions);
+                    debugPrint('not updated');
                   }
-                : null,
-            child: Text(
-              AppLocalizations.of(context)!.save_changes,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline1!
-                  .copyWith(color: Colors.white, fontSize: 15),
-            ),
-            style: ButtonStyle(
-              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.zero,
-                ),
+                }
+              : null,
+          child: Text(
+            AppLocalizations.of(context)!.save_changes,
+            style: Theme.of(context)
+                .textTheme
+                .headline1!
+                .copyWith(color: Colors.white, fontSize: 15),
+          ),
+          style: ButtonStyle(
+            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+              const RoundedRectangleBorder(
+                borderRadius: BorderRadius.zero,
               ),
             ),
-          );
+          ),
+        );
+      },
+    );
+  }
+
+  Widget cancelUpdate() {
+    return ElevatedButton(
+      onPressed: () {
+        emailController.clear();
+        cellphoneController.clear();
+        setState(() {
+          datePicked = null;
+          defaultCountry = null;
         });
+        return debugPrint('hola');
+      },
+      child: Text(
+        AppLocalizations.of(context)!.cancel,
+        style: Theme.of(context)
+            .textTheme
+            .headline1!
+            .copyWith(color: Theme.of(context).indicatorColor, fontSize: 15),
+      ),
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStateProperty.all(Theme.of(context).primaryColorLight),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+            side: BorderSide(color: Theme.of(context).indicatorColor),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget changePasswordButton() {
+    return ElevatedButton(
+      onPressed: () => debugPrint("Pressed"),
+      child: Text(
+        AppLocalizations.of(context)!.change_password,
+        style: Theme.of(context)
+            .textTheme
+            .headline1!
+            .copyWith(color: Theme.of(context).indicatorColor, fontSize: 15),
+      ),
+      style: ButtonStyle(
+        backgroundColor:
+            MaterialStateProperty.all(Theme.of(context).primaryColorLight),
+        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.zero,
+            side: BorderSide(color: Theme.of(context).indicatorColor),
+          ),
+        ),
+      ),
+    );
   }
 }
