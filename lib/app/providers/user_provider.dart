@@ -79,12 +79,21 @@ class UserProvider extends TechFreneticProvider {
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
 
-      var response = await http.get(_url);
+      Map<String, String> headers = {};
+
+      headers.addAll(sessionHeader);
+      headers.addAll(headers);
+
+      var response = await http.get(
+        _url,
+        headers: headers,
+      );
 
       if (response.statusCode == 200) {
         debugPrint(response.body);
         userinfo = UserModel.fromJson(response.body);
         prefs.userName = userinfo.userName;
+        prefs.userEmail = userinfo.mail;
         debugPrint(userinfo.toString());
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
