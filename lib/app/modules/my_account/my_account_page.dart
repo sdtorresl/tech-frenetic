@@ -156,23 +156,26 @@ class _MyAccountPageState
                   builder: (context, snapshot) {
                     store.changeEmail(email!);
                     return TextFormField(
-                      controller: emailController,
-                      decoration: InputDecoration(
-                        hintText: prefs.userEmail,
-                        hintStyle: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(color: Theme.of(context).highlightColor),
-                        errorText: snapshot.hasError
-                            ? snapshot.error.toString()
-                            : null,
-                        errorStyle: Theme.of(context)
-                            .textTheme
-                            .headline4!
-                            .copyWith(color: Colors.red),
-                      ),
-                      onChanged: store.changeEmail,
-                    );
+                        controller: emailController,
+                        decoration: InputDecoration(
+                          hintText: prefs.userEmail,
+                          hintStyle: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(
+                                  color: Theme.of(context).highlightColor),
+                          errorText: snapshot.hasError
+                              ? snapshot.error.toString()
+                              : null,
+                          errorStyle: Theme.of(context)
+                              .textTheme
+                              .headline4!
+                              .copyWith(color: Colors.red),
+                        ),
+                        onChanged: (text) {
+                          email = text;
+                          store.changeEmail(email!);
+                        });
                   }),
               const SizedBox(height: 40),
               Align(
