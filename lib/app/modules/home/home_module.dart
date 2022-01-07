@@ -3,9 +3,11 @@ import 'package:techfrenetic/app/core/auth_guard.dart';
 import 'package:techfrenetic/app/modules/articles/articles_module.dart';
 import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/contact_us/contact_us_module.dart';
+import 'package:techfrenetic/app/modules/create_groups/create_groups_module.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_page.dart';
 import 'package:techfrenetic/app/modules/create_meetups/create_meetups_module.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
+import 'package:techfrenetic/app/modules/groups/groups_module.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/about_us_widget.dart';
 import 'package:techfrenetic/app/modules/login/login_module.dart';
@@ -40,6 +42,7 @@ class HomeModule extends Module {
       children: [
         ModuleRoute('/community/', module: CommunityModule()),
         ModuleRoute('/contact_us', module: ContactUsModule()),
+        ModuleRoute('/groups', module: GroupsModule()),
         ChildRoute(
           '/skills',
           child: (context, args) => const SkillsPage(),
@@ -93,17 +96,17 @@ class HomeModule extends Module {
         AuthGuard(),
       ],
     ),
-    ChildRoute(
-      '/create_groups',
-      child: (context, args) => const CreateGroupsPage(),
-      guards: [
-        AuthGuard(),
-      ],
-    ),
 
     ModuleRoute(
       '/create_meetups',
       module: CreateMeetupsModule(),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
+    ModuleRoute(
+      '/community/groups/create_groups',
+      module: CreateGroupsModule(),
       guards: [
         AuthGuard(),
       ],
