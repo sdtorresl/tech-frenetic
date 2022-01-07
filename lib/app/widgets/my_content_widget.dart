@@ -14,6 +14,7 @@ class MyContent extends StatefulWidget {
 }
 
 class _MyContentState extends State<MyContent> {
+  String numberOfArticles = '0 ';
   @override
   Widget build(BuildContext context) {
     ArticlesProvider _articlesProvideer = ArticlesProvider();
@@ -57,7 +58,7 @@ class _MyContentState extends State<MyContent> {
                     ),
                   ),
                 ),
-                Text('0 ' + AppLocalizations.of(context)!.articles)
+                Text(numberOfArticles + AppLocalizations.of(context)!.articles)
               ],
             ),
           ),
@@ -69,6 +70,9 @@ class _MyContentState extends State<MyContent> {
                 List<ArticlesModel> contents = snapshot.data ?? [];
                 List<Widget> savedPostsWidgets = [];
                 for (ArticlesModel content in contents) {
+                  int number = int.parse(numberOfArticles);
+                  int numberArticles = number++;
+                  numberOfArticles = numberArticles.toString();
                   if (content.type == 'Article' &&
                       _prefs.userName == content.user) {
                     debugPrint(content.toString());

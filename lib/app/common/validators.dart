@@ -70,6 +70,18 @@ class Validators {
       }
     },
   );
+  static final validateDate =
+      StreamTransformer<DateTime, DateTime>.fromHandlers(
+    handleData: (date, sink) {
+      if (date != DateTime.now()) {
+        sink.add(date);
+      } else {
+        sink.addError(
+          'Ingresa un una fecha',
+        );
+      }
+    },
+  );
   static final validatePasswordCheckWrong =
       StreamTransformer<String, String>.fromHandlers(
     handleData: (passwordCheck, sink) {

@@ -36,6 +36,10 @@ class UserPreferences {
 
   String? get userName => _prefs.getString('name');
 
+  set userEmail(String? userEmail) => _prefs.setString('mail', userEmail!);
+
+  String? get userEmail => _prefs.getString('mail');
+
   set sessionExpirationDate(DateTime expirationDate) =>
       _prefs.setString('expiration_date', expirationDate.toIso8601String());
 
