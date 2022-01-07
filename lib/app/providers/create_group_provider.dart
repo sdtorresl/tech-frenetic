@@ -7,17 +7,17 @@ class CreateGroupProvider extends TechFreneticProvider {
   Future<bool?> createGroup(String name, String description, String rules,
       String namePerson, String type) async {
     try {
-      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
+      Uri _url = Uri.parse("$baseUrl/api/en/entity/node?_format=json");
 
       Map<String, dynamic> body = {
         "type": [
           {"target_id": "group", "target_type": "node_type"}
         ],
         "title": [
-          {"value": "Prueba 8"}
+          {"value": name}
         ],
         "langcode": [
-          {"value": "es"}
+          {"value": locale}
         ],
         "field_group_featured": [
           {"value": "0"}
@@ -29,19 +29,20 @@ class CreateGroupProvider extends TechFreneticProvider {
           {"value": "tfadmin (1)"}
         ],
         "field_group_rules": [
-          {"value": "none"}
+          {"value": rules}
         ],
         "field_group_articles": [
           {"value": "PlayStation 5: Black"}
         ],
         "field_group_description": [
-          {"value": "Esto es un grupo de prueba"}
+          {"value": description}
         ]
       };
 
       Map<String, String> headers = {};
-      headers.addAll(authHeader);
       headers.addAll(jsonHeader);
+      headers.addAll(authHeader);
+      headers.addAll(basicAuth);
       headers.addAll(sessionHeader);
       headers.addAll(headers);
 
@@ -51,6 +52,7 @@ class CreateGroupProvider extends TechFreneticProvider {
         headers: headers,
       );
       debugPrint(response.statusCode.toString());
+      debugPrint(response.body);
 
       if (response.statusCode == 200) {
         debugPrint(response.body);

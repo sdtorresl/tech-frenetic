@@ -17,6 +17,7 @@ List<String> items = [
   'Private',
   'Public',
 ];
+
 String? defaultValue = items.first;
 
 class _CreateGroupsPageState
@@ -329,6 +330,7 @@ class _CreateGroupsPageState
           StreamBuilder(
               stream: store.typeStream,
               builder: (context, snapshot) {
+                store.changeType(defaultValue!);
                 return DropdownButton<String>(
                   value: defaultValue,
                   isExpanded: true,
