@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/modules/articles/add_articles_page.dart';
+import 'package:techfrenetic/app/modules/edit_name/edit_name_page.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
@@ -37,7 +39,7 @@ class _MyProfileState extends State<MyProfile> {
             alignment: Alignment.centerRight,
             child: IconButton(
               onPressed: () {
-                debugPrint('Im working');
+                debugPrint('Im worddddddking');
               },
               icon: Icon(
                 Icons.edit,
@@ -74,7 +76,12 @@ class _MyProfileState extends State<MyProfile> {
               alignment: Alignment.topRight,
               child: IconButton(
                 onPressed: () {
-                  debugPrint('Im working');
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return const EditNamePage();
+                    },
+                  );
                 },
                 icon: Icon(
                   Icons.edit,
@@ -219,7 +226,7 @@ class _MyProfileState extends State<MyProfile> {
                   ),
                   trailing: IconButton(
                     onPressed: () {
-                      debugPrint('Im working');
+                      debugPrint('Im worsefseking');
                     },
                     icon: Icon(
                       Icons.edit,
@@ -246,7 +253,7 @@ class _MyProfileState extends State<MyProfile> {
                       style: Theme.of(context).textTheme.headline1),
                   trailing: IconButton(
                     onPressed: () {
-                      debugPrint('Im working');
+                      debugPrint('Im workisfsefg');
                     },
                     icon: Icon(
                       Icons.edit,
