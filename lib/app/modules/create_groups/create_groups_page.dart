@@ -162,15 +162,12 @@ class _CreateGroupsPageState
                                               ),
                                             ];
                                             showMessage(context,
-                                                title: AppLocalizations.of(
-                                                        context)!
-                                                    .error,
+                                                title: '',
                                                 content: content,
                                                 actions: actions);
                                           } else {
-                                            Widget content = Text(AppLocalizations
-                                                    .of(context)!
-                                                .error_sorry_unrecognized_username_or_password);
+                                            Widget content = const Text(
+                                                'Grupo exitosamente creado');
                                             List<Widget> actions = [
                                               TextButton(
                                                 child: Text(
@@ -192,9 +189,7 @@ class _CreateGroupsPageState
                                               ),
                                             ];
                                             showMessage(context,
-                                                title: AppLocalizations.of(
-                                                        context)!
-                                                    .error,
+                                                title: '',
                                                 content: content,
                                                 actions: actions);
                                           }
