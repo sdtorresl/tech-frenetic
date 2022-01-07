@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
+import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/modules/my_account/my_account_controller.dart';
+import 'package:techfrenetic/app/providers/countries_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
@@ -13,6 +15,8 @@ class MyAccountPage extends StatefulWidget {
   @override
   _MyAccountPageState createState() => _MyAccountPageState();
 }
+
+CountriesProvider countries = CountriesProvider();
 
 class _MyAccountPageState
     extends ModularState<MyAccountPage, MyAccountController> {
@@ -189,34 +193,56 @@ class _MyAccountPageState
                 stream: store.countryStream,
                 builder:
                     (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  return DropdownButton<String>(
-                    value: defaultCountry,
-                    isExpanded: true,
-                    underline: Container(
-                      height: 0.5,
-                      color: Colors.black,
-                    ),
-                    onChanged: (newValue) {
-                      setState(
-                        () {
-                          defaultCountry = newValue;
-                          store.changeCountry(defaultCountry!);
-                        },
-                      );
+                  return FutureBuilder(
+                    future: countries.getCountries(),
+                    builder: (BuildContext context, AsyncSnapshot snapshot) {
+                      List<String> countriesNames = [];
+                      if (snapshot.hasData) {
+                        List<CategoriesModel> categoriesModel = snapshot.data;
+                        for (var models in categoriesModel) {
+                          countriesNames.add(models.category);
+                        }
+                        String? defaultValue = countriesNames.first;
+                        return DropdownButton<String>(
+                          value: defaultCountry,
+                          isExpanded: true,
+                          underline: Container(
+                            height: 0.5,
+                            color: Colors.black,
+                          ),
+                          onChanged: (newValue) {
+                            setState(
+                              () {
+                                defaultCountry = newValue;
+                                store.changeCountry(defaultCountry!);
+                              },
+                            );
+                          },
+                          hint: Text(
+                            AppLocalizations.of(context)!.your_country,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(color: Theme.of(context).hintColor),
+                          ),
+                          items: countriesNames
+                              .map<DropdownMenuItem<String>>((String value) {
+                            return DropdownMenuItem<String>(
+                              child: Text(value),
+                              value: value,
+                            );
+                          }).toList(),
+                        );
+                      } else {
+                        return Text(
+                          'Loading categories...',
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodyText1!
+                              .copyWith(color: Theme.of(context).primaryColor),
+                        );
+                      }
                     },
-                    hint: Text(
-                      AppLocalizations.of(context)!.your_country,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .copyWith(color: Theme.of(context).hintColor),
-                    ),
-                    items: items.map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        child: Text(value),
-                        value: value,
-                      );
-                    }).toList(),
                   );
                 },
               ),
