@@ -85,7 +85,8 @@ class MyGroupPage extends StatelessWidget {
                         height: 60,
                       ),
                       ElevatedButton(
-                        onPressed: () => Modular.to.pushNamed("/create_groups"),
+                        onPressed: () => Modular.to
+                            .pushNamed("/community/groups/create_groups"),
                         child: Text(
                           AppLocalizations.of(context)!.btn_create,
                           style: const TextStyle(
