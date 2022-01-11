@@ -58,7 +58,23 @@ class _MyContentState extends State<MyContent> {
                     ),
                   ),
                 ),
-                Text(numberOfArticles + AppLocalizations.of(context)!.articles)
+                FutureBuilder(
+                  future: _articlesProvideer.getWall(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    int number = 0;
+                    if (snapshot.hasData) {
+                      List<ArticlesModel> contents = snapshot.data ?? [];
+                      for (ArticlesModel content in contents) {
+                        if (content.type == 'Article' &&
+                            _prefs.userName == content.user) {
+                          number++;
+                        }
+                      }
+                    }
+                    return Text(
+                        '$number ' + AppLocalizations.of(context)!.articles);
+                  },
+                ),
               ],
             ),
           ),
@@ -69,10 +85,8 @@ class _MyContentState extends State<MyContent> {
               if (snapshot.hasData) {
                 List<ArticlesModel> contents = snapshot.data ?? [];
                 List<Widget> savedPostsWidgets = [];
+
                 for (ArticlesModel content in contents) {
-                  int number = int.parse(numberOfArticles);
-                  int numberArticles = number++;
-                  numberOfArticles = numberArticles.toString();
                   if (content.type == 'Article' &&
                       _prefs.userName == content.user) {
                     debugPrint(content.toString());
