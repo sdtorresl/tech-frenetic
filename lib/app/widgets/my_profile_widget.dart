@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:techfrenetic/app/modules/articles/add_articles_page.dart';
+import 'package:techfrenetic/app/modules/certifications/certifications.dart';
 import 'package:techfrenetic/app/modules/edit_name/edit_name_page.dart';
 import 'package:techfrenetic/app/modules/edit_sumary/edit_sumary.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
@@ -259,7 +259,12 @@ class _MyProfileState extends State<MyProfile> {
                       style: Theme.of(context).textTheme.headline1),
                   trailing: IconButton(
                     onPressed: () {
-                      debugPrint('Im workisfsefg');
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return const CertificationsPage();
+                        },
+                      );
                     },
                     icon: Icon(
                       Icons.edit,
