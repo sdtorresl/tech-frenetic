@@ -87,6 +87,8 @@ class _EditSummaryPageState extends State<EditSummaryPage> {
             stream: null,
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               return TextFormField(
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
                 decoration: InputDecoration(
                   hintText: '',
                   hintStyle: Theme.of(context)
