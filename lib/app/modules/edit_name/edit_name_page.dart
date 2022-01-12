@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/providers/professions_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditNamePage extends StatefulWidget {
   const EditNamePage({Key? key}) : super(key: key);
@@ -8,17 +11,10 @@ class EditNamePage extends StatefulWidget {
   _EditNamePageState createState() => _EditNamePageState();
 }
 
+ProfessionsProvider professions = ProfessionsProvider();
+
 class _EditNamePageState extends State<EditNamePage> {
-  List<String> items = [
-    'Category',
-    'Applications',
-    'Cloud',
-    'Consulting & Sales',
-    'Cibersecurity',
-    'Networking',
-    'Servers & PCs',
-    'Storage',
-  ];
+  String? defaultValue;
 
   @override
   Widget build(BuildContext context) {
@@ -90,7 +86,6 @@ class _EditNamePageState extends State<EditNamePage> {
   }
 
   _articleForm(BuildContext context) {
-    String defaultValue = items.first;
     return Form(
       child: ListView(
         children: [
@@ -116,35 +111,56 @@ class _EditNamePageState extends State<EditNamePage> {
             },
           ),
           const SizedBox(height: 60),
-          DropdownButton<String>(
-            value: defaultValue,
-            isExpanded: true,
-            underline: Container(
-              height: 0.5,
-              color: Colors.black,
-            ),
-            hint: Text(
-              'Your profession',
-              style: Theme.of(context)
-                  .textTheme
-                  .bodyText1!
-                  .copyWith(color: Theme.of(context).hintColor),
-            ),
-            items: items.map(
-              (String valueItem) {
-                return DropdownMenuItem<String>(
-                  child: Text(valueItem),
-                  value: valueItem,
+          FutureBuilder(
+            future: professions.getProfessions(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              List<String> professionsNames = [];
+              if (snapshot.hasData) {
+                List<CategoriesModel> categoriesModel = snapshot.data;
+                for (var models in categoriesModel) {
+                  professionsNames.add(models.category);
+                }
+
+                return DropdownButton<String>(
+                  value: defaultValue,
+                  isExpanded: true,
+                  underline: Container(
+                    height: 0.5,
+                    color: Colors.black,
+                  ),
+                  hint: Text(
+                    'Your profession',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: Theme.of(context).hintColor),
+                  ),
+                  items: professionsNames.map(
+                    (String valueItem) {
+                      return DropdownMenuItem<String>(
+                        child: Text(valueItem),
+                        value: valueItem,
+                      );
+                    },
+                  ).toList(),
+                  onChanged: (newValue) {
+                    setState(
+                      () {
+                        defaultValue = newValue!;
+                        debugPrint(defaultValue);
+                      },
+                    );
+                  },
                 );
-              },
-            ).toList(),
-            onChanged: (newValue) {
-              setState(
-                () {
-                  defaultValue = newValue!;
-                  debugPrint(defaultValue);
-                },
-              );
+              } else {
+                return Text(
+                  'Loading categories...',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).primaryColor),
+                );
+              }
             },
           ),
           const SizedBox(height: 60),
