@@ -166,8 +166,9 @@ class _CreateGroupsPageState
                                                 content: content,
                                                 actions: actions);
                                           } else {
-                                            Widget content = const Text(
-                                                'Grupo exitosamente creado');
+                                            Widget content = Text(
+                                                AppLocalizations.of(context)!
+                                                    .error_group_api);
                                             List<Widget> actions = [
                                               TextButton(
                                                 child: Text(
@@ -189,7 +190,9 @@ class _CreateGroupsPageState
                                               ),
                                             ];
                                             showMessage(context,
-                                                title: '',
+                                                title: AppLocalizations.of(
+                                                        context)!
+                                                    .error,
                                                 content: content,
                                                 actions: actions);
                                           }
