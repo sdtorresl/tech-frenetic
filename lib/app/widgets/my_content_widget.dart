@@ -14,7 +14,6 @@ class MyContent extends StatefulWidget {
 }
 
 class _MyContentState extends State<MyContent> {
-  String numberOfArticles = '0 ';
   @override
   Widget build(BuildContext context) {
     ArticlesProvider _articlesProvideer = ArticlesProvider();
