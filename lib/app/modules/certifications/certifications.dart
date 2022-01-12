@@ -93,8 +93,8 @@ class _CertificationsPageState extends State<CertificationsPage> {
               return TextFormField(
                 decoration: InputDecoration(
                   suffixIcon: SizedBox(
-                    height: 30,
-                    width: 30,
+                    height: 20,
+                    width: 20,
                     child: FloatingActionButton(
                       onPressed: () => debugPrint('kkkko'),
                       elevation: 0,
