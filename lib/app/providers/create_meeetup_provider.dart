@@ -1,47 +1,45 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
-class CreateGroupProvider extends TechFreneticProvider {
-  Future<bool?> createGroup(String name, String description, String rules,
-      String namePerson, String type) async {
+class CreateMeetupProvider extends TechFreneticProvider {
+  Future<bool?> createMeetup(
+      String url, DateTime date, String location, String title) async {
     try {
-      Uri _url = Uri.parse("$baseUrl/api/en/entity/node?_format=json");
-
+      Uri _url = Uri.parse("$baseUrl/api/node?_format=json");
+      DateFormat('dd/MMM/yyyy').format(date);
       Map<String, dynamic> body = {
-        "type": [
-          {"target_id": "group", "target_type": "node_type"}
+        "field_event_url": [
+          {"uri": url}
         ],
-        "title": [
-          {"value": name}
+        "field_when": [
+          {
+            "value":
+                DateFormat('yyyy-MM-ddTHH:mm:ss-00:00').format(date).toString()
+          }
+        ],
+        "field_where": [
+          {"value": location}
         ],
         "langcode": [
           {"value": locale}
         ],
-        "field_group_featured": [
-          {"value": "0"}
+        "title": [
+          {"value": title}
         ],
-        "field_group_logo": [
-          {"target_id": "11", "alt": "Assassins-Creed-Valhalla-1"}
-        ],
-        "field_group_members": [
-          {"value": "tfadmin (1)"}
-        ],
-        "field_group_rules": [
-          {"value": rules}
-        ],
-        "field_group_articles": [
-          {"value": "PlayStation 5: Black"}
-        ],
-        "field_group_description": [
-          {"value": description}
+        "type": [
+          {"target_id": "meetup", "target_type": "node_type"}
         ]
       };
-
+      String hola =
+          DateFormat('yyyy-MM-ddTHH:mm:ss-SSSXXX').format(date).toString();
+      debugPrint(
+          DateFormat('yyyy-MM-ddTHH:mm:ss-SSSXXX').format(date).toString());
       Map<String, String> headers = {};
-      headers.addAll(jsonHeader);
       headers.addAll(authHeader);
+      headers.addAll(jsonHeader);
       headers.addAll(basicAuth);
       headers.addAll(sessionHeader);
       headers.addAll(headers);
