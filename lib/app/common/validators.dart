@@ -82,6 +82,34 @@ class Validators {
       }
     },
   );
+  static final validateDateMeetups =
+      StreamTransformer<DateTime, DateTime>.fromHandlers(
+    handleData: (date, sink) {
+      if (date.isBefore(DateTime.now())) {
+        sink.add(date);
+      } else {
+        sink.addError(
+          'Seleccione una fecha futura',
+        );
+      }
+    },
+  );
+  static final validateUrl = StreamTransformer<String, String>.fromHandlers(
+    handleData: (url, sink) {
+      String pattern =
+          r'(http|https)://[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:/~+#-]*[\w@?^=%&amp;/~+#-])?';
+      RegExp regExp = RegExp(pattern);
+
+      if (regExp.hasMatch(url)) {
+        sink.add(url);
+      } else {
+        sink.addError(
+          'Ingrese una url valida',
+        );
+      }
+    },
+  );
+
   static final validatePasswordCheckWrong =
       StreamTransformer<String, String>.fromHandlers(
     handleData: (passwordCheck, sink) {

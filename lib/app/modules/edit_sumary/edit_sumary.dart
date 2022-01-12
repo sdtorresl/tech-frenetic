@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:techfrenetic/app/models/categories_model.dart';
-import 'package:techfrenetic/app/providers/professions_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class EditNamePage extends StatefulWidget {
-  const EditNamePage({Key? key}) : super(key: key);
+class EditSummaryPage extends StatefulWidget {
+  const EditSummaryPage({Key? key}) : super(key: key);
 
   @override
-  _EditNamePageState createState() => _EditNamePageState();
+  _EditSummaryPageState createState() => _EditSummaryPageState();
 }
 
-ProfessionsProvider professions = ProfessionsProvider();
-
-class _EditNamePageState extends State<EditNamePage> {
-  String? defaultValue;
-
+class _EditSummaryPageState extends State<EditSummaryPage> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -63,7 +56,7 @@ class _EditNamePageState extends State<EditNamePage> {
                   width: 5,
                 ),
                 Text(
-                  "Profile",
+                  "About",
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -94,8 +87,10 @@ class _EditNamePageState extends State<EditNamePage> {
             stream: null,
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               return TextFormField(
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
                 decoration: InputDecoration(
-                  hintText: 'your name',
+                  hintText: '',
                   hintStyle: Theme.of(context)
                       .textTheme
                       .bodyText1!
@@ -108,59 +103,6 @@ class _EditNamePageState extends State<EditNamePage> {
                       .copyWith(color: Colors.red),
                 ),
               );
-            },
-          ),
-          const SizedBox(height: 60),
-          FutureBuilder(
-            future: professions.getProfessions(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              List<String> professionsNames = [];
-              if (snapshot.hasData) {
-                List<CategoriesModel> categoriesModel = snapshot.data;
-                for (var models in categoriesModel) {
-                  professionsNames.add(models.category);
-                }
-
-                return DropdownButton<String>(
-                  value: defaultValue,
-                  isExpanded: true,
-                  underline: Container(
-                    height: 0.5,
-                    color: Colors.black,
-                  ),
-                  hint: Text(
-                    'Your profession',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Theme.of(context).hintColor),
-                  ),
-                  items: professionsNames.map(
-                    (String valueItem) {
-                      return DropdownMenuItem<String>(
-                        child: Text(valueItem),
-                        value: valueItem,
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (newValue) {
-                    setState(
-                      () {
-                        defaultValue = newValue!;
-                        debugPrint(defaultValue);
-                      },
-                    );
-                  },
-                );
-              } else {
-                return Text(
-                  'Loading categories...',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(color: Theme.of(context).primaryColor),
-                );
-              }
             },
           ),
           const SizedBox(height: 60),

@@ -94,6 +94,7 @@ class UserProvider extends TechFreneticProvider {
         userinfo = UserModel.fromJson(response.body);
         prefs.userName = userinfo.userName;
         prefs.userEmail = userinfo.mail;
+        prefs.userAvatar = userinfo.fieldUserAvatar;
         debugPrint(userinfo.toString());
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');

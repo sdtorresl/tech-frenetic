@@ -5,22 +5,22 @@ import 'package:techfrenetic/app/providers/tf_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as json;
 
-class CountriesProvider extends TechFreneticProvider {
-  Future<List<CategoriesModel>> getCountries() async {
+class ProfessionsProvider extends TechFreneticProvider {
+  Future<List<CategoriesModel>> getProfessions() async {
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/paises");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/profesiones");
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
         if (response.statusCode == 200) {
           List<dynamic> jsonResponse = json.jsonDecode(response.body);
-          List<CategoriesModel> countries = [];
+          List<CategoriesModel> professions = [];
 
           for (var item in jsonResponse) {
-            CategoriesModel country = CategoriesModel.fromMap(item);
-            countries.add(country);
+            CategoriesModel profession = CategoriesModel.fromMap(item);
+            professions.add(profession);
           }
-          return countries;
+          return professions;
         } else {
           debugPrint('Request failed with status: ${response.statusCode}.');
         }

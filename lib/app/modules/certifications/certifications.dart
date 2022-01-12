@@ -1,21 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:techfrenetic/app/models/categories_model.dart';
-import 'package:techfrenetic/app/providers/professions_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class EditNamePage extends StatefulWidget {
-  const EditNamePage({Key? key}) : super(key: key);
+class CertificationsPage extends StatefulWidget {
+  const CertificationsPage({Key? key}) : super(key: key);
 
   @override
-  _EditNamePageState createState() => _EditNamePageState();
+  _CertificationsPageState createState() => _CertificationsPageState();
 }
 
-ProfessionsProvider professions = ProfessionsProvider();
-
-class _EditNamePageState extends State<EditNamePage> {
-  String? defaultValue;
-
+class _CertificationsPageState extends State<CertificationsPage> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -63,7 +56,7 @@ class _EditNamePageState extends State<EditNamePage> {
                   width: 5,
                 ),
                 Text(
-                  "Profile",
+                  "Certifications",
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -90,12 +83,25 @@ class _EditNamePageState extends State<EditNamePage> {
       child: ListView(
         children: [
           const SizedBox(height: 60),
+          Text(
+            'Certification name',
+            style: Theme.of(context).textTheme.headline1,
+          ),
           StreamBuilder(
             stream: null,
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               return TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'your name',
+                  suffixIcon: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: FloatingActionButton(
+                      onPressed: () => debugPrint('kkkko'),
+                      elevation: 0,
+                      child: const Icon(Icons.close),
+                    ),
+                  ),
+                  hintText: '',
                   hintStyle: Theme.of(context)
                       .textTheme
                       .bodyText1!
@@ -111,57 +117,35 @@ class _EditNamePageState extends State<EditNamePage> {
             },
           ),
           const SizedBox(height: 60),
-          FutureBuilder(
-            future: professions.getProfessions(),
-            builder: (BuildContext context, AsyncSnapshot snapshot) {
-              List<String> professionsNames = [];
-              if (snapshot.hasData) {
-                List<CategoriesModel> categoriesModel = snapshot.data;
-                for (var models in categoriesModel) {
-                  professionsNames.add(models.category);
-                }
-
-                return DropdownButton<String>(
-                  value: defaultValue,
-                  isExpanded: true,
-                  underline: Container(
-                    height: 0.5,
-                    color: Colors.black,
-                  ),
-                  hint: Text(
-                    'Your profession',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Theme.of(context).hintColor),
-                  ),
-                  items: professionsNames.map(
-                    (String valueItem) {
-                      return DropdownMenuItem<String>(
-                        child: Text(valueItem),
-                        value: valueItem,
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (newValue) {
-                    setState(
-                      () {
-                        defaultValue = newValue!;
-                        debugPrint(defaultValue);
-                      },
-                    );
-                  },
-                );
-              } else {
-                return Text(
-                  'Loading categories...',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(color: Theme.of(context).primaryColor),
-                );
-              }
-            },
+          HighlightContainer(
+            child: Center(
+              child: Container(
+                margin:
+                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      height: 40,
+                      width: 40,
+                      child: FloatingActionButton(
+                        onPressed: () => debugPrint('kkkko'),
+                        elevation: 0,
+                        child: const Icon(Icons.add),
+                      ),
+                    ),
+                    const SizedBox(width: 20),
+                    Text(
+                      'Add certifications',
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1!
+                          .copyWith(color: Theme.of(context).primaryColor),
+                    ),
+                  ],
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: 60),
           ElevatedButton(

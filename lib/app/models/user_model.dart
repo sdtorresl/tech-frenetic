@@ -154,7 +154,7 @@ class UserModel extends Model {
         "field_following": fieldFollowing,
         "field_interests": fieldInterests,
         "field_name": name,
-        "field_user_Avatar": fieldUserAvatar,
+        "field_user_avatar": fieldUserAvatar,
         "field_user_kind": userKind,
         "field_user_location": userLocation,
         "field_user_profession": userProfession,

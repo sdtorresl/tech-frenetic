@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:intl/intl.dart';
 import 'package:techfrenetic/app/modules/create_meetups/create_metups_controller.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
@@ -13,6 +14,7 @@ class CreateMeetupsPage extends StatefulWidget {
 class _CreateMeetupsPageState
     extends ModularState<CreateMeetupsPage, CreateMeetupsController> {
   bool _isLoading = false;
+  DateTime? datePicked;
 
   @override
   Widget build(BuildContext context) {
@@ -126,11 +128,11 @@ class _CreateMeetupsPageState
           style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
         ),
         StreamBuilder(
-          stream: null, //store.nameStream,
+          stream: store.locationStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
-                hintText: 'What´s your name?',
+                hintText: 'Write the city where event willl take place',
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -141,7 +143,7 @@ class _CreateMeetupsPageState
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: null, //store.changeName,
+              onChanged: store.changeLocation,
             );
           },
         ),
@@ -151,23 +153,42 @@ class _CreateMeetupsPageState
           style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
         ),
         StreamBuilder(
-          stream: null, //store.nameStream,
-          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+          stream: store.dateStream,
+          builder: (context, snapshot) {
             return TextFormField(
-              decoration: InputDecoration(
-                hintText: 'Where is going to be?',
-                hintStyle: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: Theme.of(context).hintColor),
-                errorText: snapshot.hasError ? snapshot.error.toString() : null,
-                errorStyle: Theme.of(context)
-                    .textTheme
-                    .headline4!
-                    .copyWith(color: Colors.red),
-              ),
-              onChanged: null, //store.changeName,
-            );
+                readOnly: true,
+                showCursor: true,
+                decoration: InputDecoration(
+                  hintText: datePicked == null
+                      ? "dd/mm/yyyy"
+                      : DateFormat('dd/MMM/yyyy').format(datePicked!),
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).hintColor),
+                  errorText:
+                      snapshot.hasError ? snapshot.error.toString() : null,
+                  errorStyle: Theme.of(context)
+                      .textTheme
+                      .headline4!
+                      .copyWith(color: Colors.red),
+                ),
+                onTap: () async {
+                  showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(1900),
+                    lastDate: DateTime(2100),
+                  ).then((date) {
+                    setState(() {
+                      datePicked = date;
+                      store.changeDate(date!);
+                    });
+                  });
+                },
+                onChanged: (text) {
+                  store.changeDate(datePicked!);
+                });
           },
         ),
         const SizedBox(height: 30),
@@ -176,11 +197,11 @@ class _CreateMeetupsPageState
           style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
         ),
         StreamBuilder(
-          stream: null, //store.nameStream,
+          stream: store.titleStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
-                hintText: 'What´s your name?',
+                hintText: 'Write the name of the event',
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -191,7 +212,7 @@ class _CreateMeetupsPageState
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: null, //store.changeName,
+              onChanged: store.changeTitle,
             );
           },
         ),
@@ -201,7 +222,7 @@ class _CreateMeetupsPageState
           style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
         ),
         StreamBuilder(
-          stream: null, //store.nameStream,
+          stream: store.urlStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
@@ -216,7 +237,7 @@ class _CreateMeetupsPageState
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: null, //store.changeName,
+              onChanged: store.changeUrl,
             );
           },
         ),

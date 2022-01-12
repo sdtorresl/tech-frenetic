@@ -6,6 +6,7 @@ import 'package:techfrenetic/app/modules/contact_us/contact_us_module.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_module.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_page.dart';
 import 'package:techfrenetic/app/modules/create_meetups/create_meetups_module.dart';
+import 'package:techfrenetic/app/modules/edit_avatar/edit_avatar_page.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
 import 'package:techfrenetic/app/modules/groups/groups_module.dart';
 import 'package:techfrenetic/app/modules/profile/profile_module.dart';
@@ -135,6 +136,13 @@ class HomeModule extends Module {
     ModuleRoute(
       '/choose_avatar',
       module: ChooseAvatarModule(),
+    ),
+    ChildRoute(
+      '/edit_avatar',
+      child: (context, args) => const EditAvatarPage(),
+      guards: [
+        AuthGuard(),
+      ],
     ),
     ModuleRoute(
       '/forgot',
