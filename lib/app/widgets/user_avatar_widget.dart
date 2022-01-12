@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/profile_model.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 
@@ -18,6 +19,8 @@ class UserAvatarWidget extends StatefulWidget {
 }
 
 class _UserAvatarWidgetState extends State<UserAvatarWidget> {
+  final prefs = UserPreferences();
+
   @override
   Widget build(BuildContext context) {
     UserProvider userProvider = UserProvider();
@@ -27,13 +30,15 @@ class _UserAvatarWidgetState extends State<UserAvatarWidget> {
       builder: (BuildContext context, AsyncSnapshot<ProfileModel?> snapshot) {
         if (snapshot.hasData) {
           ProfileModel userProfile = snapshot.data!;
-          if (userProfile.useAvatar) {
+          debugPrint(snapshot.data!.toString());
+          if (prefs.userAvatar != '') {
+            debugPrint(userProfile.avatar);
             return CircleAvatar(
               radius: widget.radius,
               backgroundColor: Colors.grey[200],
               child: ClipOval(
                 child: SvgPicture.asset(
-                  "assets/img/avatars/${userProfile.avatar}.svg",
+                  "assets/img/avatars/${prefs.userAvatar}.svg",
                   semanticsLabel: userProfile.name,
                 ),
               ),

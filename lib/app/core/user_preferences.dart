@@ -40,6 +40,11 @@ class UserPreferences {
 
   String? get userEmail => _prefs.getString('mail');
 
+  set userAvatar(String? userAvatar) =>
+      _prefs.setString('field_user_Avatar', userAvatar!);
+
+  String? get userAvatar => _prefs.getString('field_user_Avatar');
+
   set sessionExpirationDate(DateTime expirationDate) =>
       _prefs.setString('expiration_date', expirationDate.toIso8601String());
 
