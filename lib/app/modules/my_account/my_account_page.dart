@@ -129,7 +129,6 @@ class _MyAccountPageState
 
   Widget _form(context) {
     String? email = prefs.userEmail;
-    //String? dateformat = DateFormat('EEEE, MMM dd').format(datePicked);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10.0),
