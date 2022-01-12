@@ -129,7 +129,7 @@ class _MyProfileState extends State<MyProfile> {
                 child: Column(
                   children: [
                     GestureDetector(
-                      onTap: () => Modular.to.pushNamed('/choose_avatar'),
+                      onTap: () => Modular.to.pushNamed('/edit_avatar'),
                       child: UserAvatarWidget(
                         username: widget.user.name,
                         radius: 40,
