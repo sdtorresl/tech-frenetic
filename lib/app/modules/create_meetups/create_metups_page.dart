@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
+import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/modules/create_meetups/create_metups_controller.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateMeetupsPage extends StatefulWidget {
   const CreateMeetupsPage({Key? key}) : super(key: key);
@@ -93,8 +95,61 @@ class _CreateMeetupsPageState
                                   _isLoading = false;
                                 });
                                 if (createMeetup) {
+                                  Widget content =
+                                      const Text('Meetup creado exitosamente');
+                                  List<Widget> actions = [
+                                    TextButton(
+                                      child: Text(
+                                        AppLocalizations.of(context)!
+                                            .close
+                                            .toUpperCase(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .button!
+                                            .copyWith(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ];
+                                  showMessage(context,
+                                      title:
+                                          AppLocalizations.of(context)!.message,
+                                      content: content,
+                                      actions: actions);
                                   debugPrint('Meetup created');
                                 } else {
+                                  Widget content = Text(
+                                      AppLocalizations.of(context)!
+                                          .error_meetup_api);
+                                  List<Widget> actions = [
+                                    TextButton(
+                                      child: Text(
+                                        AppLocalizations.of(context)!
+                                            .close
+                                            .toUpperCase(),
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .button!
+                                            .copyWith(
+                                                fontSize: 12,
+                                                color: Theme.of(context)
+                                                    .primaryColor),
+                                      ),
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                      },
+                                    ),
+                                  ];
+                                  showMessage(context,
+                                      title:
+                                          AppLocalizations.of(context)!.error,
+                                      content: content,
+                                      actions: actions);
                                   debugPrint("Meetup not created");
                                 }
                               }
