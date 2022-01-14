@@ -23,21 +23,6 @@ class _MyAccountPageState
   final prefs = UserPreferences();
 
   DateTime? datePicked;
-
-  List<String> items = [
-    'Country 1',
-    'Country 2',
-    'Country 3',
-    'Country 4',
-    'Country 5',
-    'Country 6',
-    'Country 7',
-    'Country 8',
-    'Country 9',
-    'Country 10',
-    'Country 11',
-    'Country 12',
-  ];
   DateTime? birthdate;
   String? cellphone;
   String? defaultCountry;
@@ -201,7 +186,6 @@ class _MyAccountPageState
                         for (var models in categoriesModel) {
                           countriesNames.add(models.category);
                         }
-
                         return DropdownButton<String>(
                           value: defaultCountry,
                           isExpanded: true,
@@ -234,7 +218,7 @@ class _MyAccountPageState
                         );
                       } else {
                         return Text(
-                          'Loading categories...',
+                          'Loading countries...',
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1!
