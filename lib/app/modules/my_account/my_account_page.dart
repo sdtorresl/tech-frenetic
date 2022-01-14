@@ -201,7 +201,7 @@ class _MyAccountPageState
                         for (var models in categoriesModel) {
                           countriesNames.add(models.category);
                         }
-                        String? defaultValue = countriesNames.first;
+
                         return DropdownButton<String>(
                           value: defaultCountry,
                           isExpanded: true,
