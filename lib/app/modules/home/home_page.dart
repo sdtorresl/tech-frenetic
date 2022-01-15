@@ -112,6 +112,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           ),
         ),
         PopupMenuItem<int>(
+          onTap: () => Modular.to.pushNamed('/profile'),
           value: 1,
           child: Text(
             AppLocalizations.of(context)!.profile,
