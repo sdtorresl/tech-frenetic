@@ -39,7 +39,7 @@ class _CreateMeetupsPageState
                   children: [
                     HighlightContainer(
                       child: Text(
-                        'Host a',
+                        AppLocalizations.of(context)!.meetups_host_blue,
                         style: Theme.of(context).textTheme.headline1!.copyWith(
                               fontSize: 30,
                               color: Theme.of(context).indicatorColor,
@@ -47,7 +47,7 @@ class _CreateMeetupsPageState
                       ),
                     ),
                     Text(
-                      'Meetup',
+                      AppLocalizations.of(context)!.meetups_host_black,
                       style: Theme.of(context)
                           .textTheme
                           .headline1!
@@ -57,14 +57,14 @@ class _CreateMeetupsPageState
                 ),
                 const SizedBox(height: 20),
                 Text(
-                  'Connect with other Tech Frenetic´s',
+                  AppLocalizations.of(context)!.connect_with_other,
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1!
                       .copyWith(fontSize: 16),
                 ),
                 Text(
-                  'members in your area',
+                  AppLocalizations.of(context)!.in_your_area,
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1!
@@ -95,8 +95,9 @@ class _CreateMeetupsPageState
                                   _isLoading = false;
                                 });
                                 if (createMeetup) {
-                                  Widget content =
-                                      const Text('Meetup creado exitosamente');
+                                  Widget content = Text(
+                                      AppLocalizations.of(context)!
+                                          .message_meetup_created);
                                   List<Widget> actions = [
                                     TextButton(
                                       child: Text(
@@ -155,7 +156,7 @@ class _CreateMeetupsPageState
                               }
                             : null,
                         child: Text(
-                          'Post your meetup',
+                          AppLocalizations.of(context)!.cta_post,
                           style: Theme.of(context)
                               .textTheme
                               .headline1!
@@ -179,7 +180,7 @@ class _CreateMeetupsPageState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Where *',
+          AppLocalizations.of(context)!.lbl_where + ' *',
           style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
         ),
         StreamBuilder(
@@ -187,7 +188,7 @@ class _CreateMeetupsPageState
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
-                hintText: 'Write the city where event willl take place',
+                hintText: AppLocalizations.of(context)!.write_the_city,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -204,7 +205,7 @@ class _CreateMeetupsPageState
         ),
         const SizedBox(height: 30),
         Text(
-          'When *',
+          AppLocalizations.of(context)!.lbl_when + ' *',
           style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
         ),
         StreamBuilder(
@@ -248,7 +249,7 @@ class _CreateMeetupsPageState
         ),
         const SizedBox(height: 30),
         Text(
-          'Description *',
+          AppLocalizations.of(context)!.lbl_description + ' *',
           style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
         ),
         StreamBuilder(
@@ -256,7 +257,7 @@ class _CreateMeetupsPageState
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
-                hintText: 'Write the name of the event',
+                hintText: AppLocalizations.of(context)!.txt_description,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -273,7 +274,7 @@ class _CreateMeetupsPageState
         ),
         const SizedBox(height: 30),
         Text(
-          'Event URL',
+          AppLocalizations.of(context)!.lbl_url,
           style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
         ),
         StreamBuilder(
@@ -281,7 +282,7 @@ class _CreateMeetupsPageState
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
-                hintText: 'What´s your name?',
+                hintText: AppLocalizations.of(context)!.txt_link,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -297,7 +298,7 @@ class _CreateMeetupsPageState
           },
         ),
         Text(
-          'Link to a page Whwrw attendees can RSVP; get notificatons; see who else is coming; and check the date, time, and, adress.',
+          AppLocalizations.of(context)!.txt_link_help,
           style: Theme.of(context)
               .textTheme
               .bodyText1!
