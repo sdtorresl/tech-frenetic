@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/common/icons.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/modules/articles/add_articles_page.dart';
 import 'package:techfrenetic/app/widgets/expandable_fab.dart';
 import 'home_controller.dart';
@@ -19,6 +20,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
   final List<String> _pages = ['/community', '/skills', '/vendors', '/profile'];
+  final prefs = UserPreferences();
 
   int _currentIndex = 0;
 
@@ -93,7 +95,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         child: CircleAvatar(
           child: ClipOval(
             child: SvgPicture.asset(
-              'assets/img/avatars/avatar-01.svg',
+              'assets/img/avatars/${prefs.userAvatar}.svg',
               semanticsLabel: 'Acme Logo',
             ),
           ),
