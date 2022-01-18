@@ -79,7 +79,7 @@ class _EditAvatarPageState extends State<EditAvatarPage> {
                   ),
                 ),
                 Text(
-                  'Change your Avatar',
+                  AppLocalizations.of(context)!.change_avatar,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
