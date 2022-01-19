@@ -42,7 +42,6 @@ class HomeModule extends Module {
       child: (_, args) => const HomePage(),
       children: [
         ModuleRoute('/community/', module: CommunityModule()),
-        ModuleRoute('/contact_us', module: ContactUsModule()),
         ModuleRoute('/groups', module: GroupsModule()),
         ChildRoute(
           '/skills',
@@ -88,6 +87,13 @@ class HomeModule extends Module {
     ChildRoute(
       '/terms',
       child: (context, args) => const TermsPage(),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
+    ModuleRoute(
+      '/contact_us',
+      module: ContactUsModule(),
       guards: [
         AuthGuard(),
       ],
