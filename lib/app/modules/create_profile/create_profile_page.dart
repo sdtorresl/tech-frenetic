@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
+import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/providers/countries_provider.dart';
+import 'package:techfrenetic/app/providers/professions_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,15 +15,14 @@ class CreateProfilePage extends StatefulWidget {
   _CreateProfilePageState createState() => _CreateProfilePageState();
 }
 
+ProfessionsProvider professions = ProfessionsProvider();
+CountriesProvider countries = CountriesProvider();
+
 class _CreateProfilePageState
     extends ModularState<CreateProfilePage, CreateProfileController> {
   bool _isLoading = false;
-  List<String> itemsProfession = [
-    'Profession 1',
-    'Profession 2',
-    'Profession 3',
-    'Profession 4',
-  ];
+  String? defaultValue;
+
   List<String> items = [
     'Country 1',
     'Country 2',
@@ -191,37 +193,56 @@ class _CreateProfilePageState
         StreamBuilder<Object>(
             stream: store.professionStream,
             builder: (context, snapshot) {
-              return DropdownButton<String>(
-                value: defaultProfession,
-                isExpanded: true,
-                underline: Container(
-                  height: 0.5,
-                  color: Colors.black,
-                ),
-                hint: Text(
-                  AppLocalizations.of(context)!.yout_profession,
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(color: Theme.of(context).hintColor),
-                ),
-                items: itemsProfession.map(
-                  (String valueItem) {
-                    return DropdownMenuItem<String>(
-                      child: Text(valueItem),
-                      value: valueItem,
+              return FutureBuilder(
+                future: professions.getProfessions(),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  List<String> professionsNames = [];
+                  if (snapshot.hasData) {
+                    List<CategoriesModel> categoriesModel = snapshot.data;
+                    for (var models in categoriesModel) {
+                      professionsNames.add(models.category);
+                    }
+
+                    return DropdownButton<String>(
+                      value: defaultValue,
+                      isExpanded: true,
+                      underline: Container(
+                        height: 0.5,
+                        color: Colors.black,
+                      ),
+                      hint: Text(
+                        'Your profession',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(color: Theme.of(context).hintColor),
+                      ),
+                      items: professionsNames.map(
+                        (String valueItem) {
+                          return DropdownMenuItem<String>(
+                            child: Text(valueItem),
+                            value: valueItem,
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (newValue) {
+                        setState(
+                          () {
+                            defaultValue = newValue!;
+                            debugPrint(defaultValue);
+                          },
+                        );
+                      },
                     );
-                  },
-                ).toList(),
-                onChanged: (newValue) {
-                  setState(
-                    () {
-                      defaultProfession = newValue;
-                      debugPrint(defaultProfession);
-                      store.changeProfession(defaultProfession!);
-                      debugPrint(defaultProfession);
-                    },
-                  );
+                  } else {
+                    return Text(
+                      'Loading categories...',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(color: Theme.of(context).primaryColor),
+                    );
+                  }
                 },
               );
             }),
@@ -229,34 +250,56 @@ class _CreateProfilePageState
         StreamBuilder(
           stream: store.countryStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            return DropdownButton<String>(
-              value: defaultCountry,
-              isExpanded: true,
-              underline: Container(
-                height: 0.5,
-                color: Colors.black,
-              ),
-              onChanged: (newValue) {
-                setState(
-                  () {
-                    defaultCountry = newValue;
-                    store.changeCountry(defaultCountry!);
-                  },
-                );
+            return FutureBuilder(
+              future: countries.getCountries(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                List<String> countriesNames = [];
+                if (snapshot.hasData) {
+                  List<CategoriesModel> categoriesModel = snapshot.data;
+                  for (var models in categoriesModel) {
+                    countriesNames.add(models.category);
+                  }
+
+                  return DropdownButton<String>(
+                    value: defaultCountry,
+                    isExpanded: true,
+                    underline: Container(
+                      height: 0.5,
+                      color: Colors.black,
+                    ),
+                    onChanged: (newValue) {
+                      setState(
+                        () {
+                          defaultCountry = newValue;
+                          store.changeCountry(defaultCountry!);
+                        },
+                      );
+                    },
+                    hint: Text(
+                      AppLocalizations.of(context)!.your_country,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(color: Theme.of(context).hintColor),
+                    ),
+                    items: countriesNames
+                        .map<DropdownMenuItem<String>>((String value) {
+                      return DropdownMenuItem<String>(
+                        child: Text(value),
+                        value: value,
+                      );
+                    }).toList(),
+                  );
+                } else {
+                  return Text(
+                    'Loading countries...',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: Theme.of(context).primaryColor),
+                  );
+                }
               },
-              hint: Text(
-                AppLocalizations.of(context)!.your_country,
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: Theme.of(context).hintColor),
-              ),
-              items: items.map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  child: Text(value),
-                  value: value,
-                );
-              }).toList(),
             );
           },
         ),
