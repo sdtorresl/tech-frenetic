@@ -73,7 +73,7 @@ class UserProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<UserModel?> getUserData() async {
+  Future<UserModel?> getLoggedUser() async {
     String? userId = prefs.userId;
     UserModel? userinfo;
     try {
@@ -105,7 +105,7 @@ class UserProvider extends TechFreneticProvider {
     return userinfo;
   }
 
-  Future<UserModel?> getArticleUser(userId) async {
+  Future<UserModel?> getUser(userId) async {
     UserModel? userinfo;
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
