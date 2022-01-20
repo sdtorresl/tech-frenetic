@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:techfrenetic/app/models/meetups_model.dart';
 
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 
 class MeetupWidget extends StatefulWidget {
   final MeetupsModel meetup;
@@ -72,16 +73,8 @@ class _MeetupWidgetState extends State<MeetupWidget> {
                   style: Theme.of(context).textTheme.headline1,
                 ),
                 const SizedBox(height: 30),
-                CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: ClipOval(
-                    child: SvgPicture.asset(
-                      'assets/img/avatars/avatar-02.svg',
-                      semanticsLabel: 'Acme Logo',
-                      height: 30,
-                      width: 30,
-                    ),
-                  ),
+                AvatarWidget(
+                  userId: widget.meetup.uid_1,
                 ),
                 Text(
                   'By ' + widget.meetup.displayName,

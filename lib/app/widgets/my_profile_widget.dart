@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/modules/certifications/certifications.dart';
 import 'package:techfrenetic/app/modules/edit_name/edit_name_page.dart';
 import 'package:techfrenetic/app/modules/edit_sumary/edit_sumary.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
+import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
@@ -19,6 +21,8 @@ class MyProfile extends StatefulWidget {
 }
 
 class _MyProfileState extends State<MyProfile> {
+  final prefs = UserPreferences();
+
   @override
   Widget build(BuildContext context) {
     List<String> name = widget.user.name.split(' ');
@@ -130,8 +134,8 @@ class _MyProfileState extends State<MyProfile> {
                   children: [
                     GestureDetector(
                       onTap: () => Modular.to.pushNamed('/edit_avatar'),
-                      child: UserAvatarWidget(
-                        username: widget.user.name,
+                      child: AvatarWidget(
+                        userId: prefs.userId!,
                         radius: 40,
                       ),
                     ),
