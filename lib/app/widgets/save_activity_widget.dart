@@ -4,11 +4,18 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
+import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class SaveActivityWidget extends StatefulWidget {
   final ArticlesModel article;
-  const SaveActivityWidget({Key? key, required this.article}) : super(key: key);
+
+  const SaveActivityWidget({
+    Key? key,
+    required this.article,
+  }) : super(key: key);
 
   @override
   State<SaveActivityWidget> createState() => _SaveActivityWidgetState();
@@ -80,19 +87,32 @@ class _SaveActivityWidgetState extends State<SaveActivityWidget> {
 
   Padding _postAuthor(BuildContext context) {
     final created = widget.article.date!;
+    UserProvider _userProvider = UserProvider();
 
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
       child: Row(
         children: [
-          CircleAvatar(
-            backgroundColor: Colors.grey.withOpacity(0.2),
-            child: ClipOval(
-              child: SvgPicture.asset(
-                'assets/img/avatars/avatar-02.svg',
-                semanticsLabel: 'Acme Logo',
-              ),
-            ),
+          FutureBuilder(
+            future: _userProvider.getUserData(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              UserModel userInfo;
+              String label;
+              if (snapshot.hasData) {
+                debugPrint(snapshot.data.toString());
+                userInfo = snapshot.data;
+                label = userInfo.name;
+                return UserAvatarWidget(
+                  username: label,
+                  radius: 20,
+                );
+              } else {
+                return CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.grey[200],
+                );
+              }
+            },
           ),
           const SizedBox(width: 20),
           Column(
