@@ -33,7 +33,7 @@ class _ArticleAvatarState extends State<ArticleAvatar> {
         if (snapshot.hasData) {
           UserByArticleModel user = snapshot.data;
           return FutureBuilder(
-            future: userProvider.getArticleUser(user.targetId),
+            future: userProvider.getUser(user.targetId),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               UserModel userInfo;
               if (snapshot.hasData) {

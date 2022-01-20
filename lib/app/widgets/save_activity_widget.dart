@@ -94,7 +94,7 @@ class _SaveActivityWidgetState extends State<SaveActivityWidget> {
       child: Row(
         children: [
           FutureBuilder(
-            future: _userProvider.getUserData(),
+            future: _userProvider.getLoggedUser(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               UserModel userInfo;
               String label;
