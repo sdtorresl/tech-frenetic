@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
+import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -22,6 +24,8 @@ class SaveActivityWidget extends StatefulWidget {
 }
 
 class _SaveActivityWidgetState extends State<SaveActivityWidget> {
+  final prefs = UserPreferences();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -102,8 +106,8 @@ class _SaveActivityWidgetState extends State<SaveActivityWidget> {
                 debugPrint(snapshot.data.toString());
                 userInfo = snapshot.data;
                 label = userInfo.name;
-                return UserAvatarWidget(
-                  username: label,
+                return AvatarWidget(
+                  userId: prefs.userId!,
                   radius: 20,
                 );
               } else {

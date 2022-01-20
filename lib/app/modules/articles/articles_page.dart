@@ -8,6 +8,7 @@ import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/articles/articles_controller.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/widgets/article_avatar_widget.dart';
+import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/comments_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_html/flutter_html.dart';
@@ -84,8 +85,8 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
       padding: const EdgeInsets.only(bottom: 15, left: 20, right: 20),
       child: Row(
         children: [
-          ArticleAvatar(
-            articleUrl: widget.article.url!,
+          AvatarWidget(
+            userId: widget.article.uid!,
           ),
           const SizedBox(width: 20),
           Column(
