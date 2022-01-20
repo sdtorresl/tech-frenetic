@@ -8,7 +8,6 @@ import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
-import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class SaveActivityWidget extends StatefulWidget {
@@ -28,38 +27,22 @@ class _SaveActivityWidgetState extends State<SaveActivityWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(
-              width: 1.00,
-              color: Theme.of(context).unselectedWidgetColor,
-            ),
-            left: BorderSide(
-              width: 0.50,
-              color: Colors.grey.withOpacity(.6),
-            ),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).unselectedWidgetColor,
-              spreadRadius: -5,
-              blurRadius: 5,
-              offset: const Offset(1.9, 1.7),
-            )
-          ]),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _postAuthor(context),
-          _postSummary(context),
-          _postImage(context),
-          _postTitle(context),
-          _postTags(context),
-          _postActionBar(context)
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+      child: Card(
+        elevation: 2,
+        shape: const ContinuousRectangleBorder(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _postAuthor(context),
+            _postSummary(context),
+            _postImage(context),
+            _postTitle(context),
+            _postTags(context),
+            _postActionBar(context)
+          ],
+        ),
       ),
     );
   }
