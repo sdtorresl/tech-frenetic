@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/providers/like_provider.dart';
 import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -221,6 +222,7 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   Widget _postActionBar(context) {
+    LikeProvider like = LikeProvider();
     return Column(
       children: [
         const Divider(
@@ -237,7 +239,7 @@ class _PostWidgetState extends State<PostWidget> {
                 context: context,
                 iconAsset: 'assets/img/icons/light_bulb.svg',
                 text: 'Cool',
-                onPressed: () => {debugPrint("Like!")},
+                onPressed: () => like.like(widget.article.id),
               ),
               _actionButton(
                 context: context,
