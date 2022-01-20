@@ -7,8 +7,8 @@ import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/articles/articles_controller.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
+import 'package:techfrenetic/app/widgets/article_avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/comments_widget.dart';
-import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:flutter_html/flutter_html.dart';
 
@@ -84,8 +84,8 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
       padding: const EdgeInsets.only(bottom: 15, left: 20, right: 20),
       child: Row(
         children: [
-          UserAvatarWidget(
-            username: widget.article.user!,
+          ArticleAvatar(
+            articleUrl: widget.article.url!,
           ),
           const SizedBox(width: 20),
           Column(
@@ -131,12 +131,10 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     return AppBar(
       leading: IconButton(
         icon: const Icon(Icons.close),
-        onPressed: () {
-          Navigator.of(context).pop();
-        },
+        onPressed: () => Navigator.of(context).pop(),
       ),
       title: Text(
-        article.category!.toUpperCase(),
+        widget.article.category!.toUpperCase(),
         style: theme.textTheme.headline5!.copyWith(color: Colors.white),
       ),
       backgroundColor: Theme.of(context).primaryColorDark,

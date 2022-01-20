@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/widgets/article_avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -87,7 +88,9 @@ class _PostWidgetState extends State<PostWidget> {
       padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
       child: Row(
         children: [
-          UserAvatarWidget(username: widget.article.user!),
+          ArticleAvatar(
+            articleUrl: widget.article.url!,
+          ),
           const SizedBox(width: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
