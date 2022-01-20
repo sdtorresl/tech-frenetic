@@ -105,6 +105,28 @@ class UserProvider extends TechFreneticProvider {
     return userinfo;
   }
 
+  Future<UserModel?> getArticleUser(userId) async {
+    UserModel? userinfo;
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
+
+      var response = await http.get(
+        _url,
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        userinfo = UserModel.fromJson(response.body);
+        debugPrint(userinfo.toString());
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return userinfo;
+  }
+
   Future<ProfileModel?> getProfile(String userId) async {
     ProfileModel userinfo = ProfileModel.empty();
 
