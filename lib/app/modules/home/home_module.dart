@@ -4,7 +4,6 @@ import 'package:techfrenetic/app/modules/articles/articles_module.dart';
 import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/contact_us/contact_us_module.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_module.dart';
-import 'package:techfrenetic/app/modules/create_groups/create_groups_page.dart';
 import 'package:techfrenetic/app/modules/create_meetups/create_meetups_module.dart';
 import 'package:techfrenetic/app/modules/edit_avatar/edit_avatar_page.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';

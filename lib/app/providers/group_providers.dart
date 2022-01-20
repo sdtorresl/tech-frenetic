@@ -1,9 +1,43 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:techfrenetic/app/models/group_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
-class CreateGroupProvider extends TechFreneticProvider {
+class GroupsProvider extends TechFreneticProvider {
+  Future<List<GroupModel>> getRecommended() async {
+    List<GroupModel> recommendedGroups = [];
+
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/groups-recommended");
+
+      Map<String, String> headers = {};
+      headers.addAll(authHeader);
+      headers.addAll(sessionHeader);
+
+      var response = await http.get(
+        _url,
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = jsonDecode(response.body);
+
+        for (var item in jsonResponse) {
+          GroupModel group = GroupModel.fromMap(item);
+          recommendedGroups.add(group);
+        }
+
+        debugPrint(recommendedGroups.toString());
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return recommendedGroups;
+  }
+
   Future<bool?> createGroup(String name, String description, String rules,
       String namePerson, String type) async {
     try {

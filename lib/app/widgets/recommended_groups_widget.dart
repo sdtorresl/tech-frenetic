@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/core/utils.dart';
+import 'package:techfrenetic/app/models/group_model.dart';
 
-class RecommendedGroupsWidget extends StatefulWidget {
-  const RecommendedGroupsWidget({Key? key}) : super(key: key);
+class GroupWidget extends StatefulWidget {
+  final GroupModel group;
+
+  const GroupWidget({Key? key, required this.group}) : super(key: key);
 
   @override
-  _RecommendedGroupsWidgetState createState() =>
-      _RecommendedGroupsWidgetState();
+  _GroupWidgetState createState() => _GroupWidgetState();
 }
 
-class _RecommendedGroupsWidgetState extends State<RecommendedGroupsWidget> {
+class _GroupWidgetState extends State<GroupWidget> {
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -51,7 +54,7 @@ class _RecommendedGroupsWidgetState extends State<RecommendedGroupsWidget> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Remote Workers',
+                    parseHtmlString(widget.group.title),
                     style: Theme.of(context)
                         .textTheme
                         .headline1!
@@ -64,7 +67,7 @@ class _RecommendedGroupsWidgetState extends State<RecommendedGroupsWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '234 members',
+                            "${widget.group.members.isNotEmpty ? widget.group.members : 0} members",
                             style: Theme.of(context)
                                 .textTheme
                                 .headline1!

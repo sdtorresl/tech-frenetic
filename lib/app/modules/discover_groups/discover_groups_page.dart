@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/models/group_model.dart';
+import 'package:techfrenetic/app/providers/group_providers.dart';
 
 import 'package:techfrenetic/app/widgets/recommended_groups_widget.dart';
 import 'package:techfrenetic/app/widgets/groups_cards_widget.dart';
+import 'package:techfrenetic/app/widgets/separator.dart';
 
 class DiscoverGroupsPage extends StatefulWidget {
   const DiscoverGroupsPage({Key? key}) : super(key: key);
@@ -15,43 +18,7 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
   Widget build(BuildContext context) {
     return ListView(
       children: [
-        Padding(
-          padding: const EdgeInsets.symmetric(vertical: 15.0, horizontal: 20.0),
-          child: Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Groups you may like',
-                  style: Theme.of(context).textTheme.headline1!.copyWith(
-                        fontSize: 20,
-                      ),
-                ),
-                const RecommendedGroupsWidget(),
-                Center(
-                  child: Container(
-                    color: Theme.of(context).primaryColor,
-                    width: 290,
-                    height: 1.5,
-                  ),
-                ),
-                const RecommendedGroupsWidget(),
-                Center(
-                  child: Container(
-                    color: Theme.of(context).primaryColor,
-                    width: 290,
-                    height: 1.5,
-                  ),
-                ),
-                const RecommendedGroupsWidget(),
-              ],
-            ),
-          ),
-        ),
+        _recommndedGroups(context),
         Center(
           child: Container(
             color: Theme.of(context).unselectedWidgetColor,
@@ -121,6 +88,61 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
         ),
         const SizedBox(height: 60),
       ],
+    );
+  }
+
+  Widget _recommndedGroups(BuildContext context) {
+    double separatorWidth = MediaQuery.of(context).size.width * 0.8;
+
+    GroupsProvider groupsProvider = GroupsProvider();
+
+    return FutureBuilder(
+      future: groupsProvider.getRecommended(),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<GroupModel>> snapshot) {
+        if (snapshot.hasData) {
+          List<Widget> recommendedGroupsWidgets = [];
+          List<GroupModel> recommendedGroups = snapshot.data ?? [];
+
+          for (GroupModel group in recommendedGroups) {
+            recommendedGroupsWidgets.add(
+              GroupWidget(group: group),
+            );
+            recommendedGroupsWidgets.add(
+              Separator(separatorWidth: separatorWidth),
+            );
+          }
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 15.0),
+            child: Container(
+              decoration: const BoxDecoration(
+                color: Colors.white,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                    child: Text(
+                      'Groups you may like',
+                      style: Theme.of(context).textTheme.headline1!.copyWith(
+                            fontSize: 20,
+                          ),
+                    ),
+                  ),
+                  ...recommendedGroupsWidgets
+                ],
+              ),
+            ),
+          );
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 }
