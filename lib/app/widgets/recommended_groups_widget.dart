@@ -42,8 +42,7 @@ class _GroupWidgetState extends State<GroupWidget> {
             CachedNetworkImage(
               placeholder: (context, value) => const LinearProgressIndicator(),
               errorWidget: (context, value, e) => const Icon(Icons.error),
-              imageUrl:
-                  "https://akm-img-a-in.tosshub.com/indiatoday/images/story/201810/stockvault-person-studying-and-learning---knowledge-concept178241_0-647x363.jpeg?0LocAW2E2gIBzZp0oZSWzxmQTvAPhN_v&size=1200:675",
+              imageUrl: widget.group.picture,
             ),
             const SizedBox(
               height: 10,
@@ -74,7 +73,7 @@ class _GroupWidgetState extends State<GroupWidget> {
                                 .copyWith(fontSize: 13),
                           ),
                           Text(
-                            '67 post',
+                            "${widget.group.posts.isNotEmpty ? widget.group.posts : 0} posts",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1!

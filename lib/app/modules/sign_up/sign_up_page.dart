@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_controller.dart';
 
@@ -38,11 +39,8 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
       checkBoxCompany = true;
     }
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.of(context).pop(),
-        ),
+      appBar: TFAppBar(
+        onPressed: () => Navigator.of(context).pop(),
       ),
       body: ListView(
         children: [
