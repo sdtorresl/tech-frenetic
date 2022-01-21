@@ -163,9 +163,14 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget _postInteractions(BuildContext context) {
     Widget _comments = const SizedBox();
+    Widget _likes = const SizedBox();
+
     if (widget.article.comments != '0' && widget.article.comments == '1') {
       _comments = Row(
         children: [
+          const SizedBox(
+            width: 10,
+          ),
           SizedBox(
             child: SvgPicture.asset(
               'assets/img/icons/dot.svg',
@@ -184,6 +189,9 @@ class _PostWidgetState extends State<PostWidget> {
     if (widget.article.comments != '0' && widget.article.comments != '1') {
       _comments = Row(
         children: [
+          const SizedBox(
+            width: 10,
+          ),
           SizedBox(
             child: SvgPicture.asset(
               'assets/img/icons/dot.svg',
@@ -199,6 +207,23 @@ class _PostWidgetState extends State<PostWidget> {
       );
     }
 
+    if (widget.article.likes != '0') {
+      _likes = Row(
+        children: [
+          SvgPicture.asset(
+            'assets/img/icons/light_bulb.svg',
+            semanticsLabel: 'light_bulb',
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Text(widget.article.likes!),
+          const SizedBox(
+            width: 10,
+          ),
+        ],
+      );
+    }
     return Column(
       children: [
         const Divider(
@@ -209,14 +234,7 @@ class _PostWidgetState extends State<PostWidget> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(
             children: [
-              SvgPicture.asset(
-                'assets/img/icons/light_bulb.svg',
-                semanticsLabel: 'light_bulb',
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Text(widget.article.likes!),
+              _likes,
               _comments,
               const SizedBox(
                 width: 10,
