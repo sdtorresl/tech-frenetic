@@ -6,7 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/models/like_model.dart';
 import 'package:techfrenetic/app/providers/like_provider.dart';
-import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
+import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class PostWidget extends StatefulWidget {
@@ -99,7 +99,9 @@ class _PostWidgetState extends State<PostWidget> {
       padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
       child: Row(
         children: [
-          UserAvatarWidget(username: widget.article.user!),
+          AvatarWidget(
+            userId: widget.article.uid!,
+          ),
           const SizedBox(width: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -43,6 +43,7 @@ class MeetupsModel {
     required this.where,
     required this.author,
     required this.displayName,
+    required this.uid_1,
   });
 
   final String id;
@@ -52,6 +53,7 @@ class MeetupsModel {
   final String where;
   final String author;
   final String displayName;
+  final String uid_1;
 
   factory MeetupsModel.fromJson(String str) =>
       MeetupsModel.fromMap(json.decode(str));
@@ -66,6 +68,7 @@ class MeetupsModel {
       where: json["where"],
       author: json["author"],
       displayName: json["display_name"],
+      uid_1: json["uid_1"],
     );
   }
 
@@ -77,6 +80,7 @@ class MeetupsModel {
         where: "",
         author: "",
         displayName: "",
+        uid_1: "",
       );
   Map<String, dynamic> toMap() => {
         "id": id,
@@ -86,6 +90,7 @@ class MeetupsModel {
         "where": where,
         "author": author,
         "display_name": displayName,
+        "uid_1": uid_1,
       };
   @override
   String toString() => toJson();
