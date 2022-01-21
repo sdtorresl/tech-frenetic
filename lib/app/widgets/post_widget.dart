@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
-import 'package:techfrenetic/app/models/like_model.dart';
 import 'package:techfrenetic/app/providers/like_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -30,6 +30,7 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
+    UserPreferences prefs = UserPreferences();
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       decoration: BoxDecoration(
@@ -57,8 +58,10 @@ class _PostWidgetState extends State<PostWidget> {
         children: [
           GestureDetector(
             child: _postAuthor(context),
-            onTap: () => Modular.to
-                .pushNamed("/users_profiles", arguments: widget.article),
+            onTap: prefs.userId != widget.article.uid
+                ? () => Modular.to
+                    .pushNamed("/users_profiles", arguments: widget.article)
+                : () => Modular.to.pushNamed("/profile"),
           ),
           _postSummary(context),
           GestureDetector(
