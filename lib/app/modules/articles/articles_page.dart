@@ -79,14 +79,39 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     }
   }
 
+  Widget _avatar() {
+    Widget avatar;
+    if (article.id != '') {
+      avatar = AvatarWidget(
+        userId: widget.article.uid!,
+      );
+    } else {
+      avatar = const SizedBox();
+    }
+    return avatar;
+  }
+
+  Widget _dot() {
+    Widget dot;
+    if (article.id != '') {
+      dot = SvgPicture.asset(
+        'assets/img/icons/dot.svg',
+        allowDrawingOutsideViewBox: true,
+        semanticsLabel: 'Dot',
+        color: Theme.of(context).primaryColor,
+      );
+    } else {
+      dot = const SizedBox();
+    }
+    return dot;
+  }
+
   Widget _articleHeader(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15, left: 20, right: 20),
       child: Row(
         children: [
-          AvatarWidget(
-            userId: widget.article.uid!,
-          ),
+          _avatar(),
           const SizedBox(width: 20),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -103,12 +128,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 5.0),
                     child: SizedBox(
-                      child: SvgPicture.asset(
-                        'assets/img/icons/dot.svg',
-                        allowDrawingOutsideViewBox: true,
-                        semanticsLabel: 'Dot',
-                        color: Theme.of(context).primaryColor,
-                      ),
+                      child: _dot(),
                     ),
                   ),
                   Text(
