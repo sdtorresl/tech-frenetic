@@ -66,14 +66,14 @@ class _GroupWidgetState extends State<GroupWidget> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            "${widget.group.members.isNotEmpty ? widget.group.members : 0} members",
+                            "${widget.group.members.isNotEmpty ? widget.group.members : 0} - ${AppLocalizations.of(context)!.groups_members}",
                             style: Theme.of(context)
                                 .textTheme
                                 .headline1!
                                 .copyWith(fontSize: 13),
                           ),
                           Text(
-                            "${widget.group.posts.isNotEmpty ? widget.group.posts : 0} posts",
+                            "${widget.group.posts.isNotEmpty ? widget.group.posts : 0} - ${AppLocalizations.of(context)!.groups_posts}",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1!

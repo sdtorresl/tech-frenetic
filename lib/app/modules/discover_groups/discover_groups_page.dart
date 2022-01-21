@@ -1,9 +1,9 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
-
-import 'package:techfrenetic/app/widgets/recommended_groups_widget.dart';
 import 'package:techfrenetic/app/widgets/groups_cards_widget.dart';
+import 'package:techfrenetic/app/widgets/recommended_groups_widget.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
 
 class DiscoverGroupsPage extends StatefulWidget {
@@ -19,6 +19,7 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
     return ListView(
       children: [
         _recommndedGroups(context),
+        /* 
         Center(
           child: Container(
             color: Theme.of(context).unselectedWidgetColor,
@@ -85,15 +86,13 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
             width: 300,
             height: .5,
           ),
-        ),
+        ), */
         const SizedBox(height: 60),
       ],
     );
   }
 
   Widget _recommndedGroups(BuildContext context) {
-    double separatorWidth = MediaQuery.of(context).size.width * 0.8;
-
     GroupsProvider groupsProvider = GroupsProvider();
 
     return FutureBuilder(
@@ -101,17 +100,9 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
       builder:
           (BuildContext context, AsyncSnapshot<List<GroupModel>> snapshot) {
         if (snapshot.hasData) {
-          List<Widget> recommendedGroupsWidgets = [];
           List<GroupModel> recommendedGroups = snapshot.data ?? [];
-
-          for (GroupModel group in recommendedGroups) {
-            recommendedGroupsWidgets.add(
-              GroupWidget(group: group),
-            );
-            recommendedGroupsWidgets.add(
-              Separator(separatorWidth: separatorWidth),
-            );
-          }
+          List<Widget> recommendedGroupsWidgets =
+              getRecommendedGroupsWidget(recommendedGroups, context);
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -126,7 +117,7 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 15.0),
                     child: Text(
-                      'Groups you may like',
+                      AppLocalizations.of(context)!.community_groups_maylike,
                       style: Theme.of(context).textTheme.headline1!.copyWith(
                             fontSize: 20,
                           ),
@@ -138,11 +129,58 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
             ),
           );
         } else {
-          return const Center(
-            child: CircularProgressIndicator(),
+          return const SizedBox(
+            height: 200,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
           );
         }
       },
     );
+  }
+
+  List<Widget> getRecommendedGroupsWidget(
+      List<GroupModel> recommendedGroups, BuildContext context) {
+    double separatorWidth = MediaQuery.of(context).size.width * 0.8;
+    List<Widget> recommendedGroupsWidgets = [];
+
+    for (var i = 0; i < recommendedGroups.length; i++) {
+      GroupModel group = recommendedGroups[i];
+      if (i < 3) {
+        recommendedGroupsWidgets.add(
+          GroupWidget(group: group),
+        );
+        if (i != 2) {
+          recommendedGroupsWidgets.add(
+            Separator(separatorWidth: separatorWidth),
+          );
+        } else {
+          recommendedGroupsWidgets.add(
+            Separator(
+              separatorWidth: separatorWidth,
+              color: Theme.of(context).unselectedWidgetColor,
+              margin: const EdgeInsets.symmetric(vertical: 5),
+              height: 0.5,
+            ),
+          );
+        }
+      } else {
+        recommendedGroupsWidgets.add(
+          GroupsCardsWidget(
+            group: group,
+          ),
+        );
+        recommendedGroupsWidgets.add(
+          Separator(
+            separatorWidth: separatorWidth,
+            color: Theme.of(context).unselectedWidgetColor,
+            margin: const EdgeInsets.symmetric(vertical: 5),
+            height: 0.5,
+          ),
+        );
+      }
+    }
+    return recommendedGroupsWidgets;
   }
 }
