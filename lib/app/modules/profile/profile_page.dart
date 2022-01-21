@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
+import 'package:techfrenetic/app/modules/certifications/certifications.dart';
+import 'package:techfrenetic/app/modules/edit_name/edit_name_page.dart';
+import 'package:techfrenetic/app/modules/edit_sumary/edit_sumary.dart';
 import 'package:techfrenetic/app/modules/my_account/my_account_page.dart';
 import 'package:techfrenetic/app/widgets/my_profile_widget.dart';
 import 'package:techfrenetic/app/widgets/my_content_widget.dart';
@@ -98,12 +102,60 @@ class ProfilePageState extends State<ProfilePage> {
 
   Widget _myProfile(BuildContext context) {
     UserProvider _userProvider = UserProvider();
+    UserPreferences prefs = UserPreferences();
+
     return FutureBuilder(
       future: _userProvider.getLoggedUser(),
       builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
         if (snapshot.hasData) {
           UserModel user = snapshot.data!;
-          return MyProfile(user: user);
+          return MyProfile(
+            user: user,
+            avatarId: user.uid,
+            onTap: () => Modular.to.pushNamed('/edit_avatar'),
+            editName: IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const EditNamePage();
+                  },
+                );
+              },
+              icon: Icon(
+                Icons.edit,
+                color: Theme.of(context).indicatorColor,
+              ),
+            ),
+            editAbout: IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const EditSummaryPage();
+                  },
+                );
+              },
+              icon: Icon(
+                Icons.edit,
+                color: Theme.of(context).indicatorColor,
+              ),
+            ),
+            certifications: IconButton(
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return const CertificationsPage();
+                  },
+                );
+              },
+              icon: Icon(
+                Icons.edit,
+                color: Theme.of(context).indicatorColor,
+              ),
+            ),
+          );
         }
 
         return const Center(

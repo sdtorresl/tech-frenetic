@@ -1,19 +1,26 @@
 import 'package:flutter/material.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
-import 'package:techfrenetic/app/modules/certifications/certifications.dart';
-import 'package:techfrenetic/app/modules/edit_name/edit_name_page.dart';
-import 'package:techfrenetic/app/modules/edit_sumary/edit_sumary.dart';
-import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 
 class MyProfile extends StatefulWidget {
   final UserModel user;
-  const MyProfile({Key? key, required this.user}) : super(key: key);
+  final int avatarId;
+  final void Function()? onTap;
+  final Widget editName;
+  final Widget editAbout;
+  final Widget certifications;
+  const MyProfile(
+      {Key? key,
+      required this.user,
+      required this.avatarId,
+      required this.onTap,
+      required this.editName,
+      required this.editAbout,
+      required this.certifications})
+      : super(key: key);
 
   @override
   _MyProfileState createState() => _MyProfileState();
@@ -78,20 +85,7 @@ class _MyProfileState extends State<MyProfile> {
             ),
             Align(
               alignment: Alignment.topRight,
-              child: IconButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const EditNamePage();
-                    },
-                  );
-                },
-                icon: Icon(
-                  Icons.edit,
-                  color: Theme.of(context).indicatorColor,
-                ),
-              ),
+              child: widget.editName,
             ),
           ],
         );
@@ -132,9 +126,9 @@ class _MyProfileState extends State<MyProfile> {
                 child: Column(
                   children: [
                     GestureDetector(
-                      onTap: () => Modular.to.pushNamed('/edit_avatar'),
+                      onTap: widget.onTap,
                       child: AvatarWidget(
-                        userId: prefs.userId!,
+                        userId: widget.avatarId.toString(),
                         radius: 40,
                       ),
                     ),
@@ -224,25 +218,11 @@ class _MyProfileState extends State<MyProfile> {
                 _summaryBox(context),
                 const SizedBox(height: 20),
                 ListTile(
-                  title: Text(
-                    AppLocalizations.of(context)!.about,
-                    style: Theme.of(context).textTheme.headline1,
-                  ),
-                  trailing: IconButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const EditSummaryPage();
-                        },
-                      );
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).indicatorColor,
+                    title: Text(
+                      AppLocalizations.of(context)!.about,
+                      style: Theme.of(context).textTheme.headline1,
                     ),
-                  ),
-                ),
+                    trailing: widget.editAbout),
                 const SizedBox(height: 20),
                 Container(
                   alignment: Alignment.centerLeft,
@@ -260,20 +240,7 @@ class _MyProfileState extends State<MyProfile> {
                 ListTile(
                   title: Text(AppLocalizations.of(context)!.certifications,
                       style: Theme.of(context).textTheme.headline1),
-                  trailing: IconButton(
-                    onPressed: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return const CertificationsPage();
-                        },
-                      );
-                    },
-                    icon: Icon(
-                      Icons.edit,
-                      color: Theme.of(context).indicatorColor,
-                    ),
-                  ),
+                  trailing: widget.certifications,
                 ),
                 Container(
                   decoration: BoxDecoration(
@@ -331,31 +298,35 @@ class _MyProfileState extends State<MyProfile> {
           _counterBox(
             AppLocalizations.of(context)!.articles,
             10,
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ProfilePage(selectedPage: 1),
-              ),
-            ),
+            // () => Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const ProfilePage(selectedPage: 1),
+            //),
           ),
-          _counterBox(AppLocalizations.of(context)!.your_profile, 0,
-              () => debugPrint("Profile")),
+          _counterBox(AppLocalizations.of(context)!.your_profile, 0
+              //, () => debugPrint("Profile")
+              ),
           _counterBox(
             AppLocalizations.of(context)!.post,
             100,
-            () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const ProfilePage(selectedPage: 1),
-              ),
-            ),
+            //() => Navigator.push(
+            //   context,
+            //   MaterialPageRoute(
+            //     builder: (context) => const ProfilePage(selectedPage: 1),
+            //   ),
+            // ),
           ),
         ],
       ),
     );
   }
 
-  Widget _counterBox(String text, int counter, void Function() onPressed) {
+  Widget _counterBox(
+    String text,
+    int counter,
+    /*void Function() onPressed*/
+  ) {
     return Flexible(
       flex: 1,
       child: Container(
@@ -372,7 +343,7 @@ class _MyProfileState extends State<MyProfile> {
           ),
         ),
         child: GestureDetector(
-          onTap: onPressed,
+          onTap: null,
           child: Column(
             children: [
               Padding(

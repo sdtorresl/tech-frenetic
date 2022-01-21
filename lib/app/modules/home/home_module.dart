@@ -9,6 +9,7 @@ import 'package:techfrenetic/app/modules/edit_avatar/edit_avatar_page.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
 import 'package:techfrenetic/app/modules/groups/groups_module.dart';
 import 'package:techfrenetic/app/modules/profile/profile_module.dart';
+import 'package:techfrenetic/app/modules/users_profiles/user_profiles_module.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/about_us_widget.dart';
 import 'package:techfrenetic/app/modules/login/login_module.dart';
@@ -86,6 +87,13 @@ class HomeModule extends Module {
     ChildRoute(
       '/terms',
       child: (context, args) => const TermsPage(),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
+    ModuleRoute(
+      '/users_profiles',
+      module: UsersProfilesModule(),
       guards: [
         AuthGuard(),
       ],
