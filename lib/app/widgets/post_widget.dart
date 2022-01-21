@@ -57,7 +57,11 @@ class _PostWidgetState extends State<PostWidget> {
         children: [
           _postAuthor(context),
           _postSummary(context),
-          _postImage(context),
+          GestureDetector(
+            child: _postImage(context),
+            onTap: () => Modular.to
+                .pushNamed("/community/article", arguments: widget.article),
+          ),
           _postTitle(context),
           _postTags(context),
           _postInteractions(context),
