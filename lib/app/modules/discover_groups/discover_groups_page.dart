@@ -19,75 +19,6 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
     return ListView(
       children: [
         _recommndedGroups(context),
-        /* 
-        Center(
-          child: Container(
-            color: Theme.of(context).unselectedWidgetColor,
-            width: 400,
-            height: .5,
-          ),
-        ),
-        const SizedBox(height: 30),
-        const GroupsCardsWidget(),
-        const SizedBox(height: 10),
-        Center(
-          child: Container(
-            color: Theme.of(context).unselectedWidgetColor,
-            width: 300,
-            height: .5,
-          ),
-        ),
-        const SizedBox(height: 10),
-        const GroupsCardsWidget(),
-        const SizedBox(height: 10),
-        Center(
-          child: Container(
-            color: Theme.of(context).unselectedWidgetColor,
-            width: 300,
-            height: .5,
-          ),
-        ),
-        const SizedBox(height: 10),
-        const GroupsCardsWidget(),
-        const SizedBox(height: 10),
-        Center(
-          child: Container(
-            color: Theme.of(context).unselectedWidgetColor,
-            width: 300,
-            height: .5,
-          ),
-        ),
-        const SizedBox(height: 10),
-        const GroupsCardsWidget(),
-        const SizedBox(height: 10),
-        Center(
-          child: Container(
-            color: Theme.of(context).unselectedWidgetColor,
-            width: 300,
-            height: .5,
-          ),
-        ),
-        const SizedBox(height: 10),
-        const GroupsCardsWidget(),
-        const SizedBox(height: 10),
-        Center(
-          child: Container(
-            color: Theme.of(context).unselectedWidgetColor,
-            width: 300,
-            height: .5,
-          ),
-        ),
-        const SizedBox(height: 10),
-        const GroupsCardsWidget(),
-        const SizedBox(height: 10),
-        Center(
-          child: Container(
-            color: Theme.of(context).unselectedWidgetColor,
-            width: 300,
-            height: .5,
-          ),
-        ), */
-        const SizedBox(height: 60),
       ],
     );
   }
@@ -106,26 +37,22 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 15.0),
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.white,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                    child: Text(
-                      AppLocalizations.of(context)!.community_groups_maylike,
-                      style: Theme.of(context).textTheme.headline1!.copyWith(
-                            fontSize: 20,
-                          ),
-                    ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                  child: Text(
+                    AppLocalizations.of(context)!.community_groups_maylike,
+                    style: Theme.of(context).textTheme.headline1!.copyWith(
+                          fontSize: 20,
+                        ),
                   ),
-                  ...recommendedGroupsWidgets
-                ],
-              ),
+                ),
+                ...recommendedGroupsWidgets,
+                const SizedBox(height: 60),
+              ],
             ),
           );
         } else {
