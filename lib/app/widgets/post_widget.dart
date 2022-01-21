@@ -4,6 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/models/like_model.dart';
+import 'package:techfrenetic/app/providers/like_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
@@ -16,6 +18,16 @@ class PostWidget extends StatefulWidget {
 }
 
 class _PostWidgetState extends State<PostWidget> {
+  String likeAsset = '';
+  bool enabledLike = true;
+
+  @override
+  void initState() {
+    super.initState();
+    enabledLike = true;
+    likeAsset = 'assets/img/icons/light_bulb.svg';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -153,9 +165,14 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget _postInteractions(BuildContext context) {
     Widget _comments = const SizedBox();
+    Widget _likes = const SizedBox();
+
     if (widget.article.comments != '0' && widget.article.comments == '1') {
       _comments = Row(
         children: [
+          const SizedBox(
+            width: 10,
+          ),
           SizedBox(
             child: SvgPicture.asset(
               'assets/img/icons/dot.svg',
@@ -174,6 +191,9 @@ class _PostWidgetState extends State<PostWidget> {
     if (widget.article.comments != '0' && widget.article.comments != '1') {
       _comments = Row(
         children: [
+          const SizedBox(
+            width: 10,
+          ),
           SizedBox(
             child: SvgPicture.asset(
               'assets/img/icons/dot.svg',
@@ -189,6 +209,23 @@ class _PostWidgetState extends State<PostWidget> {
       );
     }
 
+    if (widget.article.likes != '0') {
+      _likes = Row(
+        children: [
+          SvgPicture.asset(
+            'assets/img/icons/light_bulb.svg',
+            semanticsLabel: 'light_bulb',
+          ),
+          const SizedBox(
+            width: 10,
+          ),
+          Text(widget.article.likes!),
+          const SizedBox(
+            width: 10,
+          ),
+        ],
+      );
+    }
     return Column(
       children: [
         const Divider(
@@ -199,6 +236,7 @@ class _PostWidgetState extends State<PostWidget> {
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: Row(
             children: [
+              _likes,
               _comments,
               const SizedBox(
                 width: 10,
@@ -222,6 +260,42 @@ class _PostWidgetState extends State<PostWidget> {
     );
   }
 
+  Widget likeButton(context) {
+    LikeProvider like = LikeProvider();
+    Widget likeButton;
+
+    if (enabledLike == true) {
+      likeButton = _actionButton(
+        context: context,
+        iconAsset: likeAsset,
+        text: 'Cool',
+        onPressed: () {
+          like.like(widget.article.id);
+          setState(() {
+            enabledLike = false;
+            likeAsset = 'assets/img/icons/bright_bulb.svg';
+          });
+        },
+      );
+    } else {
+      likeButton = _actionButton(
+        context: context,
+        iconAsset: likeAsset,
+        text: 'Cool',
+        onPressed: () {
+          like.dislike();
+          setState(
+            () {
+              enabledLike = true;
+              likeAsset = 'assets/img/icons/light_bulb.svg';
+            },
+          );
+        },
+      );
+    }
+    return likeButton;
+  }
+
   Widget _postActionBar(context) {
     return Column(
       children: [
@@ -235,12 +309,7 @@ class _PostWidgetState extends State<PostWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              _actionButton(
-                context: context,
-                iconAsset: 'assets/img/icons/light_bulb.svg',
-                text: 'Cool',
-                onPressed: () => {debugPrint("Like!")},
-              ),
+              likeButton(context),
               _actionButton(
                 context: context,
                 iconAsset: 'assets/img/icons/coment.svg',
