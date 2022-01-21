@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_controller.dart';
 
@@ -16,17 +17,7 @@ class _ForgotPasswordPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        foregroundColor: Theme.of(context).colorScheme.primary,
-        backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () => Modular.to.pushNamed("/login"),
-          icon: Icon(
-            Icons.arrow_back,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-        ),
-      ),
+      appBar: TFAppBar(onPressed: () => Modular.to.pushNamed("/login")),
       body: ListView(
         children: [
           Padding(

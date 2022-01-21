@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:techfrenetic/app/providers/create_group_provider.dart';
+import 'package:techfrenetic/app/providers/group_providers.dart';
 import '../../common/validators.dart';
 
 class CreateGroupsController extends Disposable {
@@ -37,7 +37,7 @@ class CreateGroupsController extends Disposable {
   String get type => _typeController.value;
 
   Future<bool> createGroup() async {
-    CreateGroupProvider _createGroupProvider = CreateGroupProvider();
+    GroupsProvider _createGroupProvider = GroupsProvider();
 
     bool? create = await _createGroupProvider.createGroup(
         name, description, rules, namePerson, type);

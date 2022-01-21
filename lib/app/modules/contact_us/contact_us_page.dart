@@ -27,6 +27,12 @@ class _ContactUsPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () => Navigator.pop(context),
+        ),
+      ),
       body: ListView(
         children: [
           contacInfo(),
@@ -269,9 +275,10 @@ class _ContactUsPageState
         ),
         const SizedBox(height: 40),
         StreamBuilder(
-          stream: null,
+          stream: store.cellphoneStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
+              keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: AppLocalizations.of(context)!.your_phone,
                 hintStyle: Theme.of(context)
@@ -284,35 +291,39 @@ class _ContactUsPageState
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: null,
+              onChanged: store.changePhone,
             );
           },
         ),
         const SizedBox(height: 40),
-        DropdownButton<String>(
-          value: defaultValue,
-          isExpanded: true,
-          underline: Container(
-            height: 0.5,
-            color: Colors.black,
-          ),
-          items: items.map(
-            (String valueItem) {
-              return DropdownMenuItem<String>(
-                child: Text(valueItem),
-                value: valueItem,
+        StreamBuilder(
+            stream: store.subjectStream,
+            builder: (context, snapshot) {
+              return DropdownButton<String>(
+                value: defaultValue,
+                isExpanded: true,
+                underline: Container(
+                  height: 0.5,
+                  color: Colors.black,
+                ),
+                items: items.map(
+                  (String valueItem) {
+                    return DropdownMenuItem<String>(
+                      child: Text(valueItem),
+                      value: valueItem,
+                    );
+                  },
+                ).toList(),
+                onChanged: (newValue) {
+                  setState(
+                    () {
+                      defaultValue = newValue;
+                      store.changeSubject(defaultValue!);
+                    },
+                  );
+                },
               );
-            },
-          ).toList(),
-          onChanged: (newValue) {
-            setState(
-              () {
-                defaultValue = newValue;
-                debugPrint(defaultValue);
-              },
-            );
-          },
-        ),
+            }),
         const SizedBox(height: 40),
         Text(
           AppLocalizations.of(context)!.message2,

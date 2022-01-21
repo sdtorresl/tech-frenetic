@@ -154,7 +154,7 @@ class _EditNamePageState extends State<EditNamePage> {
                 );
               } else {
                 return Text(
-                  'Loading categories...',
+                  'Loading Professions...',
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1!

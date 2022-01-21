@@ -11,7 +11,7 @@ class MyGroupPage extends StatelessWidget {
     return ListView(
       children: [
         Padding(
-          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 20),
+          padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 10),
           child: Container(
             decoration: BoxDecoration(
                 color: Colors.white,
@@ -73,27 +73,7 @@ class MyGroupPage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      const SizedBox(
-                        height: 50,
-                      ),
-                      Text(
-                        AppLocalizations.of(context)!.no_groups,
-                        textAlign: TextAlign.center,
-                        style: Theme.of(context).textTheme.bodyText1!,
-                      ),
-                      const SizedBox(
-                        height: 60,
-                      ),
-                      ElevatedButton(
-                        onPressed: () => Modular.to
-                            .pushNamed("/community/groups/create_groups"),
-                        child: Text(
-                          AppLocalizations.of(context)!.btn_create,
-                          style: const TextStyle(
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
+                      _noGroups(context),
                     ],
                   ),
                 ),
@@ -103,5 +83,38 @@ class MyGroupPage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget _noGroups(context) {
+    return Column(
+      children: [
+        const SizedBox(
+          height: 50,
+        ),
+        Text(
+          AppLocalizations.of(context)!.no_groups,
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.bodyText1!,
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(vertical: 20),
+          child: Image.asset('assets/img/groups/create.png'),
+        ),
+        ElevatedButton(
+          onPressed: () =>
+              Modular.to.pushNamed("/community/groups/create_groups"),
+          child: Text(
+            AppLocalizations.of(context)!.btn_create,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _currentGroups() {
+    return Column();
   }
 }

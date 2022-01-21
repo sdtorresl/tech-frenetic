@@ -9,34 +9,8 @@ class CreateGroupProvider extends TechFreneticProvider {
     try {
       Uri _url = Uri.parse("$baseUrl/api/en/entity/node?_format=json");
 
-      Map<String, dynamic> body = {
-        "type": [
-          {"target_id": "group", "target_type": "node_type"}
-        ],
-        "title": [
-          {"value": name}
-        ],
-        "langcode": [
-          {"value": locale}
-        ],
-        "field_group_featured": [
-          {"value": "0"}
-        ],
-        "field_group_logo": [
-          {"target_id": "11", "alt": "Assassins-Creed-Valhalla-1"}
-        ],
-        "field_group_members": [
-          {"value": "tfadmin (1)"}
-        ],
-        "field_group_rules": [
-          {"value": rules}
-        ],
-        "field_group_articles": [
-          {"value": "PlayStation 5: Black"}
-        ],
-        "field_group_description": [
-          {"value": description}
-        ]
+      Set<Map<String, String>> body = {
+        {"lang": "en", "mail": "sdtorresl1@innovaciones.co"}
       };
 
       Map<String, String> headers = {};
@@ -46,7 +20,7 @@ class CreateGroupProvider extends TechFreneticProvider {
       headers.addAll(sessionHeader);
       headers.addAll(headers);
 
-      var response = await http.post(
+      var response = await http.patch(
         _url,
         body: json.encode(body),
         headers: headers,
@@ -54,7 +28,7 @@ class CreateGroupProvider extends TechFreneticProvider {
       debugPrint(response.statusCode.toString());
       debugPrint(response.body);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         debugPrint(response.body);
         return true;
       } else {

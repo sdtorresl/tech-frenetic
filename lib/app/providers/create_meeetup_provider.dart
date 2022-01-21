@@ -33,8 +33,6 @@ class CreateMeetupProvider extends TechFreneticProvider {
           {"target_id": "meetup", "target_type": "node_type"}
         ]
       };
-      String hola =
-          DateFormat('yyyy-MM-ddTHH:mm:ss-SSSXXX').format(date).toString();
       debugPrint(
           DateFormat('yyyy-MM-ddTHH:mm:ss-SSSXXX').format(date).toString());
       Map<String, String> headers = {};

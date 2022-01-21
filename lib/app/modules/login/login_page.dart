@@ -202,7 +202,8 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
                     _isLoading = false;
                   });
                   if (loggedIn) {
-                    Modular.to.pushNamedAndRemoveUntil("/", (p0) => false);
+                    Modular.to
+                        .pushNamedAndRemoveUntil("/community", (p0) => false);
                   } else {
                     Widget content = Text(AppLocalizations.of(context)!
                         .error_sorry_unrecognized_username_or_password);
