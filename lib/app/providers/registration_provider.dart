@@ -115,6 +115,7 @@ class RegistrationProvider extends TechFreneticProvider {
       Map<String, String> headers = {};
       headers.addAll(authHeader);
       headers.addAll(jsonHeader);
+      headers.addAll(basicAuth);
       headers.addAll(sessionHeader);
       headers.addAll(headers);
 
@@ -129,6 +130,7 @@ class RegistrationProvider extends TechFreneticProvider {
         debugPrint(response.body);
         return true;
       } else {
+        debugPrint(response.body);
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {

@@ -73,7 +73,7 @@ class UserProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<UserModel?> getUserData() async {
+  Future<UserModel?> getLoggedUser() async {
     String? userId = prefs.userId;
     UserModel? userinfo;
     try {
@@ -95,6 +95,28 @@ class UserProvider extends TechFreneticProvider {
         prefs.userName = userinfo.userName;
         prefs.userEmail = userinfo.mail;
         prefs.userAvatar = userinfo.fieldUserAvatar;
+        debugPrint(userinfo.toString());
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return userinfo;
+  }
+
+  Future<UserModel?> getUser(userId) async {
+    UserModel? userinfo;
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
+
+      var response = await http.get(
+        _url,
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        userinfo = UserModel.fromJson(response.body);
         debugPrint(userinfo.toString());
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');

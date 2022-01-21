@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
-import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/providers/saved_articles_provider.dart';
+import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/widgets/save_post_widget.dart';
 
 class SavedArticles extends StatefulWidget {
@@ -15,7 +15,7 @@ class SavedArticles extends StatefulWidget {
 class _SavedArticlesState extends State<SavedArticles> {
   @override
   Widget build(BuildContext context) {
-    ArticlesProvider _articlesProvideer = ArticlesProvider();
+    SaveArticlesProvider _articlesProvideer = SaveArticlesProvider();
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: ListView(

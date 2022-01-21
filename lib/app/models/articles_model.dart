@@ -58,6 +58,7 @@ class ArticlesModel {
     this.thumbnail,
     this.body,
     this.votes,
+    this.uid,
   });
 
   final String id;
@@ -81,6 +82,7 @@ class ArticlesModel {
   final String? thumbnail;
   final String? body;
   final String? votes;
+  final String? uid;
 
   factory ArticlesModel.fromJson(String str) =>
       ArticlesModel.fromMap(json.decode(str));
@@ -116,6 +118,7 @@ class ArticlesModel {
           : null,
       body: json["body"],
       votes: json["votes"],
+      uid: json["uid"],
     );
   }
 
@@ -136,7 +139,8 @@ class ArticlesModel {
       likes: "",
       image: null,
       body: "",
-      votes: "");
+      votes: "",
+      uid: "");
 
   Map<String, dynamic> toMap() => {
         "id": id,
@@ -159,7 +163,8 @@ class ArticlesModel {
         "duration": duration,
         "thumbnail": thumbnail,
         "body": body,
-        "votes": votes
+        "votes": votes,
+        "uid": uid
       };
 
   @override

@@ -3,52 +3,46 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
+import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class SaveActivityWidget extends StatefulWidget {
   final ArticlesModel article;
-  const SaveActivityWidget({Key? key, required this.article}) : super(key: key);
+
+  const SaveActivityWidget({
+    Key? key,
+    required this.article,
+  }) : super(key: key);
 
   @override
   State<SaveActivityWidget> createState() => _SaveActivityWidgetState();
 }
 
 class _SaveActivityWidgetState extends State<SaveActivityWidget> {
+  final prefs = UserPreferences();
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(
-              width: 1.00,
-              color: Theme.of(context).unselectedWidgetColor,
-            ),
-            left: BorderSide(
-              width: 0.50,
-              color: Colors.grey.withOpacity(.6),
-            ),
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: Theme.of(context).unselectedWidgetColor,
-              spreadRadius: -5,
-              blurRadius: 5,
-              offset: const Offset(1.9, 1.7),
-            )
-          ]),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _postAuthor(context),
-          _postSummary(context),
-          _postImage(context),
-          _postTitle(context),
-          _postTags(context),
-          _postActionBar(context)
-        ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
+      child: Card(
+        elevation: 2,
+        shape: const ContinuousRectangleBorder(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _postAuthor(context),
+            _postSummary(context),
+            _postImage(context),
+            _postTitle(context),
+            _postTags(context),
+            _postActionBar(context)
+          ],
+        ),
       ),
     );
   }
@@ -80,19 +74,32 @@ class _SaveActivityWidgetState extends State<SaveActivityWidget> {
 
   Padding _postAuthor(BuildContext context) {
     final created = widget.article.date!;
+    UserProvider _userProvider = UserProvider();
 
     return Padding(
       padding: const EdgeInsets.only(top: 20.0, left: 20, right: 20),
       child: Row(
         children: [
-          CircleAvatar(
-            backgroundColor: Colors.grey.withOpacity(0.2),
-            child: ClipOval(
-              child: SvgPicture.asset(
-                'assets/img/avatars/avatar-02.svg',
-                semanticsLabel: 'Acme Logo',
-              ),
-            ),
+          FutureBuilder(
+            future: _userProvider.getLoggedUser(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              UserModel userInfo;
+              String label;
+              if (snapshot.hasData) {
+                debugPrint(snapshot.data.toString());
+                userInfo = snapshot.data;
+                label = userInfo.name;
+                return AvatarWidget(
+                  userId: prefs.userId!,
+                  radius: 20,
+                );
+              } else {
+                return CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.grey[200],
+                );
+              }
+            },
           ),
           const SizedBox(width: 20),
           Column(

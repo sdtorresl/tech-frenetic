@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/models/article_user_model.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as json;
@@ -213,7 +214,7 @@ class ArticlesProvider extends TechFreneticProvider {
       debugPrint(_url.toString());
       var response = await http.get(_url);
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         List<dynamic> jsonResponse = json.jsonDecode(response.body);
         if (jsonResponse.isNotEmpty) {
           article = ArticlesModel.fromMap(jsonResponse[0]);
@@ -226,5 +227,31 @@ class ArticlesProvider extends TechFreneticProvider {
     }
 
     return article;
+  }
+
+  Future<UserByArticleModel> getUserByArticle(String articleUrl) async {
+    UserByArticleModel userByArticleModel = UserByArticleModel.empty();
+
+    try {
+      Uri _url = Uri.parse("$baseUrl$articleUrl?_format=json");
+
+      var response = await http.get(_url);
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
+        debugPrint(jsonResponse.toString());
+        ArticleDetailsModel details = ArticleDetailsModel.fromMap(jsonResponse);
+        userByArticleModel = details.revisionUid;
+        //int userId = userByArticleModel.targetId;
+        debugPrint(userByArticleModel.toString());
+        return userByArticleModel;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return userByArticleModel;
   }
 }
