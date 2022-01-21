@@ -8,7 +8,6 @@ import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
-import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class SaveActivityWidget extends StatefulWidget {

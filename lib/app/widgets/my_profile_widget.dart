@@ -10,7 +10,6 @@ import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
-import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
 
 class MyProfile extends StatefulWidget {
   final UserModel user;

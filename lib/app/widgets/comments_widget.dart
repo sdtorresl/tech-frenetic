@@ -3,7 +3,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/models/comment_model.dart';
 import 'package:techfrenetic/app/providers/comments_provider.dart';
-import 'package:techfrenetic/app/widgets/user_avatar_widget.dart';
+import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:bubble/bubble.dart';
 
@@ -53,7 +53,10 @@ class _CommentsWidgetState extends State<CommentsWidget> {
       children: [
         Container(
           margin: const EdgeInsets.only(left: 20, top: 10),
-          child: UserAvatarWidget(username: comment.author),
+          child: AvatarWidget(
+            userId: comment.author,
+            radius: 20,
+          ),
         ),
         Expanded(
           child: Bubble(
