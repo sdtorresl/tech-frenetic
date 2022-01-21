@@ -40,13 +40,13 @@ class _AvatarWidgetState extends State<AvatarWidget>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.userId == prefs.userId && prefs.userAvatar!.isNotEmpty) {
+    if (widget.userId == prefs.userId && prefs.userAvatar.isNotEmpty) {
       return CircleAvatar(
         radius: widget.radius,
         backgroundColor: Colors.grey[200],
         child: ClipOval(
           child: SvgPicture.asset(
-            "assets/img/avatars/${prefs.userAvatar!.isNotEmpty ? prefs.userAvatar : 'avatar-01'}.svg",
+            "assets/img/avatars/${prefs.userAvatar.isNotEmpty ? prefs.userAvatar : 'avatar-01'}.svg",
             semanticsLabel: prefs.userName,
           ),
         ),
