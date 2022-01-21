@@ -6,7 +6,7 @@ import 'dart:convert' as json;
 import 'package:techfrenetic/app/models/saved_articles_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
-class ArticlesProvider extends TechFreneticProvider {
+class SaveArticlesProvider extends TechFreneticProvider {
   Future<List<ArticlesModel>> getSavedArticles() async {
     List<ArticlesModel> savedArticles = [];
 

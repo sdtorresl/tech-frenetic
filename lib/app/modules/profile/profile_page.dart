@@ -99,7 +99,7 @@ class ProfilePageState extends State<ProfilePage> {
   Widget _myProfile(BuildContext context) {
     UserProvider _userProvider = UserProvider();
     return FutureBuilder(
-      future: _userProvider.getUserData(),
+      future: _userProvider.getLoggedUser(),
       builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
         if (snapshot.hasData) {
           UserModel user = snapshot.data!;
