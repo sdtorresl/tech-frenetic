@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/providers/professions_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EditNamePage extends StatefulWidget {
   const EditNamePage({Key? key}) : super(key: key);

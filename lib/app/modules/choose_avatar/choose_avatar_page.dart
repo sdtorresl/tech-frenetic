@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
-import 'package:techfrenetic/app/providers/registration_provider.dart';
-import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/widgets/select_avatar_widget.dart';
 
 class ChooseAvatarPage extends StatefulWidget {
@@ -17,7 +14,6 @@ class ChooseAvatarPage extends StatefulWidget {
 class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
   String selectedAvatar = 'avatar-01';
   bool? useAvatar = true;
-  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {

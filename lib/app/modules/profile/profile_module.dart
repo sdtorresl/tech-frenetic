@@ -1,5 +1,4 @@
 import 'package:techfrenetic/app/modules/my_account/my_account_module.dart';
-import 'package:techfrenetic/app/modules/my_account/my_account_page.dart';
 //import 'package:techfrenetic/app/modules/profile/profile_controller.dart';
 import 'package:techfrenetic/app/modules/profile/profile_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';

@@ -84,11 +84,9 @@ class _SaveActivityWidgetState extends State<SaveActivityWidget> {
             future: _userProvider.getLoggedUser(),
             builder: (BuildContext context, AsyncSnapshot snapshot) {
               UserModel userInfo;
-              String label;
               if (snapshot.hasData) {
                 debugPrint(snapshot.data.toString());
                 userInfo = snapshot.data;
-                label = userInfo.name;
                 return AvatarWidget(
                   userId: prefs.userId!,
                   radius: 20,

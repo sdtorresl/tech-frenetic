@@ -1,6 +1,4 @@
 import 'dart:convert';
-
-import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/model.dart';
 
 class ArticleDetailsModel extends Model {

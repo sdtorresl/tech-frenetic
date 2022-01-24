@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/modules/certifications/certifications.dart';
 import 'package:techfrenetic/app/modules/edit_name/edit_name_page.dart';
 import 'package:techfrenetic/app/modules/edit_sumary/edit_sumary.dart';
@@ -102,7 +101,6 @@ class ProfilePageState extends State<ProfilePage> {
 
   Widget _myProfile(BuildContext context) {
     UserProvider _userProvider = UserProvider();
-    UserPreferences prefs = UserPreferences();
 
     return FutureBuilder(
       future: _userProvider.getLoggedUser(),
