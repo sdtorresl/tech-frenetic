@@ -8,6 +8,7 @@ import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/providers/like_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:share_plus/share_plus.dart';
 
 class PostWidget extends StatefulWidget {
   final ArticlesModel article;
@@ -334,7 +335,7 @@ class _PostWidgetState extends State<PostWidget> {
                 context: context,
                 iconAsset: 'assets/img/icons/share.svg',
                 text: AppLocalizations.of(context)!.share,
-                onPressed: () => {debugPrint("Share article")},
+                onPressed: () => {Share.share('hola')},
               ),
             ],
           ),
