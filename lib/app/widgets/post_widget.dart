@@ -308,6 +308,30 @@ class _PostWidgetState extends State<PostWidget> {
     return likeButton;
   }
 
+  Widget _shareButton() {
+    Widget shareButton;
+
+    if (widget.article.type == 'Article') {
+      shareButton = _actionButton(
+        context: context,
+        iconAsset: 'assets/img/icons/share.svg',
+        text: AppLocalizations.of(context)!.share,
+        onPressed: () => {Share.share('hola')},
+      );
+    } else {
+      shareButton = _actionButton(
+        context: context,
+        iconAsset: '',
+        text: '',
+        onPressed: () {
+          null;
+        },
+      );
+      ;
+    }
+    return shareButton;
+  }
+
   Widget _postActionBar(context) {
     return Column(
       children: [
@@ -331,12 +355,7 @@ class _PostWidgetState extends State<PostWidget> {
                       arguments: widget.article);
                 },
               ),
-              _actionButton(
-                context: context,
-                iconAsset: 'assets/img/icons/share.svg',
-                text: AppLocalizations.of(context)!.share,
-                onPressed: () => {Share.share('hola')},
-              ),
+              _shareButton(),
             ],
           ),
         ),
