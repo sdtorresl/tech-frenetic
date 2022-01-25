@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/modules/login/login_controller.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 class LoginPage extends StatefulWidget {
   final String title;
@@ -14,6 +15,24 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends ModularState<LoginPage, LoginController> {
   bool _isPasswordHidden = true;
   bool _isLoading = false;
+  PackageInfo _packageInfo = PackageInfo(
+    appName: '',
+    packageName: '',
+    version: '',
+    buildNumber: '',
+  );
+  @override
+  void initState() {
+    super.initState();
+    _initPackageInfo();
+  }
+
+  Future<void> _initPackageInfo() async {
+    final info = await PackageInfo.fromPlatform();
+    setState(() {
+      _packageInfo = info;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +45,7 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
           children: [
             const SafeArea(
               child: SizedBox(
-                height: 50,
+                height: 40,
               ),
             ),
             _mainTitle(context),
@@ -46,6 +65,10 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
               height: 30,
             ),
             _logginButton(context),
+            const SizedBox(
+              height: 5,
+            ),
+            _versionInfo(context),
           ],
         ),
       ),
@@ -251,6 +274,20 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
           ),
         );
       },
+    );
+  }
+
+  Widget _versionInfo(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      child: Text(
+        "Versión ${_packageInfo.version}",
+        textAlign: TextAlign.center,
+        style: Theme.of(context)
+            .textTheme
+            .bodyText2!
+            .copyWith(color: Colors.grey, fontSize: 12),
+      ),
     );
   }
 }
