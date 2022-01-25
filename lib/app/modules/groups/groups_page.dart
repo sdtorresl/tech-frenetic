@@ -27,14 +27,23 @@ class _GroupsPageState extends State<GroupsPage> {
               child: Text(AppLocalizations.of(context)!.tab_groups,
                   style: Theme.of(context).textTheme.bodyText2),
             ),
-            GestureDetector(
-              onTap: () =>
-                  Modular.to.pushNamed("/community/groups/create_groups"),
-              child: Tab(
-                child: Text(AppLocalizations.of(context)!.tab_create,
-                    style: Theme.of(context).textTheme.bodyText2),
+            Tab(
+              child: GestureDetector(
+                onTap: () =>
+                    Modular.to.pushNamed("/community/groups/create_groups"),
+                child: Center(
+                  child: SizedBox(
+                    width: 100,
+                    height: 20,
+                    child: Text(
+                      AppLocalizations.of(context)!.tab_create,
+                      style: Theme.of(context).textTheme.bodyText2,
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                ),
               ),
-            )
+            ),
           ],
         ),
         body: const TabBarView(
