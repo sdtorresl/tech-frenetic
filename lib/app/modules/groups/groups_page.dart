@@ -33,17 +33,20 @@ class _GroupsPageState extends State<GroupsPage> {
               child: GestureDetector(
                 onTap: () =>
                     Modular.to.pushNamed("/community/groups/create_groups"),
-                child: Center(
-                  child: SizedBox(
-                    width: 100,
-                    height: 20,
-                    child: Text(
-                      AppLocalizations.of(context)!.tab_create,
-                      style: Theme.of(context).textTheme.bodyText2,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                ),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      SizedBox(
+                        width: 120,
+                        height: 20,
+                        child: Text(
+                          AppLocalizations.of(context)!.tab_create,
+                          style: Theme.of(context).textTheme.bodyText2,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ]),
               ),
             ),
           ],
