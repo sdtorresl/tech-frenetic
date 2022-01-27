@@ -176,20 +176,19 @@ class ArticlesProvider extends TechFreneticProvider {
           {"value": "<p> contenido soporte etiquetas html</p>"}
         ],
         "field_tag": [
-          {"value": 'aplications'}
+          {"value": "Cloud"}
         ]
       };
 
       Map<String, String> headers = {};
-      headers['Content-Type'] = 'application/json';
+      headers.addAll(jsonHeader);
       headers.addAll(authHeader);
+      headers.addAll(basicAuth);
       headers.addAll(sessionHeader);
-
-      debugPrint(payload.toString());
-      debugPrint(headers.toString());
 
       var response = await http.post(_url,
           headers: headers, body: json.jsonEncode(payload));
+      debugPrint(response.body);
 
       if (response.statusCode == 201) {
         Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
