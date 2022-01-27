@@ -9,6 +9,7 @@ import 'package:techfrenetic/app/modules/edit_avatar/edit_avatar_page.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
 import 'package:techfrenetic/app/modules/groups/groups_module.dart';
 import 'package:techfrenetic/app/modules/profile/profile_module.dart';
+import 'package:techfrenetic/app/modules/search/search_module.dart';
 import 'package:techfrenetic/app/modules/users_profiles/user_profiles_module.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/about_us_widget.dart';
@@ -141,6 +142,13 @@ class HomeModule extends Module {
     ModuleRoute(
       '/sign',
       module: SignUpModule(),
+    ),
+    ModuleRoute(
+      '/search',
+      module: SearchModule(),
+      guards: [
+        AuthGuard(),
+      ],
     ),
     ModuleRoute(
       '/create_profile',

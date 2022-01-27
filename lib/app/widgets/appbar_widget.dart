@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 class TFAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final void Function() onPressed;
+  final void Function()? onPressed;
   final Text? title;
   final List<Widget>? widgets;
   final AppBar appBar = AppBar();
 
-  TFAppBar({Key? key, required this.onPressed, this.title, this.widgets})
+  TFAppBar({Key? key, this.onPressed, this.title, this.widgets})
       : super(key: key);
 
   @override
@@ -19,13 +20,14 @@ class TFAppBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: backgroundColor,
       title: title,
       leading: IconButton(
-        onPressed: onPressed,
+        onPressed: onPressed ?? () => Modular.to.pop(),
         icon: Icon(
           Icons.arrow_back,
           color: Theme.of(context).colorScheme.primary,
         ),
       ),
       actions: widgets,
+      elevation: 0,
     );
   }
 

@@ -70,20 +70,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     );
   }
 
-  PopupMenuButton<int> _searchMenu() {
-    return PopupMenuButton(
+  Widget _searchMenu() {
+    return IconButton(
       icon: const Icon(Icons.search),
-      color: Colors.blue,
-      itemBuilder: (context) => [
-        const PopupMenuItem<int>(
-          value: 0,
-          child: Text(
-            "Setting",
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ],
-      onSelected: (item) => {debugPrint(item.toString())},
+      onPressed: () {
+        Modular.to.pushNamed('/search');
+      },
     );
   }
 
