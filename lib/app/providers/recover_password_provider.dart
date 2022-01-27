@@ -7,7 +7,7 @@ class CreateGroupProvider extends TechFreneticProvider {
   Future<bool?> createGroup(String name, String description, String rules,
       String namePerson, String type) async {
     try {
-      Uri _url = Uri.parse("$baseUrl/api/en/entity/node?_format=json");
+      Uri _url = Uri.parse("$baseUrl/api/user/lost-password?_format=json");
 
       Set<Map<String, String>> body = {
         {"lang": "en", "mail": "sdtorresl1@innovaciones.co"}

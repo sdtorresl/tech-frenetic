@@ -8,6 +8,9 @@ import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/providers/like_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:share_plus/share_plus.dart';
+import 'package:global_configuration/global_configuration.dart';
+import 'package:intl/intl.dart';
 
 class PostWidget extends StatefulWidget {
   final ArticlesModel article;
@@ -307,6 +310,40 @@ class _PostWidgetState extends State<PostWidget> {
     return likeButton;
   }
 
+  Widget _shareButton(context) {
+    Widget shareButton;
+    String articleLink;
+    String articlePath = widget.article.url!;
+
+    if (widget.article.type == 'Article') {
+      final String baseUrl = GlobalConfiguration().getValue("api_url");
+      final String locale =
+          Intl.getCurrentLocale().startsWith("es") ? "es" : "en";
+      List<String> splitUrl = articlePath.split('/');
+      String urlEnd = splitUrl.last;
+      articleLink = baseUrl + '/$locale/' + urlEnd;
+      shareButton = _actionButton(
+        context: context,
+        iconAsset: 'assets/img/icons/share.svg',
+        text: AppLocalizations.of(context)!.share,
+        onPressed: () => {
+          Share.share(articleLink,
+              subject: AppLocalizations.of(context)!.share_message + '\n')
+        },
+      );
+    } else {
+      shareButton = _actionButton(
+        context: context,
+        iconAsset: '',
+        text: '',
+        onPressed: () {
+          null;
+        },
+      );
+    }
+    return shareButton;
+  }
+
   Widget _postActionBar(context) {
     return Column(
       children: [
@@ -330,12 +367,7 @@ class _PostWidgetState extends State<PostWidget> {
                       arguments: widget.article);
                 },
               ),
-              _actionButton(
-                context: context,
-                iconAsset: 'assets/img/icons/share.svg',
-                text: AppLocalizations.of(context)!.share,
-                onPressed: () => {debugPrint("Share article")},
-              ),
+              _shareButton(context),
             ],
           ),
         ),
