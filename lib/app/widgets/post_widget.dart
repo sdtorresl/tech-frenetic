@@ -327,7 +327,8 @@ class _PostWidgetState extends State<PostWidget> {
         iconAsset: 'assets/img/icons/share.svg',
         text: AppLocalizations.of(context)!.share,
         onPressed: () => {
-          Share.share(articleLink, subject: 'Check this awesome Article!!\n')
+          Share.share(articleLink,
+              subject: AppLocalizations.of(context)!.share_message + '\n')
         },
       );
     } else {
