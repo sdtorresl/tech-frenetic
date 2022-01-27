@@ -25,12 +25,27 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: TFAppBar(onPressed: () => Modular.to.pop()),
-      body: Column(
+      body: ListView(
         children: [
-          _searchHeader(context),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: _searchHeader(context),
+          ),
           _searchTabs(),
-          _searchBox(),
-          _searchResults(),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+            child: _searchBox(),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            color: Colors.black,
+            width: 200,
+            height: 2.5,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+            child: _searchResults(),
+          ),
         ],
       ),
     );
@@ -111,11 +126,62 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
   }
 
   Widget _searchBox() {
-    return SizedBox();
+    return StreamBuilder(
+        stream: null,
+        builder: (context, snapshot) {
+          return Container(
+            decoration: BoxDecoration(
+              border: Border(
+                top:
+                    BorderSide(width: 2, color: Theme.of(context).primaryColor),
+                bottom:
+                    BorderSide(width: 2, color: Theme.of(context).primaryColor),
+                left:
+                    BorderSide(width: 2, color: Theme.of(context).primaryColor),
+                right:
+                    BorderSide(width: 2, color: Theme.of(context).primaryColor),
+              ),
+            ),
+            child: TextFormField(
+              decoration: InputDecoration(
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                border: InputBorder.none,
+                prefixIcon:
+                    Icon(Icons.search, color: Theme.of(context).primaryColor),
+                suffixIcon: Icon(Icons.cancel,
+                    color: Theme.of(context).unselectedWidgetColor),
+                hintText: 'Type here to search',
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Theme.of(context).primaryColor),
+                fillColor: Colors.white,
+                filled: true,
+              ),
+            ),
+          );
+        });
   }
 
   Widget _searchResults() {
-    return Text("Selectd box: $selected");
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text("Selectd box: $selected"),
+        Text(
+          'Resulst: ',
+          style: Theme.of(context).textTheme.headline2,
+          textAlign: TextAlign.left,
+        ),
+        FutureBuilder(
+          future: null,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            return SizedBox();
+          },
+        ),
+      ],
+    );
   }
 
   Widget _searchHeader(BuildContext context) {
