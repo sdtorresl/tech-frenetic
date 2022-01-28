@@ -6,6 +6,7 @@ import 'package:techfrenetic/app/modules/search/search_controller.dart';
 import 'package:techfrenetic/app/providers/search_provider.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/save_content_widget.dart';
+import 'package:techfrenetic/app/widgets/separator.dart';
 
 enum SEARCH_CATEGORIES { content, users, groups, vendors }
 
@@ -17,9 +18,10 @@ class SearchPage extends StatefulWidget {
 }
 
 class SearchPageState extends ModularState<SearchPage, SearchController> {
-  String selected = "";
-  String articleTitle = "";
+  int selected = 0;
+  String searchText = "";
   TextEditingController searchTextController = TextEditingController();
+  SearchProvider searchResults = SearchProvider();
 
   @override
   void initState() {
@@ -28,6 +30,8 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
 
   @override
   Widget build(BuildContext context) {
+    double separatorWidth = MediaQuery.of(context).size.width * 0.9;
+
     return Scaffold(
       appBar: TFAppBar(onPressed: () => Modular.to.pop()),
       body: ListView(
@@ -41,10 +45,9 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
             child: _searchBox(),
           ),
-          Container(
-            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+          Separator(
+            separatorWidth: separatorWidth,
             color: Colors.black,
-            width: 200,
             height: 2.5,
           ),
           Padding(
@@ -107,11 +110,11 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
           tabController.addListener(() {
             if (!tabController.indexIsChanging) {
               setState(() {
-                selected = tabController.index.toString();
+                selected = tabController.index;
               });
             }
           });
-          selected = tabController.index.toString();
+          selected = tabController.index;
 
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 15),
@@ -132,90 +135,206 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
 
   Widget _searchBox() {
     return StreamBuilder(
-        stream: store.commentStream,
-        builder: (context, snapshot) {
-          return Container(
-            decoration: BoxDecoration(
-              border: Border(
-                top:
-                    BorderSide(width: 2, color: Theme.of(context).primaryColor),
-                bottom:
-                    BorderSide(width: 2, color: Theme.of(context).primaryColor),
-                left:
-                    BorderSide(width: 2, color: Theme.of(context).primaryColor),
-                right:
-                    BorderSide(width: 2, color: Theme.of(context).primaryColor),
-              ),
+      stream: store.searchStream,
+      builder: (context, snapshot) {
+        return Container(
+          decoration: BoxDecoration(
+            border: Border(
+              top: BorderSide(width: 2, color: Theme.of(context).primaryColor),
+              bottom:
+                  BorderSide(width: 2, color: Theme.of(context).primaryColor),
+              left: BorderSide(width: 2, color: Theme.of(context).primaryColor),
+              right:
+                  BorderSide(width: 2, color: Theme.of(context).primaryColor),
             ),
-            child: TextFormField(
-              controller: searchTextController,
-              decoration: InputDecoration(
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                border: InputBorder.none,
-                prefixIcon:
-                    Icon(Icons.search, color: Theme.of(context).primaryColor),
-                suffixIcon: IconButton(
-                  icon: Icon(Icons.cancel,
-                      color: Theme.of(context).unselectedWidgetColor),
-                  onPressed: () {
-                    searchTextController.clear();
-                  },
-                ),
-                hintText: 'Type here to search',
-                hintStyle: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(color: Theme.of(context).primaryColor),
-                fillColor: Colors.white,
-                filled: true,
+          ),
+          child: TextFormField(
+            controller: searchTextController,
+            decoration: InputDecoration(
+              enabledBorder: InputBorder.none,
+              focusedBorder: InputBorder.none,
+              border: InputBorder.none,
+              prefixIcon:
+                  Icon(Icons.search, color: Theme.of(context).primaryColor),
+              suffixIcon: IconButton(
+                icon: Icon(Icons.cancel,
+                    color: Theme.of(context).unselectedWidgetColor),
+                onPressed: () {
+                  searchTextController.clear();
+                  setState(() {
+                    searchText = "";
+                  });
+                },
               ),
-              onChanged: (text) {
-                articleTitle = text;
-                store.changeComment;
-              },
-              onFieldSubmitted: (text) {},
+              hintText: 'Type here to search',
+              hintStyle: Theme.of(context)
+                  .textTheme
+                  .bodyText1!
+                  .copyWith(color: Theme.of(context).primaryColor),
+              fillColor: Colors.white,
+              filled: true,
             ),
-          );
-        });
+            onChanged: (text) {
+              setState(() {
+                searchText = text;
+              });
+              store.changeSearch;
+            },
+            onFieldSubmitted: (text) {
+              debugPrint("Submitted $text");
+            },
+          ),
+        );
+      },
+    );
   }
 
   Widget _searchResults() {
-    SearchProvider searchResults = SearchProvider();
+    if (searchText.isEmpty) {
+      return const SizedBox();
+    }
+
+    Widget results;
+
+    List<SEARCH_CATEGORIES> categories = SEARCH_CATEGORIES.values;
+    switch (categories[selected]) {
+      case SEARCH_CATEGORIES.content:
+        results = _articleResults();
+        break;
+      case SEARCH_CATEGORIES.groups:
+        results = _groupResults();
+        break;
+      case SEARCH_CATEGORIES.users:
+        results = _userResults();
+        break;
+      case SEARCH_CATEGORIES.vendors:
+        results = _vendorResults();
+        break;
+    }
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Selectd box: $selected"),
         Text(
-          'Resulst: $articleTitle',
+          "${AppLocalizations.of(context)!.search_results}: $searchText",
           style: Theme.of(context).textTheme.headline2,
           textAlign: TextAlign.left,
         ),
-        FutureBuilder(
-          future: searchResults.getArticleByTitle(articleTitle),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (snapshot.hasData) {
-              debugPrint(snapshot.data.toString());
-              List<ArticlesModel> results = snapshot.data ?? [];
-              List<Widget> resultsWidgets = [];
-              debugPrint(results.toString());
-
-              for (ArticlesModel results in results) {
-                resultsWidgets.add(SaveContent(article: results));
-              }
-
-              return Column(
-                children: [
-                  ...resultsWidgets,
-                  const SizedBox(height: 40),
-                ],
-              );
-            } else {
-              return Container(width: 50, height: 50, color: Colors.redAccent);
-            }
-          },
-        ),
+        results
       ],
+    );
+  }
+
+  FutureBuilder<List<ArticlesModel>> _vendorResults() {
+    return FutureBuilder(
+      future: searchResults.getArticleByTitle(searchText),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          debugPrint(snapshot.data.toString());
+          List<ArticlesModel> results = snapshot.data ?? [];
+          List<Widget> resultsWidgets = [];
+          debugPrint(results.toString());
+
+          for (ArticlesModel results in results) {
+            resultsWidgets.add(SaveContent(article: results));
+          }
+
+          return Column(
+            children: [
+              ...resultsWidgets,
+              const SizedBox(height: 40),
+            ],
+          );
+        } else {
+          return Container(width: 50, height: 50, color: Colors.redAccent);
+        }
+      },
+    );
+  }
+
+  FutureBuilder<List<ArticlesModel>> _userResults() {
+    return FutureBuilder(
+      future: searchResults.getArticleByTitle(searchText),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          debugPrint(snapshot.data.toString());
+          List<ArticlesModel> results = snapshot.data ?? [];
+          List<Widget> resultsWidgets = [];
+          debugPrint(results.toString());
+
+          for (ArticlesModel results in results) {
+            resultsWidgets.add(SaveContent(article: results));
+          }
+
+          return Column(
+            children: [
+              ...resultsWidgets,
+              const SizedBox(height: 40),
+            ],
+          );
+        } else {
+          return Container(width: 50, height: 50, color: Colors.redAccent);
+        }
+      },
+    );
+  }
+
+  FutureBuilder<List<ArticlesModel>> _groupResults() {
+    return FutureBuilder(
+      future: searchResults.getArticleByTitle(searchText),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          debugPrint(snapshot.data.toString());
+          List<ArticlesModel> results = snapshot.data ?? [];
+          List<Widget> resultsWidgets = [];
+          debugPrint(results.toString());
+
+          for (ArticlesModel results in results) {
+            resultsWidgets.add(SaveContent(article: results));
+          }
+
+          return Column(
+            children: [
+              ...resultsWidgets,
+              const SizedBox(height: 40),
+            ],
+          );
+        } else {
+          return Container(width: 50, height: 50, color: Colors.redAccent);
+        }
+      },
+    );
+  }
+
+  FutureBuilder<List<ArticlesModel>> _articleResults() {
+    return FutureBuilder(
+      future: searchResults.getArticleByTitle(searchText),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          debugPrint(snapshot.data.toString());
+          List<ArticlesModel> results = snapshot.data ?? [];
+          List<Widget> resultsWidgets = [];
+          debugPrint(results.toString());
+
+          for (ArticlesModel results in results) {
+            resultsWidgets.add(SaveContent(article: results));
+          }
+
+          return Column(
+            children: [
+              ...resultsWidgets,
+              const SizedBox(height: 40),
+            ],
+          );
+        } else {
+          return const SizedBox(
+            height: 200,
+            child: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
+      },
     );
   }
 
