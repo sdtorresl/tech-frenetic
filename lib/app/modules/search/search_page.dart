@@ -1,8 +1,11 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/search/search_controller.dart';
+import 'package:techfrenetic/app/providers/search_provider.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
+import 'package:techfrenetic/app/widgets/save_content_widget.dart';
 
 enum SEARCH_CATEGORIES { content, users, groups, vendors }
 
@@ -15,6 +18,8 @@ class SearchPage extends StatefulWidget {
 
 class SearchPageState extends ModularState<SearchPage, SearchController> {
   String selected = "";
+  String articleTitle = "";
+  TextEditingController searchTextController = TextEditingController();
 
   @override
   void initState() {
@@ -127,7 +132,7 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
 
   Widget _searchBox() {
     return StreamBuilder(
-        stream: null,
+        stream: store.commentStream,
         builder: (context, snapshot) {
           return Container(
             decoration: BoxDecoration(
@@ -143,14 +148,20 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
               ),
             ),
             child: TextFormField(
+              controller: searchTextController,
               decoration: InputDecoration(
                 enabledBorder: InputBorder.none,
                 focusedBorder: InputBorder.none,
                 border: InputBorder.none,
                 prefixIcon:
                     Icon(Icons.search, color: Theme.of(context).primaryColor),
-                suffixIcon: Icon(Icons.cancel,
-                    color: Theme.of(context).unselectedWidgetColor),
+                suffixIcon: IconButton(
+                  icon: Icon(Icons.cancel,
+                      color: Theme.of(context).unselectedWidgetColor),
+                  onPressed: () {
+                    searchTextController.clear();
+                  },
+                ),
                 hintText: 'Type here to search',
                 hintStyle: Theme.of(context)
                     .textTheme
@@ -159,25 +170,49 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
                 fillColor: Colors.white,
                 filled: true,
               ),
+              onChanged: (text) {
+                articleTitle = text;
+                store.changeComment;
+              },
+              onFieldSubmitted: (text) {},
             ),
           );
         });
   }
 
   Widget _searchResults() {
+    SearchProvider searchResults = SearchProvider();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text("Selectd box: $selected"),
         Text(
-          'Resulst: ',
+          'Resulst: $articleTitle',
           style: Theme.of(context).textTheme.headline2,
           textAlign: TextAlign.left,
         ),
         FutureBuilder(
-          future: null,
+          future: searchResults.getArticleByTitle(articleTitle),
           builder: (BuildContext context, AsyncSnapshot snapshot) {
-            return SizedBox();
+            if (snapshot.hasData) {
+              debugPrint(snapshot.data.toString());
+              List<ArticlesModel> results = snapshot.data ?? [];
+              List<Widget> resultsWidgets = [];
+              debugPrint(results.toString());
+
+              for (ArticlesModel results in results) {
+                resultsWidgets.add(SaveContent(article: results));
+              }
+
+              return Column(
+                children: [
+                  ...resultsWidgets,
+                  const SizedBox(height: 40),
+                ],
+              );
+            } else {
+              return Container(width: 50, height: 50, color: Colors.redAccent);
+            }
           },
         ),
       ],
@@ -206,4 +241,7 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
       ),
     );
   }
+  // Widget resulstByBoxSelected(){
+
+  // }
 }
