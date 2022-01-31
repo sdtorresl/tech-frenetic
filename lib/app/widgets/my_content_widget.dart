@@ -90,7 +90,7 @@ class _MyContentState extends State<MyContent> {
                       _prefs.userName == content.user) {
                     debugPrint(content.toString());
                     savedPostsWidgets.add(
-                      SaveContent(savedPost: content),
+                      SaveContent(article: content),
                     );
                   }
                 }
