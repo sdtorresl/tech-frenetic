@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
+import 'package:techfrenetic/app/providers/group_providers.dart';
 
 class GroupsCardsWidget extends StatefulWidget {
   final GroupModel group;
@@ -18,6 +19,7 @@ class GroupsCardsWidget extends StatefulWidget {
 class _GroupsCardsWidgetState extends State<GroupsCardsWidget> {
   @override
   Widget build(BuildContext context) {
+    GroupsProvider groupsProvider = GroupsProvider();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: ListTile(
@@ -39,14 +41,17 @@ class _GroupsCardsWidgetState extends State<GroupsCardsWidget> {
           style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
         ),
         subtitle: Text(
-          "${widget.group.members.isNotEmpty ? widget.group.members : 0} ${AppLocalizations.of(context)!.groups_members} - ${widget.group.posts.isNotEmpty ? widget.group.posts : 0} ${AppLocalizations.of(context)!.groups_posts}",
+          "${widget.group.members.isNotEmpty ? widget.group.members.length : 0} ${AppLocalizations.of(context)!.groups_members} - ${widget.group.posts.isNotEmpty ? widget.group.posts.length : 0} ${AppLocalizations.of(context)!.groups_posts}",
           style: Theme.of(context)
               .textTheme
               .bodyText1!
               .copyWith(color: Theme.of(context).hintColor, fontSize: 13),
         ),
         trailing: ElevatedButton(
-          onPressed: null,
+          onPressed: () {
+            debugPrint(widget.group.id);
+            groupsProvider.getGroupsMembers(widget.group.id);
+          },
           child: Text(
             AppLocalizations.of(context)!.btn_join,
             style:

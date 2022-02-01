@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:techfrenetic/app/models/group_model.dart';
+import 'package:techfrenetic/app/models/groups_members_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
 class GroupsProvider extends TechFreneticProvider {
@@ -132,5 +133,34 @@ class GroupsProvider extends TechFreneticProvider {
       debugPrint(e.toString());
     }
     return false;
+  }
+
+  Future<List> getGroupsMembers(groupId) async {
+    GroupsMembersModel members;
+
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/$locale/node/95/?_format=json");
+
+      var response = await http.get(
+        _url,
+      );
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = jsonDecode(response.body);
+        debugPrint(jsonResponse.toString());
+        members = GroupsMembersModel.fromMap(jsonResponse);
+        debugPrint(members.toString());
+
+        // for (var item in jsonResponse) {
+        // GroupModel group = GroupModel.fromMap(item);
+        //recommendedGroups.add(group);
+        // }
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return [];
   }
 }
