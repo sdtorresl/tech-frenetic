@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/2000/svg">
-  <desc>Created with Lunacy</desc>
-  <g id="magnifying-glass-2" transform="translate(0.1660156 0.1660156)">
-    <g id="magnifying-glass" transform="matrix(-1 0 0 1 25 0)">
-      <path d="M4.35392 9.92304C4.35392 4.45148 8.8054 0 14.277 0C19.7486 0 24.2 4.45148 24.2 9.92304C24.2 15.3946 19.7485 19.8461 14.277 19.8461C11.8807 19.8461 9.68024 18.9923 7.9635 17.573L1.33648 24.2L0 22.8635L6.62702 16.2365C5.20773 14.5198 4.35392 12.3193 4.35392 9.92304ZM6.24403 9.92304C6.24403 14.3524 9.8476 17.956 14.277 17.956C18.7063 17.956 22.3099 14.3524 22.3099 9.92304C22.3099 5.49368 18.7063 1.89011 14.277 1.89011C9.8476 1.89011 6.24403 5.49368 6.24403 9.92304Z" id="Shape" fill="#006EE8" fill-rule="evenodd" stroke="#006EE8" stroke-width="0.1" />
-    </g>
-  </g>
-</svg>

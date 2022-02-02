@@ -81,9 +81,9 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
 
   Widget _avatar() {
     Widget avatar;
-    if (article.id != '') {
+    if (article.id.isNotEmpty) {
       avatar = AvatarWidget(
-        userId: widget.article.uid!,
+        userId: widget.article.id,
       );
     } else {
       avatar = const SizedBox();
