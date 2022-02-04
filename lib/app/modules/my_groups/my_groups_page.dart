@@ -113,8 +113,4 @@ class MyGroupPage extends StatelessWidget {
       ],
     );
   }
-
-  Widget _currentGroups() {
-    return Column();
-  }
 }

@@ -8,7 +8,7 @@ import 'dart:convert' as json;
 class ProfessionsProvider extends TechFreneticProvider {
   Future<List<CategoriesModel>> getProfessions() async {
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/profesiones");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/professions");
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {

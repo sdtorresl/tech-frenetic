@@ -29,7 +29,7 @@ class CommunityPageState
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
               border: Border.all(
-                  color: Theme.of(context).chipTheme.backgroundColor,
+                  color: Theme.of(context).chipTheme.backgroundColor!,
                   width: 1)),
           child: Align(
             alignment: Alignment.center,
@@ -43,7 +43,7 @@ class CommunityPageState
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
               border: Border.all(
-                  color: Theme.of(context).chipTheme.backgroundColor,
+                  color: Theme.of(context).chipTheme.backgroundColor!,
                   width: 1)),
           child: Align(
             alignment: Alignment.center,
@@ -57,7 +57,7 @@ class CommunityPageState
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(50),
               border: Border.all(
-                  color: Theme.of(context).chipTheme.backgroundColor,
+                  color: Theme.of(context).chipTheme.backgroundColor!,
                   width: 1)),
           child: Align(
             alignment: Alignment.center,

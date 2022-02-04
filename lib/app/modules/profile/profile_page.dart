@@ -68,16 +68,17 @@ class ProfilePageState extends State<ProfilePage> {
               child: GNav(
                 tabBorderRadius: 50,
                 tabActiveBorder: Border.all(
-                  color: Theme.of(context).chipTheme.backgroundColor,
+                  color: Theme.of(context).chipTheme.backgroundColor!,
                   width: 1,
                 ),
                 tabBorder: Border.all(color: Colors.transparent, width: 0),
                 duration: const Duration(milliseconds: 200),
                 gap: 8,
-                color: Theme.of(context).chipTheme.labelStyle.color,
+                color: Theme.of(context).chipTheme.labelStyle!.color!,
                 activeColor: Colors.white,
                 iconSize: 24,
-                tabBackgroundColor: Theme.of(context).chipTheme.backgroundColor,
+                tabBackgroundColor:
+                    Theme.of(context).chipTheme.backgroundColor!,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 tabs: tabs,
