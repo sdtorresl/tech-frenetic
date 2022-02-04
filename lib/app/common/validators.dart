@@ -16,6 +16,7 @@ class Validators {
       }
     },
   );
+
   static final validateLoginPassword =
       StreamTransformer<String, String>.fromHandlers(
     handleData: (password, sink) {
@@ -28,6 +29,7 @@ class Validators {
       }
     },
   );
+
   static final validateSignInPassword =
       StreamTransformer<String, String>.fromHandlers(
     handleData: (password, sink) {
@@ -59,6 +61,7 @@ class Validators {
       }
     },
   );
+
   static final validateName = StreamTransformer<String, String>.fromHandlers(
     handleData: (name, sink) {
       if (name.isNotEmpty) {
@@ -70,6 +73,20 @@ class Validators {
       }
     },
   );
+
+  static final validateProfession =
+      StreamTransformer<String, String>.fromHandlers(
+    handleData: (name, sink) {
+      if (name.isNotEmpty) {
+        sink.add(name);
+      } else {
+        sink.addError(
+          'Ingresa una profesión',
+        );
+      }
+    },
+  );
+
   static final validateDate =
       StreamTransformer<DateTime, DateTime>.fromHandlers(
     handleData: (date, sink) {
@@ -82,6 +99,7 @@ class Validators {
       }
     },
   );
+
   static final validateDateMeetups =
       StreamTransformer<DateTime, DateTime>.fromHandlers(
     handleData: (date, sink) {
@@ -94,6 +112,7 @@ class Validators {
       }
     },
   );
+
   static final validateUrl = StreamTransformer<String, String>.fromHandlers(
     handleData: (url, sink) {
       String pattern =

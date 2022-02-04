@@ -8,22 +8,24 @@ import 'dart:convert' as json;
 class ProfessionsProvider extends TechFreneticProvider {
   Future<List<CategoriesModel>> getProfessions() async {
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/profesiones");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/professions");
+      debugPrint(_url.toString());
+
       var response = await http.get(_url);
 
-      if (response.statusCode == 200) {
-        if (response.statusCode == 200) {
-          List<dynamic> jsonResponse = json.jsonDecode(response.body);
-          List<CategoriesModel> professions = [];
+      debugPrint(response.toString());
 
-          for (var item in jsonResponse) {
-            CategoriesModel profession = CategoriesModel.fromMap(item);
-            professions.add(profession);
-          }
-          return professions;
-        } else {
-          debugPrint('Request failed with status: ${response.statusCode}.');
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.jsonDecode(response.body);
+        List<CategoriesModel> professions = [];
+
+        for (var item in jsonResponse) {
+          CategoriesModel profession = CategoriesModel.fromMap(item);
+          professions.add(profession);
         }
+        return professions;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
       debugPrint(e.toString());
