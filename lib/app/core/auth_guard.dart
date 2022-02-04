@@ -5,7 +5,7 @@ class AuthGuard extends RouteGuard {
   AuthGuard() : super(redirectTo: '/login/');
 
   @override
-  bool canActivate(String path, ModularRoute router) {
+  bool canActivate(String path, ModularRoute route) {
     UserProvider userProvider = UserProvider();
     return userProvider.isLogged();
   }

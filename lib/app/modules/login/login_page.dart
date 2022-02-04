@@ -278,7 +278,7 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
   }
 
   Widget _versionInfo(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       child: Text(
         "Versión ${_packageInfo.version}",

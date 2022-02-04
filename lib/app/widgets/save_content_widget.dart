@@ -2,12 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
-
 import 'package:timeago/timeago.dart' as timeago;
 
 class SaveContent extends StatefulWidget {
-  final ArticlesModel savedPost;
-  const SaveContent({Key? key, required this.savedPost}) : super(key: key);
+  final ArticlesModel article;
+  const SaveContent({Key? key, required this.article}) : super(key: key);
 
   @override
   _SaveState createState() => _SaveState();
@@ -20,7 +19,7 @@ class _SaveState extends State<SaveContent> {
       padding: const EdgeInsets.all(10.0),
       child: GestureDetector(
         onTap: () => Modular.to
-            .pushNamed("/community/article", arguments: widget.savedPost),
+            .pushNamed("/community/article", arguments: widget.article),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -44,7 +43,7 @@ class _SaveState extends State<SaveContent> {
                       SizedBox(
                         width: 150,
                         child: Text(
-                          widget.savedPost.category!,
+                          widget.article.category!,
                           style: Theme.of(context)
                               .textTheme
                               .headline1!
@@ -53,18 +52,18 @@ class _SaveState extends State<SaveContent> {
                                   color: Theme.of(context).indicatorColor),
                         ),
                       ),
-                      Text(timeago.format(widget.savedPost.date!),
+                      Text(timeago.format(widget.article.date!),
                           style: Theme.of(context).textTheme.bodyText1),
                       const SizedBox(height: 10),
                       SizedBox(
                         width: 150,
                         child: Text(
-                          widget.savedPost.title,
+                          widget.article.title,
                           style: Theme.of(context).textTheme.headline1,
                         ),
                       ),
                       const SizedBox(height: 10),
-                      Text(widget.savedPost.displayName,
+                      Text(widget.article.displayName,
                           style: Theme.of(context)
                               .textTheme
                               .headline1!
@@ -83,7 +82,7 @@ class _SaveState extends State<SaveContent> {
                               const LinearProgressIndicator(),
                           errorWidget: (context, value, e) =>
                               const Icon(Icons.error),
-                          imageUrl: widget.savedPost.image!,
+                          imageUrl: widget.article.image!,
                         ),
                       ),
                     ],

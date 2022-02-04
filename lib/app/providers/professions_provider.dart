@@ -12,18 +12,16 @@ class ProfessionsProvider extends TechFreneticProvider {
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
-        if (response.statusCode == 200) {
-          List<dynamic> jsonResponse = json.jsonDecode(response.body);
-          List<CategoriesModel> professions = [];
+        List<dynamic> jsonResponse = json.jsonDecode(response.body);
+        List<CategoriesModel> professions = [];
 
-          for (var item in jsonResponse) {
-            CategoriesModel profession = CategoriesModel.fromMap(item);
-            professions.add(profession);
-          }
-          return professions;
-        } else {
-          debugPrint('Request failed with status: ${response.statusCode}.');
+        for (var item in jsonResponse) {
+          CategoriesModel profession = CategoriesModel.fromMap(item);
+          professions.add(profession);
         }
+        return professions;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
       debugPrint(e.toString());

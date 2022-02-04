@@ -38,6 +38,12 @@ class _AvatarWidgetState extends State<AvatarWidget>
   }
 
   @override
+  dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (widget.userId == prefs.userId && prefs.userAvatar.isNotEmpty) {
       return CircleAvatar(
