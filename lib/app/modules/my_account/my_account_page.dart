@@ -8,6 +8,7 @@ import 'package:techfrenetic/app/providers/countries_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
+import 'package:techfrenetic/app/widgets/separator.dart';
 
 class MyAccountPage extends StatefulWidget {
   const MyAccountPage({Key? key}) : super(key: key);
@@ -29,6 +30,28 @@ class _MyAccountPageState
   bool _isLoading = false;
   final emailController = TextEditingController();
   final cellphoneController = TextEditingController();
+  final dateController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (prefs.userEmail?.isNotEmpty ?? false) {
+      store.changeEmail(prefs.userEmail!);
+    }
+
+    if (prefs.userPhone?.isNotEmpty ?? false) {
+      store.changeCellphone(prefs.userPhone!);
+    }
+
+    if (prefs.userCountry?.isNotEmpty ?? false) {
+      store.changeCountry(prefs.userCountry!);
+    }
+
+    if (prefs.userBirthdate != null) {
+      store.changeBirthdate(prefs.userBirthdate!);
+      dateController.text = DateFormat('dd/MM/yyyy').format(store.birthdate!);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,7 +103,7 @@ class _MyAccountPageState
                 ),
               ),
             ),
-            _form(context),
+            _userDataForm(context),
             _passwordchange(context),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 50.0),
@@ -112,377 +135,317 @@ class _MyAccountPageState
     );
   }
 
-  Widget _form(context) {
-    String? email = prefs.userEmail;
-
+  Widget _userDataForm(context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            top: BorderSide(
-              width: .9,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-          ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 50),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  AppLocalizations.of(context)!.email,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              ),
-              StreamBuilder(
-                  stream: store.emailStream,
-                  builder: (context, snapshot) {
-                    store.changeEmail(email!);
-                    return TextFormField(
-                        controller: emailController,
-                        decoration: InputDecoration(
-                          hintText: prefs.userEmail,
-                          hintStyle: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(
-                                  color: Theme.of(context).highlightColor),
-                          errorText: snapshot.hasError
-                              ? snapshot.error.toString()
-                              : null,
-                          errorStyle: Theme.of(context)
-                              .textTheme
-                              .headline4!
-                              .copyWith(color: Colors.red),
-                        ),
-                        onChanged: (text) {
-                          email = text;
-                          store.changeEmail(email!);
-                        });
-                  }),
-              const SizedBox(height: 40),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  AppLocalizations.of(context)!.your_country,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              ),
-              StreamBuilder(
-                stream: store.countryStream,
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  return FutureBuilder(
-                    future: countries.getCountries(),
-                    builder: (BuildContext context, AsyncSnapshot snapshot) {
-                      List<String> countriesNames = [];
-                      if (snapshot.hasData) {
-                        List<CategoriesModel> categoriesModel = snapshot.data;
-                        for (var models in categoriesModel) {
-                          countriesNames.add(models.category);
-                        }
-                        return DropdownButton<String>(
-                          value: defaultCountry,
-                          isExpanded: true,
-                          underline: Container(
-                            height: 0.5,
-                            color: Colors.black,
-                          ),
-                          onChanged: (newValue) {
-                            setState(
-                              () {
-                                defaultCountry = newValue;
-                                store.changeCountry(defaultCountry!);
-                              },
-                            );
-                          },
-                          hint: Text(
-                            AppLocalizations.of(context)!.your_country,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(color: Theme.of(context).hintColor),
-                          ),
-                          items: countriesNames
-                              .map<DropdownMenuItem<String>>((String value) {
-                            return DropdownMenuItem<String>(
-                              child: Text(value),
-                              value: value,
-                            );
-                          }).toList(),
-                        );
-                      } else {
-                        return Text(
-                          'Loading countries...',
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(color: Theme.of(context).primaryColor),
-                        );
-                      }
-                    },
-                  );
-                },
-              ),
-              const SizedBox(height: 50),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  AppLocalizations.of(context)!.mobile_phone,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              ),
-              StreamBuilder(
-                stream: store.cellphoneStream,
-                builder: (context, snapshot) {
-                  return TextFormField(
-                    controller: cellphoneController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      hintText: AppLocalizations.of(context)!.phone_number,
-                      hintStyle: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .copyWith(color: Theme.of(context).highlightColor),
-                      errorText: snapshot.hasError
-                          ? 'Ingrese un numero de telefono'
-                          : null,
-                      errorStyle: Theme.of(context)
-                          .textTheme
-                          .headline4!
-                          .copyWith(color: Colors.red),
-                    ),
-                    onChanged: store.changeCellphone,
-                  );
-                },
-              ),
-              const SizedBox(height: 40),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  AppLocalizations.of(context)!.birthdate,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              ),
-              StreamBuilder(
-                stream: store.birthdateStream,
-                builder: (context, snapshot) {
-                  return TextFormField(
-                    readOnly: true,
-                    showCursor: true,
-                    decoration: InputDecoration(
-                      hintText: datePicked == null
-                          ? "dd/mm/yyyy"
-                          : DateFormat('dd/MMM/yyyy').format(datePicked!),
-                      hintStyle: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .copyWith(color: Theme.of(context).highlightColor),
-                      errorText:
-                          snapshot.hasError ? snapshot.error.toString() : null,
-                      errorStyle: Theme.of(context)
-                          .textTheme
-                          .headline4!
-                          .copyWith(color: Colors.red),
-                    ),
-
-                    onTap: () async {
-                      showDatePicker(
-                        context: context,
-                        initialDate: DateTime.now(),
-                        firstDate: DateTime(1900),
-                        lastDate: DateTime(2100),
-                      ).then((date) {
-                        setState(() {
-                          datePicked = date;
-                          store.changeBirthdate(date!);
-                        });
-                      });
-                    },
-                    // onChanged: (text) {
-                    //   store.changeBirthdate(datePicked!);
-                    // }
-                  );
-                },
-              ),
-              const SizedBox(height: 30),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  updateButton(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                    child: cancelUpdate(),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
+      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+      child: Column(
+        children: [
+          const SizedBox(height: 30),
+          _emailField(),
+          const SizedBox(height: 30),
+          _countriesField(context),
+          const SizedBox(height: 30),
+          _phoneField(context),
+          const SizedBox(height: 30),
+          _birthdateField(context),
+          const SizedBox(height: 30),
+          updateButton(),
+        ],
       ),
+    );
+  }
+
+  Widget _birthdateField(context) {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            AppLocalizations.of(context)!.birthdate,
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ),
+        StreamBuilder(
+          stream: store.birthdateStream,
+          builder: (context, snapshot) {
+            return TextFormField(
+              controller: dateController,
+              readOnly: true,
+              showCursor: true,
+              decoration: InputDecoration(
+                hintText: "dd/mm/yyyy",
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Theme.of(context).highlightColor),
+                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.red),
+              ),
+              onTap: () async {
+                showDatePicker(
+                  context: context,
+                  initialDate: DateTime.now(),
+                  firstDate: DateTime(1900),
+                  lastDate: DateTime(2100),
+                ).then((date) {
+                  if (date != null) {
+                    dateController.text = DateFormat('dd/MM/yyyy').format(date);
+                    store.changeBirthdate(date);
+                  }
+                });
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _phoneField(context) {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            AppLocalizations.of(context)!.mobile_phone,
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ),
+        StreamBuilder(
+          stream: store.cellphoneStream,
+          builder: (context, snapshot) {
+            return TextFormField(
+              initialValue: store.cellphone,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.phone_number,
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Theme.of(context).highlightColor),
+                errorText:
+                    snapshot.hasError ? 'Ingrese un numero de telefono' : null,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.red),
+              ),
+              onChanged: store.changeCellphone,
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _countriesField(context) {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            AppLocalizations.of(context)!.your_country,
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ),
+        StreamBuilder(
+          stream: store.countryStream,
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            return FutureBuilder(
+              future: countries.getCountries(),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                List<String> countriesNames = [];
+                if (snapshot.hasData) {
+                  List<CategoriesModel> categoriesModel = snapshot.data;
+                  for (var models in categoriesModel) {
+                    countriesNames.add(models.category);
+                  }
+                }
+
+                return DropdownButton<String>(
+                  value: store.country,
+                  isExpanded: true,
+                  underline: Container(
+                    height: 0.5,
+                    color: Colors.black,
+                  ),
+                  onChanged: (country) {
+                    setState(
+                      () {
+                        store.changeCountry(country!);
+                      },
+                    );
+                  },
+                  hint: Text(
+                    AppLocalizations.of(context)!.your_country,
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: Theme.of(context).hintColor),
+                  ),
+                  items: countriesNames
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      child: Text(value),
+                      value: value,
+                    );
+                  }).toList(),
+                );
+              },
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  Widget _emailField() {
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            AppLocalizations.of(context)!.email,
+            style: Theme.of(context).textTheme.bodyText1,
+          ),
+        ),
+        StreamBuilder(
+          stream: store.emailStream,
+          builder: (context, snapshot) {
+            return TextFormField(
+              initialValue: store.email,
+              decoration: InputDecoration(
+                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.red),
+              ),
+              onChanged: store.changeEmail,
+            );
+          },
+        ),
+      ],
     );
   }
 
   Widget _passwordchange(context) {
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border(
-            bottom: BorderSide(
-              width: .9,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
-            top: BorderSide(
-              width: .9,
-              color: Theme.of(context).colorScheme.onSurface,
-            ),
+      padding: const EdgeInsets.all(20.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Separator(separatorWidth: double.infinity),
+          const SizedBox(height: 15.0),
+          Text(
+            AppLocalizations.of(context)!.password,
+            style: Theme.of(context).textTheme.headline1,
           ),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            children: [
-              const SizedBox(height: 15.0),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  AppLocalizations.of(context)!.password,
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Align(
-                alignment: Alignment.centerLeft,
-                child: Text(AppLocalizations.of(context)!.last_changed + ': '),
-              ),
-              const SizedBox(height: 20),
-              changePasswordButton(),
-              const SizedBox(height: 30),
-            ],
-          ),
-        ),
+          const SizedBox(height: 10),
+          Text(AppLocalizations.of(context)!.last_changed + ': '),
+          const SizedBox(height: 20),
+          _changePasswordButton(),
+          const SizedBox(height: 20),
+        ],
       ),
     );
   }
 
   Widget updateButton() {
-    return StreamBuilder<Object>(
+    return StreamBuilder<bool>(
       stream: store.formValidStream,
       builder: (context, snapshot) {
+        bool formVald = false;
+        if (snapshot.hasData) {
+          formVald = snapshot.data!;
+        }
         return ElevatedButton(
-          onPressed: !_isLoading
-              ? () async {
-                  debugPrint(snapshot.data.toString());
-                  setState(() {
-                    _isLoading = true;
-                  });
-                  bool article = await store.update();
-                  setState(() {
-                    _isLoading = true;
-                  });
-                  if (article == true) {
-                    Modular.to.popAndPushNamed("/community");
-                  } else {
-                    Widget content = Text(AppLocalizations.of(context)!
-                        .error_sorry_unrecognized_username_or_password);
-                    List<Widget> actions = [
-                      TextButton(
-                        child: Text(
-                          AppLocalizations.of(context)!.close.toUpperCase(),
-                          style: Theme.of(context).textTheme.button!.copyWith(
-                              fontSize: 12,
-                              color: Theme.of(context).primaryColor),
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                    ];
-                    showMessage(context,
-                        title: AppLocalizations.of(context)!.error,
-                        content: content,
-                        actions: actions);
-                    debugPrint('not updated');
-                  }
-                }
+          onPressed: !_isLoading && formVald
+              ? () => _updatePersonalData(context)
               : null,
-          child: Text(
-            AppLocalizations.of(context)!.save_changes,
-            style: Theme.of(context)
-                .textTheme
-                .headline1!
-                .copyWith(color: Colors.white, fontSize: 15),
-          ),
-          style: ButtonStyle(
-            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-              const RoundedRectangleBorder(
-                borderRadius: BorderRadius.zero,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _isLoading
+                  ? Container(
+                      height: 20,
+                      width: 40,
+                      child: const CircularProgressIndicator(),
+                      padding: const EdgeInsets.only(right: 20),
+                    )
+                  : const SizedBox.shrink(),
+              Text(
+                AppLocalizations.of(context)!.save_changes,
+                style: Theme.of(context)
+                    .textTheme
+                    .headline1!
+                    .copyWith(color: Colors.white, fontSize: 15),
               ),
-            ),
+            ],
           ),
         );
       },
     );
   }
 
-  Widget cancelUpdate() {
-    return ElevatedButton(
-      onPressed: () {
-        emailController.clear();
-        cellphoneController.clear();
-        setState(() {
-          datePicked = null;
-          defaultCountry = null;
-        });
-        return debugPrint('hola');
-      },
-      child: Text(
-        AppLocalizations.of(context)!.cancel,
-        style: Theme.of(context)
-            .textTheme
-            .headline1!
-            .copyWith(color: Theme.of(context).indicatorColor, fontSize: 15),
-      ),
-      style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all(Theme.of(context).primaryColorLight),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-            side: BorderSide(color: Theme.of(context).indicatorColor),
-          ),
+  Widget _changePasswordButton() {
+    return SizedBox(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: () => debugPrint("Pressed"),
+        child: Text(
+          AppLocalizations.of(context)!.change_password,
+          style: Theme.of(context)
+              .textTheme
+              .headline1!
+              .copyWith(color: Theme.of(context).indicatorColor, fontSize: 15),
+        ),
+        style: ElevatedButton.styleFrom(
+          primary: Colors.white,
+          onPrimary: Colors.black,
+          elevation: 0,
+          side: const BorderSide(width: 1.5, color: Colors.black),
         ),
       ),
     );
   }
 
-  Widget changePasswordButton() {
-    return ElevatedButton(
-      onPressed: () => debugPrint("Pressed"),
-      child: Text(
-        AppLocalizations.of(context)!.change_password,
-        style: Theme.of(context)
-            .textTheme
-            .headline1!
-            .copyWith(color: Theme.of(context).indicatorColor, fontSize: 15),
-      ),
-      style: ButtonStyle(
-        backgroundColor:
-            MaterialStateProperty.all(Theme.of(context).primaryColorLight),
-        shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.zero,
-            side: BorderSide(color: Theme.of(context).indicatorColor),
+  _updatePersonalData(context) async {
+    setState(() {
+      _isLoading = true;
+    });
+
+    store.update().then(
+      (updated) {
+        List<Widget> actions = [
+          TextButton(
+            child: Text(
+              AppLocalizations.of(context)!.close.toUpperCase(),
+              style: Theme.of(context).textTheme.button!.copyWith(
+                  fontSize: 12, color: Theme.of(context).primaryColor),
+            ),
+            onPressed: () {
+              Modular.to.pop();
+              setState(() {
+                _isLoading = false;
+              });
+            },
           ),
-        ),
-      ),
+        ];
+
+        showMessage(context,
+            title: updated
+                ? AppLocalizations.of(context)!.about
+                : AppLocalizations.of(context)!.error,
+            content: Text(updated
+                ? AppLocalizations.of(context)!.about
+                : AppLocalizations.of(context)!.error),
+            actions: actions);
+      },
     );
   }
 }

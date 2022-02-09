@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:techfrenetic/app/models/profile_model.dart';
 import 'package:techfrenetic/app/models/session_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
@@ -159,5 +160,80 @@ class UserProvider extends TechFreneticProvider {
     bool tokenExists = prefs.csrfToken?.isNotEmpty ?? false;
     bool isNotExpired = DateTime.now().isBefore(prefs.sessionExpirationDate);
     return tokenExists && isNotExpired;
+  }
+
+  Future<bool> userUpdate(DateTime birthdate, String cellphone, String country,
+      String email) async {
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
+
+      Map<String, dynamic> body = {
+        "field_birthdate": {"value": DateFormat("yy-MM-dd").format(birthdate)},
+        "field_cellphone": {"value": cellphone},
+        "field_user_location": {"value": country},
+        "mail": {"value": email}
+      };
+
+      Map<String, String> headers = {};
+      headers.addAll(jsonHeader);
+      headers.addAll(authHeader);
+      headers.addAll(sessionHeader);
+      headers.addAll(headers);
+
+      var response = await http.patch(
+        _url,
+        body: json.jsonEncode(body),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool?> update(
+    DateTime birthdate,
+    String cellphone,
+    String country,
+  ) async {
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
+
+      Map<String, dynamic> body = {
+        "field_birthdate": {"value": birthdate.toString()},
+        "field_cellphone": {"value": cellphone},
+        "field_user_location": {"value": country},
+      };
+
+      Map<String, String> headers = {};
+      headers.addAll(jsonHeader);
+      headers.addAll(authHeader);
+      headers.addAll(sessionHeader);
+      headers.addAll(headers);
+
+      var response = await http.patch(
+        _url,
+        body: json.jsonEncode(body),
+        headers: headers,
+      );
+      debugPrint(response.statusCode.toString());
+
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return false;
   }
 }

@@ -8,7 +8,7 @@ import 'dart:convert' as json;
 class CountriesProvider extends TechFreneticProvider {
   Future<List<CategoriesModel>> getCountries() async {
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/paises");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/countrys");
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {

@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
-import 'package:techfrenetic/app/providers/user_actualizations_provider.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
 import '../../common/validators.dart';
 
 class MyAccountController extends Disposable {
@@ -30,32 +30,22 @@ class MyAccountController extends Disposable {
   Function(String) get changeCellphone => _cellphoneController.sink.add;
   Function(DateTime) get changeBirthdate => _birthdateController.sink.add;
 
-  String get email => _emailController.value;
-  String get country => _countryController.value;
-  String get cellphone => _cellphoneController.value;
-  DateTime get birthdate => _birthdateController.value;
+  String get email => _emailController.valueOrNull ?? "";
+  String? get country => _countryController.valueOrNull;
+  String get cellphone => _cellphoneController.valueOrNull ?? "";
+  DateTime? get birthdate => _birthdateController.valueOrNull;
 
   Future<bool> update() async {
     UserPreferences prefs = UserPreferences();
-    UserActualizationsProvider _actualizationsProvider =
-        UserActualizationsProvider();
-    if (prefs.userEmail == email) {
-      bool? update =
-          await _actualizationsProvider.update(birthdate, cellphone, country);
-      if (update == true) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      bool? update = await _actualizationsProvider.userUpdate(
-          birthdate, cellphone, country, email);
-      if (update == true) {
-        return true;
-      } else {
-        return false;
-      }
-    }
+    UserProvider _userProvider = UserProvider();
+
+    prefs.userEmail = email;
+    prefs.userBirthdate = birthdate;
+    prefs.userCountry = country;
+    prefs.userPhone = cellphone;
+
+    return await _userProvider.userUpdate(
+        birthdate!, cellphone, country!, email);
   }
 
   @override

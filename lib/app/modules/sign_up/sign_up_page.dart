@@ -348,7 +348,6 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                                               .error,
                                           content: content,
                                           actions: actions);
-                                      debugPrint("Not sign");
                                     }
                                   }
                                 : null,

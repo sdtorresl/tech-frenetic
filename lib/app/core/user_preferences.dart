@@ -40,6 +40,21 @@ class UserPreferences {
 
   String? get userEmail => _prefs.getString('mail');
 
+  set userPhone(String? userPhone) => _prefs.setString('phone', userPhone!);
+
+  String? get userPhone => _prefs.getString('phone');
+
+  set userCountry(String? userCountry) =>
+      _prefs.setString('country', userCountry!);
+
+  String? get userCountry => _prefs.getString('country');
+
+  set userBirthdate(DateTime? userBirthdate) =>
+      _prefs.setString('birthday', userBirthdate!.toString());
+
+  DateTime? get userBirthdate =>
+      DateTime.tryParse(_prefs.getString('birthday') ?? '');
+
   set userAvatar(String? userAvatar) =>
       _prefs.setString('field_user_Avatar', userAvatar!);
 
