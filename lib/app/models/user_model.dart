@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/model.dart';
 
 class UserModel extends Model {
@@ -54,7 +55,7 @@ class UserModel extends Model {
   String company;
   DateTime? dateSavePassword;
   String fieldFollowing;
-  String fieldInterests;
+  List<InterestModel> fieldInterests;
   String name;
   String fieldUserAvatar;
   String userKind;
@@ -78,14 +79,6 @@ class UserModel extends Model {
     String birthDateStr = Model.returnValue(json['field_birthdate'], "null");
     String dateSavePasswordStr =
         Model.returnValue(json['field_date_save_password'], 'null');
-
-    // DateTime? created = DateTime.tryParse(createdStr);
-    // DateTime? changed = DateTime.tryParse(changedStr);
-    // DateTime? contentTranslationUid =
-    //     DateTime.tryParse(contentTranslationUidStr);
-    // DateTime? contentTranslationCreated =
-    //     DateTime.tryParse(contentTranslationCreatedStr);
-    // DateTime? birthDate = DateTime.tryParse(birthDateStr);
 
     return UserModel(
       uid: Model.returnValue(json["uid"], 0),
@@ -114,7 +107,11 @@ class UserModel extends Model {
       company: Model.returnValue(json["field_company"], ''),
       dateSavePassword: DateTime.tryParse(dateSavePasswordStr),
       fieldFollowing: Model.returnValue(json["field_following"], ''),
-      fieldInterests: Model.returnValue(json["field_interests"], ''),
+      fieldInterests: json["field_interests"] == null
+          ? []
+          : List<InterestModel>.from(
+              json["field_interests"].map((x) => InterestModel.fromMap(x)),
+            ),
       name: Model.returnValue(json["field_name"], ''),
       fieldUserAvatar: Model.returnValue(json["field_user_avatar"], ''),
       userKind: Model.returnValue(json["field_user_kind"], ''),
@@ -164,6 +161,39 @@ class UserModel extends Model {
         "field_use_avatar": useAvatar,
         "user_picture": userPicture,
       };
+
+  @override
+  toString() => toJson();
+}
+
+class InterestModel extends Model {
+  InterestModel({
+    required this.id,
+    required this.type,
+    this.uuid,
+    this.url,
+  });
+
+  int id;
+  String type;
+  String? uuid;
+  String? url;
+
+  factory InterestModel.fromJson(String str) =>
+      InterestModel.fromMap(json.decode(str));
+
+  String toJson() => json.encode(toMap());
+
+  factory InterestModel.fromMap(Map<String, dynamic> json) {
+    return InterestModel(
+      id: json["target_id"],
+      type: json["target_type"],
+      uuid: json["target_uuid"],
+      url: json["url"],
+    );
+  }
+
+  Map<String, dynamic> toMap() => {"target_id": id, "target_type": type};
 
   @override
   toString() => toJson();

@@ -12,7 +12,7 @@ class CategoriesModel {
   final String id;
   final String category;
   final String featured;
-  final String link;
+  final String? link;
 
   factory CategoriesModel.fromJson(String str) =>
       CategoriesModel.fromMap(json.decode(str));
@@ -25,15 +25,17 @@ class CategoriesModel {
       id: json["id"],
       category: json["category"],
       featured: json["featured"],
-      link: _baseUrl + json["link"],
+      link: json["link"] != null ? _baseUrl + json["link"] : "",
     );
   }
+
   factory CategoriesModel.empty() => CategoriesModel(
         id: "",
         category: "",
         featured: "",
         link: "",
       );
+
   Map<String, dynamic> toMap() => {
         "id": id,
         "category": category,

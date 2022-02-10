@@ -63,4 +63,27 @@ class CategoriesProvider extends TechFreneticProvider {
       return [];
     }
   }
+
+  Future<List<CategoriesModel>> getInterests() async {
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/interest");
+      var response = await http.get(_url);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.jsonDecode(response.body);
+        List<CategoriesModel> interests = [];
+
+        for (var item in jsonResponse) {
+          CategoriesModel interest = CategoriesModel.fromMap(item);
+          interests.add(interest);
+        }
+        return interests;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return [];
+  }
 }

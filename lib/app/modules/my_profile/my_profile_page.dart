@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
+import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
@@ -9,6 +11,7 @@ import 'package:techfrenetic/app/models/user_model.dart';
 import '../certifications/certifications.dart';
 import '../edit_name/edit_name_page.dart';
 import '../edit_sumary/edit_sumary.dart';
+import '../interests/interests_page.dart';
 
 class MyProfilePage extends StatefulWidget {
   final UserModel user;
@@ -26,6 +29,7 @@ class MyProfilePage extends StatefulWidget {
 
 class _MyProfilePageState extends State<MyProfilePage> {
   final _prefs = UserPreferences();
+  CategoriesProvider _categoriesProvicer = CategoriesProvider();
   bool editable = false;
 
   @override
@@ -164,10 +168,63 @@ class _MyProfilePageState extends State<MyProfilePage> {
     );
   }
 
-  ListTile _interestsBody(BuildContext context) {
-    return ListTile(
-      title: Text(AppLocalizations.of(context)!.interest,
-          style: Theme.of(context).textTheme.headline1),
+  Widget _interestsBody(BuildContext context) {
+    List<InterestModel>? interests = widget.user.fieldInterests;
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListTile(
+          title: Text(AppLocalizations.of(context)!.interest,
+              style: Theme.of(context).textTheme.headline1),
+          trailing: IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return InterestsPage(user: widget.user);
+                },
+              );
+            },
+            icon: Icon(
+              Icons.edit,
+              color: Theme.of(context).indicatorColor,
+            ),
+          ),
+        ),
+        FutureBuilder(
+          future: _categoriesProvicer.getInterests(),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<CategoriesModel>> snapshot) {
+            if (snapshot.hasData) {
+              List<CategoriesModel> interestsCategories = snapshot.data!;
+              List<Widget> interestsInfo = [];
+
+              for (InterestModel interest in interests) {
+                String interestTitle = interestsCategories
+                    .firstWhere(
+                        (element) => element.id == interest.id.toString())
+                    .category;
+                interestsInfo.add(
+                  ListTile(
+                    title: Text(interestTitle),
+                  ),
+                );
+              }
+
+              return Column(
+                children: [
+                  ...interestsInfo,
+                ],
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
+              );
+            }
+          },
+        ),
+      ],
     );
   }
 
@@ -176,9 +233,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
     List<Widget> certificationsInfo = certifications
         .map(
-          (e) => Padding(
-            padding: const EdgeInsets.only(top: 5.0, left: 15),
-            child: Text(e.toString()),
+          (e) => ListTile(
+            title: Text(e.toString()),
           ),
         )
         .toList();
