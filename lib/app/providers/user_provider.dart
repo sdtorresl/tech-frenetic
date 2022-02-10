@@ -198,19 +198,12 @@ class UserProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool?> update(
-    DateTime birthdate,
-    String cellphone,
-    String country,
-  ) async {
+  Future<bool> updateCertifications(List<String> certifications) async {
+    debugPrint("Updating certifications for user $userId...");
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
 
-      Map<String, dynamic> body = {
-        "field_birthdate": {"value": birthdate.toString()},
-        "field_cellphone": {"value": cellphone},
-        "field_user_location": {"value": country},
-      };
+      Map<String, dynamic> body = {"field_certifications": certifications};
 
       Map<String, String> headers = {};
       headers.addAll(jsonHeader);
@@ -223,7 +216,6 @@ class UserProvider extends TechFreneticProvider {
         body: json.jsonEncode(body),
         headers: headers,
       );
-      debugPrint(response.statusCode.toString());
 
       if (response.statusCode == 200) {
         debugPrint(response.body);

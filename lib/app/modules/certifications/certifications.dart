@@ -1,14 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CertificationsPage extends StatefulWidget {
-  const CertificationsPage({Key? key}) : super(key: key);
+  final UserModel user;
+  const CertificationsPage({Key? key, required this.user}) : super(key: key);
 
   @override
   _CertificationsPageState createState() => _CertificationsPageState();
 }
 
 class _CertificationsPageState extends State<CertificationsPage> {
+  final TextEditingController _certificationsController =
+      TextEditingController();
+  UserProvider _userProvider = UserProvider();
+  List<String> _certifications = [];
+  bool _isSaving = false;
+
+  @override
+  void initState() {
+    _certifications = widget.user.fieldCertifications;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -30,7 +47,7 @@ class _CertificationsPageState extends State<CertificationsPage> {
         child: Column(children: [
           _header(context),
           Expanded(
-            child: _articleForm(context),
+            child: _certificationsForms(context),
           ),
         ]),
       ),
@@ -48,7 +65,7 @@ class _CertificationsPageState extends State<CertificationsPage> {
               children: [
                 HighlightContainer(
                     child: Text(
-                  "Edit",
+                  AppLocalizations.of(context)!.profile_edit_about_blue,
                   style: theme.textTheme.headline1!
                       .copyWith(color: theme.primaryColor, fontSize: 25),
                 )),
@@ -56,7 +73,7 @@ class _CertificationsPageState extends State<CertificationsPage> {
                   width: 5,
                 ),
                 Text(
-                  "Certifications",
+                  AppLocalizations.of(context)!.profile_edit_certifications,
                   style: Theme.of(context)
                       .textTheme
                       .headline1!
@@ -78,27 +95,28 @@ class _CertificationsPageState extends State<CertificationsPage> {
     );
   }
 
-  _articleForm(BuildContext context) {
+  Widget _certificationsForms(BuildContext context) {
     return Form(
-      child: ListView(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SizedBox(height: 60),
+          const SizedBox(height: 50),
           Text(
-            'Certification name',
+            AppLocalizations.of(context)!.profile_edit_name,
             style: Theme.of(context).textTheme.headline1,
           ),
           StreamBuilder(
             stream: null,
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               return TextFormField(
+                controller: _certificationsController,
                 decoration: InputDecoration(
                   suffixIcon: SizedBox(
                     height: 20,
                     width: 20,
-                    child: FloatingActionButton(
-                      onPressed: () => debugPrint('kkkko'),
-                      elevation: 0,
-                      child: const Icon(Icons.close),
+                    child: IconButton(
+                      onPressed: () => _certificationsController.clear(),
+                      icon: const Icon(Icons.close),
                     ),
                   ),
                   hintText: '',
@@ -116,42 +134,111 @@ class _CertificationsPageState extends State<CertificationsPage> {
               );
             },
           ),
-          const SizedBox(height: 60),
+          const SizedBox(height: 20),
           HighlightContainer(
-            child: Center(
-              child: Container(
-                margin:
-                    const EdgeInsets.symmetric(horizontal: 8.0, vertical: 50),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SizedBox(
-                      height: 40,
-                      width: 40,
-                      child: FloatingActionButton(
-                        onPressed: () => debugPrint('kkkko'),
-                        elevation: 0,
-                        child: const Icon(Icons.add),
+            child: Container(
+              margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    AppLocalizations.of(context)!.profile_edit_add,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1!
+                        .copyWith(color: Theme.of(context).primaryColor),
+                  ),
+                  const SizedBox(
+                    width: 20,
+                  ),
+                  ClipOval(
+                    child: Material(
+                      color: Theme.of(context).primaryColor,
+                      child: InkWell(
+                        splashColor: Theme.of(context).colorScheme.background,
+                        onTap: () {
+                          if (_certificationsController.text.isNotEmpty) {
+                            _certifications.add(_certificationsController.text);
+                            //_certificationsController.clear();
+                            setState(() {});
+                          }
+                        },
+                        child: const SizedBox(
+                          width: 40,
+                          height: 40,
+                          child: Icon(
+                            Icons.add,
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
-                    const SizedBox(width: 20),
-                    Text(
-                      'Add certifications',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline1!
-                          .copyWith(color: Theme.of(context).primaryColor),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
-          const SizedBox(height: 60),
-          ElevatedButton(
-              onPressed: () => debugPrint('hola'), child: const Text('Save'))
+          const SizedBox(
+            height: 20,
+          ),
+          Expanded(
+            child: ListView.builder(
+              shrinkWrap: false,
+              itemCount: _certifications.length,
+              itemBuilder: (context, index) {
+                return ListTile(
+                  title: Text(_certifications[index]),
+                  trailing: IconButton(
+                    onPressed: () {
+                      _certifications.removeAt(index);
+                      setState(() {});
+                    },
+                    icon: const Icon(Icons.delete),
+                  ),
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 30),
+          SizedBox(
+            width: double.infinity,
+            child: ElevatedButton(
+              onPressed: !_isSaving ? () => _saveCertifications() : null,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  _isSaving
+                      ? Container(
+                          height: 20,
+                          width: 40,
+                          child: const CircularProgressIndicator(),
+                          padding: const EdgeInsets.only(right: 20),
+                        )
+                      : const SizedBox.shrink(),
+                  Text(
+                    AppLocalizations.of(context)!.save_changes,
+                    style: Theme.of(context)
+                        .textTheme
+                        .button!
+                        .copyWith(color: Colors.white),
+                  ),
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );
+  }
+
+  _saveCertifications() async {
+    setState(() {
+      _isSaving = true;
+    });
+    await _userProvider.updateCertifications(_certifications);
+    setState(() {
+      _isSaving = false;
+    });
+    Modular.to.pop();
   }
 }

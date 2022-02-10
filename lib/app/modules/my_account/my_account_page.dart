@@ -17,11 +17,10 @@ class MyAccountPage extends StatefulWidget {
   _MyAccountPageState createState() => _MyAccountPageState();
 }
 
-CountriesProvider countries = CountriesProvider();
-
 class _MyAccountPageState
     extends ModularState<MyAccountPage, MyAccountController> {
   final prefs = UserPreferences();
+  CountriesProvider countries = CountriesProvider();
 
   DateTime? datePicked;
   DateTime? birthdate;
@@ -382,8 +381,8 @@ class _MyAccountPageState
                 AppLocalizations.of(context)!.save_changes,
                 style: Theme.of(context)
                     .textTheme
-                    .headline1!
-                    .copyWith(color: Colors.white, fontSize: 15),
+                    .button!
+                    .copyWith(color: Colors.white),
               ),
             ],
           ),
@@ -401,8 +400,8 @@ class _MyAccountPageState
           AppLocalizations.of(context)!.change_password,
           style: Theme.of(context)
               .textTheme
-              .headline1!
-              .copyWith(color: Theme.of(context).indicatorColor, fontSize: 15),
+              .button!
+              .copyWith(color: Theme.of(context).indicatorColor),
         ),
         style: ElevatedButton.styleFrom(
           primary: Colors.white,

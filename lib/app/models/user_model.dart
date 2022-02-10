@@ -50,7 +50,7 @@ class UserModel extends Model {
   String biography;
   DateTime? birthdate;
   String cellphone;
-  String fieldCertifications;
+  List<String> fieldCertifications;
   String company;
   DateTime? dateSavePassword;
   String fieldFollowing;
@@ -108,7 +108,9 @@ class UserModel extends Model {
       biography: Model.returnValue(json["field_biography"], ''),
       birthdate: DateTime.tryParse(birthDateStr),
       cellphone: Model.returnValue(json["field_cellphone"], ''),
-      fieldCertifications: Model.returnValue(json["field_certifications"], ''),
+      fieldCertifications: List<String>.from(
+        Model.returnValue(json["field_certifications"], [], isList: true),
+      ),
       company: Model.returnValue(json["field_company"], ''),
       dateSavePassword: DateTime.tryParse(dateSavePasswordStr),
       fieldFollowing: Model.returnValue(json["field_following"], ''),

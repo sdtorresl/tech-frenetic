@@ -6,7 +6,7 @@ import 'package:techfrenetic/app/modules/certifications/certifications.dart';
 import 'package:techfrenetic/app/modules/edit_name/edit_name_page.dart';
 import 'package:techfrenetic/app/modules/edit_sumary/edit_sumary.dart';
 import 'package:techfrenetic/app/modules/my_account/my_account_page.dart';
-import 'package:techfrenetic/app/widgets/my_profile_widget.dart';
+import 'package:techfrenetic/app/modules/my_profile/my_profile_page.dart';
 import 'package:techfrenetic/app/widgets/my_content_widget.dart';
 import 'package:techfrenetic/app/widgets/my_activity_widget.dart';
 import 'package:techfrenetic/app/widgets/saved_articles_widget.dart';
@@ -108,52 +108,9 @@ class ProfilePageState extends State<ProfilePage> {
       builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
         if (snapshot.hasData) {
           UserModel user = snapshot.data!;
-          return MyProfile(
+          return MyProfilePage(
             user: user,
             avatarId: user.uid,
-            onTap: () => Modular.to.pushNamed('/edit_avatar'),
-            editName: IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const EditNamePage();
-                  },
-                );
-              },
-              icon: Icon(
-                Icons.edit,
-                color: Theme.of(context).indicatorColor,
-              ),
-            ),
-            editAbout: IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const EditSummaryPage();
-                  },
-                );
-              },
-              icon: Icon(
-                Icons.edit,
-                color: Theme.of(context).indicatorColor,
-              ),
-            ),
-            certifications: IconButton(
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return const CertificationsPage();
-                  },
-                );
-              },
-              icon: Icon(
-                Icons.edit,
-                color: Theme.of(context).indicatorColor,
-              ),
-            ),
           );
         }
 

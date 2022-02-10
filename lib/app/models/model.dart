@@ -1,11 +1,17 @@
 class Model {
-  static dynamic returnValue(List<dynamic>? list, dynamic defaultValue) {
+  static dynamic returnValue(List<dynamic>? list, dynamic defaultValue,
+      {bool isList = false}) {
     if (list == null) {
       return defaultValue;
     }
 
     try {
-      return list.isNotEmpty ? list[0]["value"]! : defaultValue;
+      if (list.isNotEmpty) {
+        return !isList
+            ? list[0]["value"]
+            : list.map((e) => e["value"]).toList();
+      }
+      return defaultValue;
     } catch (e) {
       return defaultValue;
     }

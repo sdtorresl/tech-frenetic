@@ -146,7 +146,7 @@ final ThemeData techFreneticTheme = ThemeData(
     button: TextStyle(
       color: Color(0xdd000000),
       fontFamily: 'NunitoSans',
-      fontSize: 20,
+      fontSize: 17,
       fontWeight: FontWeight.w700,
       fontStyle: FontStyle.normal,
     ),
