@@ -7,7 +7,7 @@ import 'package:techfrenetic/app/modules/edit_name/edit_name_page.dart';
 import 'package:techfrenetic/app/modules/edit_sumary/edit_sumary.dart';
 import 'package:techfrenetic/app/modules/my_account/my_account_page.dart';
 import 'package:techfrenetic/app/modules/my_profile/my_profile_page.dart';
-import 'package:techfrenetic/app/widgets/my_content_widget.dart';
+import 'package:techfrenetic/app/modules/my_content/my_content_page.dart';
 import 'package:techfrenetic/app/widgets/my_activity_widget.dart';
 import 'package:techfrenetic/app/widgets/saved_articles_widget.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
@@ -126,7 +126,7 @@ class ProfilePageState extends State<ProfilePage> {
   }
 
   Widget _myContent(BuildContext context) {
-    return const MyContent();
+    return const MyContentPage();
   }
 
   Widget _myActivity(BuildContext context) {

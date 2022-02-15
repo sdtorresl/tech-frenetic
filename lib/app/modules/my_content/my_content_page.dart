@@ -6,33 +6,30 @@ import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/widgets/save_content_widget.dart';
 
-class MyContent extends StatefulWidget {
-  const MyContent({Key? key}) : super(key: key);
+class MyContentPage extends StatefulWidget {
+  const MyContentPage({Key? key}) : super(key: key);
 
   @override
-  _MyContentState createState() => _MyContentState();
+  _MyContentPageState createState() => _MyContentPageState();
 }
 
-class _MyContentState extends State<MyContent> {
+class _MyContentPageState extends State<MyContentPage> {
   @override
   Widget build(BuildContext context) {
     ArticlesProvider _articlesProvideer = ArticlesProvider();
     final _prefs = UserPreferences();
     return Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(10.0),
       child: ListView(
         children: [
           Container(
+            margin: const EdgeInsets.all(5),
             decoration: BoxDecoration(
               color: Colors.white,
               border: Border(
                 top: BorderSide(
                   width: 1.90,
                   color: Theme.of(context).primaryColor,
-                ),
-                left: BorderSide(
-                  width: 0.50,
-                  color: Colors.grey.withOpacity(.6),
                 ),
               ),
               boxShadow: [
@@ -95,25 +92,12 @@ class _MyContentState extends State<MyContent> {
                   }
                 }
 
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      border: Border(
-                        top: BorderSide(
-                          width: .5,
-                          color: Colors.grey.withOpacity(.6),
-                        ),
-                      ),
-                    ),
-                    child: Column(
-                      children: [
-                        ...savedPostsWidgets,
-                        const SizedBox(height: 60),
-                      ],
-                    ),
-                  ),
+                return Column(
+                  children: [
+                    const SizedBox(height: 10),
+                    ...savedPostsWidgets,
+                    const SizedBox(height: 60),
+                  ],
                 );
               } else {
                 return const Center(child: CircularProgressIndicator());

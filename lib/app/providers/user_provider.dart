@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/models/profile_model.dart';
 import 'package:techfrenetic/app/models/session_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
@@ -132,9 +133,8 @@ class UserProvider extends TechFreneticProvider {
     ProfileModel userinfo = ProfileModel.empty();
 
     try {
-      Uri _url =
-          Uri.parse("$baseUrl/api/en/v1/full-profile?_format=json&id=$userId");
-      debugPrint(_url.toString());
+      Uri _url = Uri.parse(
+          "$baseUrl/api/$locale/v1/full-profile?_format=json&id=$userId");
 
       var response = await http.get(_url);
 
@@ -210,6 +210,44 @@ class UserProvider extends TechFreneticProvider {
       headers.addAll(authHeader);
       headers.addAll(sessionHeader);
       headers.addAll(headers);
+
+      var response = await http.patch(
+        _url,
+        body: json.jsonEncode(body),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return false;
+  }
+
+  updateInterests(List<CategoriesModel> interests) async {
+    debugPrint("Updating interests for user $userId...");
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
+
+      Map<String, dynamic> body = {
+        "field_interests": [
+          {"target_id": 1}
+        ]
+      };
+      debugPrint("Body: " + body.toString());
+      debugPrint("Body: " + json.jsonEncode(body.toString()));
+
+      Map<String, String> headers = {};
+      headers.addAll(jsonHeader);
+      headers.addAll(authHeader);
+      headers.addAll(sessionHeader);
+      headers.addAll(headers);
+
+      debugPrint(headers.toString());
 
       var response = await http.patch(
         _url,

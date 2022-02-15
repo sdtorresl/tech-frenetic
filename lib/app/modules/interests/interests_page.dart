@@ -20,14 +20,26 @@ class _InterestsPageState extends State<InterestsPage> {
   final CategoriesProvider _categoriesProvider = CategoriesProvider();
   List<CategoriesModel> _availableInterests = [CategoriesModel.empty()];
   late String _selectedInterest;
-  List<InterestModel> _interests = [];
+  List<CategoriesModel> _userInterests = [];
   bool _isSaving = false;
 
   @override
   void initState() {
-    _interests = widget.user.fieldInterests;
+    _loadUserInterests();
+
     _selectedInterest = _availableInterests.first.id;
     super.initState();
+  }
+
+  void _loadUserInterests() {
+    _categoriesProvider.getInterests().then((interestsCategories) {
+      for (InterestModel interest in widget.user.fieldInterests) {
+        CategoriesModel interestCategory = interestsCategories
+            .firstWhere((element) => element.id == interest.id.toString());
+        _userInterests.add(interestCategory);
+      }
+      setState(() {});
+    });
   }
 
   @override
@@ -117,21 +129,21 @@ class _InterestsPageState extends State<InterestsPage> {
               if (snapshot.hasData) {
                 _availableInterests = snapshot.data!;
 
-                debugPrint(_selectedInterest);
+                if (_selectedInterest.isEmpty) {
+                  _selectedInterest = _availableInterests.first.id;
+                }
 
                 return DropdownButton(
                   isExpanded: true,
-                  //  value: _selectedInterest,
+                  value: _selectedInterest,
                   icon: const Icon(Icons.keyboard_arrow_down),
                   items: _availableInterests.map((CategoriesModel item) {
-                    debugPrint(item.toString());
                     return DropdownMenuItem(
                       value: item.id,
                       child: Text(item.category),
                     );
                   }).toList(),
                   onChanged: (String? newValue) {
-                    debugPrint(newValue);
                     setState(() {
                       _selectedInterest = newValue!;
                     });
@@ -168,10 +180,11 @@ class _InterestsPageState extends State<InterestsPage> {
                           if (_selectedInterest.isNotEmpty) {
                             CategoriesModel interest = _availableInterests
                                 .firstWhere((e) => _selectedInterest == e.id);
-                            _interests.add(InterestModel(
-                                id: int.tryParse(interest.id) ?? 0,
-                                type: "taxonomy_term"));
-                            //_certificationsController.clear();
+
+                            if (!_userInterests
+                                .any((item) => item.id == interest.id)) {
+                              _userInterests.add(interest);
+                            }
                             setState(() {});
                           }
                         },
@@ -196,13 +209,13 @@ class _InterestsPageState extends State<InterestsPage> {
           Expanded(
             child: ListView.builder(
               shrinkWrap: false,
-              itemCount: _interests.length,
+              itemCount: _userInterests.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  title: Text(_interests[index].id.toString()),
+                  title: Text(_userInterests[index].category),
                   trailing: IconButton(
                     onPressed: () {
-                      _interests.removeAt(index);
+                      _userInterests.removeAt(index);
                       setState(() {});
                     },
                     icon: const Icon(Icons.delete),
@@ -247,7 +260,7 @@ class _InterestsPageState extends State<InterestsPage> {
     setState(() {
       _isSaving = true;
     });
-    //await _userProvider.updateCertifications(_interests);
+    await _userProvider.updateInterests(_userInterests);
     setState(() {
       _isSaving = false;
     });

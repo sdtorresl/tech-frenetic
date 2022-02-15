@@ -15,85 +15,69 @@ class SaveContent extends StatefulWidget {
 class _SaveState extends State<SaveContent> {
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(10.0),
-      child: GestureDetector(
-        onTap: () => Modular.to
-            .pushNamed("/community/article", arguments: widget.article),
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border(
-              bottom: BorderSide(
-                width: .8,
-                color: Colors.grey.withOpacity(.8),
+    return GestureDetector(
+      onTap: () =>
+          Modular.to.pushNamed("/community/article", arguments: widget.article),
+      child: Card(
+        shape: const ContinuousRectangleBorder(),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              flex: 6,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.article.category!,
+                      style: Theme.of(context).textTheme.headline1!.copyWith(
+                          fontSize: 16,
+                          color: Theme.of(context).indicatorColor),
+                    ),
+                    Text(
+                      timeago.format(widget.article.date!),
+                      style: Theme.of(context)
+                          .textTheme
+                          .caption!
+                          .copyWith(fontSize: 12),
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: 150,
+                      child: Text(
+                        widget.article.title,
+                        style: Theme.of(context).textTheme.headline1,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      widget.article.displayName,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1!
+                          .copyWith(fontSize: 15),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-          child: Column(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 12),
-                      SizedBox(
-                        width: 150,
-                        child: Text(
-                          widget.article.category!,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1!
-                              .copyWith(
-                                  fontSize: 16,
-                                  color: Theme.of(context).indicatorColor),
-                        ),
-                      ),
-                      Text(timeago.format(widget.article.date!),
-                          style: Theme.of(context).textTheme.bodyText1),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        width: 150,
-                        child: Text(
-                          widget.article.title,
-                          style: Theme.of(context).textTheme.headline1,
-                        ),
-                      ),
-                      const SizedBox(height: 10),
-                      Text(widget.article.displayName,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1!
-                              .copyWith(fontSize: 15)),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      SizedBox(
-                        width: 150,
-                        height: 100,
-                        child: CachedNetworkImage(
-                          width: MediaQuery.of(context).size.width,
-                          fit: BoxFit.fitWidth,
-                          placeholder: (context, value) =>
-                              const LinearProgressIndicator(),
-                          errorWidget: (context, value, e) =>
-                              const Icon(Icons.error),
-                          imageUrl: widget.article.image!,
-                        ),
-                      ),
-                    ],
-                  )
-                ],
+            Expanded(
+              flex: 4,
+              child: SizedBox(
+                height: 200,
+                child: CachedNetworkImage(
+                  fit: BoxFit.cover,
+                  placeholder: (context, value) =>
+                      const LinearProgressIndicator(),
+                  errorWidget: (context, value, e) => const Icon(Icons.error),
+                  imageUrl: widget.article.image!,
+                ),
               ),
-              const SizedBox(height: 30),
-              //_actionBar(context),
-              const SizedBox(height: 10),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );

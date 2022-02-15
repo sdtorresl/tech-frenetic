@@ -37,11 +37,9 @@ class CategoriesModel {
       );
 
   Map<String, dynamic> toMap() => {
-        "id": id,
-        "category": category,
-        "featured": featured,
-        "link": link,
+        'target_id': id,
       };
+
   @override
   String toString() => toJson();
 }
