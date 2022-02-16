@@ -40,7 +40,15 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         title: Row(
           children: [
             const SizedBox(width: 20),
-            Image.asset('assets/img/main-logo.png', fit: BoxFit.fill),
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  _currentIndex = 0;
+                });
+                Modular.to.navigate(_pages[0]);
+              },
+              child: Image.asset('assets/img/main-logo.png', fit: BoxFit.fill),
+            ),
           ],
         ),
         backgroundColor: Colors.white,
@@ -52,16 +60,13 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
         ],
       ),
       endDrawer: const CustomDrawer(),
-      body: AnimatedContainer(
-        duration: const Duration(seconds: 10),
-        child: RouterOutlet(),
-      ),
+      body: RouterOutlet(),
       floatingActionButton: _floatingActionButton(),
       bottomNavigationBar: _bottomNavigationBar(),
     );
   }
 
-  IconButton _openDrawer(GlobalKey<ScaffoldState> _scaffoldKey) {
+  Widget _openDrawer(GlobalKey<ScaffoldState> _scaffoldKey) {
     return IconButton(
       icon: const Icon(Icons.menu),
       onPressed: () {
@@ -79,7 +84,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     );
   }
 
-  PopupMenuButton<int> _userMenu() {
+  Widget _userMenu() {
     return PopupMenuButton(
       child: Container(
         width: 50,
@@ -149,7 +154,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     );
   }
 
-  TitledBottomNavigationBar _bottomNavigationBar() {
+  Widget _bottomNavigationBar() {
     return TitledBottomNavigationBar(
       reverse: true,
       currentIndex:

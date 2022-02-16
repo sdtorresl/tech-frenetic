@@ -43,7 +43,6 @@ class HomeModule extends Module {
       child: (_, args) => const HomePage(),
       children: [
         ModuleRoute('/community/', module: CommunityModule()),
-        ModuleRoute('/groups', module: GroupsModule()),
         ChildRoute(
           '/skills',
           child: (context, args) => const SkillsPage(),
@@ -63,6 +62,13 @@ class HomeModule extends Module {
         ),
       ],
       guards: [AuthGuard()],
+    ),
+    ModuleRoute(
+      '/groups/',
+      module: GroupsModule(),
+      guards: [
+        AuthGuard(),
+      ],
     ),
     ChildRoute(
       '/about_us',

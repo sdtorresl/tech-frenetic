@@ -6,6 +6,39 @@ import 'package:techfrenetic/app/models/groups_members_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
 class GroupsProvider extends TechFreneticProvider {
+  Future<GroupModel> getGroup(int id) async {
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/$locale/node/$id/?_format=json");
+
+      Map<String, String> headers = {};
+      headers.addAll(authHeader);
+      headers.addAll(sessionHeader);
+
+      var response = await http.get(
+        _url,
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint(response.body);
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return GroupModel(
+        title: "Grupo de ejemplo",
+        description: "This is a description",
+        featured: "featured",
+        members: "156",
+        picture:
+            "https://dev-techfrenetic.us.seedcloud.co/images/temp/image-detail-group.png",
+        id: "15",
+        posts: "15");
+  }
+
   Future<List<GroupModel>> getRecommended() async {
     List<GroupModel> recommendedGroups = [];
 
