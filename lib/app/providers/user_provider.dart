@@ -29,8 +29,6 @@ class UserProvider extends TechFreneticProvider {
         updateCookie(response);
         loggedUser = SessionModel.fromJson(response.body);
 
-        debugPrint(loggedUser.toString());
-
         prefs.csrfToken = loggedUser.csrfToken;
         prefs.logoutToken = loggedUser.logoutToken;
         prefs.userId = loggedUser.currentUser!.uid;
@@ -92,12 +90,10 @@ class UserProvider extends TechFreneticProvider {
       );
 
       if (response.statusCode == 200) {
-        debugPrint(response.body);
         userinfo = UserModel.fromJson(response.body);
         prefs.userName = userinfo.userName;
         prefs.userEmail = userinfo.mail;
         prefs.userAvatar = userinfo.fieldUserAvatar;
-        debugPrint(userinfo.toString());
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
@@ -246,8 +242,6 @@ class UserProvider extends TechFreneticProvider {
       headers.addAll(authHeader);
       headers.addAll(sessionHeader);
       headers.addAll(headers);
-
-      debugPrint(headers.toString());
 
       var response = await http.patch(
         _url,

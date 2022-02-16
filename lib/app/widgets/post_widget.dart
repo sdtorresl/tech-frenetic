@@ -34,6 +34,7 @@ class _PostWidgetState extends State<PostWidget> {
   @override
   Widget build(BuildContext context) {
     UserPreferences prefs = UserPreferences();
+
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       decoration: BoxDecoration(
@@ -275,7 +276,7 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   Widget likeButton(context) {
-    LikeProvider like = LikeProvider();
+    LikeProvider likeProvider = LikeProvider();
     Widget likeButton;
 
     if (enabledLike == true) {
@@ -284,7 +285,7 @@ class _PostWidgetState extends State<PostWidget> {
         iconAsset: likeAsset,
         text: 'Cool',
         onPressed: () {
-          like.like(widget.article.id);
+          likeProvider.like(widget.article.id);
           setState(() {
             enabledLike = false;
             likeAsset = 'assets/img/icons/bright_bulb.svg';
@@ -297,7 +298,7 @@ class _PostWidgetState extends State<PostWidget> {
         iconAsset: likeAsset,
         text: 'Cool',
         onPressed: () {
-          like.dislike();
+          likeProvider.dislike();
           setState(
             () {
               enabledLike = true;
@@ -332,14 +333,7 @@ class _PostWidgetState extends State<PostWidget> {
         },
       );
     } else {
-      shareButton = _actionButton(
-        context: context,
-        iconAsset: '',
-        text: '',
-        onPressed: () {
-          null;
-        },
-      );
+      shareButton = const SizedBox();
     }
     return shareButton;
   }
@@ -375,7 +369,7 @@ class _PostWidgetState extends State<PostWidget> {
     );
   }
 
-  TextButton _actionButton(
+  Widget _actionButton(
       {required BuildContext context,
       required String iconAsset,
       required String text,

@@ -43,24 +43,15 @@ class HomeModule extends Module {
       child: (_, args) => const HomePage(),
       children: [
         ModuleRoute('/community/', module: CommunityModule()),
-        ChildRoute(
-          '/skills',
-          child: (context, args) => const SkillsPage(),
-        ),
-        ChildRoute(
-          '/vendors',
-          child: (context, args) => const VendorsPage(),
-        ),
+        ChildRoute('/skills', child: (context, args) => const SkillsPage()),
+        ChildRoute('/vendors', child: (context, args) => const VendorsPage()),
         ModuleRoute('/profile', module: ProfileModule()),
       ],
       guards: [
         AuthGuard(),
       ],
     ),
-    ChildRoute(
-      '/events',
-      child: (context, args) => const EventsPage(),
-    ),
+    ChildRoute('/events', child: (context, args) => const EventsPage()),
     ChildRoute(
       '/vendors_search',
       child: (context, args) => const VendorsSearchPage(),
@@ -114,7 +105,6 @@ class HomeModule extends Module {
         AuthGuard(),
       ],
     ),
-
     ModuleRoute(
       '/create_meetups',
       module: CreateMeetupsModule(),
@@ -177,10 +167,5 @@ class HomeModule extends Module {
       '/forgot',
       module: ForgotPasswordModule(),
     ),
-    // ModuleRoute(
-    //   '/create_groups',
-    //   module: CreateGroupsModule(),
-
-    // ),
   ];
 }
