@@ -11,8 +11,9 @@ import 'package:techfrenetic/app/widgets/drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
-  final String title;
-  const HomePage({Key? key, this.title = "Home"}) : super(key: key);
+  const HomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -59,7 +60,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           _openDrawer(_scaffoldKey),
         ],
       ),
-      endDrawer: const CustomDrawer(),
+      endDrawer: CustomDrawer(callback: _updateChildPage),
       body: RouterOutlet(),
       floatingActionButton: _floatingActionButton(),
       bottomNavigationBar: _bottomNavigationBar(),
@@ -181,5 +182,14 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             icon: const Icon(Icons.person_outline)),
       ],
     );
+  }
+
+  _updateChildPage(String route) {
+    debugPrint("Updating index");
+    int index = _pages.contains(route) ? _pages.indexOf(route) : 0;
+    setState(() {
+      _currentIndex = index;
+    });
+    Modular.to.navigate(_pages[0]);
   }
 }

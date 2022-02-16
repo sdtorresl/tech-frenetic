@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/modules/contact_us/contact_us_controller.dart';
+import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -27,12 +28,7 @@ class _ContactUsPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
+      appBar: TFAppBar(),
       body: ListView(
         children: [
           contacInfo(),
@@ -46,94 +42,93 @@ class _ContactUsPageState
   Widget contacInfo() {
     return Container(
       color: Theme.of(context).indicatorColor,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 5),
-              child: Text(
-                AppLocalizations.of(context)!.contact,
-                style: Theme.of(context).textTheme.headline1!.copyWith(
-                    color: Theme.of(context).indicatorColor, fontSize: 30),
-              ),
+      padding: const EdgeInsets.symmetric(vertical: 25, horizontal: 30),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Container(
+            color: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 5),
+            child: Text(
+              AppLocalizations.of(context)!.contact,
+              style: Theme.of(context).textTheme.headline1!.copyWith(
+                  color: Theme.of(context).indicatorColor, fontSize: 30),
             ),
-            const SizedBox(height: 20),
-            Text(
-              AppLocalizations.of(context)!.call_us,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline2!
-                  .copyWith(color: Colors.white),
-            ),
-            Text(AppLocalizations.of(context)!.phone + '(+57 3104655112)',
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      color: Colors.white,
-                    )),
-            Row(
-              children: [
-                const Icon(
-                  Icons.check_circle_outline_sharp,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            AppLocalizations.of(context)!.call_us,
+            style: Theme.of(context)
+                .textTheme
+                .headline2!
+                .copyWith(color: Colors.white),
+          ),
+          Text(
+            AppLocalizations.of(context)!.phone,
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
                   color: Colors.white,
                 ),
-                Text(
-                  ' (+57 3104655112)',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(color: Colors.white),
+          ),
+          Row(
+            children: [
+              const Icon(
+                Icons.check_circle_outline_sharp,
+                color: Colors.white,
+              ),
+              Text(
+                ' (+57 3104655112)',
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Colors.white),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          Container(
+            color: Colors.white,
+            width: 400,
+            height: .5,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            AppLocalizations.of(context)!.write_us,
+            style: Theme.of(context)
+                .textTheme
+                .headline2!
+                .copyWith(color: Colors.white),
+          ),
+          Text(
+            'memo@techfrenetic.com',
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  color: Colors.white,
                 ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Container(
-              color: Colors.white,
-              width: 400,
-              height: .5,
-            ),
-            const SizedBox(height: 20),
-            Text(
-              AppLocalizations.of(context)!.write_us,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline2!
-                  .copyWith(color: Colors.white),
-            ),
-            Text(
-              'memo@techfrenetic.com',
+          ),
+          const SizedBox(height: 20),
+          Container(
+            color: Colors.white,
+            width: 400,
+            height: .5,
+          ),
+          const SizedBox(height: 20),
+          Text(
+            AppLocalizations.of(context)!.find_us,
+            style: Theme.of(context)
+                .textTheme
+                .headline2!
+                .copyWith(color: Colors.white),
+          ),
+          Text('Cra 11 # 70-66 Oficina 209',
               style: Theme.of(context).textTheme.bodyText1!.copyWith(
                     color: Colors.white,
-                  ),
-            ),
-            const SizedBox(height: 20),
-            Container(
-              color: Colors.white,
-              width: 400,
-              height: .5,
-            ),
-            const SizedBox(height: 20),
-            Text(
-              AppLocalizations.of(context)!.find_us,
-              style: Theme.of(context)
-                  .textTheme
-                  .headline2!
-                  .copyWith(color: Colors.white),
-            ),
-            Text('Cra 11 # 70-66 Oficina 209',
-                style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      color: Colors.white,
-                    )),
-            Text(
-              'Bogotá. Colombia.',
-              style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                    color: Colors.white,
-                  ),
-            ),
-            const SizedBox(height: 20),
-          ],
-        ),
+                  )),
+          Text(
+            'Bogotá. Colombia.',
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  color: Colors.white,
+                ),
+          ),
+        ],
       ),
     );
   }

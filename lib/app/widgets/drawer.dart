@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 
 class CustomDrawer extends StatelessWidget {
-  const CustomDrawer({Key? key}) : super(key: key);
+  final Function(String) callback;
+
+  const CustomDrawer({Key? key, required this.callback}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -34,32 +35,33 @@ class CustomDrawer extends StatelessWidget {
           ),
           _menuItem(
             context,
-            "Tech Community",
-            onPressed: () => Modular.to.popAndPushNamed("/community"),
-          ),
-          _menuItem(
-            context,
-            "Tech Events",
-            onPressed: () => {
-              Modular.to.popAndPushNamed("/events"),
+            AppLocalizations.of(context)!.tech_community,
+            onPressed: () {
+              callback("/community");
             },
           ),
           _menuItem(
             context,
-            "Tech Vendors",
-            onPressed: () => {
-              debugPrint("Pressed vendors"),
+            AppLocalizations.of(context)!.tech_events,
+            onPressed: () => Modular.to.popAndPushNamed("/events"),
+          ),
+          _menuItem(
+            context,
+            AppLocalizations.of(context)!.tech_vendors,
+            onPressed: () {
+              callback("/vendors");
             },
           ),
           const SizedBox(
             height: 30,
           ),
-          _simpleMenuItem(context, "About Us",
-              onPressed: () => {Modular.to.pushNamed("/about_us")}),
-          _simpleMenuItem(context, "Contact Us",
-              onPressed: () => {Modular.to.pushNamed("/contact_us")}),
-          // _simpleMenuItem(context, "Newsletter",
-          //     onPressed: () => {debugPrint("Newsletter us pressed")}),
+          _simpleMenuItem(context, AppLocalizations.of(context)!.about,
+              onPressed: () => Modular.to.popAndPushNamed("/about_us")),
+          _simpleMenuItem(
+            context,
+            AppLocalizations.of(context)!.contact,
+            onPressed: () => Modular.to.popAndPushNamed("/contact_us"),
+          ),
           const SizedBox(
             height: 50,
           ),
@@ -73,24 +75,8 @@ class CustomDrawer extends StatelessWidget {
               ),
               onPressed: () async {
                 UserProvider userProvider = UserProvider();
-                if (await userProvider.logout()) {
-                  Modular.to.pushReplacementNamed("/login");
-                } else {
-                  showMessage(
-                    context,
-                    title: AppLocalizations.of(context)!.error,
-                    content: Text(AppLocalizations.of(context)!.error_logout),
-                    actions: <Widget>[
-                      TextButton(
-                        child: Text(AppLocalizations.of(context)!.close),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                          Modular.to.pushReplacementNamed("/login");
-                        },
-                      ),
-                    ],
-                  );
-                }
+                await userProvider.logout();
+                Modular.to.pushReplacementNamed("/login");
               },
             ),
           ),

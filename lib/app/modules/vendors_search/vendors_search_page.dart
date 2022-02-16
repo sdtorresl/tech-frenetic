@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/providers/vendors_search_provider.dart';
+import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -25,10 +26,7 @@ class _VendorsSearchPageState extends State<VendorsSearchPage> {
   Widget build(BuildContext context) {
     VendorsSearchProvider searchProvider = VendorsSearchProvider();
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        leading: const SizedBox(),
-        backgroundColor: Colors.white,
+      appBar: TFAppBar(
         title: Text(
           AppLocalizations.of(context)!.results,
           style: Theme.of(context).textTheme.headline1,

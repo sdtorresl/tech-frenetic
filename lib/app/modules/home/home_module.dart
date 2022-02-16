@@ -12,7 +12,7 @@ import 'package:techfrenetic/app/modules/profile/profile_module.dart';
 import 'package:techfrenetic/app/modules/search/search_module.dart';
 import 'package:techfrenetic/app/modules/users_profiles/user_profiles_module.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
-import 'package:techfrenetic/app/widgets/about_us_widget.dart';
+import 'package:techfrenetic/app/modules/about_us/about_us_page.dart';
 import 'package:techfrenetic/app/modules/login/login_module.dart';
 import 'package:techfrenetic/app/modules/privacy_policy/privacy_poicy_page.dart';
 import 'package:techfrenetic/app/modules/create_profile/create_profile_module.dart';
@@ -51,17 +51,19 @@ class HomeModule extends Module {
           '/vendors',
           child: (context, args) => const VendorsPage(),
         ),
-        ChildRoute(
-          '/vendors_search',
-          child: (context, args) => const VendorsSearchPage(),
-        ),
         ModuleRoute('/profile', module: ProfileModule()),
-        ChildRoute(
-          '/events',
-          child: (context, args) => const EventsPage(),
-        ),
       ],
-      guards: [AuthGuard()],
+      guards: [
+        AuthGuard(),
+      ],
+    ),
+    ChildRoute(
+      '/events',
+      child: (context, args) => const EventsPage(),
+    ),
+    ChildRoute(
+      '/vendors_search',
+      child: (context, args) => const VendorsSearchPage(),
     ),
     ModuleRoute(
       '/groups/',
@@ -72,7 +74,7 @@ class HomeModule extends Module {
     ),
     ChildRoute(
       '/about_us',
-      child: (context, args) => const AboutUsWidget(),
+      child: (context, args) => const AboutUsPage(),
       guards: [
         AuthGuard(),
       ],

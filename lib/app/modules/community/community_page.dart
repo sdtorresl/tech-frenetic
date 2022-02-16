@@ -11,9 +11,8 @@ import 'package:techfrenetic/app/widgets/post_widget.dart';
 import 'package:techfrenetic/app/modules/groups/groups_page.dart';
 
 class CommunityPage extends StatefulWidget {
-  final String title;
-  const CommunityPage({Key? key, this.title = 'CommunityPage'})
-      : super(key: key);
+  const CommunityPage({Key? key}) : super(key: key);
+
   @override
   CommunityPageState createState() => CommunityPageState();
 }
