@@ -12,7 +12,7 @@ import 'package:techfrenetic/app/widgets/most_popular_widget.dart';
 import 'package:techfrenetic/app/widgets/section_header_widget.dart';
 
 import '../../models/categories_model.dart';
-import '../../widgets/category_button.dart';
+import '../../widgets/category_button_widget.dart';
 
 class SkillsPage extends StatefulWidget {
   const SkillsPage({Key? key}) : super(key: key);

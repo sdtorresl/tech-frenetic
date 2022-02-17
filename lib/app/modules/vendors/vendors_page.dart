@@ -6,7 +6,7 @@ import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 import '../../models/categories_model.dart';
-import '../../widgets/category_button.dart';
+import '../../widgets/category_button_widget.dart';
 
 class VendorsPage extends StatefulWidget {
   final String title;

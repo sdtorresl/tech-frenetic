@@ -55,13 +55,16 @@ class UserProvider extends TechFreneticProvider {
         headers: headers,
       );
 
+      prefs.csrfToken = null;
+      prefs.logoutToken = null;
+      prefs.userId = null;
+      prefs.sessionExpirationDate = DateTime.now();
+      prefs.userId = null;
+      prefs.userEmail = null;
+
+      cleanCookies();
+
       if (response.statusCode == 200) {
-        cleanCookies();
-
-        prefs.csrfToken = null;
-        prefs.logoutToken = null;
-        prefs.userId = null;
-
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');

@@ -7,7 +7,7 @@ import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/expandable_fab.dart';
 import 'home_controller.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
-import 'package:techfrenetic/app/widgets/drawer.dart';
+import 'package:techfrenetic/app/widgets/drawer_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {

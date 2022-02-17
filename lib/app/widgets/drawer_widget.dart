@@ -76,7 +76,7 @@ class CustomDrawer extends StatelessWidget {
               onPressed: () async {
                 UserProvider userProvider = UserProvider();
                 await userProvider.logout();
-                Modular.to.pushReplacementNamed("/login");
+                Modular.to.popAndPushNamed("/login");
               },
             ),
           ),

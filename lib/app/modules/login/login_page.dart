@@ -15,12 +15,8 @@ class LoginPage extends StatefulWidget {
 class LoginPageState extends ModularState<LoginPage, LoginController> {
   bool _isPasswordHidden = true;
   bool _isLoading = false;
-  PackageInfo _packageInfo = PackageInfo(
-    appName: '',
-    packageName: '',
-    version: '',
-    buildNumber: '',
-  );
+  PackageInfo _packageInfo =
+      PackageInfo(appName: '', buildNumber: '', packageName: '', version: '');
   @override
   void initState() {
     super.initState();
@@ -40,8 +36,6 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
       body: Padding(
         padding: const EdgeInsets.all(25),
         child: ListView(
-          //mainAxisAlignment: MainAxisAlignment.start,
-          //crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SafeArea(
               child: SizedBox(
