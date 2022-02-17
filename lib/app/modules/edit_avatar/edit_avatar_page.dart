@@ -59,8 +59,8 @@ class _EditAvatarPageState extends State<EditAvatarPage> {
         },
       ),
       body: SelectAvatarWidget(
-        title1: AppLocalizations.of(context)!.say_hi,
-        title2: AppLocalizations.of(context)!.change_avatar,
+        title: AppLocalizations.of(context)!.say_hi,
+        subtitle: AppLocalizations.of(context)!.change_avatar,
       ),
     );
   }

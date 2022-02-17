@@ -61,8 +61,9 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
         ),
       ),
       body: SelectAvatarWidget(
-        title1: AppLocalizations.of(context)!.say_hi,
-        title2: AppLocalizations.of(context)!.choose_image,
+        title: AppLocalizations.of(context)!.say_hi,
+        subtitle: AppLocalizations.of(context)!.choose_image,
+        destinationRoute: ("/welcome"),
       ),
     );
   }

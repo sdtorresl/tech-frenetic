@@ -6,11 +6,15 @@ import 'package:techfrenetic/app/providers/registration_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class SelectAvatarWidget extends StatefulWidget {
-  final String title1;
-  final String title2;
+  final String title;
+  final String subtitle;
+  final String destinationRoute;
 
   const SelectAvatarWidget(
-      {Key? key, required this.title1, required this.title2})
+      {Key? key,
+      required this.title,
+      required this.subtitle,
+      this.destinationRoute = '/profile'})
       : super(key: key);
 
   @override
@@ -91,26 +95,6 @@ class _SelectAvatarWidgetState extends State<SelectAvatarWidget> {
                     ),
                   ],
                 ),
-                // Column(
-                //   children: [
-                //     const SizedBox(height: 25),
-                //     Text(
-                //       'Upload photo',
-                //       style: Theme.of(context)
-                //           .textTheme
-                //           .headline1!
-                //           .copyWith(fontSize: 13),
-                //     ),
-                //     IconButton(
-                //       onPressed: () => debugPrint('Im working'),
-                //       icon: Icon(
-                //         Icons.add_circle,
-                //         size: 40,
-                //         color: Theme.of(context).primaryColor,
-                //       ),
-                //     ),
-                //   ],
-                // ),
               ],
             ),
             const SizedBox(height: 20),
@@ -186,15 +170,24 @@ class _SelectAvatarWidgetState extends State<SelectAvatarWidget> {
                   setState(() {
                     _isLoading = true;
                   });
-                  bool? created = await articlesProvider.selectAvatar(
+                  bool? changed = await articlesProvider.selectAvatar(
                       useAvatar!, selectedAvatar);
                   setState(() {
                     _isLoading = false;
                   });
-                  if (created!) {
-                    Modular.to.pushNamed("/welcome", arguments: selectedAvatar);
+                  if (changed!) {
+                    debugPrint("Avatar changed!");
                   } else {
-                    debugPrint('no choose avatar');
+                    debugPrint('Avatar wasn\'t changed');
+                  }
+
+                  switch (widget.destinationRoute) {
+                    case '/welcome':
+                      Modular.to
+                          .pushNamed("/welcome", arguments: selectedAvatar);
+                      break;
+                    default:
+                      Modular.to.pop();
                   }
                 }
               : null,
