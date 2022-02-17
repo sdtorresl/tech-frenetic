@@ -22,7 +22,7 @@ class _CertificationsPageState extends State<CertificationsPage> {
 
   @override
   void initState() {
-    _certifications = widget.user.fieldCertifications;
+    _certifications = widget.user.certifications;
     super.initState();
   }
 

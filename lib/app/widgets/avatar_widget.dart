@@ -20,16 +20,12 @@ class AvatarWidget extends StatefulWidget {
 
 class _AvatarWidgetState extends State<AvatarWidget>
     with TickerProviderStateMixin {
-  final prefs = UserPreferences();
-
-  late Future<UserModel?> user;
+  final _prefs = UserPreferences();
+  final UserProvider _userProvider = UserProvider();
   late AnimationController _controller;
 
   @override
   void initState() {
-    UserProvider userProvider = UserProvider();
-    user = userProvider.getUser(widget.userId);
-
     _controller = AnimationController(
         duration: const Duration(milliseconds: 250), vsync: this);
     _controller.forward();
@@ -45,24 +41,27 @@ class _AvatarWidgetState extends State<AvatarWidget>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.userId == prefs.userId && prefs.userAvatar.isNotEmpty) {
+    if (widget.userId == _prefs.userId && _prefs.userAvatar.isNotEmpty) {
       return CircleAvatar(
         radius: widget.radius,
         backgroundColor: Colors.grey[200],
         child: ClipOval(
           child: SvgPicture.asset(
-            "assets/img/avatars/${prefs.userAvatar.isNotEmpty ? prefs.userAvatar : 'avatar-01'}.svg",
-            semanticsLabel: prefs.userName,
+            "assets/img/avatars/${_prefs.userAvatar.isNotEmpty ? _prefs.userAvatar : 'avatar-01'}.svg",
+            semanticsLabel: _prefs.userName,
           ),
         ),
       );
     }
 
     return FutureBuilder(
-      future: user,
+      future: _userProvider.getUser(widget.userId),
       builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
+        UserModel user = UserModel.empty();
+
         if (snapshot.hasData) {
-          UserModel user = snapshot.data!;
+          user = snapshot.data!;
+
           _controller.reset();
           _controller.forward();
 
@@ -73,7 +72,7 @@ class _AvatarWidgetState extends State<AvatarWidget>
               scale: Tween(begin: 0.0, end: 1.0).animate(_controller),
               child: ClipOval(
                 child: SvgPicture.asset(
-                  "assets/img/avatars/${user.fieldUserAvatar.isNotEmpty ? user.fieldUserAvatar : 'avatar-01'}.svg",
+                  "assets/img/avatars/${user.avatar.isNotEmpty ? user.avatar : 'avatar-01'}.svg",
                   semanticsLabel: user.name,
                 ),
               ),

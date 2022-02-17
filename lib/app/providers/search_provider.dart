@@ -14,15 +14,11 @@ class SearchProvider extends TechFreneticProvider {
       var response = await http.get(
         _url,
       );
-      debugPrint(response.statusCode.toString());
-      debugPrint(response.body);
 
       if (response.statusCode == 200) {
-        debugPrint('succesful');
         Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
         WallModel wall = WallModel.fromMap(jsonResponse);
         articles = wall.articles;
-        debugPrint(articles.toString());
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }

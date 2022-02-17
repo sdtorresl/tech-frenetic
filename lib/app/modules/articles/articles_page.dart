@@ -7,6 +7,7 @@ import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/articles/articles_controller.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
+import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/comments_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -38,10 +39,10 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
           Expanded(
             child: FutureBuilder(
               future: _articlesProvider.getArticle(widget.article.id),
-              initialData: article,
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
+              builder: (BuildContext context,
+                  AsyncSnapshot<ArticlesModel> snapshot) {
                 if (snapshot.hasData) {
-                  article = snapshot.data;
+                  article = snapshot.data!;
 
                   return ListView(
                     children: [
@@ -81,9 +82,9 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
 
   Widget _avatar() {
     Widget avatar;
-    if (article.id.isNotEmpty) {
+    if (article.uid != null) {
       avatar = AvatarWidget(
-        userId: widget.article.id,
+        userId: article.uid!,
       );
     } else {
       avatar = const SizedBox();
@@ -92,7 +93,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   }
 
   Widget _dot() {
-    Widget dot;
+    Widget dot = const SizedBox();
     if (article.id != '') {
       dot = SvgPicture.asset(
         'assets/img/icons/dot.svg',
@@ -100,9 +101,8 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
         semanticsLabel: 'Dot',
         color: Theme.of(context).primaryColor,
       );
-    } else {
-      dot = const SizedBox();
     }
+
     return dot;
   }
 
@@ -146,9 +146,9 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     );
   }
 
-  AppBar _articleAppBar(BuildContext context) {
+  TFAppBar _articleAppBar(BuildContext context) {
     ThemeData theme = Theme.of(context);
-    return AppBar(
+    return TFAppBar(
       leading: IconButton(
         icon: const Icon(Icons.close),
         onPressed: () => Navigator.of(context).pop(),
@@ -158,6 +158,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
         style: theme.textTheme.headline5!.copyWith(color: Colors.white),
       ),
       backgroundColor: Theme.of(context).primaryColorDark,
+      foregroundColor: Colors.white,
       actions: [
         IconButton(
           onPressed: () => debugPrint("Like!"),

@@ -25,11 +25,8 @@ class CreateGroupProvider extends TechFreneticProvider {
         body: json.encode(body),
         headers: headers,
       );
-      debugPrint(response.statusCode.toString());
-      debugPrint(response.body);
 
       if (response.statusCode == 200) {
-        debugPrint(response.body);
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');

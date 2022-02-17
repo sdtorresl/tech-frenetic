@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/model.dart';
 
+import 'file_model.dart';
+
 class UserModel extends Model {
   UserModel({
     required this.uid,
@@ -20,24 +22,24 @@ class UserModel extends Model {
     required this.biography,
     required this.birthdate,
     required this.cellphone,
-    required this.fieldCertifications,
+    required this.certifications,
     required this.company,
     required this.dateSavePassword,
-    required this.fieldFollowing,
-    required this.fieldInterests,
+    required this.following,
+    required this.interests,
     required this.name,
-    required this.fieldUserAvatar,
-    required this.userKind,
-    required this.userLocation,
-    required this.userProfession,
-    required this.userType,
+    required this.avatar,
+    required this.kind,
+    required this.location,
+    required this.profession,
+    required this.type,
     required this.useAvatar,
-    required this.userPicture,
+    required this.picture,
   });
 
   int uid;
   String uuid;
-  String langcode;
+  String? langcode;
   String userName;
   String mail;
   DateTime? created;
@@ -50,20 +52,20 @@ class UserModel extends Model {
   DateTime? contentTranslationCreated;
   String biography;
   DateTime? birthdate;
-  String cellphone;
-  List<String> fieldCertifications;
+  String? cellphone;
+  List<String> certifications;
   String company;
   DateTime? dateSavePassword;
-  String fieldFollowing;
-  List<InterestModel> fieldInterests;
+  String following;
+  List<InterestModel> interests;
   String name;
-  String fieldUserAvatar;
-  String userKind;
-  String userLocation;
-  String userProfession;
-  String userType;
+  String avatar;
+  String? kind;
+  String? location;
+  String profession;
+  String type;
   bool useAvatar;
-  String userPicture;
+  List<FileModel> picture;
 
   factory UserModel.fromJson(String str) => UserModel.fromMap(json.decode(str));
 
@@ -101,27 +103,62 @@ class UserModel extends Model {
       biography: Model.returnValue(json["field_biography"], ''),
       birthdate: DateTime.tryParse(birthDateStr),
       cellphone: Model.returnValue(json["field_cellphone"], ''),
-      fieldCertifications: List<String>.from(
+      certifications: List<String>.from(
         Model.returnValue(json["field_certifications"], [], isList: true),
       ),
       company: Model.returnValue(json["field_company"], ''),
       dateSavePassword: DateTime.tryParse(dateSavePasswordStr),
-      fieldFollowing: Model.returnValue(json["field_following"], ''),
-      fieldInterests: json["field_interests"] == null
+      following: Model.returnValue(json["field_following"], ''),
+      interests: json["field_interests"] == null
           ? []
           : List<InterestModel>.from(
               json["field_interests"].map((x) => InterestModel.fromMap(x)),
             ),
       name: Model.returnValue(json["field_name"], ''),
-      fieldUserAvatar: Model.returnValue(json["field_user_avatar"], ''),
-      userKind: Model.returnValue(json["field_user_kind"], ''),
-      userLocation: Model.returnValue(json["field_user_location"], ''),
-      userProfession: Model.returnValue(json["field_user_profession"], ''),
-      userType: Model.returnValue(["field_user_type"], ''),
+      avatar: Model.returnValue(json["field_user_avatar"], ''),
+      kind: Model.returnValue(json["field_user_kind"], ''),
+      location: Model.returnValue(json["field_user_location"], ''),
+      profession: Model.returnValue(json["field_user_profession"], ''),
+      type: Model.returnValue(["field_user_type"], ''),
       useAvatar: Model.returnValue(["field_use_avatar"], true),
-      userPicture: Model.returnValue(json["user_picture"], ''),
+      picture: json["user_picture"] == null
+          ? []
+          : List<FileModel>.from(
+              json["user_picture"].map((x) => FileModel.fromMap(x))),
     );
   }
+
+  factory UserModel.empty() => UserModel(
+        birthdate: null,
+        biography: '',
+        cellphone: '',
+        changed: null,
+        company: '',
+        contentTranslationCreated: null,
+        contentTranslationOutdated: false,
+        contentTranslationSource: '',
+        contentTranslationStatus: false,
+        contentTranslationUid: null,
+        created: null,
+        dateSavePassword: null,
+        defaultLangcode: false,
+        certifications: [],
+        following: '',
+        interests: [],
+        avatar: '',
+        langcode: '',
+        mail: '',
+        name: '',
+        uid: 0,
+        useAvatar: true,
+        kind: '',
+        location: '',
+        userName: '',
+        picture: [],
+        profession: '',
+        type: '',
+        uuid: '',
+      );
 
   Map<String, dynamic> toMap() => {
         "uid": uid,
@@ -145,21 +182,21 @@ class UserModel extends Model {
         "field_birthdate":
             birthdate != null ? birthdate!.toIso8601String() : birthdate,
         "field_cellphone": cellphone,
-        "field_certifications": fieldCertifications,
+        "field_certifications": certifications,
         "field_company": company,
         "field_date_save_password": dateSavePassword != null
             ? dateSavePassword!.toIso8601String()
             : dateSavePassword,
-        "field_following": fieldFollowing,
-        "field_interests": fieldInterests,
+        "field_following": following,
+        "field_interests": interests,
         "field_name": name,
-        "field_user_avatar": fieldUserAvatar,
-        "field_user_kind": userKind,
-        "field_user_location": userLocation,
-        "field_user_profession": userProfession,
-        "field_user_type": userType,
+        "field_user_avatar": avatar,
+        "field_user_kind": kind,
+        "field_user_location": location,
+        "field_user_profession": profession,
+        "field_user_type": type,
         "field_use_avatar": useAvatar,
-        "user_picture": userPicture,
+        "user_picture": List<dynamic>.from(picture.map((x) => x.toMap())),
       };
 
   @override

@@ -169,7 +169,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Widget _interestsBody(BuildContext context) {
-    List<InterestModel>? interests = widget.user.fieldInterests;
+    List<InterestModel>? interests = widget.user.interests;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -229,7 +229,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Widget _certificationsBody(BuildContext context) {
-    List certifications = widget.user.fieldCertifications;
+    List certifications = widget.user.certifications;
 
     List<Widget> certificationsInfo = certifications
         .map(
@@ -375,7 +375,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(widget.user.userProfession),
+                      child: Text(widget.user.profession),
                     ),
                   ],
                 ),

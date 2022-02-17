@@ -33,7 +33,7 @@ class _InterestsPageState extends State<InterestsPage> {
 
   void _loadUserInterests() {
     _categoriesProvider.getInterests().then((interestsCategories) {
-      for (InterestModel interest in widget.user.fieldInterests) {
+      for (InterestModel interest in widget.user.interests) {
         CategoriesModel interestCategory = interestsCategories
             .firstWhere((element) => element.id == interest.id.toString());
         _userInterests.add(interestCategory);

@@ -93,7 +93,7 @@ class UserProvider extends TechFreneticProvider {
         userinfo = UserModel.fromJson(response.body);
         prefs.userName = userinfo.userName;
         prefs.userEmail = userinfo.mail;
-        prefs.userAvatar = userinfo.fieldUserAvatar;
+        prefs.userAvatar = userinfo.avatar;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
@@ -107,15 +107,15 @@ class UserProvider extends TechFreneticProvider {
     UserModel? userinfo;
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
+      debugPrint("Getting user information with id $userId");
+      debugPrint(_url.toString());
 
       var response = await http.get(
         _url,
       );
 
       if (response.statusCode == 200) {
-        debugPrint(response.body);
         userinfo = UserModel.fromJson(response.body);
-        debugPrint(userinfo.toString());
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
@@ -183,7 +183,6 @@ class UserProvider extends TechFreneticProvider {
       );
 
       if (response.statusCode == 200) {
-        debugPrint(response.body);
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
@@ -234,8 +233,6 @@ class UserProvider extends TechFreneticProvider {
           {"target_id": 1}
         ]
       };
-      debugPrint("Body: " + body.toString());
-      debugPrint("Body: " + json.jsonEncode(body.toString()));
 
       Map<String, String> headers = {};
       headers.addAll(jsonHeader);
@@ -250,7 +247,6 @@ class UserProvider extends TechFreneticProvider {
       );
 
       if (response.statusCode == 200) {
-        debugPrint(response.body);
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
