@@ -281,7 +281,7 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
     );
   }
 
-  FutureBuilder<List<ArticlesModel>> _groupResults() {
+  Widget _groupResults() {
     return FutureBuilder(
       future: searchResults.getArticleByTitle(searchText),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -308,7 +308,7 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
     );
   }
 
-  FutureBuilder<List<ArticlesModel>> _articleResults() {
+  Widget _articleResults() {
     return FutureBuilder(
       future: searchResults.getArticleByTitle(searchText),
       builder: (BuildContext context, AsyncSnapshot snapshot) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/widgets/featured_content_widget.dart';
 import 'package:techfrenetic/app/widgets/featured_events_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
@@ -9,6 +10,9 @@ import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/widgets/latest_contents_widget.dart';
 import 'package:techfrenetic/app/widgets/most_popular_widget.dart';
 import 'package:techfrenetic/app/widgets/section_header_widget.dart';
+
+import '../../models/categories_model.dart';
+import '../../widgets/category_button.dart';
 
 class SkillsPage extends StatefulWidget {
   const SkillsPage({Key? key}) : super(key: key);
@@ -19,6 +23,7 @@ class SkillsPage extends StatefulWidget {
 
 class _SkillsPageState extends State<SkillsPage> {
   final ArticlesProvider _articlesProvideer = ArticlesProvider();
+  final CategoriesProvider _categoriesProvider = CategoriesProvider();
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +33,7 @@ class _SkillsPageState extends State<SkillsPage> {
           color: Theme.of(context).buttonTheme.colorScheme!.secondary,
           child: Padding(
             padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 20.0),
+                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
             child: Column(
               children: [
                 const SizedBox(height: 30),
@@ -55,156 +60,34 @@ class _SkillsPageState extends State<SkillsPage> {
                       .copyWith(color: Colors.white, fontSize: 25),
                 ),
                 const SizedBox(height: 30),
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () => debugPrint('im working'),
-                          child: Text(
-                            'Aplications',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(color: Colors.white),
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context).primaryColor),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                                side: BorderSide(
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => debugPrint('im working'),
-                          child: Text(
-                            'Cloud',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(color: Colors.white),
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context).primaryColor),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                                side: BorderSide(
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => debugPrint('im working'),
-                          child: Text(
-                            'Cybersecurity',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(color: Colors.white),
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context).primaryColor),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                                side: BorderSide(
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ElevatedButton(
-                          onPressed: () => debugPrint('im working'),
-                          child: Text(
-                            'Networking',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(color: Colors.white),
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context).primaryColor),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                                side: BorderSide(
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => debugPrint('im working'),
-                          child: Text(
-                            'Servers & PCs',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(color: Colors.white),
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context).primaryColor),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                                side: BorderSide(
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                        ElevatedButton(
-                          onPressed: () => debugPrint('im working'),
-                          child: Text(
-                            'Storage',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(color: Colors.white),
-                          ),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all(
-                                Theme.of(context).primaryColor),
-                            shape: MaterialStateProperty.all<
-                                RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero,
-                                side: BorderSide(
-                                    color: Theme.of(context).primaryColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
+                FutureBuilder(
+                  future: _categoriesProvider.getCategories(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<CategoriesModel>> snapshot) {
+                    if (snapshot.hasData) {
+                      List<Widget> categories;
+                      categories = snapshot.data!
+                          .map((category) =>
+                              CategoryButtonWidget(category: category))
+                          .toList();
+
+                      return Wrap(
+                        spacing: 10,
+                        runSpacing: 10,
+                        alignment: WrapAlignment.center,
+                        children: [
+                          ...categories,
+                        ],
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
                   decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 15),
                     suffixIcon: Icon(Icons.search,
                         color: Theme.of(context).unselectedWidgetColor),
                     hintText: AppLocalizations.of(context)!.search,
