@@ -29,7 +29,7 @@ class MyProfilePage extends StatefulWidget {
 
 class _MyProfilePageState extends State<MyProfilePage> {
   final _prefs = UserPreferences();
-  CategoriesProvider _categoriesProvicer = CategoriesProvider();
+  final CategoriesProvider _categoriesProvicer = CategoriesProvider();
   bool editable = false;
 
   @override

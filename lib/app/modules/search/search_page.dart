@@ -5,8 +5,11 @@ import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/search/search_controller.dart';
 import 'package:techfrenetic/app/providers/search_provider.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
+import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/save_content_widget.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
+
+import '../../models/user_model.dart';
 
 enum SEARCH_CATEGORIES { content, users, groups, vendors }
 
@@ -59,7 +62,7 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
     );
   }
 
-  DefaultTabController _searchTabs() {
+  Widget _searchTabs() {
     List<Tab> tabs = List.generate(
       SEARCH_CATEGORIES.values.length,
       (index) {
@@ -246,24 +249,23 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
             ],
           );
         } else {
-          return Container(width: 50, height: 50, color: Colors.redAccent);
+          return const SizedBox.shrink();
         }
       },
     );
   }
 
-  FutureBuilder<List<ArticlesModel>> _userResults() {
+  Widget _userResults() {
     return FutureBuilder(
-      future: searchResults.getArticleByTitle(searchText),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      future: searchResults.searchUsers(searchText),
+      builder: (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
         if (snapshot.hasData) {
           debugPrint(snapshot.data.toString());
-          List<ArticlesModel> results = snapshot.data ?? [];
+          List<UserModel> users = snapshot.data!;
           List<Widget> resultsWidgets = [];
-          debugPrint(results.toString());
 
-          for (ArticlesModel results in results) {
-            resultsWidgets.add(SaveContent(article: results));
+          for (UserModel user in users) {
+            resultsWidgets.add(_userItem(user, context));
           }
 
           return Column(
@@ -273,7 +275,7 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
             ],
           );
         } else {
-          return Container(width: 50, height: 50, color: Colors.redAccent);
+          return const SizedBox.shrink();
         }
       },
     );
@@ -300,7 +302,7 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
             ],
           );
         } else {
-          return Container(width: 50, height: 50, color: Colors.redAccent);
+          return const SizedBox.shrink();
         }
       },
     );
@@ -360,7 +362,36 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
       ),
     );
   }
-  // Widget resulstByBoxSelected(){
 
-  // }
+  Widget _userItem(UserModel user, BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Card(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            children: [
+              AvatarWidget(userId: user.uid.toString()),
+              const SizedBox(
+                width: 20,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    user.name,
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
+                  Text(
+                    user.userName,
+                    style: Theme.of(context).textTheme.bodyText2,
+                  )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }

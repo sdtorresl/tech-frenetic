@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/model.dart';
 
 import 'file_model.dart';
@@ -37,35 +36,35 @@ class UserModel extends Model {
     required this.picture,
   });
 
-  int uid;
-  String uuid;
-  String? langcode;
-  String userName;
-  String mail;
-  DateTime? created;
-  DateTime? changed;
-  bool defaultLangcode;
-  String contentTranslationSource;
   bool contentTranslationOutdated;
-  DateTime? contentTranslationUid;
   bool contentTranslationStatus;
-  DateTime? contentTranslationCreated;
-  String biography;
-  DateTime? birthdate;
-  String? cellphone;
-  List<String> certifications;
-  String company;
-  DateTime? dateSavePassword;
-  String following;
-  List<InterestModel> interests;
-  String name;
-  String avatar;
-  String? kind;
-  String? location;
-  String profession;
-  String type;
+  bool defaultLangcode;
   bool useAvatar;
+  DateTime? birthdate;
+  DateTime? changed;
+  DateTime? contentTranslationCreated;
+  DateTime? contentTranslationUid;
+  DateTime? created;
+  DateTime? dateSavePassword;
+  int uid;
   List<FileModel> picture;
+  List<InterestModel> interests;
+  List<String> certifications;
+  String avatar;
+  String biography;
+  String company;
+  String contentTranslationSource;
+  String? following;
+  String name;
+  String profession;
+  String? type;
+  String userName;
+  String uuid;
+  String? cellphone;
+  String? kind;
+  String? langcode;
+  String? location;
+  String? mail;
 
   factory UserModel.fromJson(String str) => UserModel.fromMap(json.decode(str));
 

@@ -20,7 +20,7 @@ class _InterestsPageState extends State<InterestsPage> {
   final CategoriesProvider _categoriesProvider = CategoriesProvider();
   List<CategoriesModel> _availableInterests = [CategoriesModel.empty()];
   late String _selectedInterest;
-  List<CategoriesModel> _userInterests = [];
+  final List<CategoriesModel> _userInterests = [];
   bool _isSaving = false;
 
   @override

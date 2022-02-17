@@ -16,7 +16,7 @@ class CertificationsPage extends StatefulWidget {
 class _CertificationsPageState extends State<CertificationsPage> {
   final TextEditingController _certificationsController =
       TextEditingController();
-  UserProvider _userProvider = UserProvider();
+  final UserProvider _userProvider = UserProvider();
   List<String> _certifications = [];
   bool _isSaving = false;
 
