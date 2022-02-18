@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_controller.dart';
@@ -14,6 +15,8 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState
     extends ModularState<ForgotPasswordPage, ForgotPasswordController> {
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,49 +53,65 @@ class _ForgotPasswordPageState
                   stream: store.emailStream,
                   builder:
                       (BuildContext context, AsyncSnapshot<String> snapshot) {
-                    return TextFormField(
-                      decoration: InputDecoration(
-                        hintText: 'Your Email',
-                        hintStyle: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(color: Theme.of(context).hintColor),
-                        errorText: snapshot.hasError
-                            ? snapshot.error.toString()
-                            : null,
-                        errorStyle: Theme.of(context)
-                            .textTheme
-                            .headline4!
-                            .copyWith(color: Colors.red),
-                      ),
-                      onChanged: store.changeEmail,
+                    return Column(
+                      children: [
+                        TextFormField(
+                          decoration: InputDecoration(
+                            hintText: AppLocalizations.of(context)!.email,
+                            hintStyle: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(color: Theme.of(context).hintColor),
+                            errorText: snapshot.hasError
+                                ? snapshot.error.toString()
+                                : null,
+                            errorStyle: Theme.of(context)
+                                .textTheme
+                                .headline4!
+                                .copyWith(color: Colors.red),
+                          ),
+                          onChanged: store.changeEmail,
+                        ),
+                        const SizedBox(height: 50),
+                        ElevatedButton(
+                          onPressed: !_isLoading && snapshot.hasData
+                              ? () => _recoverPassword()
+                              : null,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              _isLoading
+                                  ? Container(
+                                      height: 20,
+                                      width: 20,
+                                      margin: const EdgeInsets.only(right: 20),
+                                      child: const CircularProgressIndicator(
+                                          color: Colors.white),
+                                    )
+                                  : const SizedBox(),
+                              Text(
+                                AppLocalizations.of(context)!.send_email,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .button!
+                                    .copyWith(color: Colors.white),
+                              ),
+                            ],
+                          ),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<
+                                RoundedRectangleBorder>(
+                              const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 30),
+                      ],
                     );
                   },
                 ),
-                const SizedBox(height: 50),
-                ElevatedButton(
-                  onPressed: () => debugPrint('hola'),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        AppLocalizations.of(context)!.send_email,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline1!
-                            .copyWith(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                  style: ButtonStyle(
-                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                      const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.zero,
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 30),
                 Center(
                   child: GestureDetector(
                     child: Text(
@@ -111,5 +130,39 @@ class _ForgotPasswordPageState
         ],
       ),
     );
+  }
+
+  _recoverPassword() {
+    SnackBar snackBar = SnackBar(
+      content: Text(AppLocalizations.of(context)!.password_reset_error),
+      action: SnackBarAction(
+        label: AppLocalizations.of(context)!.button_accept,
+        onPressed: () => Modular.to.pop(),
+      ),
+    );
+
+    setState(() {
+      _isLoading = true;
+    });
+
+    store.recoverPassword().then((value) {
+      if (value) {
+        snackBar = SnackBar(
+          content:
+              Text(AppLocalizations.of(context)!.password_reset_confirmation),
+          action: SnackBarAction(
+            label: AppLocalizations.of(context)!.button_accept,
+            onPressed: () => Modular.to.navigate('/login'),
+          ),
+        );
+      }
+    }).onError((error, stackTrace) {
+      debugPrint(error.toString());
+    }).whenComplete(() {
+      setState(() {
+        _isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
   }
 }

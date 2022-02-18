@@ -258,11 +258,10 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
                   : const SizedBox(),
               Text(
                 AppLocalizations.of(context)!.login_title,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w700,
-                    fontSize: 20,
-                    fontFamily: 'NunitoSan',
-                    color: Colors.white),
+                style: Theme.of(context)
+                    .textTheme
+                    .button!
+                    .copyWith(color: Colors.white),
               ),
             ],
           ),

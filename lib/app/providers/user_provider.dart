@@ -76,6 +76,31 @@ class UserProvider extends TechFreneticProvider {
     return false;
   }
 
+  Future<bool> recoverPassword(String email) async {
+    Uri _url = Uri.parse("$baseUrl/api/user/lost-password?_format=json");
+    debugPrint("Rcovering password for user $email...");
+    debugPrint(_url.toString());
+
+    try {
+      String body = json.jsonEncode({"lang": "en", "mail": email});
+      var response = await http.post(
+        _url,
+        body: body,
+        headers: jsonHeader,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {}
+
+    return false;
+  }
+
   Future<UserModel?> getLoggedUser() async {
     String? userId = prefs.userId;
     UserModel? userinfo;
