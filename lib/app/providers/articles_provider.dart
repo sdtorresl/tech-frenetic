@@ -14,6 +14,9 @@ class ArticlesProvider extends TechFreneticProvider {
       Uri _url = Uri.parse("$baseUrl/api/$locale/v1/wall?filters=yes");
       var response = await http.get(_url);
 
+      debugPrint("Getting wall information...");
+      debugPrint(_url.toString());
+
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
         WallModel wall = WallModel.fromMap(jsonResponse);

@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 final ThemeData techFreneticTheme = ThemeData(
   brightness: Brightness.light,
   primaryColor: const Color(0xff006ee8),
-  primaryColorBrightness: Brightness.dark,
   primaryColorLight: const Color(0xFFF5F9FF),
   primaryColorDark: const Color(0xff004999),
   canvasColor: const Color(0xfffafafa),
@@ -65,9 +64,9 @@ final ThemeData techFreneticTheme = ThemeData(
     hoverColor: Color(0x0a000000),
     colorScheme: ColorScheme(
       primary: Color(0xff006ee8),
-      primaryVariant: Color(0xff004999),
+      primaryContainer: Color(0xff004999),
       secondary: Color(0xff0079ff),
-      secondaryVariant: Color(0xff004999),
+      secondaryContainer: Color(0xff004999),
       surface: Color(0xffffffff),
       background: Color(0xff99c9ff),
       error: Color(0xffd32f2f),
