@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
@@ -30,12 +31,33 @@ class MyProfilePage extends StatefulWidget {
 class _MyProfilePageState extends State<MyProfilePage> {
   final _prefs = UserPreferences();
   final CategoriesProvider _categoriesProvicer = CategoriesProvider();
+  final ArticlesProvider _articlesProvider = ArticlesProvider();
+
+  int articlesCount = 0;
+  int viewedCount = 0;
+  int postsCount = 0;
+
   bool editable = false;
 
   @override
   void initState() {
     editable = _prefs.userId == widget.user.uid.toString();
     super.initState();
+    loadCounts();
+  }
+
+  void loadCounts() async {
+    _articlesProvider.getArticlesByUser(_prefs.userName ?? '').then((articles) {
+      setState(() {
+        articlesCount = articles.length;
+      });
+    });
+
+    _articlesProvider.getPostsByUser(_prefs.userName ?? '').then((posts) {
+      setState(() {
+        postsCount = posts.length;
+      });
+    });
   }
 
   @override
@@ -414,38 +436,18 @@ class _MyProfilePageState extends State<MyProfilePage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _counterBox(
-            AppLocalizations.of(context)!.articles,
-            10,
-            // () => Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => const ProfilePage(selectedPage: 1),
-            //),
-          ),
-          _counterBox(AppLocalizations.of(context)!.your_profile, 0
-              //, () => debugPrint("Profile")
-              ),
-          _counterBox(
-            AppLocalizations.of(context)!.post,
-            100,
-            //() => Navigator.push(
-            //   context,
-            //   MaterialPageRoute(
-            //     builder: (context) => const ProfilePage(selectedPage: 1),
-            //   ),
-            // ),
-          ),
+          _counterBox(AppLocalizations.of(context)!.articles, articlesCount,
+              () => debugPrint("Hola")),
+          _counterBox(AppLocalizations.of(context)!.your_profile, viewedCount,
+              () => debugPrint("Profile")),
+          _counterBox(AppLocalizations.of(context)!.post, postsCount,
+              () => debugPrint("Hola")),
         ],
       ),
     );
   }
 
-  Widget _counterBox(
-    String text,
-    int counter,
-    /*void Function() onPressed*/
-  ) {
+  Widget _counterBox(String text, int counter, void Function() onPressed) {
     return Flexible(
       flex: 1,
       child: Container(
@@ -462,7 +464,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
           ),
         ),
         child: GestureDetector(
-          onTap: null,
+          onTap: onPressed,
           child: Column(
             children: [
               Padding(

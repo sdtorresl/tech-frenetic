@@ -101,6 +101,63 @@ class ArticlesProvider extends TechFreneticProvider {
     return [];
   }
 
+  Future<List<ArticlesModel>> getArticlesByUser(String username) async {
+    List<ArticlesModel> articles = [];
+
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/wall?filters=yes");
+      var response = await http.get(_url);
+
+      debugPrint("Getting articles by user $username ...");
+      debugPrint(_url.toString());
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
+        WallModel wall = WallModel.fromMap(jsonResponse);
+
+        for (ArticlesModel content in wall.articles) {
+          if (content.type == 'Article' && username == content.user) {
+            articles.add(content);
+          }
+        }
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return articles;
+  }
+
+  Future<List<ArticlesModel>> getPostsByUser(String username) async {
+    List<ArticlesModel> posts = [];
+
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/wall?filters=yes");
+      var response = await http.get(_url);
+
+      debugPrint("Getting posts by user $username...");
+      debugPrint(_url.toString());
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
+        WallModel wall = WallModel.fromMap(jsonResponse);
+
+        posts = wall.articles
+            .where(
+                (content) => content.type == 'Post' && username == content.user)
+            .toList();
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return posts;
+  }
+
   Future<bool> addPost(String message) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/node?_format=json");

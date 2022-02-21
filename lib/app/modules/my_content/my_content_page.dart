@@ -55,17 +55,13 @@ class _MyContentPageState extends State<MyContentPage> {
                   ),
                 ),
                 FutureBuilder(
-                  future: _articlesProvideer.getWall(),
+                  future: _articlesProvideer
+                      .getArticlesByUser(_prefs.userName ?? ' '),
                   builder: (BuildContext context, AsyncSnapshot snapshot) {
                     int number = 0;
                     if (snapshot.hasData) {
                       List<ArticlesModel> contents = snapshot.data ?? [];
-                      for (ArticlesModel content in contents) {
-                        if (content.type == 'Article' &&
-                            _prefs.userName == content.user) {
-                          number++;
-                        }
-                      }
+                      number = contents.length;
                     }
                     return Text(
                         '$number ' + AppLocalizations.of(context)!.articles);
@@ -75,7 +71,7 @@ class _MyContentPageState extends State<MyContentPage> {
             ),
           ),
           FutureBuilder(
-            future: _articlesProvideer.getWall(),
+            future: _articlesProvideer.getArticlesByUser(_prefs.userName ?? ''),
             builder: (BuildContext context,
                 AsyncSnapshot<List<ArticlesModel>> snapshot) {
               if (snapshot.hasData) {
@@ -83,13 +79,9 @@ class _MyContentPageState extends State<MyContentPage> {
                 List<Widget> savedPostsWidgets = [];
 
                 for (ArticlesModel content in contents) {
-                  if (content.type == 'Article' &&
-                      _prefs.userName == content.user) {
-                    debugPrint(content.toString());
-                    savedPostsWidgets.add(
-                      SaveContent(article: content),
-                    );
-                  }
+                  savedPostsWidgets.add(
+                    SaveContent(article: content),
+                  );
                 }
 
                 return Column(
@@ -100,7 +92,9 @@ class _MyContentPageState extends State<MyContentPage> {
                   ],
                 );
               } else {
-                return const Center(child: CircularProgressIndicator());
+                return const SizedBox(
+                    height: 200,
+                    child: Center(child: CircularProgressIndicator()));
               }
             },
           ),
