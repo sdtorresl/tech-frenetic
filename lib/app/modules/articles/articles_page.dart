@@ -1,17 +1,19 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter/material.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/articles/articles_controller.dart';
+import 'package:techfrenetic/app/modules/articles/articles_image_page.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/comments_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import 'package:flutter_html/flutter_html.dart';
 
 class ArticlesPage extends StatefulWidget {
   final ArticlesModel article;
@@ -33,7 +35,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _articleAppBar(context),
+      appBar: _articleAppBar(),
       body: Column(
         children: <Widget>[
           Expanded(
@@ -46,11 +48,11 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
 
                   return ListView(
                     children: [
-                      _articleTitle(context),
-                      _articleHeader(context),
-                      _articleImage(context),
-                      _articleSummary(context),
-                      _articleInteractions(context),
+                      _articleTitle(),
+                      _articleHeader(),
+                      _articleImage(),
+                      _articleSummary(),
+                      _articleInteractions(),
                       CommentsWidget(articleId: widget.article.id),
                     ],
                   );
@@ -68,12 +70,29 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     );
   }
 
-  Widget _articleImage(BuildContext context) {
+  Widget _articleImage() {
     if (article.image != null) {
-      return CachedNetworkImage(
-        placeholder: (context, value) => const LinearProgressIndicator(),
-        errorWidget: (context, value, e) => const Icon(Icons.error),
-        imageUrl: article.image!,
+      return InkWell(
+        onTap: () {
+          Navigator.of(context).push(
+            MaterialPageRoute<void>(
+              builder: (context) => ArticleImagePage(
+                url: article.image!,
+              ),
+            ),
+          );
+        },
+        child: SizedBox(
+          height: 250,
+          child: Hero(
+            tag: 'articleImage',
+            child: CachedNetworkImage(
+              placeholder: (context, value) => const LinearProgressIndicator(),
+              errorWidget: (context, value, e) => const Icon(Icons.error),
+              imageUrl: article.image!,
+            ),
+          ),
+        ),
       );
     } else {
       return const SizedBox();
@@ -106,7 +125,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     return dot;
   }
 
-  Widget _articleHeader(BuildContext context) {
+  Widget _articleHeader() {
     return Padding(
       padding: const EdgeInsets.only(bottom: 15, left: 20, right: 20),
       child: Row(
@@ -146,7 +165,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     );
   }
 
-  TFAppBar _articleAppBar(BuildContext context) {
+  PreferredSizeWidget _articleAppBar() {
     ThemeData theme = Theme.of(context);
     return TFAppBar(
       leading: IconButton(
@@ -172,7 +191,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     );
   }
 
-  Widget _articleTitle(BuildContext context) {
+  Widget _articleTitle() {
     ThemeData theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.all(15),
@@ -183,7 +202,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     );
   }
 
-  Widget _articleSummary(BuildContext context) {
+  Widget _articleSummary() {
     Widget _summary = const SizedBox(height: 15);
     if (article.summary!.isNotEmpty) {
       _summary = Padding(
@@ -197,7 +216,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     return _summary;
   }
 
-  Widget _articleInteractions(BuildContext context) {
+  Widget _articleInteractions() {
     Widget _comments = const SizedBox();
     if (article.comments != '0' && article.comments == '1') {
       _comments = Row(
