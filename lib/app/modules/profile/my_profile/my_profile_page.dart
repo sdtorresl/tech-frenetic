@@ -5,23 +5,22 @@ import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 
-import '../certifications/certifications.dart';
-import '../edit_name/edit_name_page.dart';
-import '../edit_sumary/edit_sumary.dart';
-import '../interests/interests_page.dart';
+import '../../certifications/certifications.dart';
+import '../../edit_name/edit_name_page.dart';
+import '../../edit_sumary/edit_sumary.dart';
+import '../../interests/interests_page.dart';
 
 class MyProfilePage extends StatefulWidget {
-  final UserModel user;
-  final int avatarId;
+  final Function(String)? callback;
 
   const MyProfilePage({
     Key? key,
-    required this.user,
-    required this.avatarId,
+    this.callback,
   }) : super(key: key);
 
   @override
@@ -29,19 +28,20 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
-  final _prefs = UserPreferences();
-  final CategoriesProvider _categoriesProvicer = CategoriesProvider();
   final ArticlesProvider _articlesProvider = ArticlesProvider();
-
-  int articlesCount = 0;
-  int viewedCount = 0;
-  int postsCount = 0;
+  final CategoriesProvider _categoriesProvicer = CategoriesProvider();
+  final UserPreferences _prefs = UserPreferences();
+  final UserProvider _userProvider = UserProvider();
 
   bool editable = false;
+  int articlesCount = 0;
+  int postsCount = 0;
+  int viewedCount = 0;
+  UserModel user = UserModel.empty();
 
   @override
   void initState() {
-    editable = _prefs.userId == widget.user.uid.toString();
+    // editable = _prefs.userId == user.uid.toString();
     super.initState();
     loadCounts();
   }
@@ -62,7 +62,30 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> name = widget.user.name.split(' ');
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: FutureBuilder(
+        future: _userProvider.getLoggedUser(),
+        builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
+          if (snapshot.hasData) {
+            user = snapshot.data!;
+            return _profileView();
+          }
+
+          return const Center(
+            child: SizedBox(
+              child: CircularProgressIndicator(),
+              width: 35.0,
+              height: 35.0,
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  _profileView() {
+    List<String> name = user.name.split(' ');
     Widget nameWidget = const SizedBox();
     if (name.length < 2) {
       nameWidget = Stack(
@@ -70,7 +93,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
           Center(
             child: HighlightContainer(
               child: Text(
-                widget.user.name,
+                user.name,
                 style: Theme.of(context).textTheme.headline1!.copyWith(
                       color: Theme.of(context).indicatorColor,
                     ),
@@ -177,7 +200,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
         children: [
           _dashboardHeader(context),
           const SizedBox(height: 20),
-          _summaryBox(context),
+          _dashboard(context),
           const SizedBox(height: 20),
           _aboutBody(context),
           const SizedBox(height: 20),
@@ -191,7 +214,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Widget _interestsBody(BuildContext context) {
-    List<InterestModel>? interests = widget.user.interests;
+    List<InterestModel>? interests = user.interests;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -204,7 +227,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return InterestsPage(user: widget.user);
+                  return InterestsPage(user: user);
                 },
               );
             },
@@ -251,7 +274,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Widget _certificationsBody(BuildContext context) {
-    List certifications = widget.user.certifications;
+    List certifications = user.certifications;
 
     List<Widget> certificationsInfo = certifications
         .map(
@@ -272,7 +295,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               showDialog(
                 context: context,
                 builder: (BuildContext context) {
-                  return CertificationsPage(user: widget.user);
+                  return CertificationsPage(user: user);
                 },
               );
             },
@@ -383,7 +406,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
               GestureDetector(
                 onTap: () => Modular.to.pushNamed('/edit_avatar'),
                 child: AvatarWidget(
-                  userId: widget.avatarId.toString(),
+                  userId: user.uid.toString(),
                   radius: 40,
                 ),
               ),
@@ -397,7 +420,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   children: [
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(widget.user.profession),
+                      child: Text(user.profession),
                     ),
                   ],
                 ),
@@ -409,7 +432,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     );
   }
 
-  Widget _summaryBox(BuildContext context) {
+  Widget _dashboard(BuildContext context) {
     return Container(
       margin: const EdgeInsets.all(10),
       decoration: BoxDecoration(
@@ -436,8 +459,16 @@ class _MyProfilePageState extends State<MyProfilePage> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _counterBox(AppLocalizations.of(context)!.articles, articlesCount,
-              () => debugPrint("Hola")),
+          _counterBox(
+            AppLocalizations.of(context)!.articles,
+            articlesCount,
+            () {
+              if (widget.callback != null) {
+                widget.callback!('/profile/content');
+              }
+              Modular.to.navigate('/profile/content');
+            },
+          ),
           _counterBox(AppLocalizations.of(context)!.your_profile, viewedCount,
               () => debugPrint("Profile")),
           _counterBox(AppLocalizations.of(context)!.post, postsCount,

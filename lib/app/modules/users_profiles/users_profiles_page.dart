@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
-import 'package:techfrenetic/app/modules/my_profile/my_profile_page.dart';
+
+import '../profile/my_profile/my_profile_page.dart';
 
 class UsersProfilesPage extends StatefulWidget {
   final ArticlesModel article;
@@ -30,10 +31,14 @@ class _UsersProfilesPageState extends State<UsersProfilesPage> {
           UserModel user;
           if (snapshot.hasData) {
             user = snapshot.data;
-            return MyProfilePage(
-              user: user,
-              avatarId: user.uid,
-            );
+
+            return SizedBox();
+
+            //TODO: Fix this!!
+            // return MyProfilePage(
+            //   user: user,
+            //   avatarId: user.uid,
+            // );
           } else {
             return const SizedBox();
           }

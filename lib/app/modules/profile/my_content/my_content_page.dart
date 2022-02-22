@@ -18,7 +18,8 @@ class _MyContentPageState extends State<MyContentPage> {
   Widget build(BuildContext context) {
     ArticlesProvider _articlesProvideer = ArticlesProvider();
     final _prefs = UserPreferences();
-    return Padding(
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
       padding: const EdgeInsets.all(10.0),
       child: ListView(
         children: [

@@ -1,6 +1,7 @@
-import 'package:techfrenetic/app/modules/my_account/my_account_controller.dart';
-import 'package:techfrenetic/app/modules/my_account/my_account_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+
+import './my_account_controller.dart';
+import 'my_account_page.dart';
 
 class MyAccountModule extends Module {
   @override

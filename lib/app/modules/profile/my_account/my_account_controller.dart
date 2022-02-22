@@ -2,7 +2,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
-import '../../common/validators.dart';
+
+import '../../../common/validators.dart';
 
 class MyAccountController extends Disposable {
   final _emailController = BehaviorSubject<String>();

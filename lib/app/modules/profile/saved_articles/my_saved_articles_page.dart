@@ -5,19 +5,20 @@ import 'package:techfrenetic/app/providers/saved_articles_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/widgets/save_post_widget.dart';
 
-class SavedArticles extends StatefulWidget {
-  const SavedArticles({Key? key}) : super(key: key);
+class MySavedArticlesPage extends StatefulWidget {
+  const MySavedArticlesPage({Key? key}) : super(key: key);
 
   @override
-  _SavedArticlesState createState() => _SavedArticlesState();
+  _MySavedArticlesPageState createState() => _MySavedArticlesPageState();
 }
 
-class _SavedArticlesState extends State<SavedArticles> {
+class _MySavedArticlesPageState extends State<MySavedArticlesPage> {
   @override
   Widget build(BuildContext context) {
     SaveArticlesProvider _articlesProvideer = SaveArticlesProvider();
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      padding: const EdgeInsets.all(10.0),
       child: ListView(
         scrollDirection: Axis.vertical,
         shrinkWrap: true,

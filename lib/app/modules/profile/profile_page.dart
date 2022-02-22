@@ -1,21 +1,21 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:google_nav_bar/google_nav_bar.dart';
+
+import 'my_account/my_account_page.dart';
+import 'my_content/my_content_page.dart';
+import 'my_profile/my_profile_page.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:techfrenetic/app/modules/my_account/my_account_page.dart';
-import 'package:techfrenetic/app/modules/my_profile/my_profile_page.dart';
-import 'package:techfrenetic/app/modules/my_content/my_content_page.dart';
-import 'package:techfrenetic/app/widgets/my_activity_widget.dart';
-import 'package:techfrenetic/app/widgets/saved_articles_widget.dart';
-import 'package:techfrenetic/app/providers/user_provider.dart';
+import 'package:flutter/material.dart';
+import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
+import 'package:techfrenetic/app/modules/profile/my_activity/my_activity_page.dart';
+import 'package:techfrenetic/app/modules/profile/saved_articles/my_saved_articles_page.dart';
 
 class ProfilePage extends StatefulWidget {
-  final int selectedPage;
   final String title;
+
   const ProfilePage({
     Key? key,
-    required this.selectedPage,
     this.title = 'ProfilePage',
   }) : super(key: key);
 
@@ -23,7 +23,24 @@ class ProfilePage extends StatefulWidget {
   ProfilePageState createState() => ProfilePageState();
 }
 
-class ProfilePageState extends State<ProfilePage> {
+class ProfilePageState extends State<ProfilePage>
+    with TickerProviderStateMixin {
+  late final TabController _controller;
+
+  final List<String> _routes = [
+    '/profile/profile',
+    '/profile/content',
+    '/profile/activity',
+    '/profile/saved-articles',
+    '/profile/my-account'
+  ];
+
+  @override
+  void initState() {
+    _controller = TabController(length: _routes.length, vsync: this);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<GButton> tabs = <GButton>[
@@ -46,95 +63,50 @@ class ProfilePageState extends State<ProfilePage> {
       GButton(
         icon: Icons.manage_accounts,
         text: AppLocalizations.of(context)!.my_account,
-        onPressed: () => Modular.to.pushNamed('/profile/my_account'),
       ),
     ];
 
-    return DefaultTabController(
-      initialIndex: widget.selectedPage,
-      length: tabs.length,
-      // The Builder widget is used to have a different BuildContext to access
-      // closest DefaultTabController.
-      child: Builder(builder: (BuildContext context) {
-        final TabController tabController = DefaultTabController.of(context)!;
-
-        return Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(15),
-              child: GNav(
-                tabBorderRadius: 50,
-                tabActiveBorder: Border.all(
-                  color: Theme.of(context).chipTheme.backgroundColor!,
-                  width: 1,
-                ),
-                tabBorder: Border.all(color: Colors.transparent, width: 0),
-                duration: const Duration(milliseconds: 200),
-                gap: 8,
-                color: Theme.of(context).chipTheme.labelStyle!.color!,
-                activeColor: Colors.white,
-                iconSize: 24,
-                tabBackgroundColor:
-                    Theme.of(context).chipTheme.backgroundColor!,
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                tabs: tabs,
-                onTabChange: (index) => tabController.animateTo(index),
-              ),
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(15),
+          child: GNav(
+            selectedIndex: _controller.index,
+            tabBorderRadius: 50,
+            tabActiveBorder: Border.all(
+              color: Theme.of(context).chipTheme.backgroundColor!,
+              width: 1,
             ),
-            Expanded(
-              child: TabBarView(children: [
-                _myProfile(context),
-                _myContent(context),
-                _myActivity(context),
-                _savedArticles(context),
-                _myAccount(context)
-              ]),
-            ),
-          ],
-        );
-      }),
-    );
-  }
-
-  Widget _myProfile(BuildContext context) {
-    UserProvider _userProvider = UserProvider();
-
-    return FutureBuilder(
-      future: _userProvider.getLoggedUser(),
-      builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
-        if (snapshot.hasData) {
-          UserModel user = snapshot.data!;
-          return MyProfilePage(
-            user: user,
-            avatarId: user.uid,
-          );
-        }
-
-        return const Center(
-          child: SizedBox(
-            child: CircularProgressIndicator(),
-            width: 35.0,
-            height: 35.0,
+            tabBorder: Border.all(color: Colors.transparent, width: 0),
+            duration: const Duration(milliseconds: 200),
+            gap: 8,
+            color: Theme.of(context).chipTheme.labelStyle!.color!,
+            activeColor: Colors.white,
+            iconSize: 24,
+            tabBackgroundColor: Theme.of(context).chipTheme.backgroundColor!,
+            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+            tabs: tabs,
+            onTabChange: (index) {
+              _controller.index = index;
+              Modular.to.navigate(_routes[index],
+                  arguments: {'callback': changeSelectedPage});
+            },
           ),
-        );
-      },
+        ),
+        Expanded(
+          child: RouterOutlet(),
+        ),
+      ],
     );
   }
 
-  Widget _myContent(BuildContext context) {
-    return const MyContentPage();
-  }
+  void changeSelectedPage(String route) {
+    debugPrint("Changing route $route");
+    int index = _routes.contains(route) ? _routes.indexOf(route) : 0;
+    debugPrint("New index = $index");
 
-  Widget _myActivity(BuildContext context) {
-    return const MyActivity();
-  }
-
-  Widget _savedArticles(BuildContext context) {
-    return const SavedArticles();
-  }
-
-  Widget _myAccount(BuildContext context) {
-    return const MyAccountPage();
+    setState(() {
+      _controller.index = index;
+    });
   }
 }

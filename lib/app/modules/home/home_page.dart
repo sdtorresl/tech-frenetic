@@ -20,7 +20,12 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends ModularState<HomePage, HomeController> {
-  final List<String> _pages = ['/community', '/skills', '/vendors', '/profile'];
+  final List<String> _pages = [
+    '/community',
+    '/skills',
+    '/vendors',
+    '/profile/profile'
+  ];
   final prefs = UserPreferences();
 
   int _currentIndex = 0;
@@ -190,6 +195,6 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
     setState(() {
       _currentIndex = index;
     });
-    Modular.to.navigate(_pages[0]);
+    // Modular.to.navigate(_pages[0]);
   }
 }
