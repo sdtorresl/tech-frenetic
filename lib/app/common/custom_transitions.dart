@@ -32,22 +32,5 @@ CustomTransition get scaleAndFadeTransition => CustomTransition(
             child: child,
           ),
         );
-
-        return FadeTransition(
-          opacity: Tween<double>(
-            begin: 0.0,
-            end: 1.0,
-          ).animate(
-            CurvedAnimation(
-              parent: animation,
-              curve: const Interval(
-                0.00,
-                0.50,
-                curve: Curves.linear,
-              ),
-            ),
-          ),
-          child: child,
-        );
       },
     );

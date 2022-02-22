@@ -3,8 +3,6 @@ import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 
-import '../profile/my_profile/my_profile_page.dart';
-
 class UsersProfilesPage extends StatefulWidget {
   final ArticlesModel article;
 
@@ -32,7 +30,7 @@ class _UsersProfilesPageState extends State<UsersProfilesPage> {
           if (snapshot.hasData) {
             user = snapshot.data;
 
-            return SizedBox();
+            return const SizedBox();
 
             //TODO: Fix this!!
             // return MyProfilePage(

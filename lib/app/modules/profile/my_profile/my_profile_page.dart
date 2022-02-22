@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
@@ -28,6 +29,7 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
+  final ProfileStore store = Modular.get();
   final ArticlesProvider _articlesProvider = ArticlesProvider();
   final CategoriesProvider _categoriesProvicer = CategoriesProvider();
   final UserPreferences _prefs = UserPreferences();
@@ -463,16 +465,27 @@ class _MyProfilePageState extends State<MyProfilePage> {
             AppLocalizations.of(context)!.articles,
             articlesCount,
             () {
-              if (widget.callback != null) {
-                widget.callback!('/profile/content');
-              }
+              debugPrint("Content");
+              store.index = 1;
               Modular.to.navigate('/profile/content');
             },
           ),
-          _counterBox(AppLocalizations.of(context)!.your_profile, viewedCount,
-              () => debugPrint("Profile")),
-          _counterBox(AppLocalizations.of(context)!.post, postsCount,
-              () => debugPrint("Hola")),
+          _counterBox(
+            AppLocalizations.of(context)!.your_profile,
+            viewedCount,
+            () {
+              store.index = 1;
+              Modular.to.navigate('/profile/content');
+            },
+          ),
+          _counterBox(
+            AppLocalizations.of(context)!.post,
+            postsCount,
+            () {
+              store.index = 2;
+              Modular.to.navigate('/profile/activity');
+            },
+          ),
         ],
       ),
     );
