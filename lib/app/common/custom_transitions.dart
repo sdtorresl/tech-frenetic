@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-CustomTransition get myCustomTransition => CustomTransition(
+CustomTransition get scaleAndFadeTransition => CustomTransition(
       transitionDuration: const Duration(milliseconds: 500),
       transitionBuilder: (context, animation, secondaryAnimation, child) {
         return ScaleTransition(

@@ -1,4 +1,4 @@
-import 'package:techfrenetic/app/core/custom_transition.dart';
+import 'package:techfrenetic/app/common/custom_transitions.dart';
 import 'package:techfrenetic/app/modules/profile/my_activity/my_activity_page.dart';
 import 'package:techfrenetic/app/modules/profile/my_content/my_content_page.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/my_profile_page.dart';
@@ -20,12 +20,9 @@ class ProfileModule extends Module {
       Modular.initialRoute,
       child: (_, args) => const ProfilePage(),
       transition: TransitionType.custom,
-      customTransition: myCustomTransition,
+      customTransition: scaleAndFadeTransition,
       children: [
-        ChildRoute(
-          '/profile',
-          child: (context, args) => MyProfilePage(),
-        ),
+        ChildRoute('/profile', child: (context, args) => const MyProfilePage()),
         ChildRoute('/content', child: (context, args) => const MyContentPage()),
         ChildRoute('/activity',
             child: (context, args) => const MyActivityPage()),
