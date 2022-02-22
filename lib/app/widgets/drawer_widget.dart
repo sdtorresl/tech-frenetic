@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/modules/home/home_store.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 
 class CustomDrawer extends StatelessWidget {
-  final Function(String) callback;
+  CustomDrawer({Key? key}) : super(key: key);
 
-  const CustomDrawer({Key? key, required this.callback}) : super(key: key);
+  final HomeStore homeStore = Modular.get();
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +38,8 @@ class CustomDrawer extends StatelessWidget {
             context,
             AppLocalizations.of(context)!.tech_community,
             onPressed: () {
-              callback("/community");
+              homeStore.selectedPage = 0;
+              Modular.to.popAndPushNamed('/community');
             },
           ),
           _menuItem(
@@ -49,7 +51,8 @@ class CustomDrawer extends StatelessWidget {
             context,
             AppLocalizations.of(context)!.tech_vendors,
             onPressed: () {
-              callback("/vendors");
+              homeStore.selectedPage = 2;
+              Modular.to.popAndPushNamed('/vendors');
             },
           ),
           const SizedBox(

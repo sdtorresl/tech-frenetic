@@ -61,7 +61,6 @@ class ProfilePageState extends State<ProfilePage>
           padding: const EdgeInsets.all(15),
           child: Observer(
             builder: (BuildContext context) {
-              debugPrint("Changed value ${store.index}");
               return GNav(
                 selectedIndex: store.index,
                 tabBorderRadius: 50,
@@ -82,12 +81,7 @@ class ProfilePageState extends State<ProfilePage>
                 tabs: tabs,
                 onTabChange: (index) {
                   store.index = index;
-
-                  debugPrint(store.index.toString());
-
-                  Modular.to.navigate(
-                    _routes[index],
-                  );
+                  Modular.to.navigate(_routes[index]);
                 },
               );
             },

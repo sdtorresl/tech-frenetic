@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/modules/articles/add_articles_page.dart';
+import 'package:techfrenetic/app/modules/home/home_store.dart';
+import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/expandable_fab.dart';
-import 'home_controller.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
 import 'package:techfrenetic/app/widgets/drawer_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -19,7 +21,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends ModularState<HomePage, HomeController> {
+class _HomePageState extends ModularState<HomePage, HomeStore> {
   final List<String> _pages = [
     '/community',
     '/skills',
@@ -28,12 +30,9 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   ];
   final prefs = UserPreferences();
 
-  int _currentIndex = 0;
-
   @override
   void initState() {
     super.initState();
-    _currentIndex = 0;
   }
 
   @override
@@ -48,10 +47,8 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             const SizedBox(width: 20),
             GestureDetector(
               onTap: () {
-                setState(() {
-                  _currentIndex = 0;
-                });
-                Modular.to.navigate(_pages[0]);
+                store.selectedPage = 0;
+                Modular.to.navigate(_pages[store.selectedPage]);
               },
               child: Image.asset('assets/img/main-logo.png', fit: BoxFit.fill),
             ),
@@ -65,7 +62,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           _openDrawer(_scaffoldKey),
         ],
       ),
-      endDrawer: CustomDrawer(callback: _updateChildPage),
+      endDrawer: CustomDrawer(),
       body: RouterOutlet(),
       floatingActionButton: _floatingActionButton(),
       bottomNavigationBar: _bottomNavigationBar(),
@@ -110,7 +107,12 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           ),
         ),
         PopupMenuItem<int>(
-          onTap: () => Modular.to.pushNamed('/profile'),
+          onTap: () {
+            ProfileStore profileStore = Modular.get();
+            profileStore.index = 0;
+            store.selectedPage = 3;
+            Modular.to.navigate('/profile/profile');
+          },
           value: 1,
           child: Text(
             AppLocalizations.of(context)!.profile,
@@ -161,40 +163,31 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
   }
 
   Widget _bottomNavigationBar() {
-    return TitledBottomNavigationBar(
-      reverse: true,
-      currentIndex:
-          _currentIndex, // Use this to update the Bar giving a position
-      onTap: (index) {
-        setState(() {
-          _currentIndex = index;
-        });
-        Modular.to.navigate(_pages[index]);
-      },
-      curve: Curves.easeInBack,
-      items: [
-        TitledNavigationBarItem(
-            title: Text(AppLocalizations.of(context)!.community),
-            icon: const Icon(Icons.people_alt_outlined)),
-        TitledNavigationBarItem(
-            title: Text(AppLocalizations.of(context)!.skills),
-            icon: const Icon(Icons.home)),
-        TitledNavigationBarItem(
-            title: Text(AppLocalizations.of(context)!.vendors),
-            icon: const Icon(Icons.card_travel)),
-        TitledNavigationBarItem(
-            title: Text(AppLocalizations.of(context)!.profile),
-            icon: const Icon(Icons.person_outline)),
-      ],
+    return Observer(
+      builder: (context) => TitledBottomNavigationBar(
+        reverse: true,
+        currentIndex: store.selectedPage,
+        onTap: (index) {
+          store.selectedPage = index;
+          debugPrint("Selected page: ${store.selectedPage}");
+          Modular.to.navigate(_pages[store.selectedPage]);
+        },
+        curve: Curves.easeInBack,
+        items: [
+          TitledNavigationBarItem(
+              title: Text(AppLocalizations.of(context)!.community),
+              icon: const Icon(Icons.people_alt_outlined)),
+          TitledNavigationBarItem(
+              title: Text(AppLocalizations.of(context)!.skills),
+              icon: const Icon(Icons.home)),
+          TitledNavigationBarItem(
+              title: Text(AppLocalizations.of(context)!.vendors),
+              icon: const Icon(Icons.card_travel)),
+          TitledNavigationBarItem(
+              title: Text(AppLocalizations.of(context)!.profile),
+              icon: const Icon(Icons.person_outline)),
+        ],
+      ),
     );
-  }
-
-  _updateChildPage(String route) {
-    debugPrint("Updating index");
-    int index = _pages.contains(route) ? _pages.indexOf(route) : 0;
-    setState(() {
-      _currentIndex = index;
-    });
-    // Modular.to.navigate(_pages[0]);
   }
 }

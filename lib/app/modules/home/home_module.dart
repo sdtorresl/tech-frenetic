@@ -8,7 +8,9 @@ import 'package:techfrenetic/app/modules/create_meetups/create_meetups_module.da
 import 'package:techfrenetic/app/modules/edit_avatar/edit_avatar_page.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
 import 'package:techfrenetic/app/modules/groups/groups_module.dart';
+import 'package:techfrenetic/app/modules/home/home_store.dart';
 import 'package:techfrenetic/app/modules/profile/profile_module.dart';
+import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/modules/search/search_module.dart';
 import 'package:techfrenetic/app/modules/users_profiles/user_profiles_module.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
@@ -26,14 +28,14 @@ import 'package:techfrenetic/app/modules/events/events_page.dart';
 import 'package:techfrenetic/app/modules/vendors/vendors_page.dart';
 import 'package:techfrenetic/app/modules/videos/videos_module.dart';
 
-import 'home_controller.dart';
 import 'home_page.dart';
 
 class HomeModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind.lazySingleton((i) => HomeController()),
+    Bind.lazySingleton((i) => HomeStore()),
     Bind.lazySingleton((i) => UserProvider()),
+    Bind.lazySingleton((i) => ProfileStore()),
   ];
 
   @override
