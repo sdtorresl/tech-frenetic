@@ -19,19 +19,22 @@ class LoginController extends Disposable {
   Function(String) get changeEmail => _emailController.sink.add;
   Function(String) get changePassword => _passwordController.sink.add;
 
-  String get email => _emailController.value;
-  String get password => _passwordController.value;
+  String? get email => _emailController.valueOrNull;
+  String? get password => _passwordController.value;
 
   Future<bool> login() async {
     UserProvider _userProvider = UserProvider();
 
-    SessionModel? session = await _userProvider.login(email, password);
-
-    if (session != null) {
-      return true;
-    } else {
-      return false;
+    if (email != null && password != null) {
+      SessionModel? session = await _userProvider.login(email!, password!);
+      if (session != null) {
+        return true;
+      } else {
+        return false;
+      }
     }
+
+    return false;
   }
 
   @override

@@ -40,10 +40,12 @@ class GroupModel extends Model {
         description: json["field_group_description"],
         featured: json["field_group_featured"],
         members: json["field_group_members"],
-        picture: json["field_group_logo"].toString().isNotEmpty
-            ? baseUrl + json["field_group_logo"]
+        picture: json["field_group_logo"] != null
+            ? json["field_group_logo"].toString().isNotEmpty
+                ? baseUrl + json["field_group_logo"]
+                : ""
             : "",
-        posts: json["field_group_articles"]);
+        posts: json["field_group_articles"] ?? '');
   }
 
   Map<String, dynamic> toMap() => {

@@ -1,15 +1,17 @@
+import '../../models/group_model.dart';
+import '../../models/user_model.dart';
+import 'package:dart_levenshtein/dart_levenshtein.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/search/search_controller.dart';
+import 'package:techfrenetic/app/providers/group_providers.dart';
 import 'package:techfrenetic/app/providers/search_provider.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/save_content_widget.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
-
-import '../../models/user_model.dart';
 
 enum SEARCH_CATEGORIES { content, users, groups, vendors }
 
@@ -25,6 +27,7 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
   String searchText = "";
   TextEditingController searchTextController = TextEditingController();
   SearchProvider searchResults = SearchProvider();
+  GroupsProvider groupsProvider = GroupsProvider();
 
   @override
   void initState() {
@@ -283,17 +286,22 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
 
   Widget _groupResults() {
     return FutureBuilder(
-      future: searchResults.getArticleByTitle(searchText),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      future: groupsProvider.searchGroups(),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<GroupModel>> snapshot) {
         if (snapshot.hasData) {
-          debugPrint(snapshot.data.toString());
-          List<ArticlesModel> results = snapshot.data ?? [];
-          List<Widget> resultsWidgets = [];
+          List<GroupModel> results = snapshot.data ?? [];
+
+          results = results
+              .where((element) => element.title
+                  .toLowerCase()
+                  .contains(searchText.toLowerCase()))
+              .toList();
+
           debugPrint(results.toString());
 
-          for (ArticlesModel results in results) {
-            resultsWidgets.add(SaveContent(article: results));
-          }
+          List<Widget> resultsWidgets =
+              results.map((e) => Text(e.title)).toList();
 
           return Column(
             children: [

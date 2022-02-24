@@ -5,6 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_controller.dart';
+import 'package:techfrenetic/app/widgets/validate_text_widgt.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -17,27 +18,12 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
   bool _isPasswordHidden1 = true;
   bool _isPasswordHidden2 = true;
 
-  bool? checkBoxPerson;
-  bool? checkBoxCompany;
-
-  bool check = true;
+  bool isPerson = true;
   bool _isLoading = false;
-  String? person;
-  String? company;
+  String password = '';
 
   @override
   Widget build(BuildContext context) {
-    if (check == true) {
-      person = 'person';
-      company = '';
-      checkBoxPerson = true;
-      checkBoxCompany = false;
-    } else if (check == false) {
-      company = 'company';
-      person = '';
-      checkBoxPerson = false;
-      checkBoxCompany = true;
-    }
     return Scaffold(
       appBar: TFAppBar(
         onPressed: () => Navigator.of(context).pop(),
@@ -98,20 +84,16 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                 Row(
                   children: [
                     const SizedBox(width: 5),
-                    StreamBuilder(
-                      stream: store.personStream,
-                      builder: (context, snapshot) {
-                        store.changePerson(person!);
-                        return Checkbox(
-                          value: checkBoxPerson,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          onChanged: (bool? value) {
-                            setState(
-                              () {
-                                check = true;
-                              },
-                            );
+                    Checkbox(
+                      value: isPerson,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      onChanged: (bool? value) {
+                        setState(
+                          () {
+                            isPerson = true;
+                            store.changeUserType(
+                                isPerson ? 'person' : 'company');
                           },
                         );
                       },
@@ -122,30 +104,27 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                             .headline1!
                             .copyWith(fontSize: 16)),
                     const SizedBox(width: 30),
-                    StreamBuilder(
-                      stream: store.companyStream,
-                      builder: (context, snapshot) {
-                        store.changeCompany(company!);
-
-                        return Checkbox(
-                          value: checkBoxCompany,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(15)),
-                          onChanged: (bool? value) {
-                            setState(
-                              () {
-                                check = false;
-                              },
-                            );
+                    Checkbox(
+                      value: !isPerson,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15)),
+                      onChanged: (bool? value) {
+                        setState(
+                          () {
+                            isPerson = false;
+                            store.changeUserType(
+                                isPerson ? 'person' : 'company');
                           },
                         );
                       },
                     ),
-                    Text(AppLocalizations.of(context)!.company,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline1!
-                            .copyWith(fontSize: 16)),
+                    Text(
+                      AppLocalizations.of(context)!.company,
+                      style: Theme.of(context)
+                          .textTheme
+                          .headline1!
+                          .copyWith(fontSize: 16),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 20),
@@ -159,47 +138,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                       .copyWith(fontSize: 16),
                 ),
                 const SizedBox(height: 30),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.check_circle_outline,
-                      color: Theme.of(context).errorColor,
-                    ),
-                    Text(
-                      ' ' + AppLocalizations.of(context)!.pwd_minchars,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          color: Theme.of(context).errorColor, fontSize: 15),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.check_circle_outline,
-                      color: Theme.of(context).errorColor,
-                    ),
-                    Text(
-                      ' ' + AppLocalizations.of(context)!.pwd_lowper,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          color: Theme.of(context).errorColor, fontSize: 15),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Icon(
-                      Icons.check_circle_outline,
-                      color: Theme.of(context).errorColor,
-                    ),
-                    Text(
-                      ' ' + AppLocalizations.of(context)!.pwd_number,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          color: Theme.of(context).errorColor, fontSize: 15),
-                    ),
-                  ],
-                ),
+                _passwordValidation(),
                 const SizedBox(height: 15),
                 Row(
                   children: [
@@ -208,8 +147,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                       initialData: false,
                       builder: (BuildContext context, AsyncSnapshot snapshot) {
                         return Checkbox(
-                          value:
-                              snapshot.hasData && snapshot.data ? true : false,
+                          value: store.terms,
                           onChanged: (bool? value) {
                             setState(
                               () {
@@ -358,14 +296,6 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                                   .headline1!
                                   .copyWith(color: Colors.white),
                             ),
-                            style: ButtonStyle(
-                              shape: MaterialStateProperty.all<
-                                  RoundedRectangleBorder>(
-                                const RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.zero,
-                                ),
-                              ),
-                            ),
                           );
                         }),
                   ),
@@ -373,9 +303,32 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
               ],
             ),
           ),
-          const SizedBox(height: 80),
+          const SizedBox(height: 20),
         ],
       ),
+    );
+  }
+
+  Widget _passwordValidation() {
+    bool passwordLength = password.length >= 8;
+    bool passwordHasNumbers = RegExp(r'\d').hasMatch(password);
+    bool passwordHasMixedCase = password.contains(RegExp(r'[A-Z]')) &&
+        password.contains(RegExp(r'[a-z]'));
+
+    return Column(
+      children: [
+        ValidateTextWidget(
+            isValid: passwordLength,
+            text: AppLocalizations.of(context)!.pwd_minchars),
+        const SizedBox(height: 10),
+        ValidateTextWidget(
+            isValid: passwordHasMixedCase,
+            text: AppLocalizations.of(context)!.pwd_lowper),
+        const SizedBox(height: 10),
+        ValidateTextWidget(
+            isValid: passwordHasNumbers,
+            text: AppLocalizations.of(context)!.pwd_number),
+      ],
     );
   }
 
@@ -449,7 +402,12 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: store.changePassword,
+              onChanged: (value) {
+                store.changePassword(value);
+                setState(() {
+                  password = value;
+                });
+              },
             );
           },
         ),

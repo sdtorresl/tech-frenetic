@@ -218,7 +218,6 @@ class LoginPageState extends ModularState<LoginPage, LoginController> {
                   setState(() {
                     _isLoading = false;
                   });
-                  debugPrint("Logged: $loggedIn");
                   if (loggedIn) {
                     Modular.to
                         .pushNamedAndRemoveUntil("/community", (p0) => false);

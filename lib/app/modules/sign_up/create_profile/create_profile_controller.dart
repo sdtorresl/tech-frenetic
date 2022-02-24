@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:techfrenetic/app/common/validators.dart';
 import 'package:techfrenetic/app/providers/registration_provider.dart';
-import '../../common/validators.dart';
 
 class CreateProfileController extends Disposable {
   final _companynameController = BehaviorSubject<String>();

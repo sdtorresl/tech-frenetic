@@ -1,6 +1,6 @@
-import 'package:techfrenetic/app/modules/create_profile/create_profile_controller.dart';
+import 'create_profile_controller.dart';
+import 'create_profile_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:techfrenetic/app/modules/create_profile/create_profile_page.dart';
 
 class CreateProfileModule extends Module {
   @override

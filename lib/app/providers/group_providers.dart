@@ -39,6 +39,37 @@ class GroupsProvider extends TechFreneticProvider {
         posts: "15");
   }
 
+  Future<List<GroupModel>> searchGroups() async {
+    List<GroupModel> groups = [];
+
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/group-research");
+
+      debugPrint("Getting groups...");
+      debugPrint(_url.toString());
+
+      Map<String, String> headers = {};
+      headers.addAll(authHeader);
+      headers.addAll(sessionHeader);
+
+      var response = await http.get(
+        _url,
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = jsonDecode(response.body);
+
+        groups = jsonResponse.map((e) => GroupModel.fromMap(e)).toList();
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return groups;
+  }
+
   Future<List<GroupModel>> getRecommended() async {
     List<GroupModel> recommendedGroups = [];
 

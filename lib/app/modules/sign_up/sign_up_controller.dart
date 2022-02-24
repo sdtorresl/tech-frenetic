@@ -11,73 +11,40 @@ class SignUpController extends Disposable {
   final _emailController = BehaviorSubject<String>();
   final _passwordController = BehaviorSubject<String>();
   final _nameController = BehaviorSubject<String>();
-  final _personController = BehaviorSubject<String>();
-  final _companyController = BehaviorSubject<String>();
-  final _termsController = BehaviorSubject<bool>();
-
-  //final _passwordCheckController = BehaviorSubject<String>();
+  final _userTypeontroller = BehaviorSubject<String>.seeded('person');
+  final _termsController = BehaviorSubject<bool>.seeded(false);
 
   Stream<String> get emailStream =>
       _emailController.stream.transform(Validators.validateEmail);
-
   Stream<String> get passwordStream =>
       _passwordController.stream.transform(Validators.validateSignInPassword);
-  //   .doOnData(
-  // (String password) {
-  //   if (0 != _passwordCheckController.value.compareTo(password)) {
-  //     _passwordController.addError("Las contraseñas no coinciden");
-  //     debugPrint(_passwordCheckController.value);
-  //   } else {
-  //     // _passwordCheckController.sink.add(_passwordCheckController.value);
-  //     // print('Loop');
-  //   }
-  // },
-  //);
-
   Stream<String> get nameStream =>
       _nameController.stream.transform(Validators.validateName);
-  Stream<String> get personStream =>
-      _personController.stream.transform(Validators.validateName);
-  Stream<String> get companyStream =>
-      _companyController.stream.transform(Validators.validateName);
+  Stream<String> get userTypeStream =>
+      _userTypeontroller.stream.transform(Validators.validateName);
   Stream<bool> get termsStream =>
       _termsController.stream.transform(Validators.validateTerms);
-
-  // Stream<List<String>> get confirmPasswordStream =>
-  //     _confirmPasswordController.stream.transform(Validators.validateConfirmPasword);
-
   Stream<bool> get formValidStream => Rx.combineLatest4(termsStream, nameStream,
       emailStream, passwordStream, (e, p, c, d) => true);
 
   Function(String) get changeEmail => _emailController.sink.add;
   Function(String) get changePassword => _passwordController.sink.add;
   Function(String) get changeName => _nameController.sink.add;
-  Function(String) get changePerson => _personController.sink.add;
-  Function(String) get changeCompany => _companyController.sink.add;
+  Function(String) get changeUserType => _userTypeontroller.sink.add;
   Function(bool) get changeTerms => _termsController.sink.add;
-
-  //Function(String) get changeConfirmPassword => _confirmPasswordController.sink.add;
 
   String get email => _emailController.value;
   String get password => _passwordController.value;
   String get name => _nameController.value;
-  String get person => _personController.value;
-  String get company => _companyController.value;
+  String get userType => _userTypeontroller.value;
   bool get terms => _termsController.value;
 
   Future<String> sign() async {
-    String? userType;
     List<String> emailSplit = email.split('@');
     Random randomNumber = Random();
     String? userName = emailSplit[0] + randomNumber.nextInt(1000).toString();
     RegistrationProvider _registrationProvider = RegistrationProvider();
     UserProvider _userProvider = UserProvider();
-    if (person == 'person') {
-      userType = 'person';
-    }
-    if (company == 'company') {
-      userType = 'company';
-    }
 
     String? session = await _registrationProvider.signUp(
         userName, email, password, name, userType);
@@ -122,8 +89,7 @@ class SignUpController extends Disposable {
     _emailController.close();
     _passwordController.close();
     _nameController.close();
-    _personController.close();
-    _companyController.close();
+    _userTypeontroller.close();
     _termsController.close();
   }
 }
