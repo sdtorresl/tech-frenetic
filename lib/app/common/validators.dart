@@ -133,7 +133,7 @@ class Validators {
       StreamTransformer<String, String>.fromHandlers(
     handleData: (passwordCheck, sink) {
       sink.add(passwordCheck);
-      sink.addError("Las contraseñas no coinciden");
+      //sink.addError("Las contraseñas no coinciden");
     },
   );
 

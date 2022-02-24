@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
+import './my_account_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/providers/countries_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
-
-import './my_account_controller.dart';
+import 'package:techfrenetic/app/widgets/validate_text_widgt.dart';
 
 class MyAccountPage extends StatefulWidget {
   const MyAccountPage({Key? key}) : super(key: key);
@@ -28,6 +28,12 @@ class _MyAccountPageState
   String? cellphone;
   String? defaultCountry;
   bool _isLoading = false;
+  bool _isSavingPassword = false;
+  bool _showPasswordForm = false;
+  bool _isPasswordHidden1 = true;
+  bool _isPasswordHidden2 = true;
+  bool _isPasswordHidden3 = true;
+
   final emailController = TextEditingController();
   final cellphoneController = TextEditingController();
   final dateController = TextEditingController();
@@ -348,10 +354,207 @@ class _MyAccountPageState
           const SizedBox(height: 10),
           Text(AppLocalizations.of(context)!.last_changed + ': '),
           const SizedBox(height: 20),
-          _changePasswordButton(),
-          const SizedBox(height: 20),
+          _showPasswordForm ? _passwordForm() : _changePasswordButton(),
         ],
       ),
+    );
+  }
+
+  Widget _passwordForm() {
+    return Column(
+      children: [
+        StreamBuilder(
+          stream: store.passwordStream,
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            //String password = snapshot.data ?? '';
+            return TextFormField(
+              obscureText: _isPasswordHidden1,
+              decoration: InputDecoration(
+                hintText: AppLocalizations.of(context)!.password,
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Theme.of(context).hintColor),
+                suffixIcon: IconButton(
+                  icon: Icon(_isPasswordHidden1
+                      ? Icons.visibility_off
+                      : Icons.visibility),
+                  onPressed: () =>
+                      setState(() => _isPasswordHidden1 = !_isPasswordHidden1),
+                ),
+                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.red),
+              ),
+              onChanged: (value) {
+                store.changePassword(value);
+              },
+            );
+          },
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        StreamBuilder(
+          stream: store.newPasswordStream,
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            return TextFormField(
+              obscureText: _isPasswordHidden2,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                hintText: 'New password',
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Theme.of(context).hintColor),
+                suffixIcon: IconButton(
+                  icon: Icon(_isPasswordHidden2
+                      ? Icons.visibility_off
+                      : Icons.visibility),
+                  onPressed: () =>
+                      setState(() => _isPasswordHidden2 = !_isPasswordHidden2),
+                ),
+                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.red),
+              ),
+              onChanged: (value) {
+                store.changeNewPassword(value);
+              },
+            );
+          },
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        StreamBuilder(
+          stream: store.newConfirmationPasswordStream,
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            //String password = snapshot.data ?? '';
+            return TextFormField(
+              obscureText: _isPasswordHidden2,
+              keyboardType: TextInputType.emailAddress,
+              decoration: InputDecoration(
+                hintText: 'Create password',
+                hintStyle: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Theme.of(context).hintColor),
+                suffixIcon: IconButton(
+                  icon: Icon(_isPasswordHidden2
+                      ? Icons.visibility_off
+                      : Icons.visibility),
+                  onPressed: () =>
+                      setState(() => _isPasswordHidden2 = !_isPasswordHidden2),
+                ),
+                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.red),
+              ),
+              onChanged: (value) {
+                store.changeNewConfirmationPassword(value);
+              },
+            );
+          },
+        ),
+        const SizedBox(
+          height: 20,
+        ),
+        _passwordValidation(),
+        const SizedBox(
+          height: 30,
+        ),
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () => setState(() {
+                  _showPasswordForm = !_showPasswordForm;
+                }),
+                child: Text(
+                  AppLocalizations.of(context)!.cancel,
+                  style: Theme.of(context)
+                      .textTheme
+                      .button!
+                      .copyWith(color: Colors.black),
+                ),
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.white,
+                  elevation: 0,
+                  side: const BorderSide(width: 1.5, color: Colors.black),
+                ),
+              ),
+            ),
+            const SizedBox(
+              width: 10,
+            ),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: !_isSavingPassword
+                    ? () => _updatePersonalData(context)
+                    : null,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    _isSavingPassword
+                        ? Container(
+                            height: 20,
+                            width: 40,
+                            child: const CircularProgressIndicator(),
+                            padding: const EdgeInsets.only(right: 20),
+                          )
+                        : const SizedBox.shrink(),
+                    Text(
+                      AppLocalizations.of(context)!.save_changes,
+                      style: Theme.of(context)
+                          .textTheme
+                          .button!
+                          .copyWith(color: Colors.white),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _passwordValidation() {
+    return StreamBuilder(
+      stream: store.newPasswordStream,
+      initialData: '',
+      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+        String password = snapshot.data ?? '';
+
+        bool passwordLength = password.length >= 8;
+        bool passwordHasNumbers = RegExp(r'\d').hasMatch(password);
+        bool passwordHasMixedCase = password.contains(RegExp(r'[A-Z]')) &&
+            password.contains(RegExp(r'[a-z]'));
+
+        return Column(
+          children: [
+            ValidateTextWidget(
+                isValid: passwordLength,
+                text: AppLocalizations.of(context)!.pwd_minchars),
+            const SizedBox(height: 10),
+            ValidateTextWidget(
+                isValid: passwordHasMixedCase,
+                text: AppLocalizations.of(context)!.pwd_lowper),
+            const SizedBox(height: 10),
+            ValidateTextWidget(
+                isValid: passwordHasNumbers,
+                text: AppLocalizations.of(context)!.pwd_number),
+          ],
+        );
+      },
     );
   }
 
@@ -396,7 +599,9 @@ class _MyAccountPageState
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () => debugPrint("Pressed"),
+        onPressed: () => setState(() {
+          _showPasswordForm = !_showPasswordForm;
+        }),
         child: Text(
           AppLocalizations.of(context)!.change_password,
           style: Theme.of(context)
@@ -414,7 +619,7 @@ class _MyAccountPageState
     );
   }
 
-  _updatePersonalData(context) async {
+  void _updatePersonalData(context) async {
     setState(() {
       _isLoading = true;
     });

@@ -29,7 +29,7 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
-  final ProfileStore store = Modular.get();
+  final ProfileStore profileStore = Modular.get();
   final ArticlesProvider _articlesProvider = ArticlesProvider();
   final CategoriesProvider _categoriesProvicer = CategoriesProvider();
   final UserPreferences _prefs = UserPreferences();
@@ -86,9 +86,21 @@ class _MyProfilePageState extends State<MyProfilePage> {
     );
   }
 
-  _profileView() {
+  Widget _profileView() {
+    return ListView(
+      children: [
+        _profileHeader(context),
+        _profileBody(context),
+        const SizedBox(height: 60),
+      ],
+    );
+  }
+
+  Widget _nameWidget() {
     List<String> name = user.name.split(' ');
+
     Widget nameWidget = const SizedBox();
+
     if (name.length < 2) {
       nameWidget = Stack(
         children: [
@@ -167,14 +179,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
         );
       }
     }
-
-    return ListView(
-      children: [
-        _profileHeader(context, nameWidget),
-        _profileBody(context),
-        const SizedBox(height: 60),
-      ],
-    );
+    return nameWidget;
   }
 
   Widget _profileBody(BuildContext context) {
@@ -312,7 +317,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     );
   }
 
-  ListTile _aboutBody(BuildContext context) {
+  Widget _aboutBody(BuildContext context) {
     return ListTile(
       title: Text(
         AppLocalizations.of(context)!.about,
@@ -335,7 +340,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     );
   }
 
-  Padding _dashboardHeader(BuildContext context) {
+  Widget _dashboardHeader(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
       child: Row(
@@ -374,7 +379,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
     );
   }
 
-  Widget _profileHeader(BuildContext context, Widget nameWidget) {
+  Widget _profileHeader(BuildContext context) {
+    Widget nameWidget = _nameWidget();
+
     return Container(
       margin: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
@@ -466,7 +473,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             articlesCount,
             () {
               debugPrint("Content");
-              store.index = 1;
+              profileStore.index = 1;
               Modular.to.navigate('/profile/content');
             },
           ),
@@ -474,7 +481,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             AppLocalizations.of(context)!.your_profile,
             viewedCount,
             () {
-              store.index = 1;
+              profileStore.index = 1;
               Modular.to.navigate('/profile/content');
             },
           ),
@@ -482,7 +489,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             AppLocalizations.of(context)!.post,
             postsCount,
             () {
-              store.index = 2;
+              profileStore.index = 2;
               Modular.to.navigate('/profile/activity');
             },
           ),

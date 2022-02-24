@@ -1,6 +1,5 @@
 import '../../models/group_model.dart';
 import '../../models/user_model.dart';
-import 'package:dart_levenshtein/dart_levenshtein.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
