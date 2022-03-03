@@ -182,8 +182,8 @@ class UserProvider extends TechFreneticProvider {
 
   bool isLogged() {
     bool tokenExists = prefs.csrfToken?.isNotEmpty ?? false;
-    bool isNotExpired = DateTime.now().isBefore(prefs.sessionExpirationDate);
-    return tokenExists && isNotExpired;
+    bool tokenExpired = !DateTime.now().isBefore(prefs.sessionExpirationDate);
+    return tokenExists && !tokenExpired;
   }
 
   Future<bool> userUpdate(DateTime birthdate, String cellphone, String country,

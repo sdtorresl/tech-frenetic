@@ -14,12 +14,13 @@ class UserPreferences {
     _prefs = await SharedPreferences.getInstance();
   }
 
-  set userId(String? currentId) => _prefs.setString('current_user', currentId!);
+  set userId(String? currentId) =>
+      _prefs.setString('current_user', currentId ?? '');
 
   String? get userId => _prefs.getString('current_user');
 
   set csrfToken(String? csrfToken) =>
-      _prefs.setString('csrf_token', csrfToken!);
+      _prefs.setString('csrf_token', csrfToken ?? '');
 
   String? get csrfToken => _prefs.getString('csrf_token');
 
@@ -28,7 +29,7 @@ class UserPreferences {
   String? get cookies => _prefs.getString('cookies');
 
   set logoutToken(String? logoutToken) =>
-      _prefs.setString('logout_token', logoutToken!);
+      _prefs.setString('logout_token', logoutToken ?? '');
 
   String? get logoutToken => _prefs.getString('logout_token');
 
@@ -36,7 +37,7 @@ class UserPreferences {
 
   String? get userName => _prefs.getString('name');
 
-  set userEmail(String? userEmail) => _prefs.setString('mail', userEmail!);
+  set userEmail(String? userEmail) => _prefs.setString('mail', userEmail ?? '');
 
   String? get userEmail => _prefs.getString('mail');
 
