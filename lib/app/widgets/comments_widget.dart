@@ -16,7 +16,7 @@ class CommentsWidget extends StatefulWidget {
 }
 
 class _CommentsWidgetState extends State<CommentsWidget> {
-  final CommnentsProvider _commentsProvider = CommnentsProvider();
+  final CommentsProvider _commentsProvider = CommentsProvider();
   List<CommentModel> comments = [];
 
   @override

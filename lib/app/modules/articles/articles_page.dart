@@ -9,6 +9,7 @@ import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/articles/articles_controller.dart';
 import 'package:techfrenetic/app/modules/articles/articles_image_page.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
+import 'package:techfrenetic/app/providers/comments_provider.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/comments_widget.dart';
@@ -23,12 +24,24 @@ class ArticlesPage extends StatefulWidget {
 
 class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   ArticlesModel article = ArticlesModel.empty();
+  late String articleId;
   final ArticlesProvider _articlesProvider = ArticlesProvider();
+  final CommentsProvider _commentsProvider = CommentsProvider();
   TextEditingController commentTextController = TextEditingController();
 
   @override
   void initState() {
+    articleId = widget.article.id;
+    commentTextController.addListener(() {
+      store.changeComment(commentTextController.text);
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    commentTextController.dispose();
+    super.dispose();
   }
 
   @override
@@ -39,7 +52,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
         children: <Widget>[
           Expanded(
             child: FutureBuilder(
-              future: _articlesProvider.getArticle(widget.article.id),
+              future: _articlesProvider.getArticle(articleId),
               builder: (BuildContext context,
                   AsyncSnapshot<ArticlesModel> snapshot) {
                 if (snapshot.hasData) {
@@ -204,6 +217,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   Widget _articleSummary() {
     Widget _summary = const SizedBox(height: 15);
     if (article.summary!.isNotEmpty) {
+      debugPrint(article.body);
       _summary = Padding(
         padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
         child: Html(
@@ -236,49 +250,55 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   }
 
   Widget _commentsForm() {
-    return StreamBuilder(
-      stream: store.commentStream,
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        return Container(
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(10),
-              topRight: Radius.circular(10),
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      child: SafeArea(
+        child: Row(
+          children: [
+            Flexible(
+              child: TextField(
+                keyboardType: TextInputType.multiline,
+                controller: commentTextController,
+                onSubmitted: (value) => submitComment(),
+              ),
             ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.5),
-                spreadRadius: 5,
-                blurRadius: 7,
-                offset: const Offset(0, 3), // changes position of shadow
-              ),
-            ],
-          ),
-          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-          child: Row(
-            children: [
-              Flexible(
-                child: TextField(
-                  controller: commentTextController,
-                  onChanged: store.changeComment,
-                ),
-              ),
-              IconButton(
-                onPressed: submitComment,
-                icon: const Icon(TechFreneticIcons.coment),
-              )
-            ],
-          ),
-        );
-      },
+            IconButton(
+              onPressed: submitComment,
+              icon: const Icon(TechFreneticIcons.comment),
+            )
+          ],
+        ),
+      ),
     );
   }
 
   void submitComment() {
     debugPrint("Comment is: ${store.comment}");
-    store.changeComment("");
-    commentTextController.text = store.comment;
-    setState(() {});
+    _commentsProvider
+        .addComment(widget.article.id, store.comment)
+        .then((value) {
+      if (value) {
+        commentTextController.clear();
+        setState(() {
+          // Force to rebuild the future builder
+          articleId = widget.article.id;
+        });
+      }
+    });
   }
 }
