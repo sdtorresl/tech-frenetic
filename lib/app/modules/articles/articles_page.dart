@@ -4,12 +4,16 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
+import 'package:global_configuration/global_configuration.dart';
+import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/articles/articles_controller.dart';
 import 'package:techfrenetic/app/modules/articles/articles_image_page.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/providers/comments_provider.dart';
+import 'package:techfrenetic/app/providers/like_provider.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/comments_widget.dart';
@@ -28,6 +32,8 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   final ArticlesProvider _articlesProvider = ArticlesProvider();
   final CommentsProvider _commentsProvider = CommentsProvider();
   TextEditingController commentTextController = TextEditingController();
+  String likeAsset = 'assets/img/icons/light_bulb.svg';
+  bool enabledLike = true;
 
   @override
   void initState() {
@@ -125,7 +131,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
 
   Widget _dot() {
     Widget dot = const SizedBox();
-    if (article.id != '') {
+    if (article.id.isNotEmpty) {
       dot = SvgPicture.asset(
         'assets/img/icons/dot.svg',
         allowDrawingOutsideViewBox: true,
@@ -179,6 +185,29 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
 
   PreferredSizeWidget _articleAppBar() {
     ThemeData theme = Theme.of(context);
+
+    Widget _shareButton = const SizedBox.shrink();
+
+    debugPrint("Article: ${article.toString()}");
+
+    if (widget.article.type == "Article") {
+      final String baseUrl = GlobalConfiguration().getValue("api_url");
+      final String locale =
+          Intl.getCurrentLocale().startsWith("es") ? "es" : "en";
+      String articlePath = widget.article.url!;
+      List<String> splitUrl = articlePath.split('/');
+      String urlEnd = splitUrl.last;
+      String articleLink = "$baseUrl/$locale/$urlEnd";
+
+      _shareButton = IconButton(
+        onPressed: () => {
+          Share.share(articleLink,
+              subject: AppLocalizations.of(context)!.share_message + '\n')
+        },
+        icon: const Icon(TechFreneticIcons.share),
+      );
+    }
+
     return TFAppBar(
       leading: IconButton(
         icon: const Icon(Icons.close),
@@ -190,16 +219,24 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
       ),
       backgroundColor: Theme.of(context).primaryColorDark,
       foregroundColor: Colors.white,
-      actions: [
-        IconButton(
-          onPressed: () => debugPrint("Like!"),
-          icon: const Icon(TechFreneticIcons.lightBulb),
-        ),
-        IconButton(
-          onPressed: () => debugPrint("Share!"),
-          icon: const Icon(TechFreneticIcons.share),
-        )
-      ],
+      actions: [_likeButton(), _shareButton],
+    );
+  }
+
+  Widget _likeButton() {
+    LikeProvider likeProvider = LikeProvider();
+
+    return IconButton(
+      icon: Icon(
+        TechFreneticIcons.lightBulb,
+        color: enabledLike ?  Colors.yellow: Colors.white;
+      ),
+      onPressed: () {
+        likeProvider.like(widget.article.id);
+        setState(() {
+          enabledLike = !enabledLike;
+        });
+      },
     );
   }
 
