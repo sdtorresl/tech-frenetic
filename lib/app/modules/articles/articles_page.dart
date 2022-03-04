@@ -33,7 +33,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   final CommentsProvider _commentsProvider = CommentsProvider();
   TextEditingController commentTextController = TextEditingController();
   String likeAsset = 'assets/img/icons/light_bulb.svg';
-  bool enabledLike = true;
+  bool enabledLike = false;
 
   @override
   void initState() {
@@ -229,7 +229,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     return IconButton(
       icon: Icon(
         TechFreneticIcons.lightBulb,
-        color: enabledLike ?  Colors.yellow: Colors.white;
+        color: enabledLike ? Colors.yellow : Colors.white,
       ),
       onPressed: () {
         likeProvider.like(widget.article.id);
