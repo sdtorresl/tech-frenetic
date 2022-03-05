@@ -15,10 +15,10 @@ class ExpandableFab extends StatefulWidget {
   final List<Widget> children;
 
   @override
-  _ExpandableFabState createState() => _ExpandableFabState();
+  ExpandableFabState createState() => ExpandableFabState();
 }
 
-class _ExpandableFabState extends State<ExpandableFab>
+class ExpandableFabState extends State<ExpandableFab>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _expandAnimation;
@@ -46,7 +46,7 @@ class _ExpandableFabState extends State<ExpandableFab>
     super.dispose();
   }
 
-  void _toggle() {
+  void toggle() {
     setState(() {
       _open = !_open;
       if (_open) {
@@ -109,7 +109,7 @@ class _ExpandableFabState extends State<ExpandableFab>
           clipBehavior: Clip.antiAlias,
           elevation: 4.0,
           child: InkWell(
-            onTap: _toggle,
+            onTap: toggle,
             child: Padding(
               padding: const EdgeInsets.all(8.0),
               child: Icon(
@@ -159,7 +159,7 @@ class _ExpandableFabState extends State<ExpandableFab>
           curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
           duration: const Duration(milliseconds: 250),
           child: FloatingActionButton(
-            onPressed: _toggle,
+            onPressed: toggle,
             child: const Icon(Icons.video_call, color: Colors.white),
             backgroundColor: Theme.of(context).colorScheme.secondaryContainer,
           ),

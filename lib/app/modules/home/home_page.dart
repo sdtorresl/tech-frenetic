@@ -142,15 +142,22 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   }
 
   Widget _floatingActionButton() {
+    final GlobalKey<ExpandableFabState> _key = GlobalKey();
     List<Widget> actions = [
       ActionButton(
         onPressed: () {
+          if (_key.currentState != null) {
+            _key.currentState!.toggle();
+          }
           Modular.to.pushNamed("/community/video");
         },
         icon: const Icon(TechFreneticIcons.shareVideo),
       ),
       ActionButton(
         onPressed: () {
+          if (_key.currentState != null) {
+            _key.currentState!.toggle();
+          }
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -163,6 +170,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
     ];
 
     return ExpandableFab(
+      key: _key,
       distance: 70.0,
       children: actions,
     );
