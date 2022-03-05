@@ -37,7 +37,7 @@ class CategoriesModel {
       );
 
   Map<String, dynamic> toMap() => {
-        'target_id': id,
+        "target_id": id,
       };
 
   @override

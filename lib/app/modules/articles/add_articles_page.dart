@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/models/image_model.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
+import 'package:techfrenetic/app/providers/files_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:image_picker/image_picker.dart';
@@ -23,12 +25,15 @@ CategoriesProvider categories = CategoriesProvider();
 class AddArticlesPageState extends State<AddArticlesPage> {
   late List<String> _selectedTags;
   TextEditingController tagsController = TextEditingController();
+  FilesProvider filesProvider = FilesProvider();
   String? title;
   File? image;
+  ImageModel? uploadedImage;
   String? category = '1';
   String? description;
-  String? tag;
+  String? content;
   bool _isLoading = false;
+  bool _loadingPicture = false;
 
   @override
   void initState() {
@@ -38,12 +43,31 @@ class AddArticlesPageState extends State<AddArticlesPage> {
 
   Future pickImage() async {
     try {
+      setState(() {
+        _loadingPicture = true;
+      });
       final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+
       if (image == null) return;
+
       final imageTemporary = File(image.path);
-      setState(() => this.image = imageTemporary);
+      filesProvider.uploadFile(imageTemporary).then((image) {
+        setState(() {
+          _loadingPicture = false;
+          uploadedImage = image;
+          this.image = imageTemporary;
+        });
+      }).onError((error, stackTrace) {
+        debugPrint("Error loading image: $error");
+        setState(() {
+          _loadingPicture = false;
+          this.image = imageTemporary;
+        });
+      });
     } on PlatformException catch (e) {
       debugPrint('Failed to pick image: $e');
+
+      _loadingPicture = false;
     }
   }
 
@@ -121,7 +145,7 @@ class AddArticlesPageState extends State<AddArticlesPage> {
       child: ListView(
         children: [
           _titleField(context),
-          _imageField(context),
+          _imageField(),
           _descriptionField(context),
           _articleField(context),
           const SizedBox(height: 60),
@@ -152,7 +176,43 @@ class AddArticlesPageState extends State<AddArticlesPage> {
     );
   }
 
-  _imageField(BuildContext context) {
+  _imageField() {
+    Widget actionImageWidget = GestureDetector(
+      onTap: () => pickImage(),
+      child: image != null
+          ? SizedBox(
+              height: 200,
+              child: FittedBox(
+                fit: BoxFit.cover,
+                clipBehavior: Clip.hardEdge,
+                child: Image.file(
+                  image!,
+                ),
+              ),
+            )
+          : Container(
+              height: 200,
+              color: Colors.blueGrey,
+              margin: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.all(50),
+              child: const Icon(
+                Icons.camera,
+                color: Colors.white,
+                size: 50,
+              ),
+            ),
+    );
+    Widget loadingImage = !_loadingPicture
+        ? actionImageWidget
+        : Container(
+            height: 200,
+            color: Colors.blueGrey,
+            child: const Center(
+              child: CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            ),
+          );
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -160,30 +220,23 @@ class AddArticlesPageState extends State<AddArticlesPage> {
           height: 10,
         ),
         const Text("Selecciona una imagen"),
-        GestureDetector(
-          onTap: () => pickImage(),
-          child: image != null
-              ? Image.file(image!)
-              : Container(
-                  color: Colors.blueGrey,
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: const EdgeInsets.all(50),
-                  child: const Icon(
-                    Icons.camera,
-                    color: Colors.white,
-                    size: 50,
-                  ),
-                ),
-        ),
+        loadingImage
       ],
     );
   }
 
   _articleField(BuildContext context) {
-    return const TextField(
+    return TextField(
       maxLines: 20,
       minLines: 5,
-      decoration: InputDecoration(labelText: "Contenido"),
+      decoration: const InputDecoration(labelText: "Contenido"),
+      onChanged: (text) {
+        setState(
+          () {
+            content = text;
+          },
+        );
+      },
     );
   }
 
@@ -271,13 +324,6 @@ class AddArticlesPageState extends State<AddArticlesPage> {
               tagsController.text = "";
             });
           },
-          onChanged: (text) {
-            setState(
-              () {
-                tag = text;
-              },
-            );
-          },
         ),
         Wrap(
           spacing: 5,
@@ -307,10 +353,10 @@ class AddArticlesPageState extends State<AddArticlesPage> {
 
   _formButtons(BuildContext context) {
     bool isCompleted = title != '' &&
-        image != null &&
+        uploadedImage != null &&
         category != "" &&
         description != "" &&
-        tag != "";
+        content != "";
     final ArticlesProvider articlesProvider = ArticlesProvider();
 
     return Row(
@@ -324,7 +370,12 @@ class AddArticlesPageState extends State<AddArticlesPage> {
                       _isLoading = true;
                     });
                     bool article = await articlesProvider.addArticle(
-                        title!, int.parse(category!), description!);
+                        title!,
+                        int.parse(category!),
+                        description!,
+                        content!,
+                        _selectedTags.join(", "),
+                        uploadedImage!.id.toString());
                     setState(() {
                       _isLoading = true;
                     });

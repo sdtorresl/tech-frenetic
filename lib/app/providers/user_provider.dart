@@ -225,7 +225,6 @@ class UserProvider extends TechFreneticProvider {
     debugPrint("Updating certifications for user $userId...");
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
-
       Map<String, dynamic> body = {"field_certifications": certifications};
 
       Map<String, String> headers = {};
@@ -257,9 +256,7 @@ class UserProvider extends TechFreneticProvider {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
 
       Map<String, dynamic> body = {
-        "field_interests": [
-          {"target_id": 1}
-        ]
+        "field_interests": List<dynamic>.from(interests.map((x) => x.toMap())),
       };
 
       Map<String, String> headers = {};
@@ -268,6 +265,7 @@ class UserProvider extends TechFreneticProvider {
       headers.addAll(sessionHeader);
       headers.addAll(headers);
 
+      debugPrint(json.jsonEncode(body));
       var response = await http.patch(
         _url,
         body: json.jsonEncode(body),
@@ -278,6 +276,7 @@ class UserProvider extends TechFreneticProvider {
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint(response.reasonPhrase);
       }
     } catch (e) {
       debugPrint(e.toString());

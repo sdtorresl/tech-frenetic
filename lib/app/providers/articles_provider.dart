@@ -194,11 +194,8 @@ class ArticlesProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool> addArticle(
-    String title,
-    int category,
-    String description,
-  ) async {
+  Future<bool> addArticle(String title, int category, String description,
+      String content, String tags, String imageId) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/entity/node?_format=json");
 
@@ -213,7 +210,7 @@ class ArticlesProvider extends TechFreneticProvider {
           {'value': locale}
         ],
         'field_image': [
-          {'target_id': '10', "alt": "Imagen base  64 foto"}
+          {'target_id': imageId, "alt": "Imagen $title"}
         ],
         'field_frenetic_content': [
           {'value': true}
@@ -228,10 +225,10 @@ class ArticlesProvider extends TechFreneticProvider {
           {'value': description}
         ],
         "body": [
-          {"value": "<p> contenido soporte etiquetas html</p>"}
+          {"value": content}
         ],
         "field_tag": [
-          {"value": "Cloud"}
+          {"value": tags}
         ]
       };
 

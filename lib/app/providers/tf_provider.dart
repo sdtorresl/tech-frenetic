@@ -28,6 +28,8 @@ class TechFreneticProvider {
 
   Map<String, String> get jsonHeader => {'Content-Type': 'application/json'};
 
+  Map<String, String> get halHeader => {'Content-Type': 'application/hal+json'};
+
   String get locale => Intl.getCurrentLocale().startsWith("es") ? "es" : "en";
 
   String? get userId => prefs.userId;
