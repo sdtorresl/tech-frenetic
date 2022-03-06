@@ -1,3 +1,5 @@
+import 'package:techfrenetic/app/modules/not_implemented/not_implemented_page.dart';
+
 import 'home_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/auth_guard.dart';
@@ -167,6 +169,10 @@ class HomeModule extends Module {
     ModuleRoute(
       '/forgot',
       module: ForgotPasswordModule(),
+    ),
+    ChildRoute(
+      '/not_implemented',
+      child: (context, args) => const NotImplementedPage(),
     ),
   ];
 }

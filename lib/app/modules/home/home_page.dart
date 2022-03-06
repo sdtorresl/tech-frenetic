@@ -149,7 +149,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
           if (_key.currentState != null) {
             _key.currentState!.toggle();
           }
-          Modular.to.pushNamed("/community/video");
+          //Modular.to.pushNamed("/community/video");
+          Modular.to.pushNamed("/not_implemented");
         },
         icon: const Icon(TechFreneticIcons.shareVideo),
       ),

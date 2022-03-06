@@ -27,93 +27,96 @@ class _SkillsPageState extends State<SkillsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
-        Container(
-          color: Theme.of(context).buttonTheme.colorScheme!.secondary,
-          child: Padding(
-            padding:
-                const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
-            child: Column(
-              children: [
-                const SizedBox(height: 30),
-                Text(
-                  AppLocalizations.of(context)!.skills_title,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1!
-                      .copyWith(color: Colors.white, fontSize: 16),
-                ),
-                const SizedBox(height: 10),
-                Container(
-                  height: 2.5,
-                  width: 60,
-                  color: const Color.fromRGBO(255, 204, 54, 1),
-                ),
-                const SizedBox(height: 20),
-                Text(
-                  AppLocalizations.of(context)!.what_do_you,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline1!
-                      .copyWith(color: Colors.white, fontSize: 25),
-                ),
-                const SizedBox(height: 30),
-                FutureBuilder(
-                  future: _categoriesProvider.getCategories(),
-                  builder: (BuildContext context,
-                      AsyncSnapshot<List<CategoriesModel>> snapshot) {
-                    if (snapshot.hasData) {
-                      List<Widget> categories;
-                      categories = snapshot.data!
-                          .map((category) =>
-                              CategoryButtonWidget(category: category))
-                          .toList();
-
-                      return Wrap(
-                        spacing: 10,
-                        runSpacing: 10,
-                        alignment: WrapAlignment.center,
-                        children: [
-                          ...categories,
-                        ],
-                      );
-                    }
-                    return const SizedBox.shrink();
-                  },
-                ),
-                const SizedBox(height: 20),
-                TextFormField(
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 15),
-                    suffixIcon: Icon(Icons.search,
-                        color: Theme.of(context).unselectedWidgetColor),
-                    hintText: AppLocalizations.of(context)!.search,
-                    hintStyle: Theme.of(context)
+    return Container(
+      color: Theme.of(context).scaffoldBackgroundColor,
+      child: ListView(
+        children: [
+          Container(
+            color: Theme.of(context).buttonTheme.colorScheme!.secondary,
+            child: Padding(
+              padding:
+                  const EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0),
+              child: Column(
+                children: [
+                  const SizedBox(height: 30),
+                  Text(
+                    AppLocalizations.of(context)!.skills_title,
+                    style: Theme.of(context)
                         .textTheme
-                        .bodyText1!
-                        .copyWith(color: Colors.black),
-                    fillColor: Colors.white,
-                    filled: true,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
+                        .headline1!
+                        .copyWith(color: Colors.white, fontSize: 16),
+                  ),
+                  const SizedBox(height: 10),
+                  Container(
+                    height: 2.5,
+                    width: 60,
+                    color: const Color.fromRGBO(255, 204, 54, 1),
+                  ),
+                  const SizedBox(height: 20),
+                  Text(
+                    AppLocalizations.of(context)!.what_do_you,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline1!
+                        .copyWith(color: Colors.white, fontSize: 25),
+                  ),
+                  const SizedBox(height: 30),
+                  FutureBuilder(
+                    future: _categoriesProvider.getCategories(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<CategoriesModel>> snapshot) {
+                      if (snapshot.hasData) {
+                        List<Widget> categories;
+                        categories = snapshot.data!
+                            .map((category) =>
+                                CategoryButtonWidget(category: category))
+                            .toList();
+
+                        return Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          alignment: WrapAlignment.center,
+                          children: [
+                            ...categories,
+                          ],
+                        );
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  TextFormField(
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 15),
+                      suffixIcon: Icon(Icons.search,
+                          color: Theme.of(context).unselectedWidgetColor),
+                      hintText: AppLocalizations.of(context)!.search,
+                      hintStyle: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(color: Colors.black),
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 40),
-              ],
+                  const SizedBox(height: 40),
+                ],
+              ),
             ),
           ),
-        ),
-        featuredContent(),
-        const FeaturedEventsWidget(),
-        leatestContents(),
-        mostPopular(),
-        contentFrenetics(),
-        const SizedBox(height: 60),
-      ],
+          featuredContent(),
+          const FeaturedEventsWidget(),
+          leatestContents(),
+          mostPopular(),
+          contentFrenetics(),
+          const SizedBox(height: 60),
+        ],
+      ),
     );
   }
 

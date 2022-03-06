@@ -78,28 +78,31 @@ class CommunityPageState
             // To get index of current tab use tabController.index
           }
         });
-        return Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 10.0, bottom: 5),
-              child: TabBar(
-                unselectedLabelColor:
-                    Theme.of(context).chipTheme.backgroundColor,
-                indicatorSize: TabBarIndicatorSize.label,
-                indicator: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50),
-                    color: Theme.of(context).chipTheme.backgroundColor),
-                tabs: tabs,
+        return Container(
+          color: Theme.of(context).scaffoldBackgroundColor,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0, bottom: 5),
+                child: TabBar(
+                  unselectedLabelColor:
+                      Theme.of(context).chipTheme.backgroundColor,
+                  indicatorSize: TabBarIndicatorSize.label,
+                  indicator: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      color: Theme.of(context).chipTheme.backgroundColor),
+                  tabs: tabs,
+                ),
               ),
-            ),
-            Expanded(
-              child: TabBarView(children: [
-                _feeds(),
-                _meetups(),
-                _groups(),
-              ]),
-            ),
-          ],
+              Expanded(
+                child: TabBarView(children: [
+                  _feeds(),
+                  _meetups(),
+                  _groups(),
+                ]),
+              ),
+            ],
+          ),
         );
       }),
     );
