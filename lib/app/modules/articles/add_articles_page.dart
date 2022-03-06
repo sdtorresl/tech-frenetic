@@ -1,16 +1,12 @@
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/models/image_model.dart';
+import 'package:techfrenetic/app/modules/articles/widgets/image_selection_widget.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
-import 'package:techfrenetic/app/providers/files_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:image_picker/image_picker.dart';
 
 class AddArticlesPage extends StatefulWidget {
   final String title;
@@ -25,50 +21,18 @@ CategoriesProvider categories = CategoriesProvider();
 class AddArticlesPageState extends State<AddArticlesPage> {
   late List<String> _selectedTags;
   TextEditingController tagsController = TextEditingController();
-  FilesProvider filesProvider = FilesProvider();
+
   String? title;
-  File? image;
   ImageModel? uploadedImage;
   String? category = '1';
   String? description;
   String? content;
   bool _isLoading = false;
-  bool _loadingPicture = false;
 
   @override
   void initState() {
     _selectedTags = [];
     super.initState();
-  }
-
-  Future pickImage() async {
-    try {
-      setState(() {
-        _loadingPicture = true;
-      });
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-
-      if (image == null) return;
-
-      final imageTemporary = File(image.path);
-      filesProvider.uploadFile(imageTemporary).then((image) {
-        setState(() {
-          _loadingPicture = false;
-          uploadedImage = image;
-          this.image = imageTemporary;
-        });
-      }).onError((error, stackTrace) {
-        debugPrint("Error loading image: $error");
-        setState(() {
-          _loadingPicture = false;
-          this.image = imageTemporary;
-        });
-      });
-    } on PlatformException catch (e) {
-      debugPrint('Failed to pick image: $e');
-
-      _loadingPicture = false;
-    }
   }
 
   @override
@@ -140,12 +104,14 @@ class AddArticlesPageState extends State<AddArticlesPage> {
     );
   }
 
-  _articleForm(BuildContext context) {
+  Widget _articleForm(BuildContext context) {
     return Form(
       child: ListView(
         children: [
           _titleField(context),
-          _imageField(),
+          ImageSelectionWidget(
+            onImageLoaded: (image) => this.uploadedImage = image,
+          ),
           _descriptionField(context),
           _articleField(context),
           const SizedBox(height: 60),
@@ -173,55 +139,6 @@ class AddArticlesPageState extends State<AddArticlesPage> {
           },
         );
       },
-    );
-  }
-
-  _imageField() {
-    Widget actionImageWidget = GestureDetector(
-      onTap: () => pickImage(),
-      child: image != null
-          ? SizedBox(
-              height: 200,
-              child: FittedBox(
-                fit: BoxFit.cover,
-                clipBehavior: Clip.hardEdge,
-                child: Image.file(
-                  image!,
-                ),
-              ),
-            )
-          : Container(
-              height: 200,
-              color: Colors.blueGrey,
-              margin: const EdgeInsets.symmetric(vertical: 10),
-              padding: const EdgeInsets.all(50),
-              child: const Icon(
-                Icons.camera,
-                color: Colors.white,
-                size: 50,
-              ),
-            ),
-    );
-    Widget loadingImage = !_loadingPicture
-        ? actionImageWidget
-        : Container(
-            height: 200,
-            color: Colors.blueGrey,
-            child: const Center(
-              child: CircularProgressIndicator(
-                color: Colors.white,
-              ),
-            ),
-          );
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        const Text("Selecciona una imagen"),
-        loadingImage
-      ],
     );
   }
 
@@ -372,8 +289,8 @@ class AddArticlesPageState extends State<AddArticlesPage> {
                     bool article = await articlesProvider.addArticle(
                         title!,
                         int.parse(category!),
-                        description!,
-                        content!,
+                        description ?? '',
+                        content ?? '',
                         _selectedTags.join(", "),
                         uploadedImage!.id.toString());
                     setState(() {
@@ -382,7 +299,7 @@ class AddArticlesPageState extends State<AddArticlesPage> {
                     if (article == true) {
                       Modular.to.popAndPushNamed("/community");
                     } else {
-                      debugPrint('Article not post');
+                      debugPrint('Article not posted');
                     }
                   }
                 : null,
