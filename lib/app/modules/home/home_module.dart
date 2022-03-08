@@ -24,7 +24,7 @@ import 'package:techfrenetic/app/modules/sign_up/create_profile/create_profile_m
 import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
 import 'package:techfrenetic/app/modules/skills/skills_page.dart';
 import 'package:techfrenetic/app/modules/terms/terms_page.dart';
-import 'package:techfrenetic/app/modules/users_profiles/user_profiles_module.dart';
+import 'package:techfrenetic/app/modules/users_profiles/user_profile_module.dart';
 import 'package:techfrenetic/app/modules/vendors_search/vendors_search_page.dart';
 import 'package:techfrenetic/app/modules/vendors/vendors_page.dart';
 import 'package:techfrenetic/app/modules/videos/videos_module.dart';

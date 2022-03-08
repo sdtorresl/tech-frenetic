@@ -1,3 +1,4 @@
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/my_profile_page.dart';
 import 'my_account/my_account_module.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -9,6 +10,7 @@ import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/modules/profile/saved_articles/my_saved_articles_page.dart';
 
 class ProfileModule extends Module {
+  final UserPreferences _prefs = UserPreferences();
   @override
   final List<Bind> binds = [
     Bind.lazySingleton((i) => ProfileStore()),
@@ -24,7 +26,8 @@ class ProfileModule extends Module {
       children: [
         ChildRoute(
           '/profile',
-          child: (context, args) => const MyProfilePage(),
+          child: (context, args) =>
+              MyProfilePage(userId: args.params['userId']),
         ),
         ChildRoute('/content', child: (context, args) => const MyContentPage()),
         ChildRoute('/activity',

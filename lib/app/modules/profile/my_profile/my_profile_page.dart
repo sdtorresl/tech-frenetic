@@ -17,11 +17,11 @@ import '../../certifications/certifications.dart';
 import '../../interests/interests_page.dart';
 
 class MyProfilePage extends StatefulWidget {
-  final Function(String)? callback;
+  final String? userId;
 
   const MyProfilePage({
     Key? key,
-    this.callback,
+    this.userId,
   }) : super(key: key);
 
   @override
@@ -39,23 +39,29 @@ class _MyProfilePageState extends State<MyProfilePage> {
   int articlesCount = 0;
   int postsCount = 0;
   int viewedCount = 0;
+  String userId = '';
   UserModel user = UserModel.empty();
 
   @override
   void initState() {
-    // editable = _prefs.userId == user.uid.toString();
     super.initState();
+
+    debugPrint("User ID is ${widget.userId}");
+
+    userId = widget.userId ?? _prefs.userId!;
+    editable = widget.userId == userId || widget.userId == null;
+
     loadCounts();
   }
 
   void loadCounts() async {
-    _articlesProvider.getArticlesByUser(_prefs.userName ?? '').then((articles) {
+    _articlesProvider.getArticlesByUser(user.userName).then((articles) {
       setState(() {
         articlesCount = articles.length;
       });
     });
 
-    _articlesProvider.getPostsByUser(_prefs.userName ?? '').then((posts) {
+    _articlesProvider.getPostsByUser(user.userName).then((posts) {
       setState(() {
         postsCount = posts.length;
       });
@@ -67,7 +73,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     return Container(
       color: Theme.of(context).scaffoldBackgroundColor,
       child: FutureBuilder(
-        future: _userProvider.getLoggedUser(),
+        future: _userProvider.getUser(userId),
         builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
           if (snapshot.hasData) {
             user = snapshot.data!;

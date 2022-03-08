@@ -61,12 +61,9 @@ class _PostWidgetState extends State<PostWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           GestureDetector(
-            child: _postAuthor(context),
-            onTap: prefs.userId != widget.article.uid
-                ? () => Modular.to
-                    .pushNamed("/users_profiles", arguments: widget.article)
-                : () => Modular.to.pushNamed("/profile"),
-          ),
+              child: _postAuthor(context),
+              onTap: () => Modular.to
+                  .pushNamed("/users_profiles", arguments: widget.article.uid)),
           _postSummary(context),
           GestureDetector(
             child: _postImage(context),
