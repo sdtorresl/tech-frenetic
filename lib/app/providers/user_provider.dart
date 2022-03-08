@@ -250,7 +250,7 @@ class UserProvider extends TechFreneticProvider {
     return false;
   }
 
-  updateInterests(List<CategoriesModel> interests) async {
+  Future<bool> updateInterests(List<CategoriesModel> interests) async {
     debugPrint("Updating interests for user $userId...");
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
@@ -266,6 +266,46 @@ class UserProvider extends TechFreneticProvider {
       headers.addAll(headers);
 
       debugPrint(json.jsonEncode(body));
+      var response = await http.patch(
+        _url,
+        body: json.jsonEncode(body),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint(response.reasonPhrase);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool> updateBiografy(String biografy) async {
+    if (prefs.userId == null) {
+      return false;
+    }
+
+    String userId = prefs.userId!;
+    debugPrint("Updating biografy for user $userId...");
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
+
+      Map<String, dynamic> body = {
+        "field_biography": [
+          {"value": biografy}
+        ],
+      };
+
+      Map<String, String> headers = {};
+      headers.addAll(jsonHeader);
+      headers.addAll(authHeader);
+      headers.addAll(sessionHeader);
+      headers.addAll(headers);
+
       var response = await http.patch(
         _url,
         body: json.jsonEncode(body),

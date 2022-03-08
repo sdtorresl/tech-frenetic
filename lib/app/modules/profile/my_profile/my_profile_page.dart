@@ -3,6 +3,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/modules/profile/my_profile/edit_name/edit_name_page.dart';
+import 'package:techfrenetic/app/modules/profile/my_profile/edit_summary/edit_summary_page.dart';
 import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
@@ -12,8 +14,6 @@ import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 
 import '../../certifications/certifications.dart';
-import '../../edit_name/edit_name_page.dart';
-import '../../edit_sumary/edit_sumary.dart';
 import '../../interests/interests_page.dart';
 
 class MyProfilePage extends StatefulWidget {
@@ -318,25 +318,34 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Widget _aboutBody(BuildContext context) {
-    return ListTile(
-      title: Text(
-        AppLocalizations.of(context)!.about,
-        style: Theme.of(context).textTheme.headline1,
-      ),
-      trailing: IconButton(
-        onPressed: () {
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return const EditSummaryPage();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ListTile(
+          title: Text(
+            AppLocalizations.of(context)!.about,
+            style: Theme.of(context).textTheme.headline1,
+          ),
+          trailing: IconButton(
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return const EditSummaryPage();
+                },
+              );
             },
-          );
-        },
-        icon: Icon(
-          Icons.edit,
-          color: Theme.of(context).indicatorColor,
+            icon: Icon(
+              Icons.edit,
+              color: Theme.of(context).indicatorColor,
+            ),
+          ),
         ),
-      ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15),
+          child: Text(user.biography),
+        )
+      ],
     );
   }
 
@@ -472,7 +481,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
             AppLocalizations.of(context)!.articles,
             articlesCount,
             () {
-              debugPrint("Content");
               profileStore.index = 1;
               Modular.to.navigate('/profile/content');
             },

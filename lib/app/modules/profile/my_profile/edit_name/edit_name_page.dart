@@ -2,7 +2,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
-import 'package:techfrenetic/app/modules/edit_name/profile_bloc.dart';
+import 'package:techfrenetic/app/modules/profile/my_profile/edit_name/profile_bloc.dart';
 import 'package:techfrenetic/app/providers/professions_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
