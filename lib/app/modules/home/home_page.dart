@@ -106,6 +106,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
             AppLocalizations.of(context)!.notification_button,
             style: const TextStyle(color: Colors.black),
           ),
+          onTap: () => Modular.to.pushNamed('/not_implemented'),
         ),
         PopupMenuItem<int>(
           onTap: () {
@@ -149,8 +150,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
           if (_key.currentState != null) {
             _key.currentState!.toggle();
           }
-          //Modular.to.pushNamed("/community/video");
-          Modular.to.pushNamed("/not_implemented");
+          Modular.to.pushNamed("/community/video");
         },
         icon: const Icon(TechFreneticIcons.shareVideo),
       ),
@@ -184,7 +184,6 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         currentIndex: store.selectedPage,
         onTap: (index) {
           store.selectedPage = index;
-          debugPrint("Selected page: ${store.selectedPage}");
           Modular.to.navigate(_pages[store.selectedPage]);
         },
         curve: Curves.easeInBack,
