@@ -1,6 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/models/video_model.dart';
+import 'package:techfrenetic/app/modules/community/widgets/stories_card_widget.dart';
+import 'package:techfrenetic/app/providers/video_provider.dart';
 
 class StoriesViewWidget extends StatelessWidget {
   StoriesViewWidget({Key? key}) : super(key: key);
@@ -19,43 +20,41 @@ class StoriesViewWidget extends StatelessWidget {
     int cardsInView = 3;
     double width = MediaQuery.of(context).size.width / cardsInView;
     double height = width * 6 / 4;
+    VideoProvider videoProvider = VideoProvider();
+
     return Container(
       height: height,
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      child: ListView(
-        shrinkWrap: true,
-        scrollDirection: Axis.horizontal,
-        children: imgList
-            .map(
-              (image) => Padding(
-                padding: const EdgeInsets.symmetric(vertical: 5),
-                child: InkWell(
-                  onTap: () => Modular.to.pushNamed('/not_implemented'),
-                  child: Container(
-                    margin: EdgeInsets.only(right: width / (cardsInView * 2)),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Theme.of(context).primaryColorLight,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.withOpacity(0.5),
-                            spreadRadius: 1,
-                            blurRadius: 1,
-                            offset: const Offset(
-                                1, 1), // changes position of shadow
-                          ),
-                        ]),
-                    width: width,
-                    clipBehavior: Clip.hardEdge,
-                    child: CachedNetworkImage(
-                      imageUrl: image,
-                      fit: BoxFit.cover,
+      child: FutureBuilder(
+        future: videoProvider.getVideos(),
+        builder:
+            (BuildContext context, AsyncSnapshot<List<VideoModel>> snapshot) {
+          if (snapshot.hasData) {
+            List<VideoModel> videos = snapshot.data!;
+
+            return ListView(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              children: videos
+                  .map(
+                    (video) => StoryCardWidget(
+                      video: video,
+                      width: width,
+                      cardsInView: cardsInView,
                     ),
-                  ),
-                ),
+                  )
+                  .toList(),
+            );
+          } else {
+            return const Center(
+              child: SizedBox(
+                height: 40,
+                width: 40,
+                child: CircularProgressIndicator(),
               ),
-            )
-            .toList(),
+            );
+          }
+        },
       ),
     );
   }

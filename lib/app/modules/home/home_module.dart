@@ -1,3 +1,4 @@
+import 'package:techfrenetic/app/modules/stories/stories_view_page.dart';
 import 'package:techfrenetic/app/modules/not_implemented/not_implemented_page.dart';
 
 import 'home_page.dart';
@@ -169,6 +170,10 @@ class HomeModule extends Module {
     ModuleRoute(
       '/forgot',
       module: ForgotPasswordModule(),
+    ),
+    ChildRoute(
+      "/stories",
+      child: (context, args) => StoriesViewPage(video: args.data['video']),
     ),
     ChildRoute(
       '/not_implemented',
