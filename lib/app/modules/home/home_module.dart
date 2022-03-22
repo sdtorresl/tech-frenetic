@@ -173,7 +173,7 @@ class HomeModule extends Module {
     ),
     ChildRoute(
       "/stories",
-      child: (context, args) => StoriesViewPage(video: args.data['video']),
+      child: (context, args) => StoriesViewPage(video: args.data),
     ),
     ChildRoute(
       '/not_implemented',

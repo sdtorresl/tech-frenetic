@@ -20,8 +20,10 @@ class StoryCardWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: InkWell(
-        onTap: () =>
-            Modular.to.pushNamed('/stories', arguments: {video: video}),
+        onTap: () => Modular.to.pushNamed(
+          '/stories',
+          arguments: video,
+        ),
         child: Container(
           margin: EdgeInsets.only(right: width / (cardsInView * 2)),
           decoration: BoxDecoration(

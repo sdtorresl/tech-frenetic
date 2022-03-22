@@ -60,6 +60,8 @@ dependencies:
   mobx: ^2.0.6+1
   flutter_mobx: ^2.0.4
   card_swiper: ^2.0.1
+  chewie: ^1.1.0
+  video_player: ^2.3.0
 
 dev_dependencies:
   flutter_test:
