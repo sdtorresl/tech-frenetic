@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:path/path.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:techfrenetic/app/modules/videos/videos_controller.dart';
 
 class VideosPage extends StatefulWidget {
@@ -32,28 +31,34 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
     if (_controller != null) {
       _controller!.dispose();
     }
+    timer.cancel();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
+
     final CameraController? cameraController = _controller;
 
     return Scaffold(
+      backgroundColor: const Color.fromRGBO(80, 80, 80, 0.7),
       body: Stack(
         fit: StackFit.expand,
         children: [
           Positioned(
-            top: 0,
             left: 0,
-            bottom: 0,
             right: 0,
             child: cameraController != null
                 ? FutureBuilder<void>(
                     future: _initializeControllerFuture,
                     builder: (context, snapshot) {
                       if (snapshot.connectionState == ConnectionState.done) {
-                        return CameraPreview(cameraController);
+                        return SafeArea(
+                          child: Center(
+                            child: CameraPreview(cameraController),
+                          ),
+                        );
                       } else {
                         return const Center(child: CircularProgressIndicator());
                       }
@@ -157,8 +162,7 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
       }
       if (file != null) {
         debugPrint('Video recorded to ${file.path}');
-        //videoFile = file;
-        //_startVideoPlayer();
+        Modular.to.pushNamed('/community/video/preview', arguments: file);
       }
     });
   }
@@ -180,9 +184,11 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
       elapsedSeconds = 0;
       timer = Timer.periodic(const Duration(seconds: 1), (value) {
         debugPrint("Elapsed time: $elapsedSeconds");
-        setState(() {
-          elapsedSeconds += 1;
-        });
+        if (mounted) {
+          setState(() {
+            elapsedSeconds += 1;
+          });
+        }
       });
       await cameraController.startVideoRecording();
     } on CameraException catch (e) {
