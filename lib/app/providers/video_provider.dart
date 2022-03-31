@@ -12,13 +12,21 @@ class VideoProvider extends TechFreneticProvider {
       var headers = cloudflareAuth;
       Uri _url = Uri.parse("$cloudflareUrl/$cloudflareAccount/stream");
 
+      debugPrint(_url.toString());
+
       var response = await http.get(_url, headers: headers);
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
 
         for (var item in jsonResponse["result"]) {
-          videos.add(VideoModel.fromJson(item));
+          try {
+            videos.add(VideoModel.fromJson(item));
+          } catch (e) {
+            debugPrint("Exception getting video model");
+            debugPrint(item);
+            debugPrint(e.toString());
+          }
         }
       } else {
         debugPrint(response.reasonPhrase);

@@ -110,7 +110,7 @@ class AddArticlesPageState extends State<AddArticlesPage> {
         children: [
           _titleField(context),
           ImageSelectionWidget(
-            onImageLoaded: (image) => this.uploadedImage = image,
+            onImageLoaded: (image) => uploadedImage = image,
           ),
           _descriptionField(context),
           _articleField(context),

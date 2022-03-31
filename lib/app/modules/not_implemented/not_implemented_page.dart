@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 
 class NotImplementedPage extends StatelessWidget {

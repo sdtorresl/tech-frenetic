@@ -46,8 +46,8 @@
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false />
 		<key>NSCameraUsageDescription</key>
-		<string>Can I use the camera please?</string>
+		<string>Tech Frenetic requiere acceder a tu cámara para grabar video</string>
 		<key>NSMicrophoneUsageDescription</key>
-		<string>Can I use the mic please?</string>
+		<string>Tech Frenetic requiere acceder a tu micrófono para grabar video</string>
 	</dict>
 </plist>

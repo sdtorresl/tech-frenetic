@@ -32,7 +32,6 @@ class _MyAccountPageState
   bool _showPasswordForm = false;
   bool _isPasswordHidden1 = true;
   bool _isPasswordHidden2 = true;
-  bool _isPasswordHidden3 = true;
 
   final emailController = TextEditingController();
   final cellphoneController = TextEditingController();

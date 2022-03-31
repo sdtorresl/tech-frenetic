@@ -22,7 +22,7 @@ class VideoModel {
     this.uploadExpiry,
     this.maxSizeBytes,
     this.maxDurationSeconds,
-    this.duration,
+    //this.duration,
     this.input,
     this.playback,
     this.watermark,
@@ -44,7 +44,7 @@ class VideoModel {
   dynamic uploadExpiry;
   dynamic maxSizeBytes;
   dynamic maxDurationSeconds;
-  int? duration;
+  //double? duration;
   Input? input;
   Playback? playback;
   dynamic watermark;
@@ -72,7 +72,7 @@ class VideoModel {
         uploadExpiry: json["uploadExpiry"],
         maxSizeBytes: json["maxSizeBytes"],
         maxDurationSeconds: json["maxDurationSeconds"],
-        duration: json["duration"],
+        //duration: double.tryParse(json["duration"]),
         input: Input.fromJson(json["input"]),
         playback: Playback.fromJson(json["playback"]),
         watermark: json["watermark"],
@@ -97,7 +97,7 @@ class VideoModel {
         "uploadExpiry": uploadExpiry,
         "maxSizeBytes": maxSizeBytes,
         "maxDurationSeconds": maxDurationSeconds,
-        "duration": duration,
+        //"duration": duration,
         "input": input != null ? input!.toJson() : input,
         "playback": playback != null ? playback!.toJson() : playback,
         "watermark": watermark,
