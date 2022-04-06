@@ -17,8 +17,9 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
   CameraController? _controller;
   late Future<void> _initializeControllerFuture;
   bool isRecording = false;
+  bool _recordButtonVisible = false;
   late Timer timer;
-  int elapsedSeconds = 0;
+  double elapsedSeconds = 0;
 
   @override
   void initState() {
@@ -83,12 +84,41 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
             right: 20,
             top: 20,
             child: SafeArea(
-              child: Text(
-                elapsedTime(elapsedSeconds),
-                style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: Colors.white,
-                    ),
-              ),
+              child: isRecording
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 7.5),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(0, 0, 0, 0.5),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Row(
+                        children: [
+                          AnimatedOpacity(
+                            opacity: _recordButtonVisible ? 1.0 : 0.0,
+                            duration: const Duration(milliseconds: 250),
+                            child: const Icon(
+                              Icons.fiber_manual_record,
+                              color: Colors.red,
+                              size: 15,
+                            ),
+                          ),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text(
+                            elapsedTime(elapsedSeconds.toInt()),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: Colors.white,
+                                ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : const SizedBox.shrink(),
             ),
           ),
           Positioned(
@@ -182,11 +212,13 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
 
     try {
       elapsedSeconds = 0;
-      timer = Timer.periodic(const Duration(seconds: 1), (value) {
+
+      timer = Timer.periodic(const Duration(milliseconds: 500), (value) {
         debugPrint("Elapsed time: $elapsedSeconds");
         if (mounted) {
           setState(() {
-            elapsedSeconds += 1;
+            elapsedSeconds += 0.5;
+            _recordButtonVisible = !_recordButtonVisible;
           });
         }
       });
@@ -203,6 +235,9 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
     }
 
     try {
+      setState(() {
+        _recordButtonVisible = false;
+      });
       timer.cancel();
       return _controller!.stopVideoRecording();
     } on CameraException catch (e) {
@@ -217,6 +252,6 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
     String hours = twoDigits(duration.inHours.remainder(60));
     String minutes = twoDigits(duration.inMinutes.remainder(60));
     String seconds = twoDigits(duration.inSeconds.remainder(60));
-    return isRecording ? "$hours:$minutes:$seconds" : "";
+    return isRecording ? "$hours:$minutes:$seconds" : "00:00:10";
   }
 }

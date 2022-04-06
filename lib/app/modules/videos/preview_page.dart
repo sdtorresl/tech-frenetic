@@ -47,7 +47,7 @@ class _PreviewPageState extends State<PreviewPage>
           ..initialize().then((value) {
             _videoPlayerController.play();
 
-            timer = Timer.periodic(const Duration(milliseconds: 250), (value) {
+            timer = Timer.periodic(const Duration(milliseconds: 500), (value) {
               if (mounted) {
                 setState(() {
                   elapsedSeconds =
@@ -110,12 +110,20 @@ class _PreviewPageState extends State<PreviewPage>
                         color: Colors.white,
                       ),
                     ),
-                    Text(
-                      _elapsedTime(elapsedSeconds),
-                      style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                            color: Colors.white,
-                          ),
-                    )
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 7.5),
+                      decoration: BoxDecoration(
+                        color: const Color.fromRGBO(0, 0, 0, 0.5),
+                        borderRadius: BorderRadius.circular(50),
+                      ),
+                      child: Text(
+                        _elapsedTime(elapsedSeconds.toInt()),
+                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: Colors.white,
+                            ),
+                      ),
+                    ),
                   ],
                 ),
               ),
