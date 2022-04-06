@@ -164,7 +164,9 @@ class CommunityPageState
                       TechFreneticIcons.shareVideo,
                       size: 20,
                     ),
-                    onTap: () {},
+                    onTap: () {
+                      Modular.to.pushNamed("/community/video");
+                    },
                   ),
                 ],
               ),
@@ -242,7 +244,7 @@ class CommunityPageState
             shrinkWrap: true,
             children: [
               _postbox(),
-              StoriesViewWidget(),
+              const StoriesViewWidget(),
               ...postsWidgets,
               const SizedBox(height: 60),
             ],

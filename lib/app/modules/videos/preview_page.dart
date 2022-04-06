@@ -22,6 +22,7 @@ class _PreviewPageState extends State<PreviewPage>
   late Animation<double> _animation;
   late Timer timer;
   int elapsedSeconds = 0;
+  bool _isUploading = false;
 
   @override
   void initState() {
@@ -44,10 +45,12 @@ class _PreviewPageState extends State<PreviewPage>
             _videoPlayerController.play();
 
             timer = Timer.periodic(const Duration(milliseconds: 250), (value) {
-              setState(() {
-                elapsedSeconds =
-                    _videoPlayerController.value.position.inSeconds;
-              });
+              if (mounted) {
+                setState(() {
+                  elapsedSeconds =
+                      _videoPlayerController.value.position.inSeconds;
+                });
+              }
             });
 
             if (mounted) {
@@ -105,7 +108,7 @@ class _PreviewPageState extends State<PreviewPage>
                       ),
                     ),
                     Text(
-                      elapsedTime(elapsedSeconds),
+                      _elapsedTime(elapsedSeconds),
                       style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                             color: Colors.white,
                           ),
@@ -122,18 +125,35 @@ class _PreviewPageState extends State<PreviewPage>
             bottom: 0,
             child: _playButton(),
           ),
+          _loading()
         ],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // Add your onPressed code here!
+          setState(() {
+            _isUploading = true;
+          });
+
+          Future.delayed(const Duration(seconds: 1)).then((value) {
+            setState(() {
+              _isUploading = false;
+            });
+
+            Modular.to.pushNamed('/');
+
+            const snackBar = SnackBar(
+              content: Text('Your video was uploaded!'),
+            );
+
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
+          });
         },
         child: const Icon(Icons.send),
       ),
     );
   }
 
-  String elapsedTime(int elapsedSeconds) {
+  String _elapsedTime(int elapsedSeconds) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     Duration duration = Duration(seconds: elapsedSeconds);
     String hours = twoDigits(duration.inHours.remainder(60));
@@ -169,5 +189,20 @@ class _PreviewPageState extends State<PreviewPage>
         ),
       ),
     );
+  }
+
+  Widget _loading() {
+    return _isUploading
+        ? Positioned(
+            child: Container(
+              color: const Color.fromRGBO(0, 0, 0, 0.5),
+              child: const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          )
+        : const SizedBox.shrink();
   }
 }

@@ -36,8 +36,8 @@ class _StoriesViewPageState extends State<StoriesViewPage> {
               },
               itemCount: videos.length,
               scrollDirection: Axis.vertical,
-              pagination:
-                  const SwiperPagination(alignment: Alignment.centerRight),
+              // pagination:
+              //     const SwiperPagination(alignment: Alignment.centerRight),
             );
           } else {
             return const Center(

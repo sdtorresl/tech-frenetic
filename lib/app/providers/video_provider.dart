@@ -10,7 +10,8 @@ class VideoProvider extends TechFreneticProvider {
 
     try {
       var headers = cloudflareAuth;
-      Uri _url = Uri.parse("$cloudflareUrl/$cloudflareAccount/stream");
+      Uri _url = Uri.parse(
+          "$cloudflareUrl/$cloudflareAccount/stream?limit=50&status=ready");
 
       debugPrint(_url.toString());
 
