@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:techfrenetic/app/providers/video_provider.dart';
 import 'package:video_player/video_player.dart';
 
 class PreviewPage extends StatefulWidget {
@@ -17,12 +18,14 @@ class PreviewPage extends StatefulWidget {
 
 class _PreviewPageState extends State<PreviewPage>
     with TickerProviderStateMixin {
+  final VideoProvider _videoProvider = VideoProvider();
   late VideoPlayerController _videoPlayerController;
   late AnimationController _animationController;
   late Animation<double> _animation;
   late Timer timer;
   int elapsedSeconds = 0;
   bool _isUploading = false;
+  String? _progress;
 
   @override
   void initState() {
@@ -134,19 +137,7 @@ class _PreviewPageState extends State<PreviewPage>
             _isUploading = true;
           });
 
-          Future.delayed(const Duration(seconds: 1)).then((value) {
-            setState(() {
-              _isUploading = false;
-            });
-
-            Modular.to.pushNamed('/');
-
-            const snackBar = SnackBar(
-              content: Text('Your video was uploaded!'),
-            );
-
-            ScaffoldMessenger.of(context).showSnackBar(snackBar);
-          });
+          _videoProvider.uploadVideo(widget.videoFile, onComplete, onProgress);
         },
         child: const Icon(Icons.send),
       ),
@@ -196,13 +187,50 @@ class _PreviewPageState extends State<PreviewPage>
         ? Positioned(
             child: Container(
               color: const Color.fromRGBO(0, 0, 0, 0.5),
-              child: const Center(
-                child: CircularProgressIndicator(
-                  color: Colors.white,
+              child: Center(
+                child: SafeArea(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        _progress ?? "0%",
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium!
+                            .copyWith(color: Colors.white),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
           )
         : const SizedBox.shrink();
+  }
+
+  void onComplete() {
+    setState(() {
+      _isUploading = false;
+    });
+
+    Modular.to.pushNamed('/');
+
+    const snackBar = SnackBar(
+      content: Text('Your video was uploaded!'),
+    );
+
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+  }
+
+  void onProgress(double progress) {
+    setState(() {
+      _progress = progress.toStringAsFixed(2) + '%';
+    });
   }
 }
