@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/models/video_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as json;
 import 'package:cross_file/cross_file.dart' show XFile;
+import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:tus_client/tus_client.dart';
 
 class VideoProvider extends TechFreneticProvider {
@@ -44,9 +46,19 @@ class VideoProvider extends TechFreneticProvider {
 
   uploadVideo(XFile file, void Function()? onComplete,
       Function(double)? onProgress) async {
+    UserProvider _userProvider = UserProvider();
+    UserModel? loggedUSer = await _userProvider.getLoggedUser();
+
     final client = TusClient(
-      Uri.parse("https://master.tus.io/files/"),
+      Uri.parse("$cloudflareUrl/$cloudflareAccount/stream"),
       file,
+      headers: cloudflareAuth,
+      metadata: {
+        'author': loggedUSer != null ? loggedUSer.userName : '',
+        'userId': loggedUSer != null ? loggedUSer.uid.toString() : '',
+        'userAvatar': prefs.userAvatar
+      },
+      maxChunkSize: 5 * 1024 * 1024,
       store: TusMemoryStore(),
     );
 
