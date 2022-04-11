@@ -18,7 +18,7 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
   late Future<void> _initializeControllerFuture;
   bool isRecording = false;
   bool _recordButtonVisible = false;
-  late Timer timer;
+  Timer? timer;
   double elapsedSeconds = 0;
 
   @override
@@ -32,7 +32,9 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
     if (_controller != null) {
       _controller!.dispose();
     }
-    timer.cancel();
+    if (timer != null) {
+      timer!.cancel();
+    }
     super.dispose();
   }
 
@@ -238,7 +240,9 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
       setState(() {
         _recordButtonVisible = false;
       });
-      timer.cancel();
+      if (timer != null) {
+        timer!.cancel();
+      }
       return _controller!.stopVideoRecording();
     } on CameraException catch (e) {
       debugPrint(e.toString());

@@ -106,7 +106,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
             AppLocalizations.of(context)!.notification_button,
             style: const TextStyle(color: Colors.black),
           ),
-          onTap: () => Modular.to.pushNamed('/not_implemented'),
+          onTap: () => Modular.to.pushNamed('/notifications'),
         ),
         PopupMenuItem<int>(
           onTap: () {

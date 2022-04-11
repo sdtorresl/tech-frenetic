@@ -1,3 +1,4 @@
+import 'package:techfrenetic/app/modules/notifications/notifications_module.dart';
 import 'package:techfrenetic/app/modules/stories/stories_view_page.dart';
 import 'package:techfrenetic/app/modules/not_implemented/not_implemented_page.dart';
 
@@ -148,6 +149,13 @@ class HomeModule extends Module {
     ModuleRoute(
       '/search',
       module: SearchModule(),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
+    ModuleRoute(
+      '/notifications',
+      module: NotificationsModule(),
       guards: [
         AuthGuard(),
       ],
