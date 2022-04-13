@@ -13,13 +13,17 @@ class VideosPage extends StatefulWidget {
   VideosPageState createState() => VideosPageState();
 }
 
-class VideosPageState extends ModularState<VideosPage, VideosController> {
+class VideosPageState extends ModularState<VideosPage, VideosController>
+    with WidgetsBindingObserver {
   CameraController? _controller;
-  late Future<void> _initializeControllerFuture;
+  bool _isCameraInitialized = false;
   bool isRecording = false;
   bool _recordButtonVisible = false;
   Timer? timer;
   double elapsedSeconds = 0;
+  bool _isRearCameraSelected = true;
+  List<CameraDescription>? cameras;
+  FlashMode? _currentFlashMode;
 
   @override
   void initState() {
@@ -39,13 +43,31 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
   }
 
   @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    final CameraController? cameraController = _controller;
+
+    // App state changed before we got the chance to initialize.
+    if (cameraController == null || !cameraController.value.isInitialized) {
+      return;
+    }
+
+    if (state == AppLifecycleState.inactive) {
+      // Free up memory when camera not active
+      cameraController.dispose();
+    } else if (state == AppLifecycleState.resumed) {
+      // Reinitialize the camera with same properties
+      onNewCameraSelected(cameraController.description);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle.light);
 
     final CameraController? cameraController = _controller;
 
     return Scaffold(
-      backgroundColor: const Color.fromRGBO(80, 80, 80, 0.7),
+      backgroundColor: Colors.black12,
       body: Stack(
         fit: StackFit.expand,
         children: [
@@ -53,34 +75,42 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
             left: 0,
             right: 0,
             child: cameraController != null
-                ? FutureBuilder<void>(
-                    future: _initializeControllerFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.done) {
-                        return SafeArea(
-                          child: Center(
-                            child: CameraPreview(cameraController),
-                          ),
-                        );
-                      } else {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-                    },
-                  )
+                ? _isCameraInitialized
+                    ? SafeArea(
+                        child: Center(
+                          child: CameraPreview(cameraController),
+                        ),
+                      )
+                    : const Center(
+                        child: CircularProgressIndicator(),
+                      )
                 : const Center(child: CircularProgressIndicator()),
           ),
           Positioned(
             left: 20,
             top: 20,
             child: SafeArea(
-              child: IconButton(
-                onPressed: () => Modular.to.pop(),
-                icon: const Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.white,
+                child: Stack(
+              alignment: Alignment.center,
+              children: [
+                const Icon(
+                  Icons.circle,
+                  color: Colors.black38,
+                  size: 50,
                 ),
-              ),
-            ),
+                Positioned(
+                  left: 7,
+                  child: IconButton(
+                    onPressed: () => Modular.to.pop(),
+                    icon: const Icon(
+                      Icons.arrow_back_ios,
+                      color: Colors.white,
+                      size: 30,
+                    ),
+                  ),
+                ),
+              ],
+            )),
           ),
           Positioned(
             right: 20,
@@ -124,32 +154,23 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
             ),
           ),
           Positioned(
-            bottom: 45,
+            bottom: 20,
             left: 0,
             right: 0,
             child: Center(
-              child: GestureDetector(
-                onLongPress: cameraController != null &&
-                        cameraController.value.isInitialized &&
-                        !cameraController.value.isRecordingVideo
-                    ? onVideoRecordButtonPressed
-                    : null,
-                onLongPressUp: cameraController != null &&
-                        cameraController.value.isInitialized &&
-                        cameraController.value.isRecordingVideo
-                    ? onStopButtonPressed
-                    : null,
-                child: isRecording
-                    ? const Icon(
-                        Icons.radio_button_off,
-                        size: 70,
-                        color: Colors.red,
-                      )
-                    : const Icon(
-                        Icons.panorama_fisheye,
-                        size: 70,
-                        color: Colors.white,
-                      ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    width: 90,
+                  ),
+                  _recordButton(cameraController),
+                  const SizedBox(
+                    width: 40,
+                  ),
+                  _toggleCameraButton()
+                ],
               ),
             ),
           )
@@ -158,19 +179,104 @@ class VideosPageState extends ModularState<VideosPage, VideosController> {
     );
   }
 
-  void initializeCamera() async {
-    List<CameraDescription> cameras = await availableCameras();
-    _controller = CameraController(
-      cameras[0],
-      ResolutionPreset.medium,
+  Widget _toggleCameraButton() {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _isCameraInitialized = false;
+        });
+        onNewCameraSelected(
+          cameras![_isRearCameraSelected ? 0 : 1],
+        );
+        setState(() {
+          _isRearCameraSelected = !_isRearCameraSelected;
+        });
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white, width: 2),
+          borderRadius: BorderRadius.circular(50),
+        ),
+        width: 50,
+        height: 50,
+        child: Icon(
+          _isRearCameraSelected ? Icons.camera_front : Icons.camera_rear,
+          color: Colors.white,
+          size: 30,
+        ),
+      ),
     );
+  }
 
-    _initializeControllerFuture = _controller!.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
+  Widget _recordButton(CameraController? cameraController) {
+    return GestureDetector(
+      onLongPress: cameraController != null &&
+              cameraController.value.isInitialized &&
+              !cameraController.value.isRecordingVideo
+          ? onVideoRecordButtonPressed
+          : null,
+      onLongPressUp: cameraController != null &&
+              cameraController.value.isInitialized &&
+              cameraController.value.isRecordingVideo
+          ? onStopButtonPressed
+          : null,
+      child: isRecording
+          ? const Icon(
+              Icons.radio_button_off,
+              size: 70,
+              color: Colors.red,
+            )
+          : const Icon(
+              Icons.panorama_fisheye,
+              size: 70,
+              color: Colors.white,
+            ),
+    );
+  }
+
+  void initializeCamera() async {
+    cameras = await availableCameras();
+    if (cameras != null) {
+      onNewCameraSelected(cameras![0]);
+    }
+  }
+
+  void onNewCameraSelected(CameraDescription cameraDescription) async {
+    final previousCameraController = controller;
+    // Instantiating the camera controller
+    final CameraController cameraController = CameraController(
+      cameraDescription,
+      ResolutionPreset.high,
+      imageFormatGroup: ImageFormatGroup.jpeg,
+    );
+    previousCameraController.dispose();
+
+    // Replace with the new controller
+    if (mounted) {
+      setState(() {
+        _controller = cameraController;
+        _currentFlashMode = _controller!.value.flashMode;
+      });
+    }
+
+    // Update UI if controller updated
+    cameraController.addListener(() {
+      if (mounted) setState(() {});
     });
+
+    // Initialize controller
+    try {
+      await cameraController.initialize();
+    } on CameraException catch (e) {
+      debugPrint('Error initializing camera: $e');
+    }
+
+    // Update the Boolean
+    if (mounted) {
+      setState(() {
+        _isCameraInitialized = _controller!.value.isInitialized;
+      });
+    }
   }
 
   void onVideoRecordButtonPressed() {
