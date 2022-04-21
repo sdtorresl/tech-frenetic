@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/modules/contact_us/contact_us_controller.dart';
+import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -12,18 +14,11 @@ class ContactUsPage extends StatefulWidget {
   _ContactUsPageState createState() => _ContactUsPageState();
 }
 
-List<String> items = [
-  'Subject',
-  'Subject1',
-  'Subject2',
-  'Subject3',
-  'Subject4',
-];
-String? defaultValue = items.first;
-
 class _ContactUsPageState
     extends ModularState<ContactUsPage, ContactUsController> {
   bool _isLoading = false;
+  CategoriesProvider _categoriesProvider = CategoriesProvider();
+  String? _selectedSubject;
 
   @override
   Widget build(BuildContext context) {
@@ -181,29 +176,28 @@ class _ContactUsPageState
                     builder: (context, snapshot) {
                       return ElevatedButton(
                         onPressed: snapshot.hasData && !_isLoading
-                            ? () async {
-                                setState(() {
-                                  _isLoading = true;
-                                });
-                                bool createProfile = await store.contactUs();
-                                setState(() {
-                                  _isLoading = false;
-                                });
-                                if (createProfile) {
-                                  debugPrint('Email Send');
-                                  // Modular.to.pushNamedAndRemoveUntil(
-                                  //     '/choose_avatar', (p0) => false);
-                                } else {
-                                  debugPrint("Email not Send");
-                                }
-                              }
+                            ? _sendContact
                             : null,
-                        child: Text(
-                          AppLocalizations.of(context)!.send,
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1!
-                              .copyWith(color: Colors.white),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _isLoading
+                                ? Container(
+                                    height: 20,
+                                    width: 20,
+                                    margin: const EdgeInsets.only(right: 20),
+                                    child: const CircularProgressIndicator(
+                                        color: Colors.white),
+                                  )
+                                : const SizedBox(),
+                            Text(
+                              AppLocalizations.of(context)!.send,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .button!
+                                  .copyWith(color: Colors.white),
+                            ),
+                          ],
                         ),
                         style: ButtonStyle(
                           shape:
@@ -291,34 +285,7 @@ class _ContactUsPageState
           },
         ),
         const SizedBox(height: 40),
-        StreamBuilder(
-            stream: store.subjectStream,
-            builder: (context, snapshot) {
-              return DropdownButton<String>(
-                value: defaultValue,
-                isExpanded: true,
-                underline: Container(
-                  height: 0.5,
-                  color: Colors.black,
-                ),
-                items: items.map(
-                  (String valueItem) {
-                    return DropdownMenuItem<String>(
-                      child: Text(valueItem),
-                      value: valueItem,
-                    );
-                  },
-                ).toList(),
-                onChanged: (newValue) {
-                  setState(
-                    () {
-                      defaultValue = newValue;
-                      store.changeSubject(defaultValue!);
-                    },
-                  );
-                },
-              );
-            }),
+        _subjectsDropdown(),
         const SizedBox(height: 40),
         Text(
           AppLocalizations.of(context)!.message2,
@@ -406,5 +373,81 @@ class _ContactUsPageState
         ),
       ],
     );
+  }
+
+  StreamBuilder<String> _subjectsDropdown() {
+    return StreamBuilder(
+      stream: store.subjectStream,
+      builder: (context, snapshot) {
+        List<CategoriesModel> subjects = [];
+        return FutureBuilder(
+          future: _categoriesProvider.getSubjects(),
+          initialData: subjects,
+          builder: (BuildContext context,
+              AsyncSnapshot<List<CategoriesModel>> snapshot) {
+            if (snapshot.hasData) {
+              subjects = snapshot.data!;
+              return DropdownButton<String>(
+                value: _selectedSubject,
+                isExpanded: true,
+                underline: Container(
+                  height: 0.5,
+                  color: Colors.black,
+                ),
+                items: subjects.map(
+                  (CategoriesModel subject) {
+                    return DropdownMenuItem<String>(
+                      child: Text(subject.category),
+                      value: subject.id,
+                    );
+                  },
+                ).toList(),
+                onChanged: (newValue) {
+                  setState(
+                    () {
+                      _selectedSubject = newValue;
+                      store.changeSubject(newValue!);
+                    },
+                  );
+                },
+              );
+            } else {
+              return const Center(child: CircularProgressIndicator());
+            }
+          },
+        );
+      },
+    );
+  }
+
+  _sendContact() async {
+    setState(() {
+      _isLoading = true;
+    });
+    bool contactSent = await store.contactUs();
+    setState(() {
+      _isLoading = false;
+    });
+
+    SnackBar snackBar;
+    if (contactSent) {
+      Modular.to.pushNamedAndRemoveUntil('/', (p) => true);
+      snackBar = SnackBar(
+        content: Text(AppLocalizations.of(context)!.message_contact_sent),
+        action: SnackBarAction(
+          label: AppLocalizations.of(context)!.button_accept,
+          onPressed: () {},
+        ),
+      );
+    } else {
+      snackBar = SnackBar(
+        content: Text(AppLocalizations.of(context)!.message_error),
+        action: SnackBarAction(
+          label: AppLocalizations.of(context)!.close,
+          onPressed: () {},
+        ),
+      );
+    }
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 }
