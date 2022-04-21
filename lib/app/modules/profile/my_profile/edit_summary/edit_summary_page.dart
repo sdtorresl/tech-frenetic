@@ -168,7 +168,7 @@ class _EditSummaryPageState extends State<EditSummaryPage> {
     });
 
     String message = updated
-        ? AppLocalizations.of(context)!.mssage_success
+        ? AppLocalizations.of(context)!.message_success
         : AppLocalizations.of(context)!.error;
 
     SnackBar snackBar = SnackBar(

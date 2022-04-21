@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:techfrenetic/app/models/contact_model.dart';
+import 'package:techfrenetic/app/providers/contact_provider.dart';
 import '../../common/validators.dart';
 
 class ContactUsController extends Disposable {
@@ -42,13 +44,23 @@ class ContactUsController extends Disposable {
   String get name => _nameController.value;
   String get email => _emailController.value;
   String get phone => _cellphoneController.value;
-  String get subject => _subjectController.value;
+  String get subject => _subjectController.valueOrNull ?? '';
   String get description => _descriptionController.value;
   bool get terms => _termsController.value;
 
   Future<bool> contactUs() async {
-    debugPrint('The contact email was send');
-    return true;
+    ContactModel contactData = ContactModel(
+      name: name,
+      email: email,
+      phone: phone,
+      message: description,
+      subject: subject,
+    );
+
+    debugPrint(contactData.toString());
+
+    ContactProvider contactProvider = ContactProvider();
+    return contactProvider.sendContact(contactData);
   }
 
   @override
