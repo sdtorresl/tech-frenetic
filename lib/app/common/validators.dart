@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:techfrenetic/app/core/errors.dart';
+
 class Validators {
   static final validateEmail = StreamTransformer<String, String>.fromHandlers(
     handleData: (email, sink) {
@@ -67,9 +69,7 @@ class Validators {
       if (name.isNotEmpty) {
         sink.add(name);
       } else {
-        sink.addError(
-          'Ingresa un nombre',
-        );
+        sink.addError(ErrorType.fieldRequired);
       }
     },
   );
@@ -93,9 +93,7 @@ class Validators {
       if (date != DateTime.now()) {
         sink.add(date);
       } else {
-        sink.addError(
-          'Ingresa un una fecha',
-        );
+        sink.addError(ErrorType.dateRequired);
       }
     },
   );
@@ -103,12 +101,21 @@ class Validators {
   static final validateDateMeetups =
       StreamTransformer<DateTime, DateTime>.fromHandlers(
     handleData: (date, sink) {
-      if (date.isBefore(DateTime.now())) {
+      if (!date.isBefore(DateTime.now())) {
         sink.add(date);
       } else {
-        sink.addError(
-          'Seleccione una fecha futura',
-        );
+        sink.addError(ErrorType.futureDateRequired);
+      }
+    },
+  );
+
+  static final validateFieldRequired =
+      StreamTransformer<String, String>.fromHandlers(
+    handleData: (field, sink) {
+      if (field.isNotEmpty) {
+        sink.add(field);
+      } else {
+        sink.addError(ErrorType.fieldRequired);
       }
     },
   );
@@ -122,9 +129,11 @@ class Validators {
       if (regExp.hasMatch(url)) {
         sink.add(url);
       } else {
-        sink.addError(
-          'Ingrese una url valida',
-        );
+        if (url.isNotEmpty) {
+          sink.addError(ErrorType.invalidUrl);
+        } else {
+          sink.add(url);
+        }
       }
     },
   );

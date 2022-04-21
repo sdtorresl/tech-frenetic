@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
-import 'package:techfrenetic/app/providers/create_meeetup_provider.dart';
+import 'package:techfrenetic/app/providers/meetups_provider.dart';
 import '../../common/validators.dart';
 
 class CreateMeetupsController extends Disposable {
@@ -13,13 +13,13 @@ class CreateMeetupsController extends Disposable {
       _urlController.stream.transform(Validators.validateUrl);
 
   Stream<DateTime> get dateStream =>
-      _dateController.stream.transform(Validators.validateDate);
+      _dateController.stream.transform(Validators.validateDateMeetups);
 
   Stream<String> get locationStream =>
-      _locationController.stream.transform(Validators.validateName);
+      _locationController.stream.transform(Validators.validateFieldRequired);
 
   Stream<String> get titleStream =>
-      _titleController.stream.transform(Validators.validateName);
+      _titleController.stream.transform(Validators.validateFieldRequired);
 
   Stream<bool> get formValidStream => Rx.combineLatest4(
       urlStream, dateStream, locationStream, titleStream, (e, p, a, c) => true);
@@ -35,10 +35,10 @@ class CreateMeetupsController extends Disposable {
   String get title => _titleController.value;
 
   Future<bool> createMeetups() async {
-    CreateMeetupProvider _createMeetupPorovider = CreateMeetupProvider();
+    MeetupsProvider _meetupsProvider = MeetupsProvider();
 
     bool? createMeetup =
-        await _createMeetupPorovider.createMeetup(url, date, location, title);
+        await _meetupsProvider.createMeetup(url, date, location, title);
     if (createMeetup == true) {
       return true;
     } else {

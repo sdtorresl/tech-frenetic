@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/core/errors.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/modules/contact_us/contact_us_controller.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
@@ -274,7 +275,9 @@ class _ContactUsPageState
                     .textTheme
                     .bodyText1!
                     .copyWith(color: Theme.of(context).hintColor),
-                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorText: snapshot.hasError
+                    ? TFError.getError(context, snapshot.error as ErrorType)
+                    : null,
                 errorStyle: Theme.of(context)
                     .textTheme
                     .headline4!

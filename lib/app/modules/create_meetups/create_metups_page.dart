@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:intl/intl.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
+import 'package:techfrenetic/app/core/errors.dart';
 import 'package:techfrenetic/app/modules/create_meetups/create_metups_controller.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -193,7 +194,9 @@ class _CreateMeetupsPageState
                     .textTheme
                     .bodyText1!
                     .copyWith(color: Theme.of(context).hintColor),
-                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorText: snapshot.hasError
+                    ? TFError.getError(context, snapshot.error as ErrorType)
+                    : null,
                 errorStyle: Theme.of(context)
                     .textTheme
                     .headline4!
@@ -222,8 +225,9 @@ class _CreateMeetupsPageState
                       .textTheme
                       .bodyText1!
                       .copyWith(color: Theme.of(context).hintColor),
-                  errorText:
-                      snapshot.hasError ? snapshot.error.toString() : null,
+                  errorText: snapshot.hasError
+                      ? TFError.getError(context, snapshot.error as ErrorType)
+                      : null,
                   errorStyle: Theme.of(context)
                       .textTheme
                       .headline4!
@@ -238,7 +242,9 @@ class _CreateMeetupsPageState
                   ).then((date) {
                     setState(() {
                       datePicked = date;
-                      store.changeDate(date!);
+                      if (date != null) {
+                        store.changeDate(date);
+                      }
                     });
                   });
                 },
@@ -262,7 +268,9 @@ class _CreateMeetupsPageState
                     .textTheme
                     .bodyText1!
                     .copyWith(color: Theme.of(context).hintColor),
-                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorText: snapshot.hasError
+                    ? TFError.getError(context, snapshot.error as ErrorType)
+                    : null,
                 errorStyle: Theme.of(context)
                     .textTheme
                     .headline4!
@@ -287,7 +295,9 @@ class _CreateMeetupsPageState
                     .textTheme
                     .bodyText1!
                     .copyWith(color: Theme.of(context).hintColor),
-                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorText: snapshot.hasError
+                    ? TFError.getError(context, snapshot.error as ErrorType)
+                    : null,
                 errorStyle: Theme.of(context)
                     .textTheme
                     .headline4!
