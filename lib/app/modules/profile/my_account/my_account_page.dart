@@ -643,11 +643,11 @@ class _MyAccountPageState
 
         showMessage(context,
             title: updated
-                ? AppLocalizations.of(context)!.about
+                ? AppLocalizations.of(context)!.message_success
                 : AppLocalizations.of(context)!.error,
             content: Text(updated
-                ? AppLocalizations.of(context)!.about
-                : AppLocalizations.of(context)!.error),
+                ? AppLocalizations.of(context)!.profile_account_updated
+                : AppLocalizations.of(context)!.message_error),
             actions: actions);
       },
     );

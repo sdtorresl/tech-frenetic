@@ -16,7 +16,7 @@ class MeetupsWallModel {
 
   factory MeetupsWallModel.fromMap(Map<String, dynamic> json) {
     return MeetupsWallModel(
-      results: json["results"] = '1',
+      results: json["results"],
       articles: List<MeetupsModel>.from(
         json["articles"].map((x) => MeetupsModel.fromMap(x)),
       ),

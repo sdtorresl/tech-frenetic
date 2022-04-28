@@ -171,8 +171,10 @@
     "logout_button": "Log out",
     "looking": "What are you looking for",
     "love_to_learn": "We love to Learn everryday",
+    "meetups_by": "By",
     "meetups_cta_new": "Host a Meetup",
     "meetups_cta_post": "Post your meetup",
+    "meetups_go_meeting": "Go to meetup",
     "meetups_host_black": "Meetup",
     "meetups_host_blue": "Host a",
     "meetups_host_intro": "Connect with other Tech Frenetic’s members in your area.",
@@ -219,6 +221,7 @@
     "popular": "Popular",
     "post": "Post",
     "profile_about": "About",
+    "profile_account_updated": "Your account information has been upadted",
     "profile_activity_title": "My Activity",
     "profile_add": "Add about you",
     "profile_all_read": "Mark all as read",
@@ -343,6 +346,6 @@
     "your_email": "Your email",
     "your_name": "What´s your name?",
     "your_phone": "What´s your phone?",
-    "your_profile": "Who viewed your profile?",
-    "yout_profession": "Your Profession"
+    "your_profession": "Your Profession",
+    "your_profile": "Who viewed your profile?"
 }

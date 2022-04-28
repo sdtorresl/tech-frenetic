@@ -16,6 +16,7 @@
     "blue_vendors": "Proveedores",
     "btn_create": "Crear",
     "btn_join": "Unirme",
+    "button_accept": "Aceptar",
     "by": "Por",
     "call_us": "Llamanos",
     "cancel": "Cancelar",
@@ -170,8 +171,10 @@
     "logout_button": "Cerrar sesión",
     "looking": "Qué estás buscando",
     "love_to_learn": "Nos encanta aprender todos los días",
+    "meetups_by": "Por",
     "meetups_cta_new": "Programar un Meetup",
     "meetups_cta_post": "Programa tu meetup",
+    "meetups_go_meeting": "Ir al encuentro",
     "meetups_host_black": "tu Meetup",
     "meetups_host_blue": "Organiza",
     "meetups_host_intro": "Conectate con otros miembros Tech Frenetic en tu área.",
@@ -218,6 +221,7 @@
     "popular": "Popular",
     "post": "Post",
     "profile_about": "Acerca de",
+    "profile_account_updated": "Tu información ha sido actualizada correctamente",
     "profile_activity_title": "Mi actividad",
     "profile_add": "Escribe sobre ti",
     "profile_all_read": "Marcar todo como leido",
@@ -342,7 +346,6 @@
     "your_email": " Tu correo",
     "your_name": "¿Cuál es tu nombre?",
     "your_phone": "¿Cuál es tu telefono?",
-    "your_profile": "¿Quién vio tu perfil?",
-    "button_accept": "Aceptar",
-    "yout_profession": "Tu profesion"
+    "your_profession": "Tu profesion",
+    "your_profile": "¿Quién vio tu perfil?"
 }

@@ -104,23 +104,21 @@ class _MetupsPageState extends State<MetupsPage> {
                   const SizedBox(
                     height: 40,
                   ),
-                  Row(
-                    children: [
-                      const SizedBox(width: 20),
-                      FutureBuilder(
-                        future: meetupsProvideer.getMeetupsWall(),
-                        builder:
-                            (BuildContext context, AsyncSnapshot snapshot) {
-                          if (snapshot.hasData) {
-                            MeetupsWallModel wall = snapshot.data;
-                            return Text('(' + wall.results + ')');
-                          } else {
-                            return const Text('(0)');
-                          }
-                        },
-                      ),
-                      Text(AppLocalizations.of(context)!.meetups_ttl_black),
-                    ],
+                  Container(
+                    alignment: Alignment.centerLeft,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: FutureBuilder(
+                      future: meetupsProvideer.getMeetupsWall(),
+                      builder: (BuildContext context, AsyncSnapshot snapshot) {
+                        if (snapshot.hasData) {
+                          MeetupsWallModel wall = snapshot.data;
+                          return Text(
+                              "(${wall.results}) ${AppLocalizations.of(context)!.meetups_ttl_black}");
+                        } else {
+                          return const Text('(0)');
+                        }
+                      },
+                    ),
                   ),
                   const SizedBox(
                     height: 10,
@@ -130,20 +128,25 @@ class _MetupsPageState extends State<MetupsPage> {
                     builder: (BuildContext context, AsyncSnapshot snapshot) {
                       if (snapshot.hasData) {
                         List<MeetupsModel> meetups = snapshot.data ?? [];
-                        List<Widget> postsWidgets = [];
+                        List<Widget> meetupWidgets = [];
 
                         for (MeetupsModel meetup in meetups) {
-                          postsWidgets.add(MeetupWidget(meetup: meetup));
+                          meetupWidgets.add(MeetupWidget(meetup: meetup));
                         }
 
                         return Column(
                           children: [
-                            ...postsWidgets,
-                            const SizedBox(height: 60),
+                            ...meetupWidgets,
+                            const SizedBox(height: 20),
                           ],
                         );
                       } else {
-                        return const Center(child: CircularProgressIndicator());
+                        return const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 5),
+                          child: Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        );
                       }
                     },
                   ),
