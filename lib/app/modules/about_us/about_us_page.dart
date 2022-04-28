@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:techfrenetic/app/widgets/appbar_widget.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 
 class AboutUsPage extends StatelessWidget {
   const AboutUsPage({Key? key}) : super(key: key);
@@ -9,9 +9,6 @@ class AboutUsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TFAppBar(
-        onPressed: () => Navigator.pop(context),
-      ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: ListView(
@@ -119,7 +116,11 @@ class AboutUsPage extends StatelessWidget {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: () => Modular.to.pushNamed("/community/"),
+                    onPressed: () {
+                      UserPreferences userPreferences = UserPreferences();
+                      userPreferences.newUser = false;
+                      Modular.to.pushNamed("/community");
+                    },
                     child: Text(
                       AppLocalizations.of(context)!.become,
                       style: Theme.of(context)

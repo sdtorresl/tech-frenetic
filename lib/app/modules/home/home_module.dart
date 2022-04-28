@@ -1,3 +1,4 @@
+import 'package:techfrenetic/app/core/onboarding_guard.dart';
 import 'package:techfrenetic/app/modules/notifications/notifications_module.dart';
 import 'package:techfrenetic/app/modules/stories/stories_view_page.dart';
 import 'package:techfrenetic/app/modules/not_implemented/not_implemented_page.dart';
@@ -54,6 +55,7 @@ class HomeModule extends Module {
       ],
       guards: [
         AuthGuard(),
+        OnboardingGuard(),
       ],
     ),
     ChildRoute('/events', child: (context, args) => const EventsPage()),
