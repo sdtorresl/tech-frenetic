@@ -114,7 +114,8 @@ class _CreateMeetupsPageState
                                                     .primaryColor),
                                       ),
                                       onPressed: () {
-                                        Navigator.of(context).pop();
+                                        Modular.to.popUntil(
+                                            ModalRoute.withName('/community'));
                                       },
                                     ),
                                   ];

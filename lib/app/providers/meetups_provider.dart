@@ -78,8 +78,7 @@ class MeetupsProvider extends TechFreneticProvider {
           {"target_id": "meetup", "target_type": "node_type"}
         ]
       };
-      debugPrint(
-          DateFormat('yyyy-MM-ddTHH:mm:ss-SSSXXX').format(date).toString());
+      debugPrint(DateFormat('yyyy-MM-ddTHH:mm:ss-SSS').format(date).toString());
       Map<String, String> headers = {};
       headers
         ..addAll(authHeader)
@@ -92,6 +91,8 @@ class MeetupsProvider extends TechFreneticProvider {
         body: json.jsonEncode(body),
         headers: headers,
       );
+
+      debugPrint("Creating meetup: $_url");
 
       if (response.statusCode == 201) {
         return true;
