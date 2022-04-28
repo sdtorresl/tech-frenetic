@@ -1,12 +1,9 @@
 import 'package:card_swiper/card_swiper.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/video_model.dart';
 import 'package:techfrenetic/app/modules/stories/single_video_item.dart';
 import 'package:techfrenetic/app/providers/video_provider.dart';
-import 'package:chewie/chewie.dart';
-import 'package:video_player/video_player.dart';
 
 class StoriesViewPage extends StatefulWidget {
   const StoriesViewPage({Key? key, required VideoModel video})

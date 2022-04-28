@@ -3,7 +3,7 @@ import 'package:rxdart/rxdart.dart';
 import 'package:techfrenetic/app/providers/meetups_provider.dart';
 import '../../common/validators.dart';
 
-class CreateMeetupsController extends Disposable {
+class MeetupsController extends Disposable {
   final _urlController = BehaviorSubject<String>();
   final _dateController = BehaviorSubject<DateTime>();
   final _locationController = BehaviorSubject<String>();

@@ -1,11 +1,11 @@
-import 'package:techfrenetic/app/modules/create_meetups/create_metups_controller.dart';
-import 'package:techfrenetic/app/modules/create_meetups/create_metups_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/modules/meetups/create_meetups_page.dart';
+import 'package:techfrenetic/app/modules/meetups/meetups_controller.dart';
 
 class CreateMeetupsModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind.lazySingleton((i) => CreateMeetupsController()),
+    Bind.lazySingleton((i) => MeetupsController()),
   ];
 
   @override

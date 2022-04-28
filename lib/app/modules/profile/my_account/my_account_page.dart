@@ -28,7 +28,7 @@ class _MyAccountPageState
   String? cellphone;
   String? defaultCountry;
   bool _isLoading = false;
-  bool _isSavingPassword = false;
+  final bool _isSavingPassword = false;
   bool _showPasswordForm = false;
   bool _isPasswordHidden1 = true;
   bool _isPasswordHidden2 = true;

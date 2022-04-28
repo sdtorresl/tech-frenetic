@@ -23,7 +23,6 @@ class VideosPageState extends ModularState<VideosPage, VideosController>
   double elapsedSeconds = 0;
   bool _isRearCameraSelected = true;
   List<CameraDescription>? cameras;
-  FlashMode? _currentFlashMode;
 
   @override
   void initState() {
@@ -255,7 +254,6 @@ class VideosPageState extends ModularState<VideosPage, VideosController>
     if (mounted) {
       setState(() {
         _controller = cameraController;
-        _currentFlashMode = _controller!.value.flashMode;
       });
     }
 

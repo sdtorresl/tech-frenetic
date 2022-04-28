@@ -18,7 +18,7 @@ class ContactUsPage extends StatefulWidget {
 class _ContactUsPageState
     extends ModularState<ContactUsPage, ContactUsController> {
   bool _isLoading = false;
-  CategoriesProvider _categoriesProvider = CategoriesProvider();
+  final CategoriesProvider _categoriesProvider = CategoriesProvider();
   String? _selectedSubject;
 
   @override

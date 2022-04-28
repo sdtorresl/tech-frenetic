@@ -12,7 +12,7 @@ import 'package:techfrenetic/app/modules/choose_avatar/choose_avatar_module.dart
 import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/contact_us/contact_us_module.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_module.dart';
-import 'package:techfrenetic/app/modules/create_meetups/create_meetups_module.dart';
+import 'package:techfrenetic/app/modules/meetups/meetups_module.dart';
 import 'package:techfrenetic/app/modules/edit_avatar/edit_avatar_page.dart';
 import 'package:techfrenetic/app/modules/events/events_page.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
@@ -114,7 +114,7 @@ class HomeModule extends Module {
     ),
     ModuleRoute(
       '/create_meetups',
-      module: CreateMeetupsModule(),
+      module: MeetupsModule(),
       guards: [
         AuthGuard(),
       ],
