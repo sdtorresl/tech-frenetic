@@ -107,8 +107,7 @@ class GroupsProvider extends TechFreneticProvider {
     List<GroupModel> recommendedGroups = [];
 
     try {
-      Uri _url = Uri.parse(
-          "$baseUrl/api/$locale/v1/group-user-belongs/${prefs.userId}");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/group/1/userbelong/json");
 
       Map<String, String> headers = {};
       headers.addAll(authHeader);

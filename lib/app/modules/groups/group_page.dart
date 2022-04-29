@@ -74,7 +74,7 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
                               const SizedBox(
                                 height: 5,
                               ),
-                              Text(group.description)
+                              Text(group.description ?? '')
                             ],
                           )
                         ],

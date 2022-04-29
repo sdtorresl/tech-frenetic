@@ -135,6 +135,8 @@
     "groups_members": "miembros",
     "groups_no_groups": "Aun no tienes grupos",
     "groups_posts": "posts",
+    "groups_private": "Grupo privado",
+    "groups_public": "Grupo público",
     "groups_tab_create": "Crear un grupo",
     "groups_tab_discover": "Descubre grupos",
     "groups_tab_groups": "Mis grupos",

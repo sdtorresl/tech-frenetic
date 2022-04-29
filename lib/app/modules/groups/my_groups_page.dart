@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/models/group_model.dart';
+import 'package:techfrenetic/app/providers/group_providers.dart';
+import 'package:techfrenetic/app/widgets/group_card_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
-class MyGroupPage extends StatelessWidget {
+class MyGroupPage extends StatefulWidget {
   const MyGroupPage({Key? key}) : super(key: key);
+
+  @override
+  State<MyGroupPage> createState() => _MyGroupPageState();
+}
+
+class _MyGroupPageState extends State<MyGroupPage> {
+  String searchText = "";
+  TextEditingController searchTextController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +84,7 @@ class MyGroupPage extends StatelessWidget {
                           ),
                         ],
                       ),
-                      _noGroups(context),
+                      _userGroups(context)
                     ],
                   ),
                 ),
@@ -85,7 +96,7 @@ class MyGroupPage extends StatelessWidget {
     );
   }
 
-  Widget _noGroups(context) {
+  Widget _noGroups(BuildContext context) {
     return Column(
       children: [
         const SizedBox(
@@ -112,5 +123,95 @@ class MyGroupPage extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Widget _userGroups(BuildContext context) {
+    GroupsProvider groupsProvider = GroupsProvider();
+
+    return FutureBuilder(
+      future: groupsProvider.getGroupsUserBelongs(),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<GroupModel>> snapshot) {
+        if (snapshot.hasData) {
+          List<GroupModel> groups = snapshot.data!;
+
+          return Column(children: [
+            const SizedBox(
+              height: 20,
+            ),
+            _searchBox(context),
+            const SizedBox(
+              height: 20,
+            ),
+            ..._groupsWidget(groups)
+          ]);
+        } else {
+          return _noGroups(context);
+        }
+      },
+    );
+  }
+
+  Widget _searchBox(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.all(15),
+      decoration: const BoxDecoration(
+        border: Border(
+          top: BorderSide(width: 2, color: Colors.black45),
+          bottom: BorderSide(width: 2, color: Colors.black45),
+          left: BorderSide(width: 2, color: Colors.black45),
+          right: BorderSide(width: 2, color: Colors.black45),
+        ),
+      ),
+      child: TextFormField(
+        controller: searchTextController,
+        decoration: InputDecoration(
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          border: InputBorder.none,
+          prefixIcon: Icon(Icons.search, color: Theme.of(context).primaryColor),
+          suffixIcon: IconButton(
+            icon: Icon(Icons.cancel,
+                color: Theme.of(context).unselectedWidgetColor),
+            onPressed: () {
+              searchTextController.clear();
+              setState(() {
+                searchText = "";
+              });
+            },
+          ),
+          hintText: 'Type here to search',
+          hintStyle: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Theme.of(context).primaryColor),
+          fillColor: Colors.white,
+          filled: true,
+        ),
+        onChanged: (text) {
+          setState(() {
+            searchText = text;
+          });
+        },
+        onFieldSubmitted: (text) {
+          debugPrint("Submitted $text");
+        },
+      ),
+    );
+  }
+
+  _groupsWidget(List<GroupModel> groups) {
+    return groups.map(
+      (group) {
+        if (group.title.toLowerCase().contains(searchText)) {
+          return Container(
+            margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
+            child: GroupCardWidget(group: group),
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
+    ).toList();
   }
 }

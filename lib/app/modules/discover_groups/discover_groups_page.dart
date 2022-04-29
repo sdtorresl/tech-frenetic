@@ -93,11 +93,11 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
           );
         }
       } else {
-        recommendedGroupsWidgets.add(
+        /*recommendedGroupsWidgets.add(
           GroupsCardsWidget(
             group: group,
           ),
-        );
+        );*/
         recommendedGroupsWidgets.add(
           Separator(
             separatorWidth: separatorWidth,
