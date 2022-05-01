@@ -4,7 +4,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
 
-/*
 class GroupsCardsWidget extends StatefulWidget {
   final GroupModel group;
 
@@ -42,7 +41,7 @@ class _GroupsCardsWidgetState extends State<GroupsCardsWidget> {
           style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
         ),
         subtitle: Text(
-          "${widget.group.members.isNotEmpty ? widget.group.members.length : 0} ${AppLocalizations.of(context)!.groups_members} - ${widget.group.posts.isNotEmpty ? widget.group.posts.length : 0} ${AppLocalizations.of(context)!.groups_posts}",
+          "${widget.group.members != null ? widget.group.members!.length : 0} ${AppLocalizations.of(context)!.groups_members} - ${widget.group.posts != null ? widget.group.posts!.length : 0} ${AppLocalizations.of(context)!.groups_posts}",
           style: Theme.of(context)
               .textTheme
               .bodyText1!
@@ -70,4 +69,3 @@ class _GroupsCardsWidgetState extends State<GroupsCardsWidget> {
     );
   }
 }
-*/

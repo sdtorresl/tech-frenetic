@@ -11,6 +11,9 @@ class GroupCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.zero,
+      ),
       elevation: 3,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

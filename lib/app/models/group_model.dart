@@ -4,6 +4,7 @@
 
 import 'dart:convert';
 
+import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:techfrenetic/app/models/model.dart';
 
@@ -36,19 +37,29 @@ class GroupModel extends Model {
   factory GroupModel.fromMap(Map<String, dynamic> json) {
     final String baseUrl = GlobalConfiguration().getValue("api_url");
 
+    String picture = "";
+    if (json["field_logo"] != null) {
+      picture = json["field_logo"].toString().isNotEmpty
+          ? baseUrl + json["field_logo"]
+          : "";
+    }
+    if (json["field_group_logo"] != null) {
+      picture = json["field_group_logo"].toString().isNotEmpty
+          ? baseUrl + json["field_group_logo"]
+          : "";
+    }
+
+    debugPrint(picture);
+
     return GroupModel(
-        id: json["id"],
-        title: json["label"],
-        description: json["field_group_description"],
-        featured: json["field_group_featured"],
-        members: json["field_group_members"],
-        picture: json["field_logo"] != null
-            ? json["field_logo"].toString().isNotEmpty
-                ? baseUrl + json["field_logo"]
-                : ""
-            : "",
+        id: json["id"] ?? json["nid"],
+        title: json["label"] ?? json["title"],
+        description: json["field_group_description"] ?? '',
+        featured: json["field_group_featured"] ?? '',
+        members: json["field_group_members"] ?? '',
+        picture: picture,
         posts: json["field_group_articles"] ?? '',
-        public: json["type"] == "Group Public");
+        public: json["type"] != null ? json["type"] == "Group Public" : true);
   }
 
   Map<String, dynamic> toMap() => {

@@ -171,7 +171,7 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
                   });
                 },
               ),
-              hintText: 'Type here to search',
+              hintText: AppLocalizations.of(context)!.search_text,
               hintStyle: Theme.of(context)
                   .textTheme
                   .bodyText1!

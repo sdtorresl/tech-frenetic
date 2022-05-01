@@ -180,7 +180,7 @@ class _MyGroupPageState extends State<MyGroupPage> {
               });
             },
           ),
-          hintText: 'Type here to search',
+          hintText: AppLocalizations.of(context)!.search_text,
           hintStyle: Theme.of(context)
               .textTheme
               .bodyText1!
