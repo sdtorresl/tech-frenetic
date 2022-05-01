@@ -1,11 +1,13 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:techfrenetic/app/providers/group_providers.dart';
-import 'package:techfrenetic/app/widgets/appbar_widget.dart';
+import 'package:techfrenetic/app/widgets/separator.dart';
 
 import '../../models/group_model.dart';
 import '../../widgets/rounded_image_widget.dart';
 import 'group_controller.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/providers/group_providers.dart';
+import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 
 class GroupPage extends StatefulWidget {
   final int groupId;
@@ -24,70 +26,216 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
   Widget build(BuildContext context) {
     GroupsProvider _groupsProvider = GroupsProvider();
 
-    return FutureBuilder(
-      future: _groupsProvider.getGroup(widget.groupId),
-      builder: (BuildContext context, AsyncSnapshot<GroupModel> snapshot) {
-        if (snapshot.hasData) {
-          GroupModel group = snapshot.data!;
-          return Scaffold(
-              appBar: TFAppBar(
-                title: Text(
+    return Scaffold(
+      appBar: TFAppBar(
+        title: Text(
+          AppLocalizations.of(context)!.groups,
+          style: Theme.of(context).textTheme.headline1,
+        ),
+      ),
+      body: FutureBuilder(
+        future: _groupsProvider.getGroup(widget.groupId),
+        builder: (BuildContext context, AsyncSnapshot<GroupModel> snapshot) {
+          if (snapshot.hasData) {
+            GroupModel group = snapshot.data!;
+            return ListView(
+              children: [
+                _header(context, group),
+                _details(context, group),
+              ],
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _header(BuildContext context, GroupModel group) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(25),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        border: Border(
+          top: BorderSide(
+            width: 1.90,
+            color: Theme.of(context).primaryColor,
+          ),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).unselectedWidgetColor,
+            spreadRadius: -5,
+            blurRadius: 5,
+            offset: const Offset(1.9, 1.7),
+          )
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: RoundedImage(
+              url: group.picture,
+              width: 200,
+              height: 200,
+            ),
+          ),
+          const SizedBox(height: 30),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Center(
+                child: Text(
                   group.title,
-                  style: Theme.of(context).textTheme.headline1,
+                  style: Theme.of(context).textTheme.headline2,
                 ),
               ),
-              body: ListView(
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                group.description ?? '',
+                textAlign: TextAlign.start,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
                 children: [
-                  Container(
-                      margin: const EdgeInsets.all(10),
-                      padding: const EdgeInsets.all(25),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        border: Border(
-                          top: BorderSide(
-                            width: 1.90,
-                            color: Theme.of(context).primaryColor,
-                          ),
+                  const Icon(Icons.check),
+                  const SizedBox(
+                    width: 7,
+                  ),
+                  Text(
+                    "${group.members} ${AppLocalizations.of(context)!.groups_members}",
+                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
+                          fontWeight: FontWeight.bold,
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Theme.of(context).unselectedWidgetColor,
-                            spreadRadius: -5,
-                            blurRadius: 5,
-                            offset: const Offset(1.9, 1.7),
-                          )
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          RoundedImage(url: group.picture),
-                          const SizedBox(width: 40),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                group.title,
-                                style: Theme.of(context).textTheme.headline2,
-                              ),
-                              const SizedBox(
-                                height: 5,
-                              ),
-                              Text(group.description ?? '')
-                            ],
-                          )
-                        ],
-                      ))
+                  ),
                 ],
-              ));
-        } else {
-          return Scaffold(
-            appBar: TFAppBar(),
-            body: const Center(child: CircularProgressIndicator()),
-          );
-        }
-      },
+              ),
+              const SizedBox(
+                height: 15,
+              ),
+              Center(child: _joinButton(context, group)),
+            ],
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget _joinButton(BuildContext context, GroupModel group) {
+    if (group.public) {
+      return ElevatedButton(
+        onPressed: () => debugPrint("Join group"),
+        child: Text(AppLocalizations.of(context)!.groups_btn_join),
+      );
+    } else {
+      return ElevatedButton(
+        onPressed: () => debugPrint("Solicitar unirme"),
+        child: Text(AppLocalizations.of(context)!.groups_btn_join_request),
+      );
+    }
+  }
+
+  _details(BuildContext context, GroupModel group) {
+    return Container(
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Theme.of(context).unselectedWidgetColor,
+            spreadRadius: -5,
+            blurRadius: 5,
+            offset: const Offset(1.9, 1.7),
+          )
+        ],
+      ),
+      child: ExpansionTile(
+        title: Text(
+          AppLocalizations.of(context)!.groups_details,
+          style: Theme.of(context)
+              .textTheme
+              .headline2!
+              .copyWith(color: Theme.of(context).primaryColor),
+        ),
+        children: [
+          _groupType(context, group),
+          Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Separator(
+                  separatorWidth: double.infinity,
+                  color: Colors.black38,
+                  height: 0.5,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  AppLocalizations.of(context)!.groups_description,
+                  style: Theme.of(context).textTheme.headline2,
+                ),
+                Text(group.description ?? ''),
+                const Separator(
+                  separatorWidth: double.infinity,
+                  color: Colors.black38,
+                  height: 0.5,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+                Text(
+                  AppLocalizations.of(context)!.groups_rules,
+                  style: Theme.of(context).textTheme.headline2,
+                ),
+                const SizedBox(height: 20),
+                Text(group.description ?? ''),
+                const Separator(
+                  separatorWidth: double.infinity,
+                  color: Colors.black38,
+                  height: 0.5,
+                ),
+                const SizedBox(
+                  height: 15,
+                ),
+              ],
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Container _groupType(BuildContext context, GroupModel group) {
+    return Container(
+      margin: const EdgeInsets.all(15),
+      padding: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Theme.of(context).primaryColorLight,
+      ),
+      child: Row(
+        children: [
+          Icon(group.public ? Icons.public : Icons.private_connectivity),
+          const SizedBox(
+            width: 5,
+          ),
+          Text(
+            group.public
+                ? AppLocalizations.of(context)!.groups_public
+                : AppLocalizations.of(context)!.groups_private,
+          ),
+        ],
+      ),
     );
   }
 }

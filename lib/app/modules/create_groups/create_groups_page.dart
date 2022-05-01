@@ -280,7 +280,7 @@ class _CreateGroupsPageState
               builder: (context, snapshot) {
                 return TextFormField(
                   decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)!.group_rules,
+                    hintText: AppLocalizations.of(context)!.groups_rules,
                     hintStyle: Theme.of(context)
                         .textTheme
                         .bodyText1!

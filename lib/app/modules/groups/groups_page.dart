@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/modules/groups/my_groups_page.dart';
-import 'package:techfrenetic/app/modules/discover_groups/discover_groups_page.dart';
+import 'package:techfrenetic/app/modules/groups/discover_groups_page.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class GroupsPage extends StatefulWidget {

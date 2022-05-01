@@ -2,8 +2,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
-import 'package:techfrenetic/app/widgets/groups_cards_widget.dart';
-import 'package:techfrenetic/app/widgets/recommended_groups_widget.dart';
+import 'package:techfrenetic/app/modules/groups/widgets/recommended_group_widget.dart';
+import 'package:techfrenetic/app/modules/groups/widgets/featured_group_widget.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
 
 class DiscoverGroupsPage extends StatefulWidget {
@@ -76,7 +76,7 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
       GroupModel group = recommendedGroups[i];
       if (i < 3) {
         recommendedGroupsWidgets.add(
-          GroupWidget(group: group),
+          FeaturedGroupWidget(group: group),
         );
         if (i != 2) {
           recommendedGroupsWidgets.add(
@@ -94,7 +94,7 @@ class _DiscoverGroupsPageState extends State<DiscoverGroupsPage> {
         }
       } else {
         recommendedGroupsWidgets.add(
-          GroupsCardsWidget(
+          RecommendedGroupWidget(
             group: group,
           ),
         );

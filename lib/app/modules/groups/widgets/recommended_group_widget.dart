@@ -4,19 +4,19 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
 
-class GroupsCardsWidget extends StatefulWidget {
+class RecommendedGroupWidget extends StatefulWidget {
   final GroupModel group;
 
-  const GroupsCardsWidget({
+  const RecommendedGroupWidget({
     Key? key,
     required this.group,
   }) : super(key: key);
 
   @override
-  _GroupsCardsWidgetState createState() => _GroupsCardsWidgetState();
+  _RecommendedGroupWidgetState createState() => _RecommendedGroupWidgetState();
 }
 
-class _GroupsCardsWidgetState extends State<GroupsCardsWidget> {
+class _RecommendedGroupWidgetState extends State<RecommendedGroupWidget> {
   @override
   Widget build(BuildContext context) {
     GroupsProvider groupsProvider = GroupsProvider();

@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
-import 'package:techfrenetic/app/widgets/group_card_widget.dart';
+import 'package:techfrenetic/app/modules/groups/widgets/group_card_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class MyGroupPage extends StatefulWidget {
@@ -135,6 +135,10 @@ class _MyGroupPageState extends State<MyGroupPage> {
         if (snapshot.hasData) {
           List<GroupModel> groups = snapshot.data!;
 
+          if (groups.isEmpty) {
+            return _noGroups(context);
+          }
+
           return Column(children: [
             const SizedBox(
               height: 20,
@@ -146,7 +150,14 @@ class _MyGroupPageState extends State<MyGroupPage> {
             ..._groupsWidget(groups)
           ]);
         } else {
-          return _noGroups(context);
+          return Center(
+            child: Container(
+              margin: const EdgeInsets.symmetric(vertical: 50),
+              height: 40,
+              width: 40,
+              child: const CircularProgressIndicator(),
+            ),
+          );
         }
       },
     );
@@ -193,14 +204,11 @@ class _MyGroupPageState extends State<MyGroupPage> {
             searchText = text;
           });
         },
-        onFieldSubmitted: (text) {
-          debugPrint("Submitted $text");
-        },
       ),
     );
   }
 
-  _groupsWidget(List<GroupModel> groups) {
+  List<Widget> _groupsWidget(List<GroupModel> groups) {
     return groups.map(
       (group) {
         if (group.title.toLowerCase().contains(searchText)) {

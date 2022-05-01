@@ -10,6 +10,8 @@ class GroupsProvider extends TechFreneticProvider {
     try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/node/$id/?_format=json");
 
+      debugPrint(_url.toString());
+
       Map<String, String> headers = {};
       headers.addAll(authHeader);
       headers.addAll(sessionHeader);

@@ -5,16 +5,16 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/utils.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
 
-class GroupWidget extends StatefulWidget {
+class FeaturedGroupWidget extends StatefulWidget {
   final GroupModel group;
 
-  const GroupWidget({Key? key, required this.group}) : super(key: key);
+  const FeaturedGroupWidget({Key? key, required this.group}) : super(key: key);
 
   @override
-  _GroupWidgetState createState() => _GroupWidgetState();
+  _FeaturedGroupWidgetState createState() => _FeaturedGroupWidgetState();
 }
 
-class _GroupWidgetState extends State<GroupWidget> {
+class _FeaturedGroupWidgetState extends State<FeaturedGroupWidget> {
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -39,7 +39,7 @@ class _GroupWidgetState extends State<GroupWidget> {
       child: Column(
         children: [
           GestureDetector(
-            onTap: () => Modular.to.pushNamed('/groups/1'),
+            onTap: () => Modular.to.pushNamed("/groups/${widget.group.id}"),
             child: CachedNetworkImage(
               placeholder: (context, value) => const LinearProgressIndicator(),
               errorWidget: (context, value, e) => const Icon(Icons.error),

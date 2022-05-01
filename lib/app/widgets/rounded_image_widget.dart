@@ -24,7 +24,7 @@ class RoundedImage extends StatelessWidget {
           image: CachedNetworkImageProvider(url),
           fit: BoxFit.cover,
         ),
-        borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+        borderRadius: BorderRadius.all(Radius.circular(width)),
         border: Border.all(
           color: Colors.blue,
           width: 2.0,
