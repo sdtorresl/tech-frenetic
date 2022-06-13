@@ -82,6 +82,7 @@ class GroupsProvider extends TechFreneticProvider {
       headers.addAll(authHeader);
       headers.addAll(sessionHeader);
 
+      debugPrint(_url.toString());
       var response = await http.get(
         _url,
         headers: headers,
