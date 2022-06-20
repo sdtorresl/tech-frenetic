@@ -22,10 +22,10 @@ class GroupPage extends StatefulWidget {
 }
 
 class _GroupPageState extends ModularState<GroupPage, GroupController> {
+  GroupsProvider _groupsProvider = GroupsProvider();
+
   @override
   Widget build(BuildContext context) {
-    GroupsProvider _groupsProvider = GroupsProvider();
-
     return Scaffold(
       appBar: TFAppBar(
         title: Text(
@@ -142,7 +142,7 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
     }
   }
 
-  _details(BuildContext context, GroupModel group) {
+  Widget _details(BuildContext context, GroupModel group) {
     return Container(
       margin: const EdgeInsets.all(10),
       padding: const EdgeInsets.all(5),
@@ -167,6 +167,7 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
         ),
         children: [
           _groupType(context, group),
+          _members(context, group),
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: Column(
@@ -236,6 +237,21 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _members(BuildContext context, GroupModel group) {
+    return FutureBuilder(
+      future: _groupsProvider.getMembers(group.id),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          return Column(
+            children: [],
+          );
+        } else {
+          return const LinearProgressIndicator();
+        }
+      },
     );
   }
 }

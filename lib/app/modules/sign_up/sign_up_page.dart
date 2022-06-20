@@ -20,7 +20,8 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
 
   bool isPerson = true;
   bool _isLoading = false;
-  String password = '';
+  String _password = '';
+  String _confirmationPassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -310,10 +311,11 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
   }
 
   Widget _passwordValidation() {
-    bool passwordLength = password.length >= 8;
-    bool passwordHasNumbers = RegExp(r'\d').hasMatch(password);
-    bool passwordHasMixedCase = password.contains(RegExp(r'[A-Z]')) &&
-        password.contains(RegExp(r'[a-z]'));
+    bool passwordLength = _password.length >= 8;
+    bool passwordHasNumbers = RegExp(r'\d').hasMatch(_password);
+    bool passwordHasMixedCase = _password.contains(RegExp(r'[A-Z]')) &&
+        _password.contains(RegExp(r'[a-z]'));
+    bool passwordsMatch = _password == _confirmationPassword;
 
     return Column(
       children: [
@@ -328,6 +330,10 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
         ValidateTextWidget(
             isValid: passwordHasNumbers,
             text: AppLocalizations.of(context)!.pwd_number),
+        const SizedBox(height: 10),
+        ValidateTextWidget(
+            isValid: passwordsMatch,
+            text: AppLocalizations.of(context)!.pwd_match),
       ],
     );
   }
@@ -404,8 +410,10 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
               ),
               onChanged: (value) {
                 store.changePassword(value);
+                store
+                    .changePasswordConfirmation(_confirmationPassword == value);
                 setState(() {
-                  password = value;
+                  _password = value;
                 });
               },
             );
@@ -413,7 +421,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
         ),
         const SizedBox(height: 20),
         StreamBuilder(
-          stream: store.passwordStream,
+          stream: store.passwordConfirmationStream,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             return TextFormField(
               obscureText: _isPasswordHidden2,
@@ -430,7 +438,18 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                   onPressed: () =>
                       setState(() => _isPasswordHidden2 = !_isPasswordHidden2),
                 ),
+                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.red),
               ),
+              onChanged: (value) {
+                store.changePasswordConfirmation(value == _password);
+                setState(() {
+                  _confirmationPassword = value;
+                });
+              },
             );
           },
         ),

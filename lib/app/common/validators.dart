@@ -165,6 +165,19 @@ class Validators {
       }
     },
   );
+
+  static final validateConfirmPass = StreamTransformer<bool, bool>.fromHandlers(
+    handleData: (passwordValid, sink) {
+      if (passwordValid) {
+        sink.add(passwordValid);
+      } else {
+        sink.addError(
+          'Las contraseñas no coinciden',
+        );
+      }
+    },
+  );
+
   // static final validateConfirmPasword =
   //     StreamTransformer<List<String>, String>.fromHandlers(
   //   handleData: (password, sink) {

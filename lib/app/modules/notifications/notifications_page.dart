@@ -82,7 +82,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
               },
             );
           } else {
-            return CircularProgressIndicator();
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
           }
         },
       ),

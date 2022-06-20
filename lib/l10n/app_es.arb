@@ -271,6 +271,7 @@
     "pwd_lowper": "Letras mayúsculas y minúsculas",
     "pwd_minchars": "8 o más caracteres",
     "pwd_number": "Al menos un número",
+    "pwd_match": "Las contraseñas coinciden",
     "recent_events": "recientes",
     "recent": "Eventos",
     "reset_black": "tu contraseña",

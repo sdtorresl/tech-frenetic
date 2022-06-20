@@ -6,16 +6,16 @@ import 'package:techfrenetic/app/models/model.dart';
 class NotificationModel extends Model {
   NotificationModel({
     required this.avatar,
-    required this.type,
+    this.type,
     required this.name,
     required this.body,
     required this.created,
-    required this.id,
+    this.id = "0",
     this.read = false,
   });
 
   String avatar;
-  String type;
+  String? type;
   String name;
   String body;
   DateTime created;
@@ -38,7 +38,7 @@ class NotificationModel extends Model {
       body: json["notification_text"],
       created: DateTime.now()
           .subtract(const Duration(hours: 3)), // TODO: Convert datetime here
-      id: json["id"],
+      id: json["id"] ?? "ID",
     );
   }
 

@@ -204,6 +204,7 @@ class _CreateProfilePageState
                         setState(
                           () {
                             defaultValue = newValue!;
+                            store.changeProfession(newValue);
                             debugPrint(defaultValue);
                           },
                         );

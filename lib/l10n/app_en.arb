@@ -271,6 +271,7 @@
     "pwd_lowper": "Upper and lower case letters",
     "pwd_minchars": "8 or more characters",
     "pwd_number": "At least one number",
+    "pwd_match": "Passwords match",
     "recent_events": "events",
     "recent": "Recent",
     "reset_black": "your password",
