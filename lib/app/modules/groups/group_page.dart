@@ -193,7 +193,9 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
                   AppLocalizations.of(context)!.groups_description,
                   style: Theme.of(context).textTheme.headline2,
                 ),
+                const SizedBox(height: 10),
                 Text(group.description ?? ''),
+                const SizedBox(height: 10),
                 const Separator(
                   separatorWidth: double.infinity,
                   color: Colors.black38,
@@ -206,8 +208,9 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
                   AppLocalizations.of(context)!.groups_rules,
                   style: Theme.of(context).textTheme.headline2,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Text(group.description ?? ''),
+                const SizedBox(height: 10),
                 const Separator(
                   separatorWidth: double.infinity,
                   color: Colors.black38,
@@ -253,17 +256,7 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
       builder: (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
         if (snapshot.hasData) {
           List<UserModel> members = snapshot.data!;
-          members.add(members[0]);
-          members.add(members[0]);
-          members.add(members[0]);
-          members.add(members[0]);
-          members.add(members[0]);
-          members.add(members[0]);
-          members.add(members[0]);
-          members.add(members[0]);
-          members.add(members[0]);
-          members.add(members[0]);
-          members.add(members[0]);
+
           List<Widget> avatars = members
               .map(
                 (e) => CircleAvatar(

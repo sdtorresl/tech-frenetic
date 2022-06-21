@@ -90,8 +90,8 @@ class MembersWidget extends StatelessWidget {
         ),
         Separator(
           separatorWidth: MediaQuery.of(context).size.width,
-          color: Colors.grey,
-          height: 1,
+          color: Colors.black38,
+          height: 0.5,
         )
       ],
     );
