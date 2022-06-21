@@ -1,3 +1,5 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
 
 import '../../models/group_model.dart';
@@ -8,6 +10,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
+import 'package:techfrenetic/app/core/utils.dart';
 
 class GroupPage extends StatefulWidget {
   final int groupId;
@@ -166,14 +169,17 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
               .copyWith(color: Theme.of(context).primaryColor),
         ),
         children: [
-          _groupType(context, group),
-          _members(context, group),
           Padding(
             padding: const EdgeInsets.all(15.0),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                _groupType(context, group),
+                _members(context, group),
+                const SizedBox(
+                  height: 15,
+                ),
                 const Separator(
                   separatorWidth: double.infinity,
                   color: Colors.black38,
@@ -217,9 +223,9 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
     );
   }
 
-  Container _groupType(BuildContext context, GroupModel group) {
+  Widget _groupType(BuildContext context, GroupModel group) {
     return Container(
-      margin: const EdgeInsets.all(15),
+      margin: const EdgeInsets.only(bottom: 20),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColorLight,
@@ -243,10 +249,41 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
   Widget _members(BuildContext context, GroupModel group) {
     return FutureBuilder(
       future: _groupsProvider.getMembers(group.id),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
+      builder: (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
         if (snapshot.hasData) {
+          List<UserModel> members = snapshot.data!;
+          List<Widget> avatars = members
+              .map(
+                (e) => CircleAvatar(
+                  backgroundColor: Theme.of(context).backgroundColor,
+                  backgroundImage:
+                      CachedNetworkImageProvider(e.picture.first.url),
+                  radius: 25,
+                ),
+              )
+              .toList();
+          int length = members.length;
+
           return Column(
-            children: [],
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "${AppLocalizations.of(context)!.groups_members.toCapitalize()}($length)",
+                style: Theme.of(context).textTheme.headline1,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(children: avatars),
+              const SizedBox(
+                height: 10,
+              ),
+              TextButton(
+                onPressed: () => debugPrint("Ver todos"),
+                child: Text("Ver todos"),
+              )
+            ],
           );
         } else {
           return const LinearProgressIndicator();
