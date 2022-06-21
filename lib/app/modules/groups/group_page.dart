@@ -1,16 +1,17 @@
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:techfrenetic/app/models/user_model.dart';
-import 'package:techfrenetic/app/widgets/separator.dart';
+import 'package:techfrenetic/app/modules/groups/widgets/members_widget.dart';
 
 import '../../models/group_model.dart';
 import '../../widgets/rounded_image_widget.dart';
 import 'group_controller.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/core/utils.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
-import 'package:techfrenetic/app/core/utils.dart';
+import 'package:techfrenetic/app/widgets/separator.dart';
 
 class GroupPage extends StatefulWidget {
   final int groupId;
@@ -252,6 +253,17 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
       builder: (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
         if (snapshot.hasData) {
           List<UserModel> members = snapshot.data!;
+          members.add(members[0]);
+          members.add(members[0]);
+          members.add(members[0]);
+          members.add(members[0]);
+          members.add(members[0]);
+          members.add(members[0]);
+          members.add(members[0]);
+          members.add(members[0]);
+          members.add(members[0]);
+          members.add(members[0]);
+          members.add(members[0]);
           List<Widget> avatars = members
               .map(
                 (e) => CircleAvatar(
@@ -275,13 +287,20 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
               const SizedBox(
                 height: 10,
               ),
-              Row(children: avatars),
+              Wrap(
+                spacing: 5,
+                runSpacing: 7,
+                children: avatars,
+              ),
               const SizedBox(
                 height: 10,
               ),
               TextButton(
-                onPressed: () => debugPrint("Ver todos"),
-                child: Text("Ver todos"),
+                onPressed: () => showDialog(
+                    context: context,
+                    builder: (BuildContext context) =>
+                        MembersWidget(members: members)),
+                child: Text(AppLocalizations.of(context)!.view_more),
               )
             ],
           );
