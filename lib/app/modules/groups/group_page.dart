@@ -1,4 +1,7 @@
+import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/groups/widgets/members_widget.dart';
+import 'package:techfrenetic/app/providers/articles_provider.dart';
+import 'package:techfrenetic/app/widgets/post_widget.dart';
 
 import '../../models/group_model.dart';
 import '../../widgets/rounded_image_widget.dart';
@@ -26,10 +29,12 @@ class GroupPage extends StatefulWidget {
 }
 
 class _GroupPageState extends ModularState<GroupPage, GroupController> {
-  GroupsProvider _groupsProvider = GroupsProvider();
+  final GroupsProvider _groupsProvider = GroupsProvider();
+  GroupModel group = GroupModel.empty();
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("ID is ${widget.groupId.toString()}");
     return Scaffold(
       appBar: TFAppBar(
         title: Text(
@@ -41,11 +46,13 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
         future: _groupsProvider.getGroup(widget.groupId),
         builder: (BuildContext context, AsyncSnapshot<GroupModel> snapshot) {
           if (snapshot.hasData) {
-            GroupModel group = snapshot.data!;
+            group = snapshot.data!;
+
             return ListView(
               children: [
                 _header(context, group),
                 _details(context, group),
+                _feeds(context, group)
               ],
             );
           } else {
@@ -209,7 +216,7 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
                   style: Theme.of(context).textTheme.headline2,
                 ),
                 const SizedBox(height: 10),
-                Text(group.description ?? ''),
+                Text(group.rules ?? ''),
                 const SizedBox(height: 10),
                 const Separator(
                   separatorWidth: double.infinity,
@@ -299,6 +306,36 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
           );
         } else {
           return const LinearProgressIndicator();
+        }
+      },
+    );
+  }
+
+  Widget _feeds(BuildContext context, GroupModel group) {
+    ArticlesProvider _articlesProvideer = ArticlesProvider();
+
+    return FutureBuilder(
+      future: _articlesProvideer.getWallByGroup(group),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<ArticlesModel>> snapshot) {
+        if (snapshot.hasData) {
+          List<ArticlesModel> articles = snapshot.data ?? [];
+          List<Widget> postsWidgets = [];
+
+          for (ArticlesModel article in articles) {
+            postsWidgets.add(PostWidget(article: article));
+          }
+
+          return Column(
+            //shrinkWrap: true,
+            children: [
+              // _postbox(),
+              ...postsWidgets,
+              const SizedBox(height: 60),
+            ],
+          );
+        } else {
+          return const Center(child: CircularProgressIndicator());
         }
       },
     );

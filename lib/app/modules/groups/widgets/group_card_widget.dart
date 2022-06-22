@@ -12,7 +12,10 @@ class GroupCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Modular.to.pushNamed("/groups/${group.id}"),
+      onTap: () {
+        debugPrint("Routing to group page ${group.id}...");
+        Modular.to.pushNamed("/groups/${group.id}");
+      },
       child: Card(
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.zero,

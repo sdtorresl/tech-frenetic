@@ -7,9 +7,11 @@ import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
 class GroupsProvider extends TechFreneticProvider {
-  Future<GroupModel> getGroup(int id) async {
+  Future<GroupModel> getGroup(int groupId) async {
+    GroupModel group = GroupModel.empty();
+
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/node/$id/?_format=json");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/group-id/$groupId");
 
       debugPrint(_url.toString());
 
@@ -23,7 +25,8 @@ class GroupsProvider extends TechFreneticProvider {
       );
 
       if (response.statusCode == 200) {
-        debugPrint(response.body);
+        List<dynamic> jsonResponse = jsonDecode(response.body);
+        group = GroupModel.fromMap(jsonResponse[0]);
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
@@ -31,15 +34,7 @@ class GroupsProvider extends TechFreneticProvider {
       debugPrint(e.toString());
     }
 
-    return GroupModel(
-        title: "Grupo de ejemplo",
-        description: "This is a description",
-        featured: "featured",
-        members: "156",
-        picture:
-            "https://dev-techfrenetic.us.seedcloud.co/images/temp/image-detail-group.png",
-        id: "15",
-        posts: "15");
+    return group;
   }
 
   Future<List<GroupModel>> searchGroups() async {

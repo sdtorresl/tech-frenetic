@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/article_user_model.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:techfrenetic/app/models/group_model.dart';
 import 'dart:convert' as json;
 
 import 'package:techfrenetic/app/providers/tf_provider.dart';
@@ -299,5 +300,36 @@ class ArticlesProvider extends TechFreneticProvider {
     }
 
     return userByArticleModel;
+  }
+
+  Future<List<ArticlesModel>> getWallByGroup(GroupModel group) async {
+    List<ArticlesModel> articles = [];
+
+    try {
+      Uri _url;
+
+      if (group.public) {
+        _url = Uri.parse("$baseUrl/api/$locale/v1/wall-public/${group.id}");
+      } else {
+        _url = Uri.parse("$baseUrl/api/$locale/v1/wall-private/${group.id}");
+      }
+
+      var response = await http.get(_url);
+
+      debugPrint("Getting posts by group ${group.id}}...");
+      debugPrint(_url.toString());
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
+        WallModel wall = WallModel.fromMap(jsonResponse);
+        articles = wall.articles;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return articles;
   }
 }

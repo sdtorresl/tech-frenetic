@@ -17,6 +17,7 @@ class GroupModel extends Model {
     this.featured,
     this.members,
     this.posts,
+    this.rules,
     this.public = true,
   });
 
@@ -27,12 +28,21 @@ class GroupModel extends Model {
   String? members;
   String picture;
   String? posts;
+  String? rules;
   bool public;
 
   factory GroupModel.fromJson(String str) =>
       GroupModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
+
+  factory GroupModel.empty() {
+    return GroupModel(
+        id: "",
+        title: "",
+        picture:
+            "https://dev-techfrenetic.us.seedcloud.co/images/temp/image-detail-group.png");
+  }
 
   factory GroupModel.fromMap(Map<String, dynamic> json) {
     final String baseUrl = GlobalConfiguration().getValue("api_url");
@@ -54,11 +64,13 @@ class GroupModel extends Model {
     return GroupModel(
         id: json["id"] ?? json["nid"],
         title: json["label"] ?? json["title"],
-        description: json["field_group_description"] ?? '',
+        description:
+            json["field_group_description"] ?? json["field_description"] ?? '',
         featured: json["field_group_featured"] ?? '',
         members: json["field_group_members"] ?? '',
         picture: picture,
         posts: json["field_group_articles"] ?? '',
+        rules: json["field_rules"],
         public: json["type"] != null ? json["type"] == "Group Public" : true);
   }
 
