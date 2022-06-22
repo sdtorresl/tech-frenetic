@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:ffi';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:techfrenetic/app/models/model.dart';
 
@@ -72,8 +73,6 @@ class UserModel extends Model {
   String toJson() => json.encode(toMap());
 
   factory UserModel.fromMap(Map<String, dynamic> json) {
-    final String baseUrl = GlobalConfiguration().getValue("api_url");
-
     int uid = int.parse((Model.returnValue(json["uid"], 0) ?? 0).toString());
     String createdStr = Model.returnValue(json['created'], "null");
     String changedStr = Model.returnValue(json['changed'], "null");
@@ -85,9 +84,13 @@ class UserModel extends Model {
     String dateSavePasswordStr =
         Model.returnValue(json['field_date_save_password'], 'null');
 
+    bool useAvatar = json["field_use_avatar"] is String
+        ? json["field_use_avatar"] == "True"
+        : Model.returnValue(json["field_use_avatar"], false);
+
     List<FileModel> picture = [];
     if (json["user_picture"] is String) {
-      picture = [FileModel(targetId: 1, url: baseUrl + json["user_picture"])];
+      picture = [FileModel(targetId: 1, url: json["user_picture"])];
     } else {
       picture = json["user_picture"] == null
           ? []
@@ -132,8 +135,8 @@ class UserModel extends Model {
       kind: Model.returnValue(json["field_user_kind"], ''),
       location: Model.returnValue(json["field_user_location"], ''),
       profession: Model.returnValue(json["field_user_profession"], ''),
-      type: Model.returnValue(["field_user_type"], ''),
-      useAvatar: Model.returnValue(["field_use_avatar"], true),
+      type: Model.returnValue(json["field_user_type"], ''),
+      useAvatar: useAvatar,
       picture: picture,
     );
   }

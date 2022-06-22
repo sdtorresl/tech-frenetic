@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
@@ -65,19 +66,36 @@ class _AvatarWidgetState extends State<AvatarWidget>
           _controller.reset();
           _controller.forward();
 
-          return CircleAvatar(
-            radius: widget.radius,
-            backgroundColor: Colors.grey[200],
-            child: ScaleTransition(
-              scale: Tween(begin: 0.0, end: 1.0).animate(_controller),
-              child: ClipOval(
-                child: SvgPicture.asset(
-                  "assets/img/avatars/${user.avatar.isNotEmpty ? user.avatar : 'avatar-01'}.svg",
-                  semanticsLabel: user.name,
+          if (user.useAvatar) {
+            return CircleAvatar(
+              radius: widget.radius,
+              backgroundColor: Colors.grey[200],
+              child: ScaleTransition(
+                scale: Tween(begin: 0.0, end: 1.0).animate(_controller),
+                child: ClipOval(
+                  child: SvgPicture.asset(
+                    "assets/img/avatars/${user.avatar.isNotEmpty ? user.avatar : 'avatar-01'}.svg",
+                    semanticsLabel: user.name,
+                  ),
                 ),
               ),
-            ),
-          );
+            );
+          } else {
+            return CircleAvatar(
+              radius: widget.radius,
+              backgroundColor: Colors.grey[200],
+            );
+            /* return CircleAvatar(
+              radius: widget.radius,
+              backgroundColor: Colors.grey[200],
+              child: ScaleTransition(
+                scale: Tween(begin: 0.0, end: 1.0).animate(_controller),
+                child: ClipOval(
+                  child: CachedNetworkImage(imageUrl: user.picture.first.url),
+                ),
+              ),
+            ); */
+          }
         } else {
           return CircleAvatar(
             radius: widget.radius,

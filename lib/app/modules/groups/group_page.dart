@@ -1,12 +1,12 @@
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/groups/widgets/members_widget.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
+import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
 
 import '../../models/group_model.dart';
 import '../../widgets/rounded_image_widget.dart';
 import 'group_controller.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +34,6 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("ID is ${widget.groupId.toString()}");
     return Scaffold(
       appBar: TFAppBar(
         title: Text(
@@ -65,7 +64,7 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
 
   Widget _header(BuildContext context, GroupModel group) {
     return Container(
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -155,7 +154,7 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
 
   Widget _details(BuildContext context, GroupModel group) {
     return Container(
-      margin: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       padding: const EdgeInsets.all(5),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -266,10 +265,8 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
 
           List<Widget> avatars = members
               .map(
-                (e) => CircleAvatar(
-                  backgroundColor: Theme.of(context).backgroundColor,
-                  backgroundImage:
-                      CachedNetworkImageProvider(e.picture.first.url),
+                (user) => AvatarWidget(
+                  userId: user.uid.toString(),
                   radius: 25,
                 ),
               )

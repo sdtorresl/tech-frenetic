@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:global_configuration/global_configuration.dart';
 import 'package:techfrenetic/app/models/model.dart';
 
 class FileModel extends Model {
@@ -12,7 +13,10 @@ class FileModel extends Model {
     this.targetType,
     this.targetUuid,
     required this.url,
-  });
+  }) {
+    final String baseUrl = GlobalConfiguration().getValue("api_url");
+    url = baseUrl + url;
+  }
 
   int targetId;
   String? alt;

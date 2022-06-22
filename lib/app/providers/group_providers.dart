@@ -195,7 +195,7 @@ class GroupsProvider extends TechFreneticProvider {
   }
 
   Future<List> getGroupsMembers(groupId) async {
-    GroupsMembersModel members;
+    GroupMembersModel members;
 
     try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/node/95/?_format=json");
@@ -204,16 +204,13 @@ class GroupsProvider extends TechFreneticProvider {
         _url,
       );
 
+      debugPrint(_url.toString());
+
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = jsonDecode(response.body);
         debugPrint(jsonResponse.toString());
-        members = GroupsMembersModel.fromMap(jsonResponse);
+        members = GroupMembersModel.fromMap(jsonResponse);
         debugPrint(members.toString());
-
-        // for (var item in jsonResponse) {
-        // GroupModel group = GroupModel.fromMap(item);
-        //recommendedGroups.add(group);
-        // }
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }

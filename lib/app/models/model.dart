@@ -16,6 +16,8 @@ class Model {
         }
         return defaultValue;
       } catch (e) {
+        debugPrint(e.toString());
+        debugPrint("Returning default value: " + value[0].toString());
         return defaultValue;
       }
     } else if (value is String || value is int) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/core/utils.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
 
 class MembersWidget extends StatelessWidget {
@@ -60,12 +61,9 @@ class MembersWidget extends StatelessWidget {
         ),
         Row(
           children: [
-            CircleAvatar(
-              backgroundColor: Theme.of(context).primaryColor,
-              backgroundImage:
-                  CachedNetworkImageProvider(member.picture.first.url),
+            AvatarWidget(
+              userId: member.uid.toString(),
               radius: 50,
-              foregroundColor: Colors.black,
             ),
             const SizedBox(
               width: 15,
