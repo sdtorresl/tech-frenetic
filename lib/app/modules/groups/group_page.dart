@@ -1,4 +1,5 @@
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/modules/groups/widgets/join_leave_button_widget.dart';
 import 'package:techfrenetic/app/modules/groups/widgets/members_widget.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
@@ -130,7 +131,11 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
               const SizedBox(
                 height: 15,
               ),
-              Center(child: _joinButton(context, group)),
+              Center(
+                child: JoinLeaveButtonWidget(
+                  group: group,
+                ),
+              ),
             ],
           )
         ],
@@ -258,7 +263,7 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
 
   Widget _members(BuildContext context, GroupModel group) {
     return FutureBuilder(
-      future: _groupsProvider.getMembers(group.id),
+      future: _groupsProvider.getMembers(group.id.toString()),
       builder: (BuildContext context, AsyncSnapshot<List<UserModel>> snapshot) {
         if (snapshot.hasData) {
           List<UserModel> members = snapshot.data!;

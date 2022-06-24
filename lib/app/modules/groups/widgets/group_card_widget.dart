@@ -13,7 +13,6 @@ class GroupCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        debugPrint("Routing to group page ${group.id}...");
         Modular.to.pushNamed("/groups/${group.id}");
       },
       child: Card(

@@ -316,7 +316,7 @@ class ArticlesProvider extends TechFreneticProvider {
 
       var response = await http.get(_url);
 
-      debugPrint("Getting posts by group ${group.id}}...");
+      debugPrint("Getting posts by group ${group.id}...");
       debugPrint(_url.toString());
 
       if (response.statusCode == 200) {

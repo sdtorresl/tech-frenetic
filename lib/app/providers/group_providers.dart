@@ -5,8 +5,11 @@ import 'package:techfrenetic/app/models/group_model.dart';
 import 'package:techfrenetic/app/models/groups_members_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
 
 class GroupsProvider extends TechFreneticProvider {
+  UserProvider _userProvider = UserProvider();
+
   Future<GroupModel> getGroup(int groupId) async {
     GroupModel group = GroupModel.empty();
 
@@ -106,28 +109,34 @@ class GroupsProvider extends TechFreneticProvider {
     List<GroupModel> recommendedGroups = [];
 
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/group/1/userbelong/json");
+      UserModel? loggedUser = await _userProvider.getLoggedUser();
+      if (loggedUser != null) {
+        Uri _url = Uri.parse(
+            "$baseUrl/api/$locale/v1/group/${loggedUser.uid}/userbelong/json");
 
-      Map<String, String> headers = {};
-      headers.addAll(authHeader);
-      headers.addAll(sessionHeader);
+        Map<String, String> headers = {};
+        headers.addAll(authHeader);
+        headers.addAll(sessionHeader);
 
-      var response = await http.get(
-        _url,
-        headers: headers,
-      );
+        var response = await http.get(
+          _url,
+          headers: headers,
+        );
 
-      if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = jsonDecode(response.body);
+        debugPrint(_url.toString());
 
-        for (var item in jsonResponse) {
-          GroupModel group = GroupModel.fromMap(item);
-          recommendedGroups.add(group);
+        if (response.statusCode == 200) {
+          List<dynamic> jsonResponse = jsonDecode(response.body);
+
+          for (var item in jsonResponse) {
+            GroupModel group = GroupModel.fromMap(item);
+            recommendedGroups.add(group);
+          }
+
+          debugPrint(recommendedGroups.toString());
+        } else {
+          debugPrint('Request failed with status: ${response.statusCode}.');
         }
-
-        debugPrint(recommendedGroups.toString());
-      } else {
-        debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -184,6 +193,116 @@ class GroupsProvider extends TechFreneticProvider {
       );
 
       if (response.statusCode == 201) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return false;
+  }
+
+  Future<int?> getUserIdInGroup(String userId, var groupId) async {
+    int? gUserId;
+    try {
+      Uri _url =
+          Uri.parse("$baseUrl/api/$locale/v1/group-user/$groupId/$userId");
+
+      debugPrint(_url.toString());
+
+      Map<String, String> headers = {}
+        ..addAll(authHeader)
+        ..addAll(sessionHeader);
+
+      var response = await http.get(
+        _url,
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = jsonDecode(response.body);
+        if (jsonResponse.isNotEmpty) {
+          gUserId = int.tryParse(jsonResponse[0]["id"]);
+        }
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return gUserId;
+  }
+
+  Future<bool> joinGroup(String userId, int groupId) async {
+    try {
+      Uri _url =
+          Uri.parse("$baseUrl/api/entity/group_content?_format=hal_json");
+
+      Map<String, dynamic> body = {
+        "_links": {
+          "type": {
+            "href":
+                "http://dev-techfrenetic.us.seedcloud.co/api/rest/type/group_content/group-group_membership"
+          }
+        },
+        "type": [
+          {"target_id": "group-group_membership"}
+        ],
+        "gid": [
+          {"target_id": groupId}
+        ],
+        "entity_id": [
+          {"target_id": userId}
+        ]
+      };
+
+      Map<String, String> headers = {}
+        ..addAll(halHeader)
+        ..addAll(authHeader)
+        ..addAll(basicAuth)
+        ..addAll(sessionHeader);
+
+      var response = await http.post(
+        _url,
+        body: json.encode(body),
+        headers: headers,
+      );
+
+      debugPrint(_url.toString());
+      debugPrint(body.toString());
+
+      if (response.statusCode == 201) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool> leaveGroup(String gUserId, int groupId) async {
+    try {
+      Uri _url = Uri.parse(
+          "$baseUrl/api/group/$groupId/content/$gUserId?_format=json");
+
+      Map<String, String> headers = {}
+        ..addAll(halHeader)
+        ..addAll(authHeader)
+        ..addAll(basicAuth)
+        ..addAll(sessionHeader);
+
+      var response = await http.delete(
+        _url,
+        headers: headers,
+      );
+
+      debugPrint(_url.toString());
+
+      if (response.statusCode == 204) {
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');

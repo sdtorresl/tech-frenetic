@@ -4,6 +4,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/utils.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
+import 'package:techfrenetic/app/modules/groups/widgets/join_leave_button_widget.dart';
+import 'package:techfrenetic/app/providers/group_providers.dart';
 
 class FeaturedGroupWidget extends StatefulWidget {
   final GroupModel group;
@@ -15,6 +17,8 @@ class FeaturedGroupWidget extends StatefulWidget {
 }
 
 class _FeaturedGroupWidgetState extends State<FeaturedGroupWidget> {
+  GroupsProvider _groupsProvider = GroupsProvider();
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -83,24 +87,7 @@ class _FeaturedGroupWidgetState extends State<FeaturedGroupWidget> {
                         ),
                       ],
                     ),
-                    ElevatedButton(
-                      onPressed: null,
-                      child: Text(
-                        AppLocalizations.of(context)!.btn_join,
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline1!
-                            .copyWith(fontSize: 13),
-                      ),
-                      style: ButtonStyle(
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                          const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.zero,
-                          ),
-                        ),
-                      ),
-                    ),
+                    JoinLeaveButtonWidget(group: widget.group)
                   ],
                 ),
                 const SizedBox(

@@ -21,7 +21,7 @@ class GroupModel extends Model {
     this.public = true,
   });
 
-  String id;
+  var id;
   String title;
   String? description;
   String? featured;
@@ -38,7 +38,7 @@ class GroupModel extends Model {
 
   factory GroupModel.empty() {
     return GroupModel(
-        id: "",
+        id: -1,
         title: "",
         picture:
             "https://dev-techfrenetic.us.seedcloud.co/images/temp/image-detail-group.png");
