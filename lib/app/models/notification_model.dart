@@ -47,7 +47,12 @@ class NotificationModel extends Model {
         "field_type": type,
         "user_id": name,
         "notification_text": body,
-        "created": created,
+        "created": created.toIso8601String(),
         "id": id,
       };
+
+  @override
+  String toString() {
+    return toJson();
+  }
 }

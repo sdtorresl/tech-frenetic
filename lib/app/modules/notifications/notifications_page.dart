@@ -4,6 +4,7 @@ import 'package:techfrenetic/app/models/notification_model.dart';
 import 'package:techfrenetic/app/providers/notifications_provider.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({Key? key}) : super(key: key);
@@ -20,7 +21,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return Scaffold(
       appBar: TFAppBar(
         title: Text(
-          'Notifications',
+          AppLocalizations.of(context)!.profile_notifications,
           style: Theme.of(context)
               .textTheme
               .headline1!
