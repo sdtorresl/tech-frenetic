@@ -1,3 +1,6 @@
+import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
+
 import './my_account_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -20,42 +23,36 @@ class MyAccountPage extends StatefulWidget {
 
 class _MyAccountPageState
     extends ModularState<MyAccountPage, MyAccountController> {
-  final prefs = UserPreferences();
-  CountriesProvider countries = CountriesProvider();
+  final CountriesProvider _countriesProvider = CountriesProvider();
+  final UserProvider _userProvider = UserProvider();
 
-  DateTime? datePicked;
-  DateTime? birthdate;
-  String? cellphone;
-  String? defaultCountry;
   bool _isLoading = false;
   final bool _isSavingPassword = false;
   bool _showPasswordForm = false;
   bool _isPasswordHidden1 = true;
   bool _isPasswordHidden2 = true;
 
-  final emailController = TextEditingController();
-  final cellphoneController = TextEditingController();
-  final dateController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _cellphoneController = TextEditingController();
+  final _dateController = TextEditingController();
+
+  final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
 
   @override
   void initState() {
     super.initState();
-    if (prefs.userEmail?.isNotEmpty ?? false) {
-      store.changeEmail(prefs.userEmail!);
-    }
 
-    if (prefs.userPhone?.isNotEmpty ?? false) {
-      store.changeCellphone(prefs.userPhone!);
-    }
+    _emailController.addListener(() {
+      store.changeEmail(_emailController.text);
+    });
 
-    if (prefs.userCountry?.isNotEmpty ?? false) {
-      store.changeCountry(prefs.userCountry!);
-    }
+    _cellphoneController.addListener(() {
+      store.changeCellphone(_cellphoneController.text);
+    });
 
-    if (prefs.userBirthdate != null) {
-      store.changeBirthdate(prefs.userBirthdate!);
-      dateController.text = DateFormat('dd/MM/yyyy').format(store.birthdate!);
-    }
+    _dateController.addListener(() {
+      store.changeBirthdate(_dateFormat.parse(_dateController.text));
+    });
   }
 
   @override
@@ -140,23 +137,53 @@ class _MyAccountPageState
     );
   }
 
+  @override
+  void dispose() {
+    store.dispose();
+    super.dispose();
+  }
+
   Widget _userDataForm(context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
-      child: Column(
-        children: [
-          const SizedBox(height: 30),
-          _emailField(),
-          const SizedBox(height: 30),
-          _countriesField(context),
-          const SizedBox(height: 30),
-          _phoneField(context),
-          const SizedBox(height: 30),
-          _birthdateField(context),
-          const SizedBox(height: 30),
-          updateButton(),
-        ],
-      ),
+    return FutureBuilder(
+      future: _userProvider.getLoggedUser(),
+      builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
+        if (snapshot.hasData) {
+          UserModel? user = snapshot.data;
+
+          if (user != null) {
+            if (user.mail != null) {
+              _emailController.text = user.mail!;
+            }
+            if (user.cellphone != null) {
+              _cellphoneController.text = user.cellphone!;
+            }
+            if (user.birthdate != null) {
+              _dateController.text = _dateFormat.format(user.birthdate!);
+            }
+            if (user.location != null) {
+              store.changeCountry(user.location!);
+            }
+          }
+        }
+
+        return Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+          child: Column(
+            children: [
+              const SizedBox(height: 30),
+              _emailField(),
+              const SizedBox(height: 30),
+              _countriesField(context),
+              const SizedBox(height: 30),
+              _phoneField(context),
+              const SizedBox(height: 30),
+              _birthdateField(context),
+              const SizedBox(height: 30),
+              updateButton(),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -174,7 +201,7 @@ class _MyAccountPageState
           stream: store.birthdateStream,
           builder: (context, snapshot) {
             return TextFormField(
-              controller: dateController,
+              controller: _dateController,
               readOnly: true,
               showCursor: true,
               decoration: InputDecoration(
@@ -197,8 +224,7 @@ class _MyAccountPageState
                   lastDate: DateTime(2100),
                 ).then((date) {
                   if (date != null) {
-                    dateController.text = DateFormat('dd/MM/yyyy').format(date);
-                    store.changeBirthdate(date);
+                    _dateController.text = _dateFormat.format(date);
                   }
                 });
               },
@@ -223,7 +249,7 @@ class _MyAccountPageState
           stream: store.cellphoneStream,
           builder: (context, snapshot) {
             return TextFormField(
-              initialValue: store.cellphone,
+              controller: _cellphoneController,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 hintText: AppLocalizations.of(context)!.phone_number,
@@ -238,7 +264,6 @@ class _MyAccountPageState
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: store.changeCellphone,
             );
           },
         ),
@@ -260,7 +285,7 @@ class _MyAccountPageState
           stream: store.countryStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return FutureBuilder(
-              future: countries.getCountries(),
+              future: _countriesProvider.getCountries(),
               builder: (BuildContext context, AsyncSnapshot snapshot) {
                 List<String> countriesNames = [];
                 if (snapshot.hasData) {
@@ -321,7 +346,7 @@ class _MyAccountPageState
           stream: store.emailStream,
           builder: (context, snapshot) {
             return TextFormField(
-              initialValue: store.email,
+              controller: _emailController,
               decoration: InputDecoration(
                 errorText: snapshot.hasError ? snapshot.error.toString() : null,
                 errorStyle: Theme.of(context)
@@ -329,7 +354,6 @@ class _MyAccountPageState
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: store.changeEmail,
             );
           },
         ),
@@ -598,9 +622,11 @@ class _MyAccountPageState
     return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
-        onPressed: () => setState(() {
-          _showPasswordForm = !_showPasswordForm;
-        }),
+        onPressed: () {
+          setState(() {
+            _showPasswordForm = !_showPasswordForm;
+          });
+        },
         child: Text(
           AppLocalizations.of(context)!.change_password,
           style: Theme.of(context)

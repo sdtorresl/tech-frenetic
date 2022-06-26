@@ -76,31 +76,6 @@ class UserProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool> recoverPassword(String email) async {
-    Uri _url = Uri.parse("$baseUrl/api/user/lost-password?_format=json");
-    debugPrint("Rcovering password for user $email...");
-    debugPrint(_url.toString());
-
-    try {
-      String body = json.jsonEncode({"lang": "en", "mail": email});
-      var response = await http.post(
-        _url,
-        body: body,
-        headers: jsonHeader,
-      );
-
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        debugPrint('Request failed with status: ${response.statusCode}.');
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {}
-
-    return false;
-  }
-
   Future<UserModel?> getLoggedUser() async {
     String? userId = prefs.userId;
     UserModel? userinfo;
@@ -214,6 +189,7 @@ class UserProvider extends TechFreneticProvider {
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint('Request failed with status: ${response.body}.');
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -321,6 +297,62 @@ class UserProvider extends TechFreneticProvider {
     } catch (e) {
       debugPrint(e.toString());
     }
+    return false;
+  }
+
+  Future<bool> recoverPassword(String email) async {
+    Uri _url = Uri.parse("$baseUrl/api/user/lost-password?_format=json");
+    debugPrint("Recovering password for user $email...");
+    debugPrint(_url.toString());
+
+    try {
+      String body = json.jsonEncode({"lang": "en", "mail": email});
+      var response = await http.post(
+        _url,
+        body: body,
+        headers: jsonHeader,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {}
+
+    return false;
+  }
+
+  Future<bool> requestChangePassToken(String email) async {
+    Uri _url = Uri.parse("$baseUrl/api/user/lost-password?_format=json");
+    debugPrint("Sending token to email $email...");
+    debugPrint(_url.toString());
+
+    Map<String, dynamic> body = {"mail": email};
+    Map<String, String> headers = {};
+    headers
+      ..addAll(authHeader)
+      ..addAll(jsonHeader)
+      ..addAll(sessionHeader);
+
+    try {
+      var response = await http.post(
+        _url,
+        body: body,
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {}
+
     return false;
   }
 }
