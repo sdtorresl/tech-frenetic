@@ -100,6 +100,7 @@
     "error_title_required": "You must type a title",
     "error_typeerror_networkerror_when_attempting_to_fetch_resource": "There is a problem with the server [002]",
     "error_uperrcase" : "This field mist contain at least one uppercase character",
+    "error_user_exists": "An user with this username already exists",
     "error_validation_failed_mail_the_email_address": "This email address has been already taken.",
     "error_video_required": "You must load the mp4 video file",
     "error_when_future": "You must select a future date",

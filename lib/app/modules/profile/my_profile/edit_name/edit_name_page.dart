@@ -1,9 +1,12 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/common/alert_dialog.dart';
+import 'package:techfrenetic/app/core/exceptions.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_name/profile_bloc.dart';
 import 'package:techfrenetic/app/providers/professions_provider.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class EditNamePage extends StatefulWidget {
@@ -16,9 +19,11 @@ class EditNamePage extends StatefulWidget {
 ProfessionsProvider professions = ProfessionsProvider();
 
 class _EditNamePageState extends State<EditNamePage> {
+  final UserProvider _userProvider = UserProvider();
   late final ProfileBloc _profileBloc;
   late UserPreferences _prefs;
   String? defaultValue;
+  bool _isUpdating = false;
 
   @override
   void initState() {
@@ -125,11 +130,23 @@ class _EditNamePageState extends State<EditNamePage> {
     return StreamBuilder(
       stream: _profileBloc.nameFormStream,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        debugPrint("Data: ${snapshot.data.toString()}");
-        debugPrint(snapshot.hasError.toString());
         return ElevatedButton(
-          onPressed: !snapshot.hasData ? null : saveName,
-          child: Text(AppLocalizations.of(context)!.profile_save),
+          onPressed: !snapshot.hasData ? null : _updateProfile,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _isUpdating
+                  ? Container(
+                      height: 20,
+                      width: 40,
+                      child:
+                          const CircularProgressIndicator(color: Colors.white),
+                      padding: const EdgeInsets.only(right: 20),
+                    )
+                  : const SizedBox.shrink(),
+              Text(AppLocalizations.of(context)!.profile_save),
+            ],
+          ),
         );
       },
     );
@@ -217,8 +234,36 @@ class _EditNamePageState extends State<EditNamePage> {
     );
   }
 
-  saveName() async {
-    debugPrint(_profileBloc.name);
-    debugPrint(_profileBloc.profession);
+  void _updateProfile() async {
+    if (_profileBloc.name != null && _profileBloc.profession != null) {
+      setState(() {
+        _isUpdating = true;
+      });
+      _userProvider
+          .updateProfile(_profileBloc.name!, _profileBloc.profession!)
+          .then((value) {
+        if (value) {
+          showMessage(
+            context,
+            title: AppLocalizations.of(context)!.message_success,
+            content:
+                Text(AppLocalizations.of(context)!.profile_account_updated),
+          );
+        }
+      }).catchError((error) {
+        if (error is UserExistsException) {
+          debugPrint("User already exists");
+          showMessage(
+            context,
+            title: AppLocalizations.of(context)!.error,
+            content: Text(AppLocalizations.of(context)!.error_user_exists),
+          );
+        }
+      }).whenComplete(() {
+        setState(() {
+          _isUpdating = false;
+        });
+      });
+    }
   }
 }

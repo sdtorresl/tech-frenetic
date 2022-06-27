@@ -257,8 +257,10 @@ class UserProvider extends TechFreneticProvider {
         debugPrint('Request failed with status: ${response.statusCode}.');
         debugPrint(response.reasonPhrase);
       }
-    } catch (e) {
-      debugPrint(e.toString());
+    } on SocketException {
+      debugPrint('No Internet connection 😑');
+    } on FormatException {
+      debugPrint("Bad response format 👎");
     }
     return false;
   }
@@ -300,6 +302,55 @@ class UserProvider extends TechFreneticProvider {
     } catch (e) {
       debugPrint(e.toString());
     }
+    return false;
+  }
+
+  Future<bool> updateProfile(String username, String profesion) async {
+    if (prefs.userId == null) {
+      return false;
+    }
+
+    String userId = prefs.userId!;
+
+    debugPrint("Updating profile for user $userId...");
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
+
+      Map<String, dynamic> body = {
+        "name": [username],
+        "field_user_profession": [profesion]
+      };
+
+      Map<String, String> headers = {}
+        ..addAll(jsonHeader)
+        ..addAll(authHeader)
+        ..addAll(sessionHeader);
+
+      debugPrint(_url.toString());
+
+      var response = await http.patch(
+        _url,
+        body: json.jsonEncode(body),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint(response.reasonPhrase);
+        debugPrint(response.body);
+        if (RegExp(r'.*username.*is already taken.*').hasMatch(response.body)) {
+          throw UserExistsException();
+        }
+        throw BadRequestException();
+      }
+    } on SocketException {
+      debugPrint('No Internet connection 😑');
+    } on FormatException {
+      debugPrint("Bad response format 👎");
+    }
+
     return false;
   }
 

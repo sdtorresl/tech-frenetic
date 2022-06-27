@@ -100,6 +100,7 @@
     "error_title_required": "Debes escribir un título",
     "error_typeerror_networkerror_when_attempting_to_fetch_resource": "Hay un problema con el servidor [002]",
     "error_uperrcase" : "Este campo debe contener al menos una mayúscula",
+    "error_user_exists": "Ya existe un usuario con este nombre de usuario",
     "error_validation_failed_mail_the_email_address": "Este email ya se encuentra registrado.",
     "error_video_required": "Debes cargar el video mp4",
     "error_when_future": "Debes seleccionar una fecha futura",
