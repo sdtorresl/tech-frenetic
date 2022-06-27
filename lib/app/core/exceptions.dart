@@ -2,6 +2,6 @@ class TokenInvalidException implements Exception {
   String errMsg() => 'Invalid token';
 }
 
-class UserNotFound implements Exception {
+class UserNotFoundException implements Exception {
   String errMsg() => 'User not found';
 }

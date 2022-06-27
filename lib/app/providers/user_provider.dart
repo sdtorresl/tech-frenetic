@@ -348,7 +348,7 @@ class UserProvider extends TechFreneticProvider {
       );
 
       if (response.statusCode == 200) {
-        debugPrint("Email was send successfully");
+        debugPrint("Email was sent successfully");
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
@@ -390,6 +390,9 @@ class UserProvider extends TechFreneticProvider {
           debugPrint('Request failed with status: ${response.statusCode}.');
           debugPrint('Request failed with status: ${response.body}.');
           if (response.statusCode == 400) {
+            if (response.body.contains("This User was not found or invalid")) {
+              throw UserNotFoundException();
+            }
             throw TokenInvalidException();
           }
         }

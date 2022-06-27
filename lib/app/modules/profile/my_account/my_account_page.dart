@@ -29,7 +29,8 @@ class _MyAccountPageState
 
   bool _isLoading = false;
   bool _isSavingPassword = false;
-  bool _showPasswordForm = true;
+  bool _isSendingEmail = false;
+  bool _showPasswordForm = false;
   bool _isTokenHidden = true;
   bool _isPasswordHidden = true;
   String _confirmationPassword = '';
@@ -345,6 +346,7 @@ class _MyAccountPageState
           builder: (context, snapshot) {
             return TextFormField(
               controller: _emailController,
+              readOnly: true,
               decoration: InputDecoration(
                 errorText: snapshot.hasError ? snapshot.error.toString() : null,
                 errorStyle: Theme.of(context)
@@ -655,12 +657,25 @@ class _MyAccountPageState
       width: double.infinity,
       child: ElevatedButton(
         onPressed: _user == null ? null : _requestToken,
-        child: Text(
-          AppLocalizations.of(context)!.change_password,
-          style: Theme.of(context)
-              .textTheme
-              .button!
-              .copyWith(color: Theme.of(context).indicatorColor),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _isSendingEmail
+                ? Container(
+                    height: 20,
+                    width: 40,
+                    child: const CircularProgressIndicator(),
+                    padding: const EdgeInsets.only(right: 20),
+                  )
+                : const SizedBox.shrink(),
+            Text(
+              AppLocalizations.of(context)!.change_password,
+              style: Theme.of(context)
+                  .textTheme
+                  .button!
+                  .copyWith(color: Theme.of(context).indicatorColor),
+            ),
+          ],
         ),
         style: ElevatedButton.styleFrom(
           primary: Colors.white,
@@ -709,6 +724,9 @@ class _MyAccountPageState
 
   void _requestToken() {
     if (_user!.mail != null) {
+      setState(() {
+        _isSendingEmail = true;
+      });
       _userProvider.requestChangePassToken(_user!.mail!).then((sent) {
         if (sent) {
           setState(() {
@@ -737,6 +755,10 @@ class _MyAccountPageState
                   .error_sorry_system_can_t_send_email_at_the_moment),
               actions: actions);
         }
+      }).whenComplete(() {
+        setState(() {
+          _isSendingEmail = false;
+        });
       });
     }
   }
@@ -757,35 +779,40 @@ class _MyAccountPageState
         ),
         onPressed: () {
           Modular.to.pop();
-          setState(() {
-            _isSavingPassword = false;
-          });
         },
       ),
     ];
 
+    String title = '';
+    Widget content = const SizedBox.shrink();
+
     store.updatePassword().then(
       (updated) {
-        showMessage(context,
-            title: updated
-                ? AppLocalizations.of(context)!.message_success
-                : AppLocalizations.of(context)!.error,
-            content: Text(updated
-                ? AppLocalizations.of(context)!.password_changed
-                : AppLocalizations.of(context)!.message_error),
-            actions: actions);
+        title = updated
+            ? AppLocalizations.of(context)!.message_success
+            : AppLocalizations.of(context)!.error;
+        content = Text(updated
+            ? AppLocalizations.of(context)!.password_changed
+            : AppLocalizations.of(context)!.message_error);
       },
     ).catchError((error) {
       if (error is TokenInvalidException) {
-        showMessage(context,
-            title: AppLocalizations.of(context)!.error,
-            content: Text(AppLocalizations.of(context)!
-                .error_name_new_pass_and_temp_pass_fields_are_required),
-            actions: actions);
-        setState(() {
-          _isSavingPassword = false;
-        });
+        title = AppLocalizations.of(context)!.error;
+        content = Text(AppLocalizations.of(context)!
+            .error_name_new_pass_and_temp_pass_fields_are_required);
       }
+      if (error is UserNotFoundException) {
+        title = AppLocalizations.of(context)!.error;
+        content = Text(AppLocalizations.of(context)!
+            .error_this_user_was_not_found_or_invalid);
+      }
+    }).whenComplete(() {
+      showMessage(context, title: title, content: content, actions: actions);
+      setState(
+        () {
+          _isSavingPassword = false;
+        },
+      );
     });
   }
 }
