@@ -1,5 +1,6 @@
 import 'package:mobx/mobx.dart';
 import 'package:techfrenetic/app/core/errors.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 
 part 'edit_summary_store.g.dart';
@@ -41,13 +42,15 @@ abstract class _SummaryStoreBase with Store {
     validateSummary(summary);
   }
 
-  Future<bool> updateBiografy() async {
+  Future<UserModel?> updateBiografy() async {
     if (!hasErrors) {
       UserProvider userProvider = UserProvider();
-      return userProvider.updateBiografy(summary);
+      if (await userProvider.updateBiografy(summary)) {
+        return userProvider.getLoggedUser();
+      }
     }
 
-    return false;
+    return null;
   }
 
   @computed

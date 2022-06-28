@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
@@ -76,8 +77,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
         future: _userProvider.getUser(userId),
         builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
           if (snapshot.hasData) {
-            user = snapshot.data!;
-            return _profileView();
+            if (snapshot.data != null) {
+              user = snapshot.data!;
+              profileStore.loggedUser = user;
+              return _profileView();
+            }
           }
 
           return const Center(
@@ -349,7 +353,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Text(user.biography),
+          child: Observer(builder: (context) {
+            return Text(profileStore.loggedUser.biography);
+          }),
         )
       ],
     );
