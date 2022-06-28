@@ -12,7 +12,7 @@ import 'package:techfrenetic/app/providers/countries_provider.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
-import 'package:techfrenetic/app/widgets/validate_text_widgt.dart';
+import 'package:techfrenetic/app/widgets/validate_text_widget.dart';
 
 class MyAccountPage extends StatefulWidget {
   const MyAccountPage({Key? key}) : super(key: key);
@@ -293,7 +293,6 @@ class _MyAccountPageState
                     countriesNames.add(models.category);
                   }
                 }
-
                 return DropdownButton<String>(
                   value: store.country,
                   isExpanded: true,
@@ -302,11 +301,7 @@ class _MyAccountPageState
                     color: Colors.black,
                   ),
                   onChanged: (country) {
-                    setState(
-                      () {
-                        store.changeCountry(country!);
-                      },
-                    );
+                    store.changeCountry(country!);
                   },
                   hint: Text(
                     AppLocalizations.of(context)!.your_country,

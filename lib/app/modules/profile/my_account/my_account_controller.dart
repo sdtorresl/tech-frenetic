@@ -71,6 +71,6 @@ class MyAccountController extends Disposable {
   }
 
   Future<bool> updatePassword() {
-    return _userProvider.updatePassword(token, newPassword);
+    return _userProvider.updateLoggedUserPassword(token, newPassword);
   }
 }

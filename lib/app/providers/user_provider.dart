@@ -411,7 +411,8 @@ class UserProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool> updatePassword(String token, String newPassword) async {
+  Future<bool> updateLoggedUserPassword(
+      String token, String newPassword) async {
     UserModel? loggedUser = await getLoggedUser();
     if (loggedUser != null) {
       Uri _url =
@@ -452,6 +453,49 @@ class UserProvider extends TechFreneticProvider {
       } on FormatException {
         debugPrint("Bad response format 👎");
       }
+    }
+
+    return false;
+  }
+
+  Future<bool> updatePassword(
+      String username, String token, String newPassword) async {
+    Uri _url = Uri.parse("$baseUrl/api/user/lost-password-reset?_format=json");
+    debugPrint("Updating password for user $username...");
+    debugPrint(_url.toString());
+
+    Map<String, dynamic> body = {
+      "name": username,
+      "temp_pass": token,
+      "new_pass": newPassword
+    };
+
+    Map<String, String> headers = jsonHeader;
+
+    try {
+      var response = await http.post(
+        _url,
+        body: json.jsonEncode(body),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint("Password changed successfully");
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint('Request failed with status: ${response.body}.');
+        if (response.statusCode == 400) {
+          if (response.body.contains("This User was not found or invalid")) {
+            throw UserNotFoundException();
+          }
+          throw TokenInvalidException();
+        }
+      }
+    } on SocketException {
+      debugPrint('No Internet connection 😑');
+    } on FormatException {
+      debugPrint("Bad response format 👎");
     }
 
     return false;
