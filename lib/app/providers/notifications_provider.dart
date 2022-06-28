@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/notification_model.dart';
@@ -27,7 +28,6 @@ class NotificationsProvider extends TechFreneticProvider {
         notifications = jsonResponse
             .map((item) => NotificationModel.fromMap(item))
             .toList();
-        debugPrint(notifications.toString());
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
@@ -35,5 +35,36 @@ class NotificationsProvider extends TechFreneticProvider {
       debugPrint(e.toString());
     }
     return notifications;
+  }
+
+  Future<bool> deleteNotification(NotificationModel notification) async {
+    try {
+      Uri _url = Uri.parse(
+          "$baseUrl/api/$locale/admin/structure/notification/${notification.id}?_format=hal_json");
+
+      Map<String, String> headers = {}
+        ..addAll(authHeader)
+        ..addAll(sessionHeader);
+
+      debugPrint(_url.toString());
+
+      var response = await http.delete(
+        _url,
+        headers: headers,
+      );
+
+      if (response.statusCode == 204) {
+        debugPrint("Notification ${notification.id} was deleted");
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } on SocketException {
+      debugPrint('No Internet connection 😑');
+    } on FormatException {
+      debugPrint("Bad response format 👎");
+    }
+
+    return false;
   }
 }

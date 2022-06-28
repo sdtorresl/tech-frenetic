@@ -20,6 +20,7 @@ class NotificationsPage extends StatefulWidget {
 class _NotificationsPageState
     extends ModularState<NotificationsPage, NotificationsStore> {
   final NotificationsProvider _notificationsProvider = NotificationsProvider();
+  List<NotificationModel> _notifications = List<NotificationModel>.empty();
 
   @override
   void initState() {
@@ -68,12 +69,12 @@ class _NotificationsPageState
         builder: (BuildContext context,
             AsyncSnapshot<List<NotificationModel>> snapshot) {
           if (snapshot.hasData) {
-            List<NotificationModel> notifications = snapshot.data!;
+            _notifications = snapshot.data!;
 
             return ListView.builder(
-              itemCount: notifications.length,
+              itemCount: _notifications.length,
               itemBuilder: (context, index) {
-                NotificationModel notification = notifications[index];
+                NotificationModel notification = _notifications[index];
                 return Observer(
                   builder: (BuildContext context) {
                     bool inList =
@@ -134,9 +135,14 @@ class _NotificationsPageState
     );
   }
 
-  _deleteSelectedNotifications() {
+  _deleteSelectedNotifications() async {
     for (NotificationModel notification in store.selectedNotifications) {
-      debugPrint("Delete notification ${notification.body}...");
+      debugPrint("Delete notification ${notification.id}...");
+      bool removed =
+          await _notificationsProvider.deleteNotification(notification);
+      if (removed) {
+        _notifications.remove(notification);
+      }
     }
     store.clearNotifications();
     setState(() {});

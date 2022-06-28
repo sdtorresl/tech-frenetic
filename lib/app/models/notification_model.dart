@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:techfrenetic/app/models/model.dart';
 
@@ -11,16 +10,18 @@ class NotificationModel extends Model {
     required this.body,
     required this.created,
     this.id = "0",
-    this.read = false,
+    this.useAvatar = true,
+    this.picture,
   });
 
   String avatar;
+  String? picture;
   String? type;
   String name;
   String body;
   DateTime created;
   String id;
-  bool read;
+  bool useAvatar;
 
   factory NotificationModel.fromJson(String str) =>
       NotificationModel.fromMap(json.decode(str));
@@ -28,17 +29,18 @@ class NotificationModel extends Model {
   String toJson() => json.encode(toMap());
 
   factory NotificationModel.fromMap(Map<String, dynamic> json) {
-    String avatar = json["user_picture"] ?? 'avatar-01';
+    String avatar = json["field_user_avatar"] ?? 'avatar-01';
     avatar = avatar.isEmpty ? 'avatar-01' : avatar;
 
     return NotificationModel(
-      avatar: avatar,
       type: json["field_type"],
       name: json["user_id"],
       body: json["notification_text"],
-      created: DateTime.now()
-          .subtract(const Duration(hours: 3)), // TODO: Convert datetime here
-      id: json["id"] ?? "ID",
+      created: DateTime.parse(json["created"]),
+      id: json["id"],
+      useAvatar: json["field_use_avatar"] == "true",
+      avatar: avatar,
+      picture: json["user_picture"],
     );
   }
 

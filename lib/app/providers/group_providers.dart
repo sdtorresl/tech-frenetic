@@ -8,7 +8,7 @@ import 'package:techfrenetic/app/providers/tf_provider.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 
 class GroupsProvider extends TechFreneticProvider {
-  UserProvider _userProvider = UserProvider();
+  final UserProvider _userProvider = UserProvider();
 
   Future<GroupModel> getGroup(int groupId) async {
     GroupModel group = GroupModel.empty();
@@ -284,7 +284,7 @@ class GroupsProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool> leaveGroup(String gUserId, int groupId) async {
+  Future<bool> leaveGroup(String gUserId, String groupId) async {
     try {
       Uri _url = Uri.parse(
           "$baseUrl/api/group/$groupId/content/$gUserId?_format=json");
