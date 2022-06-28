@@ -4,8 +4,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/modules/profile/my_profile/certifications/certifications_page.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_name/edit_name_page.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_summary/edit_summary_page.dart';
+import 'package:techfrenetic/app/modules/profile/my_profile/interests/interests_page.dart';
 import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
@@ -13,9 +15,6 @@ import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
-
-import '../../certifications/certifications.dart';
-import '../../interests/interests_page.dart';
 
 class MyProfilePage extends StatefulWidget {
   final String? userId;
