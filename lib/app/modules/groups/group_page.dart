@@ -143,20 +143,6 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
     );
   }
 
-  Widget _joinButton(BuildContext context, GroupModel group) {
-    if (group.public) {
-      return ElevatedButton(
-        onPressed: () => debugPrint("Join group"),
-        child: Text(AppLocalizations.of(context)!.groups_btn_join),
-      );
-    } else {
-      return ElevatedButton(
-        onPressed: () => debugPrint("Solicitar unirme"),
-        child: Text(AppLocalizations.of(context)!.groups_btn_join_request),
-      );
-    }
-  }
-
   Widget _details(BuildContext context, GroupModel group) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),

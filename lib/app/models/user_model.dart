@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:ffi';
-import 'package:global_configuration/global_configuration.dart';
 import 'package:techfrenetic/app/models/model.dart';
 
 import 'file_model.dart';

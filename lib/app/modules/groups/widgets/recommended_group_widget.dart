@@ -3,7 +3,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
 import 'package:techfrenetic/app/modules/groups/widgets/join_leave_button_widget.dart';
-import 'package:techfrenetic/app/providers/group_providers.dart';
 
 class RecommendedGroupWidget extends StatefulWidget {
   final GroupModel group;
@@ -20,7 +19,6 @@ class RecommendedGroupWidget extends StatefulWidget {
 class _RecommendedGroupWidgetState extends State<RecommendedGroupWidget> {
   @override
   Widget build(BuildContext context) {
-    GroupsProvider groupsProvider = GroupsProvider();
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
       child: ListTile(
