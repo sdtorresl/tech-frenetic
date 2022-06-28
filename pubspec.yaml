@@ -66,6 +66,7 @@ dependencies:
   path: ^1.8.0
   tus_client: ^1.0.2
   url_launcher: ^6.1.0
+  badges: ^2.0.3
 
 dev_dependencies:
   flutter_test:
