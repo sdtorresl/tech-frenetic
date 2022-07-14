@@ -2,7 +2,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/core/exceptions.dart';
-import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_name/profile_bloc.dart';
 import 'package:techfrenetic/app/providers/professions_provider.dart';
@@ -16,24 +15,29 @@ class EditNamePage extends StatefulWidget {
   _EditNamePageState createState() => _EditNamePageState();
 }
 
-ProfessionsProvider professions = ProfessionsProvider();
-
 class _EditNamePageState extends State<EditNamePage> {
+  final ProfessionsProvider _professionsProvider = ProfessionsProvider();
   final UserProvider _userProvider = UserProvider();
-  late final ProfileBloc _profileBloc;
-  late UserPreferences _prefs;
-  String? defaultValue;
+  final ProfileBloc _profileBloc = ProfileBloc();
+  final TextEditingController _nameController = TextEditingController();
   bool _isUpdating = false;
 
   @override
   void initState() {
     super.initState();
-    _profileBloc = ProfileBloc();
-    _prefs = UserPreferences();
 
-    if (_prefs.userName != null) {
-      _profileBloc.changeName(_prefs.userName!);
-    }
+    _nameController.addListener(() {
+      _profileBloc.changeName(_nameController.text);
+    });
+
+    _userProvider.getLoggedUser().then((user) {
+      if (user != null) {
+        debugPrint("Logged user: ${user.userName}");
+        debugPrint("Logged user: ${user.profession}");
+        _nameController.text = user.userName;
+        _profileBloc.changeProfession(user.profession);
+      }
+    });
   }
 
   @override
@@ -154,7 +158,7 @@ class _EditNamePageState extends State<EditNamePage> {
 
   Widget _professionField() {
     return FutureBuilder(
-      future: professions.getProfessions(),
+      future: _professionsProvider.getProfessions(),
       builder: (BuildContext context,
           AsyncSnapshot<List<CategoriesModel>> snapshot) {
         List<String> professionsNames = [];
@@ -215,15 +219,14 @@ class _EditNamePageState extends State<EditNamePage> {
       stream: _profileBloc.nameStream,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         return TextFormField(
-          initialValue: _profileBloc.name,
-          onChanged: _profileBloc.changeName,
+          controller: _nameController,
           decoration: InputDecoration(
             hintText: AppLocalizations.of(context)!.profile_your_name,
             hintStyle: Theme.of(context)
                 .textTheme
                 .bodyText1!
                 .copyWith(color: Theme.of(context).hintColor),
-            errorText: snapshot.hasError ? snapshot.error.toString() : "",
+            errorText: snapshot.hasError ? snapshot.error.toString() : null,
             errorStyle: Theme.of(context)
                 .textTheme
                 .headline4!
