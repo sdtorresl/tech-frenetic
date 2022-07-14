@@ -31,7 +31,7 @@ class CommentsProvider extends TechFreneticProvider {
     return comments;
   }
 
-  Future<bool> addComment(String articleId, String comment) async {
+  Future<int?> addComment(String articleId, String comment) async {
     Uri _url = Uri.parse("$baseUrl/api/$locale/comment?_format=json");
 
     try {
@@ -68,8 +68,7 @@ class CommentsProvider extends TechFreneticProvider {
       var response = await http.post(_url, headers: headers, body: body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        debugPrint(response.body);
-        return true;
+        return json.jsonDecode(response.body)["cid"][0]["value"];
       } else {
         debugPrint(
             "Comment failed to be created: ${response.reasonPhrase}. Status code ${response.statusCode}");
@@ -78,6 +77,6 @@ class CommentsProvider extends TechFreneticProvider {
       debugPrint(e.toString());
     }
 
-    return false;
+    return null;
   }
 }

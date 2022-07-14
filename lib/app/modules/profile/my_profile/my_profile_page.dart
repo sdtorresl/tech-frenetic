@@ -149,6 +149,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
         String nameStr = words;
 
         nameWidget = Stack(
+          alignment: AlignmentDirectional.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -400,8 +401,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Widget _profileHeader(BuildContext context) {
-    Widget nameWidget = _nameWidget();
-
     return Container(
       margin: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
@@ -439,19 +438,18 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   radius: 40,
                 ),
               ),
-              ListTile(
-                title: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(child: nameWidget),
-                ),
-                subtitle: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(user.profession),
-                    ),
-                  ],
+              Container(
+                child: _nameWidget(),
+                margin: const EdgeInsets.only(top: 15),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                child: Text(
+                  user.profession,
+                  maxLines: 2,
+                  overflow: TextOverflow.fade,
+                  textAlign: TextAlign.center,
                 ),
               ),
             ],

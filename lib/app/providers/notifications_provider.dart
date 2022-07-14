@@ -67,4 +67,108 @@ class NotificationsProvider extends TechFreneticProvider {
 
     return false;
   }
+
+  Future<bool> postNotification(
+      String contentId, NotificationType type, int targetId) async {
+    try {
+      Uri _url = Uri.parse(
+          "$baseUrl/api/$locale/entity/notification?_format=hal_json");
+
+      Map<String, String> headers = {}
+        ..addAll(authHeader)
+        ..addAll(sessionHeader)
+        ..addAll(halHeader);
+      debugPrint(_url.toString());
+
+      Map<String, dynamic> body = {
+        "_links": {
+          "type": {
+            "href":
+                "http://dev-techfrenetic.us.seedcloud.co/api/rest/type/notification/notification"
+          }
+        },
+        "name": [
+          {"value": targetId}
+        ],
+      };
+
+      switch (type) {
+        case NotificationType.commentNotification:
+          body.addAll({
+            "field_content": [
+              {"target_id": contentId}
+            ],
+            "field_comment": [
+              {"target_id": targetId}
+            ],
+            "field_type": [
+              {"value": "comment"}
+            ]
+          });
+          break;
+        case NotificationType.videoNotification:
+        case NotificationType.contentNotification:
+          body.addAll({
+            "field_content": [
+              {"target_id": targetId}
+            ],
+            "field_type": [
+              {"value": "video"}
+            ]
+          });
+          break;
+        case NotificationType.sharedNotification:
+          body.addAll({
+            "field_content": [
+              {"target_id": targetId}
+            ],
+            "field_type": [
+              {"value": "shared"}
+            ]
+          });
+          break;
+        case NotificationType.groupNotification:
+          body.addAll({
+            "field_group": [
+              {"target_id": targetId}
+            ],
+            "field_type": [
+              {"value": "group"}
+            ]
+          });
+          break;
+        default:
+          body.addAll({
+            "field_content": [
+              {"target_id": targetId}
+            ],
+            "field_type": [
+              {"value": "video"}
+            ]
+          });
+          break;
+      }
+
+      debugPrint(body.toString());
+
+      var response = await http.post(
+        _url,
+        headers: headers,
+        body: json.encode(body),
+      );
+
+      if (response.statusCode == 201) {
+        debugPrint("Notification was created");
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } on SocketException {
+      debugPrint('No Internet connection 😑');
+    } on FormatException {
+      debugPrint("Bad response format 👎");
+    }
+
+    return false;
+  }
 }

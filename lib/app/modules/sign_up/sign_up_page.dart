@@ -315,7 +315,8 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
     bool passwordHasNumbers = RegExp(r'\d').hasMatch(_password);
     bool passwordHasMixedCase = _password.contains(RegExp(r'[A-Z]')) &&
         _password.contains(RegExp(r'[a-z]'));
-    bool passwordsMatch = _password == _confirmationPassword;
+    bool passwordsMatch =
+        _password == _confirmationPassword && _password.isNotEmpty;
 
     return Column(
       children: [
@@ -346,7 +347,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
             builder: (context, snapshot) {
               return TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'What´s your name?',
+                  hintText: AppLocalizations.of(context)!.your_name,
                   hintStyle: Theme.of(context)
                       .textTheme
                       .bodyText1!
@@ -367,7 +368,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               return TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'Your Email',
+                  hintText: AppLocalizations.of(context)!.your_email,
                   hintStyle: Theme.of(context)
                       .textTheme
                       .bodyText1!
@@ -390,7 +391,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
               obscureText: _isPasswordHidden1,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                hintText: 'Create password',
+                hintText: AppLocalizations.of(context)!.form1_password,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -426,7 +427,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
             return TextFormField(
               obscureText: _isPasswordHidden2,
               decoration: InputDecoration(
-                hintText: 'Confirm your password',
+                hintText: AppLocalizations.of(context)!.form1_repassword,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!

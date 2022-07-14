@@ -24,10 +24,20 @@ class _LatestArticleWidgetState extends State<LatestArticleWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 20),
-          CachedNetworkImage(
-              placeholder: (context, value) => const LinearProgressIndicator(),
-              errorWidget: (context, value, e) => const Icon(Icons.error),
-              imageUrl: widget.article.thumbnail!),
+          widget.article.thumbnail != null
+              ? CachedNetworkImage(
+                  placeholder: (context, value) =>
+                      const LinearProgressIndicator(),
+                  errorWidget: (context, value, e) => const Icon(Icons.error),
+                  imageUrl: widget.article.thumbnail!)
+              : const SizedBox(
+                  height: 100,
+                  width: double.infinity,
+                  child: Icon(
+                    Icons.error,
+                    size: 36,
+                  ),
+                ),
           Row(
             children: [
               Text(

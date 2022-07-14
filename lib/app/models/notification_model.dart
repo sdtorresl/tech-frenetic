@@ -2,6 +2,14 @@ import 'dart:convert';
 
 import 'package:techfrenetic/app/models/model.dart';
 
+enum NotificationType {
+  groupNotification,
+  commentNotification,
+  contentNotification,
+  videoNotification,
+  sharedNotification
+}
+
 class NotificationModel extends Model {
   NotificationModel({
     required this.avatar,
