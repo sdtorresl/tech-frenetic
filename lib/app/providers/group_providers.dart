@@ -144,47 +144,40 @@ class GroupsProvider extends TechFreneticProvider {
     return recommendedGroups;
   }
 
-  Future<bool?> createGroup(String name, String description, String rules,
-      String namePerson, String type) async {
+  Future<bool> createGroup(
+      String name, String description, String rules, bool isPublic) async {
     try {
-      Uri _url = Uri.parse("$baseUrl/api/en/entity/node?_format=json");
+      Uri _url = Uri.parse("$baseUrl/api/en/entity/group?_format=json");
 
       Map<String, dynamic> body = {
+        "_links": {
+          "type": {
+            "href":
+                "http://dev-techfrenetic.us.seedcloud.co/api/rest/type/group/${isPublic ? "group" : "group_private"}"
+          }
+        },
         "type": [
-          {"target_id": "group", "target_type": "node_type"}
+          {"target_id": isPublic ? "group" : "group_private"}
         ],
-        "title": [
+        "label": [
           {"value": name}
         ],
-        "langcode": [
-          {"value": locale}
+        "field_logo": [
+          {"target_id": 145}
         ],
-        "field_group_featured": [
-          {"value": "0"}
-        ],
-        "field_group_logo": [
-          {"target_id": "11", "alt": "Assassins-Creed-Valhalla-1"}
-        ],
-        "field_group_members": [
-          {"value": "tfadmin (1)"}
-        ],
-        "field_group_rules": [
-          {"value": rules}
-        ],
-        "field_group_articles": [
-          {"value": "PlayStation 5: Black"}
-        ],
-        "field_group_description": [
+        "field_description": [
           {"value": description}
+        ],
+        "field_rules": [
+          {"value": rules}
         ]
       };
 
-      Map<String, String> headers = {};
-      headers.addAll(jsonHeader);
-      headers.addAll(authHeader);
-      headers.addAll(basicAuth);
-      headers.addAll(sessionHeader);
-      headers.addAll(headers);
+      Map<String, String> headers = {}
+        ..addAll(halHeader)
+        ..addAll(authHeader)
+        ..addAll(basicAuth)
+        ..addAll(sessionHeader);
 
       var response = await http.post(
         _url,
@@ -196,6 +189,7 @@ class GroupsProvider extends TechFreneticProvider {
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint('Response: ${response.body}.');
       }
     } catch (e) {
       debugPrint(e.toString());

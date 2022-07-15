@@ -13,16 +13,16 @@ class CreateGroupsPage extends StatefulWidget {
   _CreateGroupsPageState createState() => _CreateGroupsPageState();
 }
 
-List<String> items = [
-  'Private',
-  'Public',
-];
-
-String? defaultValue = items.first;
-
 class _CreateGroupsPageState
     extends ModularState<CreateGroupsPage, CreateGroupsController> {
+  Map<bool, String> items = {true: 'Public', false: 'Private'};
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    store.changeType(true);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -326,30 +326,27 @@ class _CreateGroupsPageState
                 Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
           ),
           StreamBuilder(
-              stream: store.typeStream,
+              stream: store.isPublicStream,
               builder: (context, snapshot) {
-                store.changeType(defaultValue!);
-                return DropdownButton<String>(
-                  value: defaultValue,
+                return DropdownButton<bool>(
+                  value: store.isPublic,
                   isExpanded: true,
                   underline: Container(
                     height: 0.5,
                     color: Colors.black,
                   ),
-                  items: items.map(
-                    (String valueItem) {
-                      return DropdownMenuItem<String>(
-                        child: Text(valueItem),
-                        value: valueItem,
+                  items: items.entries.map(
+                    (e) {
+                      return DropdownMenuItem<bool>(
+                        child: Text(e.value),
+                        value: e.key,
                       );
                     },
                   ).toList(),
-                  onChanged: (newValue) {
+                  onChanged: (isPublic) {
                     setState(
                       () {
-                        defaultValue = newValue;
-                        store.changeType(defaultValue!);
-                        debugPrint(defaultValue);
+                        store.changeType(isPublic ?? true);
                       },
                     );
                   },

@@ -143,7 +143,6 @@ class UserProvider extends TechFreneticProvider {
 
         if (users.isNotEmpty) {
           user = UserModel.fromProfileMap(users.first);
-          debugPrint("User: $user");
         }
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
