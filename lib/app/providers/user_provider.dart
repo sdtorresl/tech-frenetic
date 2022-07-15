@@ -5,7 +5,6 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:techfrenetic/app/core/exceptions.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
-import 'package:techfrenetic/app/models/profile_model.dart';
 import 'package:techfrenetic/app/models/session_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
@@ -131,23 +130,20 @@ class UserProvider extends TechFreneticProvider {
     return userinfo;
   }
 
-  Future<ProfileModel?> getProfile(String userId) async {
-    ProfileModel userinfo = ProfileModel.empty();
+  Future<UserModel?> getProfile(String userId) async {
+    UserModel? user;
 
     try {
-      Uri _url = Uri.parse(
-          "$baseUrl/api/$locale/v1/full-profile?_format=json&id=$userId");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/user-name/$userId");
 
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
-        List<dynamic> profiles = json.jsonDecode(response.body);
+        List<dynamic> users = json.jsonDecode(response.body);
 
-        if (profiles.isNotEmpty) {
-          userinfo = ProfileModel.fromJson(profiles[0]);
-          if (!userinfo.useAvatar) {
-            userinfo.picture = baseUrl + userinfo.picture;
-          }
+        if (users.isNotEmpty) {
+          user = UserModel.fromProfileMap(users.first);
+          debugPrint("User: $user");
         }
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
@@ -155,7 +151,7 @@ class UserProvider extends TechFreneticProvider {
     } catch (e) {
       debugPrint(e.toString());
     }
-    return userinfo;
+    return user;
   }
 
   bool isLogged() {

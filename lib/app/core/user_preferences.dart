@@ -68,7 +68,7 @@ class UserPreferences {
       DateTime.tryParse(_prefs.getString('expiration_date') ?? '') ??
       DateTime.now();
 
-  set newUser(bool newUser) => _prefs.setBool('newUser', newUser);
+  set newUser(bool newUser) => _prefs.setBool('new_user', newUser);
 
-  bool get newUser => _prefs.getBool('newUser') ?? true;
+  bool get newUser => _prefs.getBool('new_user') ?? true;
 }
