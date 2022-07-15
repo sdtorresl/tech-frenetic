@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
+import 'package:techfrenetic/app/core/errors.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_controller.dart';
 
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
@@ -20,6 +21,10 @@ class _CreateGroupsPageState
 
   @override
   void initState() {
+    items = {
+      true: AppLocalizations.of(context)!.groups_public,
+      false: AppLocalizations.of(context)!.groups_private,
+    };
     store.changeType(true);
     super.initState();
   }
@@ -244,8 +249,9 @@ class _CreateGroupsPageState
                         .textTheme
                         .bodyText1!
                         .copyWith(color: Theme.of(context).hintColor),
-                    errorText:
-                        snapshot.hasError ? snapshot.error.toString() : null,
+                    errorText: snapshot.hasError
+                        ? TFError.getError(context, snapshot.error as ErrorType)
+                        : null,
                     errorStyle: Theme.of(context)
                         .textTheme
                         .headline4!
@@ -254,7 +260,7 @@ class _CreateGroupsPageState
                   onChanged: store.changeName,
                 );
               }),
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           StreamBuilder(
               stream: store.descriptionStream,
               builder: (context, snapshot) {
@@ -265,7 +271,9 @@ class _CreateGroupsPageState
                         .textTheme
                         .bodyText1!
                         .copyWith(color: Theme.of(context).hintColor),
-                    //errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                    errorText: snapshot.hasError
+                        ? TFError.getError(context, snapshot.error as ErrorType)
+                        : null,
                     errorStyle: Theme.of(context)
                         .textTheme
                         .headline4!
@@ -274,7 +282,7 @@ class _CreateGroupsPageState
                   onChanged: store.changeDescription,
                 );
               }),
-          const SizedBox(height: 40),
+          const SizedBox(height: 20),
           StreamBuilder(
               stream: store.rulesStream,
               builder: (context, snapshot) {
@@ -285,7 +293,9 @@ class _CreateGroupsPageState
                         .textTheme
                         .bodyText1!
                         .copyWith(color: Theme.of(context).hintColor),
-                    //errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                    errorText: snapshot.hasError
+                        ? TFError.getError(context, snapshot.error as ErrorType)
+                        : null,
                     errorStyle: Theme.of(context)
                         .textTheme
                         .headline4!
@@ -294,7 +304,7 @@ class _CreateGroupsPageState
                   onChanged: store.changeRules,
                 );
               }),
-          const SizedBox(height: 60),
+          const SizedBox(height: 30),
           Text(
             AppLocalizations.of(context)!.group_person,
             style:
@@ -310,7 +320,9 @@ class _CreateGroupsPageState
                         .textTheme
                         .bodyText1!
                         .copyWith(color: Theme.of(context).hintColor),
-                    //errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                    errorText: snapshot.hasError
+                        ? TFError.getError(context, snapshot.error as ErrorType)
+                        : null,
                     errorStyle: Theme.of(context)
                         .textTheme
                         .headline4!
@@ -319,7 +331,7 @@ class _CreateGroupsPageState
                   onChanged: store.changeNamePerson,
                 );
               }),
-          const SizedBox(height: 60),
+          const SizedBox(height: 30),
           Text(
             AppLocalizations.of(context)!.select,
             style:
