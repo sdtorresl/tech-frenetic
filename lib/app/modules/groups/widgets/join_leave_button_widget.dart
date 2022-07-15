@@ -52,8 +52,8 @@ class _JoinLeaveButtonWidgetState extends State<JoinLeaveButtonWidget> {
         setState(() {
           _isLoading = true;
         });
-        bool joined =
-            await _groupsProvider.joinGroup(userId.toString(), widget.group.id);
+        bool joined = await _groupsProvider.joinGroup(
+            userId.toString(), int.parse(widget.group.id));
         if (joined) {
           debugPrint("Joined!");
         }
