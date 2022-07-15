@@ -23,6 +23,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends ModularState<HomePage, HomeStore> {
+  final ProfileStore _profileStore = Modular.get();
+
   final List<String> _pages = [
     '/community',
     '/skills',
@@ -33,6 +35,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
 
   @override
   void initState() {
+    store.selectedPage = 0;
     super.initState();
   }
 
@@ -110,8 +113,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         ),
         PopupMenuItem<int>(
           onTap: () {
-            ProfileStore profileStore = Modular.get();
-            profileStore.index = 0;
+            _profileStore.index = 0;
             store.selectedPage = 3;
             Modular.to.navigate('/profile/profile');
           },

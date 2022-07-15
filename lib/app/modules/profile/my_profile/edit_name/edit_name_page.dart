@@ -33,10 +33,10 @@ class _EditNamePageState extends State<EditNamePage> {
 
     _userProvider.getLoggedUser().then((user) {
       if (user != null) {
-        debugPrint("Logged user: ${user.userName}");
-        debugPrint("Logged user: ${user.profession}");
         _nameController.text = user.userName;
-        _profileBloc.changeProfession(user.profession);
+        if (user.profession.isNotEmpty) {
+          _profileBloc.changeProfession(user.profession);
+        }
       }
     });
   }
