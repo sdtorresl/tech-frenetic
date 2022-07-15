@@ -1,5 +1,6 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/core/exceptions.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
@@ -102,7 +103,7 @@ class _EditNamePageState extends State<EditNamePage> {
               ],
             ),
             IconButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Modular.to.popAndPushNamed('/profile/profile'),
               icon: const Icon(Icons.close),
             ),
           ],
@@ -251,6 +252,19 @@ class _EditNamePageState extends State<EditNamePage> {
             title: AppLocalizations.of(context)!.message_success,
             content:
                 Text(AppLocalizations.of(context)!.profile_account_updated),
+            actions: [
+              TextButton(
+                child: Text(
+                  AppLocalizations.of(context)!.close.toUpperCase(),
+                  style: Theme.of(context).textTheme.button!.copyWith(
+                      fontSize: 12, color: Theme.of(context).primaryColor),
+                ),
+                onPressed: () {
+                  Modular.to.pop();
+                  Modular.to.popAndPushNamed('/profile/profile');
+                },
+              ),
+            ],
           );
         }
       }).catchError((error) {
