@@ -124,7 +124,9 @@ class _EditSummaryPageState extends State<EditSummaryPage> {
                     .textTheme
                     .bodyText1!
                     .copyWith(color: Theme.of(context).hintColor),
-                errorText: TFError.getError(context, _summaryStore.error),
+                errorText: _summaryStore.hasErrors
+                    ? TFError.getError(context, _summaryStore.error)
+                    : null,
                 errorStyle: Theme.of(context)
                     .textTheme
                     .headline4!
