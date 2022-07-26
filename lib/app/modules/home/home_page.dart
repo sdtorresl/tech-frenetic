@@ -99,8 +99,6 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         child: Observer(
           name: 'avatarObserver',
           builder: (context) {
-            debugPrint(
-                "Rendering avatar for user ${_profileStore.loggedUser.toString()}");
             return AvatarWidget(
               userId: _profileStore.loggedUser?.uid.toString() ?? prefs.userId!,
             );

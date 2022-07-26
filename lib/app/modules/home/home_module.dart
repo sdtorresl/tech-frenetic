@@ -171,7 +171,7 @@ class HomeModule extends Module {
     ),
     ChildRoute(
       '/edit_avatar',
-      child: (context, args) => const EditAvatarPage(),
+      child: (context, args) => EditAvatarPage(),
       guards: [
         AuthGuard(),
       ],

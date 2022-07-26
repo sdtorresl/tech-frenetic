@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:techfrenetic/app/models/user_model.dart';
-import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/providers/registration_provider.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
@@ -12,12 +10,14 @@ class SelectAvatarWidget extends StatefulWidget {
   final String title;
   final String subtitle;
   final String destinationRoute;
+  final String defaultAvatar;
 
   const SelectAvatarWidget(
       {Key? key,
       required this.title,
       required this.subtitle,
-      this.destinationRoute = '/profile'})
+      this.destinationRoute = '/profile',
+      this.defaultAvatar = 'avatar-01'})
       : super(key: key);
 
   @override
@@ -27,11 +27,16 @@ class SelectAvatarWidget extends StatefulWidget {
 class _SelectAvatarWidgetState extends State<SelectAvatarWidget> {
   final RegistrationProvider _registrationProvider = RegistrationProvider();
   final UserProvider _userProvider = UserProvider();
-  final ProfileStore _profileStore = ProfileStore();
 
-  String selectedAvatar = 'avatar-01';
+  late String _selectedAvatar;
   bool? useAvatar = true;
   bool _isLoading = false;
+
+  @override
+  void initState() {
+    _selectedAvatar = widget.defaultAvatar;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -128,7 +133,7 @@ class _SelectAvatarWidgetState extends State<SelectAvatarWidget> {
     ];
 
     List<Widget> avatarWidgets = avatars
-        .map((avatar) => singleAvatar(avatar, avatar == selectedAvatar))
+        .map((avatar) => singleAvatar(avatar, avatar == _selectedAvatar))
         .toList();
 
     return Wrap(
@@ -153,7 +158,7 @@ class _SelectAvatarWidgetState extends State<SelectAvatarWidget> {
             setState(
               () {
                 if (value = true) {
-                  selectedAvatar = avatar;
+                  _selectedAvatar = avatar;
                   useAvatar = value;
                 }
               },
@@ -165,7 +170,7 @@ class _SelectAvatarWidgetState extends State<SelectAvatarWidget> {
   }
 
   Widget _nextStep(BuildContext context) {
-    bool isCompleted = selectedAvatar != '' && useAvatar! != false;
+    bool isCompleted = _selectedAvatar != '' && useAvatar! != false;
 
     return Center(
       child: SizedBox(
@@ -177,18 +182,12 @@ class _SelectAvatarWidgetState extends State<SelectAvatarWidget> {
                     _isLoading = true;
                   });
                   bool changed = await _registrationProvider.selectAvatar(
-                      useAvatar ?? true, selectedAvatar);
+                      useAvatar ?? true, _selectedAvatar);
                   setState(() {
                     _isLoading = false;
                   });
                   if (changed) {
-                    _profileStore.loggedUser = null;
-
-                    UserModel? user = await _userProvider.getLoggedUser();
-                    if (user != null) {
-                      debugPrint("User avatar is ${user.avatar}");
-                      _profileStore.loggedUser = user;
-                    }
+                    _userProvider.updateLoggedUser();
                   } else {
                     debugPrint('Avatar wasn\'t changed');
                   }
@@ -196,7 +195,7 @@ class _SelectAvatarWidgetState extends State<SelectAvatarWidget> {
                   switch (widget.destinationRoute) {
                     case '/welcome':
                       Modular.to
-                          .pushNamed("/welcome", arguments: selectedAvatar);
+                          .pushNamed("/welcome", arguments: _selectedAvatar);
                       break;
                     default:
                       Modular.to.pop();

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 
@@ -20,7 +21,7 @@ class AvatarWidget extends StatefulWidget {
 
 class _AvatarWidgetState extends State<AvatarWidget>
     with TickerProviderStateMixin {
-  //final _prefs = UserPreferences();
+  final _prefs = UserPreferences();
   final UserProvider _userProvider = UserProvider();
   late AnimationController _controller;
 
@@ -41,7 +42,7 @@ class _AvatarWidgetState extends State<AvatarWidget>
 
   @override
   Widget build(BuildContext context) {
-    /* if (widget.userId == _prefs.userId && _prefs.userAvatar.isNotEmpty) {
+    if (widget.userId == _prefs.userId && _prefs.userAvatar.isNotEmpty) {
       return CircleAvatar(
         radius: widget.radius,
         backgroundColor: Colors.grey[200],
@@ -52,7 +53,7 @@ class _AvatarWidgetState extends State<AvatarWidget>
           ),
         ),
       );
-    } */
+    }
 
     return FutureBuilder(
       future: _userProvider.getProfile(widget.userId),
