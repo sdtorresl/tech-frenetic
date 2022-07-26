@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
@@ -28,7 +29,7 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
-  final ProfileStore profileStore = Modular.get();
+  final ProfileStore _profileStore = Modular.get();
   final ArticlesProvider _articlesProvider = ArticlesProvider();
   final CategoriesProvider _categoriesProvicer = CategoriesProvider();
   final UserPreferences _prefs = UserPreferences();
@@ -65,28 +66,33 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: FutureBuilder(
-        future: _userProvider.getUser(userId),
-        builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
-          if (snapshot.hasData) {
-            if (snapshot.data != null) {
-              user = snapshot.data!;
-              return _profileView();
+    return Observer(builder: (context) {
+      if (_profileStore.loggedUser?.uid.toString() == _prefs.userId) {
+        user = _profileStore.loggedUser ?? UserModel.empty();
+      }
+      return Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: FutureBuilder(
+          future: _userProvider.getUser(userId),
+          builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data != null) {
+                user = snapshot.data!;
+                return _profileView();
+              }
             }
-          }
 
-          return const Center(
-            child: SizedBox(
-              child: CircularProgressIndicator(),
-              width: 35.0,
-              height: 35.0,
-            ),
-          );
-        },
-      ),
-    );
+            return const Center(
+              child: SizedBox(
+                child: CircularProgressIndicator(),
+                width: 35.0,
+                height: 35.0,
+              ),
+            );
+          },
+        ),
+      );
+    });
   }
 
   Widget _profileView() {
@@ -482,7 +488,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             AppLocalizations.of(context)!.articles,
             articlesCount,
             () {
-              profileStore.index = 1;
+              _profileStore.index = 1;
               Modular.to.navigate('/profile/content');
             },
           ),
@@ -490,7 +496,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             AppLocalizations.of(context)!.your_profile,
             viewedCount,
             () {
-              profileStore.index = 1;
+              _profileStore.index = 1;
               Modular.to.navigate('/profile/content');
             },
           ),
@@ -498,7 +504,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             AppLocalizations.of(context)!.post,
             postsCount,
             () {
-              profileStore.index = 2;
+              _profileStore.index = 2;
               Modular.to.navigate('/profile/activity');
             },
           ),
