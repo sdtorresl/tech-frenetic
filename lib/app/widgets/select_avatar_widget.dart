@@ -2,7 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/providers/registration_provider.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class SelectAvatarWidget extends StatefulWidget {
@@ -22,6 +25,10 @@ class SelectAvatarWidget extends StatefulWidget {
 }
 
 class _SelectAvatarWidgetState extends State<SelectAvatarWidget> {
+  final RegistrationProvider _registrationProvider = RegistrationProvider();
+  final UserProvider _userProvider = UserProvider();
+  final ProfileStore _profileStore = ProfileStore();
+
   String selectedAvatar = 'avatar-01';
   bool? useAvatar = true;
   bool _isLoading = false;
@@ -159,7 +166,6 @@ class _SelectAvatarWidgetState extends State<SelectAvatarWidget> {
 
   Widget _nextStep(BuildContext context) {
     bool isCompleted = selectedAvatar != '' && useAvatar! != false;
-    RegistrationProvider articlesProvider = RegistrationProvider();
 
     return Center(
       child: SizedBox(
@@ -170,13 +176,19 @@ class _SelectAvatarWidgetState extends State<SelectAvatarWidget> {
                   setState(() {
                     _isLoading = true;
                   });
-                  bool? changed = await articlesProvider.selectAvatar(
-                      useAvatar!, selectedAvatar);
+                  bool changed = await _registrationProvider.selectAvatar(
+                      useAvatar ?? true, selectedAvatar);
                   setState(() {
                     _isLoading = false;
                   });
-                  if (changed!) {
-                    debugPrint("Avatar changed!");
+                  if (changed) {
+                    _profileStore.loggedUser = null;
+
+                    UserModel? user = await _userProvider.getLoggedUser();
+                    if (user != null) {
+                      debugPrint("User avatar is ${user.avatar}");
+                      _profileStore.loggedUser = user;
+                    }
                   } else {
                     debugPrint('Avatar wasn\'t changed');
                   }

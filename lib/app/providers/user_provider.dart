@@ -1,18 +1,18 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:techfrenetic/app/core/exceptions.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/models/session_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 import 'dart:convert' as json;
 
 class UserProvider extends TechFreneticProvider {
-  SessionModel? loggedUser;
-
   Future<SessionModel?> login(String email, String password) async {
     SessionModel? loggedUser;
 
@@ -79,8 +79,10 @@ class UserProvider extends TechFreneticProvider {
   }
 
   Future<UserModel?> getLoggedUser() async {
+    ProfileStore profileStore = Modular.get();
+
     String? userId = prefs.userId;
-    UserModel? userinfo;
+    UserModel? loggedUser;
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
 
@@ -95,17 +97,18 @@ class UserProvider extends TechFreneticProvider {
       );
 
       if (response.statusCode == 200) {
-        userinfo = UserModel.fromJson(response.body);
-        prefs.userName = userinfo.userName;
-        prefs.userEmail = userinfo.mail;
-        prefs.userAvatar = userinfo.avatar;
+        loggedUser = UserModel.fromJson(response.body);
+        profileStore.loggedUser = loggedUser;
+        prefs.userName = loggedUser.userName;
+        prefs.userEmail = loggedUser.mail;
+        prefs.userAvatar = loggedUser.avatar;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
       debugPrint(e.toString());
     }
-    return userinfo;
+    return loggedUser;
   }
 
   Future<UserModel?> getUser(String userId) async {

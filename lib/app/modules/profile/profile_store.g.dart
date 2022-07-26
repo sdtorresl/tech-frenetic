@@ -9,14 +9,6 @@ part of 'profile_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
 
 mixin _$ProfileStore on _ProfileStoreBase, Store {
-  Computed<UserModel>? _$loggedUserComputed;
-
-  @override
-  UserModel get loggedUser =>
-      (_$loggedUserComputed ??= Computed<UserModel>(() => super.loggedUser,
-              name: '_ProfileStoreBase.loggedUser'))
-          .value;
-
   final _$indexAtom = Atom(name: '_ProfileStoreBase.index');
 
   @override
@@ -32,18 +24,18 @@ mixin _$ProfileStore on _ProfileStoreBase, Store {
     });
   }
 
-  final _$_loggedUserAtom = Atom(name: '_ProfileStoreBase._loggedUser');
+  final _$loggedUserAtom = Atom(name: '_ProfileStoreBase.loggedUser');
 
   @override
-  UserModel get _loggedUser {
-    _$_loggedUserAtom.reportRead();
-    return super._loggedUser;
+  UserModel? get loggedUser {
+    _$loggedUserAtom.reportRead();
+    return super.loggedUser;
   }
 
   @override
-  set _loggedUser(UserModel value) {
-    _$_loggedUserAtom.reportWrite(value, super._loggedUser, () {
-      super._loggedUser = value;
+  set loggedUser(UserModel? value) {
+    _$loggedUserAtom.reportWrite(value, super.loggedUser, () {
+      super.loggedUser = value;
     });
   }
 

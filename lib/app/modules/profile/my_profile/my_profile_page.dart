@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
@@ -45,13 +44,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
   @override
   void initState() {
     super.initState();
-
-    debugPrint("User ID is ${widget.userId}");
-
     userId = widget.userId ?? _prefs.userId!;
-    editable = widget.userId == userId || widget.userId == null;
-
-    loadCounts();
+    editable = widget.userId == _prefs.userId;
+    //loadCounts();
   }
 
   void loadCounts() async {
@@ -78,7 +73,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
           if (snapshot.hasData) {
             if (snapshot.data != null) {
               user = snapshot.data!;
-              profileStore.loggedUser = user;
               return _profileView();
             }
           }
@@ -353,9 +347,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
-          child: Observer(builder: (context) {
-            return Text(profileStore.loggedUser.biography);
-          }),
+          child: Text(user.biography),
         )
       ],
     );

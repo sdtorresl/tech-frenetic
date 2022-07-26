@@ -62,8 +62,10 @@ class _AvatarWidgetState extends State<AvatarWidget>
         if (snapshot.hasData) {
           user = snapshot.data!;
 
-          _controller.reset();
-          _controller.forward();
+          if (!_controller.isAnimating) {
+            _controller.reset();
+            _controller.forward();
+          }
 
           if (user.useAvatar) {
             return CircleAvatar(

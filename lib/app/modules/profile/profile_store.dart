@@ -10,12 +10,5 @@ abstract class _ProfileStoreBase with Store {
   int index = 0;
 
   @observable
-  UserModel _loggedUser = UserModel.empty();
-
-  set loggedUser(UserModel user) {
-    _loggedUser = user;
-  }
-
-  @computed
-  UserModel get loggedUser => _loggedUser;
+  UserModel? loggedUser;
 }

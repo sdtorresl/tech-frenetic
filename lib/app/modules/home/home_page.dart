@@ -96,8 +96,15 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
       child: Container(
         width: 50,
         padding: const EdgeInsets.symmetric(vertical: 8),
-        child: AvatarWidget(
-          userId: prefs.userId!,
+        child: Observer(
+          name: 'avatarObserver',
+          builder: (context) {
+            debugPrint(
+                "Rendering avatar for user ${_profileStore.loggedUser.toString()}");
+            return AvatarWidget(
+              userId: _profileStore.loggedUser?.uid.toString() ?? prefs.userId!,
+            );
+          },
         ),
       ),
       offset: const Offset(0, 60),
