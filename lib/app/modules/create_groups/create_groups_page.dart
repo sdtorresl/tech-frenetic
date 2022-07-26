@@ -21,12 +21,17 @@ class _CreateGroupsPageState
 
   @override
   void initState() {
+    store.changeType(true);
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
     items = {
       true: AppLocalizations.of(context)!.groups_public,
       false: AppLocalizations.of(context)!.groups_private,
     };
-    store.changeType(true);
-    super.initState();
+    super.didChangeDependencies();
   }
 
   @override
