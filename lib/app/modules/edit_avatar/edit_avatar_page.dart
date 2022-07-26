@@ -5,16 +5,8 @@ import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/select_avatar_widget.dart';
 
-class EditAvatarPage extends StatefulWidget {
+class EditAvatarPage extends StatelessWidget {
   const EditAvatarPage({Key? key}) : super(key: key);
-
-  @override
-  _EditAvatarPageState createState() => _EditAvatarPageState();
-}
-
-class _EditAvatarPageState extends State<EditAvatarPage> {
-  String selectedAvatar = 'avatar-01';
-  bool? useAvatar = true;
 
   @override
   Widget build(BuildContext context) {
