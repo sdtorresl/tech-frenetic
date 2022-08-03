@@ -114,19 +114,30 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
               const SizedBox(
                 height: 10,
               ),
-              Row(
-                children: [
-                  const Icon(Icons.check),
-                  const SizedBox(
-                    width: 7,
-                  ),
-                  Text(
-                    "${group.members} ${AppLocalizations.of(context)!.groups_members}",
-                    style: Theme.of(context).textTheme.subtitle2!.copyWith(
-                          fontWeight: FontWeight.bold,
+              FutureBuilder(
+                future: _groupsProvider.getMembers(group.id.toString()),
+                builder: (BuildContext context,
+                    AsyncSnapshot<List<UserModel>> snapshot) {
+                  if (snapshot.hasData) {
+                    return Row(
+                      children: [
+                        const Icon(Icons.check),
+                        const SizedBox(
+                          width: 7,
                         ),
-                  ),
-                ],
+                        Text(
+                          "${snapshot.data?.length ?? 0} ${AppLocalizations.of(context)!.groups_members}",
+                          style:
+                              Theme.of(context).textTheme.subtitle2!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                        )
+                      ],
+                    );
+                  } else {
+                    return const SizedBox.shrink();
+                  }
+                },
               ),
               const SizedBox(
                 height: 15,
@@ -227,11 +238,12 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
   Widget _groupType(BuildContext context, GroupModel group) {
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).primaryColorLight,
       ),
-      child: Row(
+      child: Wrap(
+        crossAxisAlignment: WrapCrossAlignment.center,
         children: [
           Icon(group.public ? Icons.public : Icons.private_connectivity),
           const SizedBox(

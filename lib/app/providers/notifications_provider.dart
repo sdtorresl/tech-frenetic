@@ -2,16 +2,19 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/notification_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 import 'package:http/http.dart' as http;
 
 class NotificationsProvider extends TechFreneticProvider {
   Future<List<NotificationModel>> getNotifications() async {
+    UserPreferences prefs = UserPreferences();
     List<NotificationModel> notifications = [];
 
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/notifications");
+      Uri _url = Uri.parse(
+          "$baseUrl/api/$locale/notifications?uid=${prefs.userId}&uid_group=${prefs.userId}");
 
       Map<String, String> headers = {};
       headers.addAll(authHeader);
