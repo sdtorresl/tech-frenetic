@@ -208,6 +208,7 @@
     "message_error": "An unexpected error has happened",
     "message_meetup_created": "Meetup created successfully",
     "message_success": "Data was updated successfully",
+    "message_in_progress": "In progress...",
     "message": "message",
     "message2": "Message",
     "mobile_phone": "Mobile phone",

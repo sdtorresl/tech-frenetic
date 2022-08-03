@@ -21,6 +21,7 @@ class _NotificationsPageState
     extends ModularState<NotificationsPage, NotificationsStore> {
   final NotificationsProvider _notificationsProvider = NotificationsProvider();
   List<NotificationModel> _notifications = List<NotificationModel>.empty();
+  bool isDeleting = false;
 
   @override
   void initState() {
@@ -68,6 +69,24 @@ class _NotificationsPageState
         future: _notificationsProvider.getNotifications(),
         builder: (BuildContext context,
             AsyncSnapshot<List<NotificationModel>> snapshot) {
+          if (isDeleting) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    width: 50,
+                    height: 50,
+                    child: CircularProgressIndicator(),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(AppLocalizations.of(context)!.message_in_progress)
+                ],
+              ),
+            );
+          }
           if (snapshot.hasData) {
             _notifications = snapshot.data!;
 
@@ -136,6 +155,9 @@ class _NotificationsPageState
   }
 
   _deleteSelectedNotifications() async {
+    setState(() {
+      isDeleting = true;
+    });
     for (NotificationModel notification in store.selectedNotifications) {
       debugPrint("Delete notification ${notification.id}...");
       bool removed =
@@ -145,6 +167,8 @@ class _NotificationsPageState
       }
     }
     store.clearNotifications();
-    setState(() {});
+    setState(() {
+      isDeleting = false;
+    });
   }
 }

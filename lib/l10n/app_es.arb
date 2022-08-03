@@ -208,6 +208,7 @@
     "message_error": "Ha ocurrido un error inesperado",
     "message_meetup_created": "Meetup creado exitosamente",
     "message_success": "Los datos fueron actualizados satisfactoriamente",
+    "message_in_progress": "En progreso...",
     "message": "mensaje",
     "message2": "Mensaje",
     "mobile_phone": "Telefono celular",
