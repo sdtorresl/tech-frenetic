@@ -128,6 +128,7 @@
     "general_account_settings": "General Settings",
     "get_in": "Get in",
     "group_description": "Write short description group name",
+    "group_intro": "Create a Frenetics communby filling the following fields",
     "group_name": "Write the group name",
     "group_person": "Write the name of person",
     "groups_btn_create": "Create group",

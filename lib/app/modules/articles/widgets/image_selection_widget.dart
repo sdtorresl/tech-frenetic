@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:techfrenetic/app/models/image_model.dart';
 import 'package:techfrenetic/app/providers/files_provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ImageSelectionWidget extends StatefulWidget {
   const ImageSelectionWidget({
@@ -36,7 +37,7 @@ class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
         const SizedBox(
           height: 10,
         ),
-        const Text("Selecciona una imagen"),
+        Text(AppLocalizations.of(context)!.choose_image),
         imageBox
       ],
     );
@@ -96,7 +97,7 @@ class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
       margin: const EdgeInsets.symmetric(vertical: 10),
       padding: const EdgeInsets.all(50),
       child: const Icon(
-        Icons.camera,
+        Icons.camera_alt_outlined,
         color: Colors.white,
         size: 50,
       ),

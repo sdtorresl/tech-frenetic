@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/core/errors.dart';
+import 'package:techfrenetic/app/modules/articles/widgets/image_selection_widget.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_controller.dart';
 
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
@@ -87,7 +88,10 @@ class _CreateGroupsPageState
                     ),
                   ),
                   Container(
-                    padding: const EdgeInsets.symmetric(vertical: 50),
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 50,
+                      horizontal: 20,
+                    ),
                     child: Column(
                       children: [
                         Row(
@@ -117,18 +121,9 @@ class _CreateGroupsPageState
                           height: 20,
                         ),
                         Text(
-                          'Lorem impusm connect with other Tech Frenetic’s members in…',
+                          AppLocalizations.of(context)!.group_intro,
                           style: Theme.of(context).textTheme.bodyText1,
                           textAlign: TextAlign.center,
-                        ),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.camera_alt_outlined,
-                              color: Theme.of(context).primaryColor),
-                          iconSize: 50,
-                          onPressed: null,
                         ),
                         form(),
                         const SizedBox(height: 40),
@@ -239,139 +234,144 @@ class _CreateGroupsPageState
   }
 
   Widget form() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 23.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          StreamBuilder(
-              stream: store.nameStream,
-              builder: (context, snapshot) {
-                return TextFormField(
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)!.group_name,
-                    hintStyle: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Theme.of(context).hintColor),
-                    errorText: snapshot.hasError
-                        ? TFError.getError(context, snapshot.error as ErrorType)
-                        : null,
-                    errorStyle: Theme.of(context)
-                        .textTheme
-                        .headline4!
-                        .copyWith(color: Colors.red),
-                  ),
-                  onChanged: store.changeName,
-                );
-              }),
-          const SizedBox(height: 20),
-          StreamBuilder(
-              stream: store.descriptionStream,
-              builder: (context, snapshot) {
-                return TextFormField(
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)!.group_description,
-                    hintStyle: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Theme.of(context).hintColor),
-                    errorText: snapshot.hasError
-                        ? TFError.getError(context, snapshot.error as ErrorType)
-                        : null,
-                    errorStyle: Theme.of(context)
-                        .textTheme
-                        .headline4!
-                        .copyWith(color: Colors.red),
-                  ),
-                  onChanged: store.changeDescription,
-                );
-              }),
-          const SizedBox(height: 20),
-          StreamBuilder(
-              stream: store.rulesStream,
-              builder: (context, snapshot) {
-                return TextFormField(
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)!.groups_rules,
-                    hintStyle: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Theme.of(context).hintColor),
-                    errorText: snapshot.hasError
-                        ? TFError.getError(context, snapshot.error as ErrorType)
-                        : null,
-                    errorStyle: Theme.of(context)
-                        .textTheme
-                        .headline4!
-                        .copyWith(color: Colors.red),
-                  ),
-                  onChanged: store.changeRules,
-                );
-              }),
-          const SizedBox(height: 30),
-          Text(
-            AppLocalizations.of(context)!.group_person,
-            style:
-                Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
-          ),
-          StreamBuilder(
-              stream: store.namePersonStream,
-              builder: (context, snapshot) {
-                return TextFormField(
-                  decoration: InputDecoration(
-                    hintText: AppLocalizations.of(context)!.group_person,
-                    hintStyle: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Theme.of(context).hintColor),
-                    errorText: snapshot.hasError
-                        ? TFError.getError(context, snapshot.error as ErrorType)
-                        : null,
-                    errorStyle: Theme.of(context)
-                        .textTheme
-                        .headline4!
-                        .copyWith(color: Colors.red),
-                  ),
-                  onChanged: store.changeNamePerson,
-                );
-              }),
-          const SizedBox(height: 30),
-          Text(
-            AppLocalizations.of(context)!.select,
-            style:
-                Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
-          ),
-          StreamBuilder(
-              stream: store.isPublicStream,
-              builder: (context, snapshot) {
-                return DropdownButton<bool>(
-                  value: store.isPublic,
-                  isExpanded: true,
-                  underline: Container(
-                    height: 0.5,
-                    color: Colors.black,
-                  ),
-                  items: items.entries.map(
-                    (e) {
-                      return DropdownMenuItem<bool>(
-                        child: Text(e.value),
-                        value: e.key,
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (isPublic) {
-                    setState(
-                      () {
-                        store.changeType(isPublic ?? true);
-                      },
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ImageSelectionWidget(
+          onImageLoaded: (image) {
+            if (image != null) {
+              store.changeImage(image);
+            }
+          },
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        StreamBuilder(
+            stream: store.nameStream,
+            builder: (context, snapshot) {
+              return TextFormField(
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.group_name,
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).hintColor),
+                  errorText: snapshot.hasError
+                      ? TFError.getError(context, snapshot.error as ErrorType)
+                      : null,
+                  errorStyle: Theme.of(context)
+                      .textTheme
+                      .headline4!
+                      .copyWith(color: Colors.red),
+                ),
+                onChanged: store.changeName,
+              );
+            }),
+        const SizedBox(height: 20),
+        StreamBuilder(
+            stream: store.descriptionStream,
+            builder: (context, snapshot) {
+              return TextFormField(
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.group_description,
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).hintColor),
+                  errorText: snapshot.hasError
+                      ? TFError.getError(context, snapshot.error as ErrorType)
+                      : null,
+                  errorStyle: Theme.of(context)
+                      .textTheme
+                      .headline4!
+                      .copyWith(color: Colors.red),
+                ),
+                onChanged: store.changeDescription,
+              );
+            }),
+        const SizedBox(height: 20),
+        StreamBuilder(
+            stream: store.rulesStream,
+            builder: (context, snapshot) {
+              return TextFormField(
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.groups_rules,
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).hintColor),
+                  errorText: snapshot.hasError
+                      ? TFError.getError(context, snapshot.error as ErrorType)
+                      : null,
+                  errorStyle: Theme.of(context)
+                      .textTheme
+                      .headline4!
+                      .copyWith(color: Colors.red),
+                ),
+                onChanged: store.changeRules,
+              );
+            }),
+        const SizedBox(height: 30),
+        Text(
+          AppLocalizations.of(context)!.group_person,
+          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
+        ),
+        StreamBuilder(
+            stream: store.namePersonStream,
+            builder: (context, snapshot) {
+              return TextFormField(
+                decoration: InputDecoration(
+                  hintText: AppLocalizations.of(context)!.group_person,
+                  hintStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(color: Theme.of(context).hintColor),
+                  errorText: snapshot.hasError
+                      ? TFError.getError(context, snapshot.error as ErrorType)
+                      : null,
+                  errorStyle: Theme.of(context)
+                      .textTheme
+                      .headline4!
+                      .copyWith(color: Colors.red),
+                ),
+                onChanged: store.changeNamePerson,
+              );
+            }),
+        const SizedBox(height: 30),
+        Text(
+          AppLocalizations.of(context)!.select,
+          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
+        ),
+        StreamBuilder(
+            stream: store.isPublicStream,
+            builder: (context, snapshot) {
+              return DropdownButton<bool>(
+                value: store.isPublic,
+                isExpanded: true,
+                underline: Container(
+                  height: 0.5,
+                  color: Colors.black,
+                ),
+                items: items.entries.map(
+                  (e) {
+                    return DropdownMenuItem<bool>(
+                      child: Text(e.value),
+                      value: e.key,
                     );
                   },
-                );
-              }),
-          const SizedBox(height: 60),
-        ],
-      ),
+                ).toList(),
+                onChanged: (isPublic) {
+                  setState(
+                    () {
+                      store.changeType(isPublic ?? true);
+                    },
+                  );
+                },
+              );
+            }),
+        const SizedBox(height: 60),
+      ],
     );
   }
 }

@@ -128,6 +128,7 @@
     "general_account_settings": "Ajustes Generales",
     "get_in": "Ponte en",
     "group_description": "Escribe una descripción breve del nombre del grupo",
+    "group_intro": "Crea una comunidad de Frenéticos completando la siguiente información",
     "group_name": "Escribe el nombre del grupo",
     "group_person": "Escribe el nombre de la persona",
     "groups_btn_create": "Crear un grupo",

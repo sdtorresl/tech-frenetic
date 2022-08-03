@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:techfrenetic/app/models/group_model.dart';
 import 'package:techfrenetic/app/models/groups_members_model.dart';
+import 'package:techfrenetic/app/models/image_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
@@ -144,8 +145,8 @@ class GroupsProvider extends TechFreneticProvider {
     return recommendedGroups;
   }
 
-  Future<bool> createGroup(
-      String name, String description, String rules, bool isPublic) async {
+  Future<bool> createGroup(String name, String description, String rules,
+      bool isPublic, ImageModel image) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/en/entity/group?_format=json");
 
@@ -163,7 +164,7 @@ class GroupsProvider extends TechFreneticProvider {
           {"value": name}
         ],
         "field_logo": [
-          {"target_id": 145}
+          {"target_id": image.id}
         ],
         "field_description": [
           {"value": description}
@@ -352,5 +353,26 @@ class GroupsProvider extends TechFreneticProvider {
       debugPrint(e.toString());
     }
     return members;
+  }
+
+  Future<List<Map<String, String>>> getUsers() async {
+    List<Map<String, String>> users = [];
+
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/group-user-list");
+      debugPrint(_url.toString());
+      var response = await http.get(_url);
+      if (response.statusCode == 200) {
+        var jsonResponse = jsonDecode(response.body);
+        users = jsonResponse["articles"]
+            .map((user) => {'id': user['uid'], 'name': user["name"]})
+            .toList();
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return users;
   }
 }
