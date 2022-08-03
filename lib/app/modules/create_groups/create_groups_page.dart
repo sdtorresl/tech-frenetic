@@ -5,6 +5,7 @@ import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/core/errors.dart';
 import 'package:techfrenetic/app/modules/articles/widgets/image_selection_widget.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_controller.dart';
+import 'package:techfrenetic/app/providers/group_providers.dart';
 
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
@@ -17,6 +18,9 @@ class CreateGroupsPage extends StatefulWidget {
 
 class _CreateGroupsPageState
     extends ModularState<CreateGroupsPage, CreateGroupsController> {
+  final GroupsProvider _groupsProvider = Modular.get();
+  TextEditingController _membersTextController = TextEditingController();
+
   Map<bool, String> items = {true: 'Public', false: 'Private'};
   bool _isLoading = false;
 
@@ -131,83 +135,35 @@ class _CreateGroupsPageState
                           width: 250,
                           child: StreamBuilder(
                               stream: store.formValidStream,
-                              builder: (context, snapshot) {
+                              builder: (context, AsyncSnapshot<bool> snapshot) {
                                 return ElevatedButton(
-                                  onPressed: snapshot.hasData && !_isLoading
-                                      ? () async {
-                                          setState(() {
-                                            _isLoading = true;
-                                          });
-                                          bool created =
-                                              await store.createGroup();
-                                          setState(() {
-                                            _isLoading = false;
-                                          });
-                                          if (created) {
-                                            Widget content = const Text(
-                                                'Grupo exitosamente creado');
-                                            List<Widget> actions = [
-                                              TextButton(
-                                                child: Text(
-                                                  AppLocalizations.of(context)!
-                                                      .close
-                                                      .toUpperCase(),
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .button!
-                                                      .copyWith(
-                                                          fontSize: 12,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor),
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            ];
-                                            showMessage(context,
-                                                title: '',
-                                                content: content,
-                                                actions: actions);
-                                          } else {
-                                            Widget content = Text(
-                                                AppLocalizations.of(context)!
-                                                    .error_group_api);
-                                            List<Widget> actions = [
-                                              TextButton(
-                                                child: Text(
-                                                  AppLocalizations.of(context)!
-                                                      .close
-                                                      .toUpperCase(),
-                                                  style: Theme.of(context)
-                                                      .textTheme
-                                                      .button!
-                                                      .copyWith(
-                                                          fontSize: 12,
-                                                          color: Theme.of(
-                                                                  context)
-                                                              .primaryColor),
-                                                ),
-                                                onPressed: () {
-                                                  Navigator.of(context).pop();
-                                                },
-                                              ),
-                                            ];
-                                            showMessage(context,
-                                                title: AppLocalizations.of(
-                                                        context)!
-                                                    .error,
-                                                content: content,
-                                                actions: actions);
-                                          }
-                                        }
+                                  onPressed: snapshot.hasData
+                                      ? snapshot.data ?? false
+                                          ? _createGroup
+                                          : null
                                       : null,
-                                  child: Text(
-                                    AppLocalizations.of(context)!.btn_create,
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                    ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      _isLoading
+                                          ? Container(
+                                              height: 20,
+                                              width: 20,
+                                              margin: const EdgeInsets.only(
+                                                  right: 20),
+                                              child:
+                                                  const CircularProgressIndicator(
+                                                      color: Colors.white),
+                                            )
+                                          : const SizedBox.shrink(),
+                                      Text(
+                                        AppLocalizations.of(context)!
+                                            .btn_create,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                   style: ButtonStyle(
                                     shape: MaterialStateProperty.all<
@@ -313,65 +269,206 @@ class _CreateGroupsPageState
               );
             }),
         const SizedBox(height: 30),
-        Text(
-          AppLocalizations.of(context)!.group_person,
-          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
-        ),
-        StreamBuilder(
-            stream: store.namePersonStream,
-            builder: (context, snapshot) {
-              return TextFormField(
-                decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context)!.group_person,
-                  hintStyle: Theme.of(context)
-                      .textTheme
-                      .bodyText1!
-                      .copyWith(color: Theme.of(context).hintColor),
-                  errorText: snapshot.hasError
-                      ? TFError.getError(context, snapshot.error as ErrorType)
-                      : null,
-                  errorStyle: Theme.of(context)
-                      .textTheme
-                      .headline4!
-                      .copyWith(color: Colors.red),
-                ),
-                onChanged: store.changeNamePerson,
-              );
-            }),
+        _membersField(),
         const SizedBox(height: 30),
         Text(
           AppLocalizations.of(context)!.select,
           style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
         ),
         StreamBuilder(
-            stream: store.isPublicStream,
-            builder: (context, snapshot) {
-              return DropdownButton<bool>(
-                value: store.isPublic,
-                isExpanded: true,
-                underline: Container(
-                  height: 0.5,
-                  color: Colors.black,
-                ),
-                items: items.entries.map(
-                  (e) {
-                    return DropdownMenuItem<bool>(
-                      child: Text(e.value),
-                      value: e.key,
-                    );
-                  },
-                ).toList(),
-                onChanged: (isPublic) {
-                  setState(
-                    () {
-                      store.changeType(isPublic ?? true);
-                    },
+          stream: store.isPublicStream,
+          builder: (context, snapshot) {
+            return DropdownButton<bool>(
+              value: store.isPublic,
+              isExpanded: true,
+              underline: Container(
+                height: 0.5,
+                color: Colors.black,
+              ),
+              items: items.entries.map(
+                (e) {
+                  return DropdownMenuItem<bool>(
+                    child: Text(e.value),
+                    value: e.key,
                   );
                 },
-              );
-            }),
-        const SizedBox(height: 60),
+              ).toList(),
+              onChanged: (isPublic) {
+                setState(
+                  () {
+                    store.changeType(isPublic ?? true);
+                  },
+                );
+              },
+            );
+          },
+        ),
+        const SizedBox(height: 30),
       ],
     );
+  }
+
+  Widget _membersField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.group_person,
+          style: Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
+        ),
+        FutureBuilder(
+          future: _groupsProvider.getUsers(),
+          builder: (BuildContext context,
+              AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+            List<String> users = [];
+
+            if (snapshot.hasData) {
+              users = List<String>.from(
+                  snapshot.data!.map((e) => e["name"]).toList());
+            }
+
+            return RawAutocomplete(
+              optionsBuilder: (TextEditingValue textEditingValue) {
+                if (textEditingValue.text == '') {
+                  return const Iterable<String>.empty();
+                }
+                return users.where((String option) {
+                  return option.contains(textEditingValue.text.toLowerCase());
+                });
+              },
+              fieldViewBuilder: (BuildContext context,
+                  TextEditingController textEditingController,
+                  FocusNode focusNode,
+                  VoidCallback onFieldSubmitted) {
+                _membersTextController = textEditingController;
+                return TextFormField(
+                  controller: _membersTextController,
+                  focusNode: focusNode,
+                  onFieldSubmitted: (String value) {
+                    debugPrint("Submitted");
+                    textEditingController.clear();
+                    onFieldSubmitted();
+                  },
+                );
+              },
+              onSelected: (String selection) {
+                _membersTextController.clear();
+                store.addMember(selection);
+              },
+              optionsViewBuilder: (BuildContext context,
+                  AutocompleteOnSelected<String> onSelected,
+                  Iterable<String> options) {
+                return Align(
+                  alignment: Alignment.topLeft,
+                  child: Material(
+                    elevation: 4.0,
+                    child: SizedBox(
+                      height: 200.0,
+                      child: ListView.builder(
+                        padding: const EdgeInsets.all(8.0),
+                        itemCount: options.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          final String option = options.elementAt(index);
+                          return GestureDetector(
+                            onTap: () {
+                              onSelected(option);
+                            },
+                            child: ListTile(
+                              title: Text(option),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                );
+              },
+            );
+          },
+        ),
+        StreamBuilder(
+          stream: store.namePersonStream,
+          builder:
+              (BuildContext context, AsyncSnapshot<Iterable<String>> snapshot) {
+            List<String> selectedUsers =
+                snapshot.hasData ? List<String>.from(snapshot.data!) : [];
+            return Wrap(
+              spacing: 5,
+              children:
+                  List<Widget>.generate(selectedUsers.length, (int index) {
+                return Chip(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                  label: Text(
+                    selectedUsers[index],
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyText1!
+                        .copyWith(color: Colors.white),
+                  ),
+                  deleteIcon: const Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                  onDeleted: () {
+                    store.removeMember(selectedUsers[index]);
+                  },
+                  elevation: 1,
+                );
+              }),
+            );
+          },
+        ),
+      ],
+    );
+  }
+
+  void _createGroup() async {
+    setState(() {
+      _isLoading = true;
+    });
+    bool created = await store.createGroup();
+    setState(() {
+      _isLoading = false;
+    });
+
+    Widget content = const Text('Grupo exitosamente creado');
+    List<Widget> actions = [
+      TextButton(
+        child: Text(
+          AppLocalizations.of(context)!.close.toUpperCase(),
+          style: Theme.of(context)
+              .textTheme
+              .button!
+              .copyWith(fontSize: 12, color: Theme.of(context).primaryColor),
+        ),
+        onPressed: () {
+          Modular.to.pushNamedAndRemoveUntil("/community/", (p0) => false);
+        },
+      ),
+    ];
+
+    if (!created) {
+      content = Text(AppLocalizations.of(context)!.error_group_api);
+      actions = [
+        TextButton(
+          child: Text(
+            AppLocalizations.of(context)!.close.toUpperCase(),
+            style: Theme.of(context)
+                .textTheme
+                .button!
+                .copyWith(fontSize: 12, color: Theme.of(context).primaryColor),
+          ),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ];
+    }
+
+    showMessage(context,
+        title: created ? '' : AppLocalizations.of(context)!.error,
+        content: content,
+        actions: actions);
   }
 }

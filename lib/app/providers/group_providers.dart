@@ -355,8 +355,8 @@ class GroupsProvider extends TechFreneticProvider {
     return members;
   }
 
-  Future<List<Map<String, String>>> getUsers() async {
-    List<Map<String, String>> users = [];
+  Future<List<Map<String, dynamic>>> getUsers() async {
+    List<Map<String, dynamic>> users = [];
 
     try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/v1/group-user-list");
@@ -364,9 +364,7 @@ class GroupsProvider extends TechFreneticProvider {
       var response = await http.get(_url);
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
-        users = jsonResponse["articles"]
-            .map((user) => {'id': user['uid'], 'name': user["name"]})
-            .toList();
+        users = List<Map<String, dynamic>>.from(jsonResponse["articles"]);
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
