@@ -8,7 +8,7 @@ class CreateGroupsController extends Disposable {
   final _nameController = BehaviorSubject<String>();
   final _descriptionController = BehaviorSubject<String>();
   final _rulesController = BehaviorSubject<String>();
-  final _namePersonController = BehaviorSubject<String>();
+  final _membersController = BehaviorSubject<Iterable<String>>.seeded([]);
   final _isPublicController = BehaviorSubject<bool>();
   final _imageController = BehaviorSubject<ImageModel>();
 
@@ -18,8 +18,7 @@ class CreateGroupsController extends Disposable {
       _descriptionController.stream.transform(Validators.validateName);
   Stream<String> get rulesStream =>
       _rulesController.stream.transform(Validators.validateName);
-  Stream<String> get namePersonStream =>
-      _namePersonController.stream.transform(Validators.validateName);
+  Stream<Iterable<String>> get namePersonStream => _membersController.stream;
   Stream<bool> get isPublicStream => _isPublicController;
   Stream<ImageModel> get imageStream => _imageController;
 
@@ -34,21 +33,32 @@ class CreateGroupsController extends Disposable {
   Function(String) get changeName => _nameController.sink.add;
   Function(String) get changeDescription => _descriptionController.sink.add;
   Function(String) get changeRules => _rulesController.sink.add;
-  Function(String) get changeNamePerson => _namePersonController.sink.add;
+  Function(String) get addMember => (String member) {
+        List<String> newMembers = List.from(members);
+        if (!newMembers.contains(member)) {
+          newMembers.add(member);
+          _membersController.sink.add(newMembers);
+        }
+      };
+  Function(String) get removeMember => (String member) {
+        List<String> newMembers = List.from(members);
+        newMembers.removeWhere((item) => item == member);
+        _membersController.sink.add(newMembers);
+      };
   Function(bool) get changeType => _isPublicController.sink.add;
   Function(ImageModel) get changeImage => _imageController.sink.add;
 
   String get name => _nameController.value;
   String get description => _descriptionController.value;
   String get rules => _rulesController.value;
-  String get namePerson => _namePersonController.value;
+  Iterable<String> get members => _membersController.value;
   bool get isPublic => _isPublicController.value;
   ImageModel get image => _imageController.value;
 
   Future<bool> createGroup() async {
-    GroupsProvider _createGroupProvider = GroupsProvider();
+    GroupsProvider _groupProvider = GroupsProvider();
 
-    bool created = await _createGroupProvider.createGroup(
+    bool created = await _groupProvider.createGroup(
         name, description, rules, isPublic, image);
 
     if (created) {
@@ -63,7 +73,7 @@ class CreateGroupsController extends Disposable {
     _nameController.close();
     _descriptionController.close();
     _rulesController.close();
-    _namePersonController.close();
+    _membersController.close();
     _isPublicController.close();
   }
 }
