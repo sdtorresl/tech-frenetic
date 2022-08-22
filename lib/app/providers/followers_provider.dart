@@ -19,11 +19,13 @@ class FollowersProvider extends TechFreneticProvider {
 
       if (response.statusCode == 200) {
         List<dynamic> decodedResponse = json.jsonDecode(response.body);
-        List<String> userIds = decodedResponse.first['users'].split(', ');
-        for (String id in userIds) {
-          UserModel? user = await _userProvider.getUser(id);
-          if (user != null) {
-            following.add(user);
+        if (decodedResponse.isNotEmpty) {
+          List<String> userIds = decodedResponse.first['users'].split(', ');
+          for (String id in userIds) {
+            UserModel? user = await _userProvider.getUser(id);
+            if (user != null) {
+              following.add(user);
+            }
           }
         }
       } else {
@@ -46,11 +48,13 @@ class FollowersProvider extends TechFreneticProvider {
 
       if (response.statusCode == 200) {
         List<dynamic> decodedResponse = json.jsonDecode(response.body);
-        List<String> userIds = decodedResponse.first['users'].split(', ');
-        for (String id in userIds) {
-          UserModel? user = await _userProvider.getUser(id);
-          if (user != null) {
-            followers.add(user);
+        if (decodedResponse.isNotEmpty) {
+          List<String> userIds = decodedResponse.first['users'].split(', ');
+          for (String id in userIds) {
+            UserModel? user = await _userProvider.getUser(id);
+            if (user != null) {
+              followers.add(user);
+            }
           }
         }
       } else {

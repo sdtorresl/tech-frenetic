@@ -472,7 +472,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
                                       'followers': followers
                                     }),
                             child: Text(
-                                "${following.length} Followers ${followers.length} Following")),
+                                "${following.length} ${AppLocalizations.of(context)!.profile_followers} - ${followers.length}  ${AppLocalizations.of(context)!.profile_following}")),
                       ],
                     );
                   } else {
