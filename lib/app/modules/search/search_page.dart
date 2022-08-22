@@ -1,3 +1,6 @@
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:techfrenetic/app/modules/search/widgets/group_item_widget.dart';
+
 import '../../models/group_model.dart';
 import '../../models/user_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -285,22 +288,16 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
 
   Widget _groupResults() {
     return FutureBuilder(
-      future: groupsProvider.searchGroups(),
+      future: groupsProvider.searchGroups(searchText),
       builder:
           (BuildContext context, AsyncSnapshot<List<GroupModel>> snapshot) {
         if (snapshot.hasData) {
           List<GroupModel> results = snapshot.data ?? [];
 
-          results = results
-              .where((element) => element.title
-                  .toLowerCase()
-                  .contains(searchText.toLowerCase()))
-              .toList();
-
           debugPrint(results.toString());
 
           List<Widget> resultsWidgets =
-              results.map((e) => Text(e.title)).toList();
+              results.map((e) => GroupItemWidget(group: e)).toList();
 
           return Column(
             children: [
@@ -393,6 +390,34 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
                     user.userName,
                     style: Theme.of(context).textTheme.bodyText2,
                   )
+                ],
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _groupItem(GroupModel group) {
+    return Container(
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      child: Card(
+        child: Container(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            children: [
+              CachedNetworkImage(imageUrl: group.picture),
+              const SizedBox(
+                width: 20,
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    group.title,
+                    style: Theme.of(context).textTheme.headline3,
+                  ),
                 ],
               )
             ],

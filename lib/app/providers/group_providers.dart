@@ -41,11 +41,12 @@ class GroupsProvider extends TechFreneticProvider {
     return group;
   }
 
-  Future<List<GroupModel>> searchGroups() async {
+  Future<List<GroupModel>> searchGroups(String groupName) async {
     List<GroupModel> groups = [];
 
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/group-research");
+      Uri _url =
+          Uri.parse("$baseUrl/api/$locale/v1/search-group?search=$groupName");
 
       debugPrint("Getting groups...");
       debugPrint(_url.toString());
