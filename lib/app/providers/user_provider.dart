@@ -21,11 +21,7 @@ class UserProvider extends TechFreneticProvider {
 
       String body = json.jsonEncode({'name': email, 'pass': password});
 
-      var response = await http.post(
-        _url,
-        body: body,
-        headers: <String, String>{'content-type': 'application/json'},
-      );
+      var response = await http.post(_url, body: body, headers: jsonHeader);
 
       if (response.statusCode == 200) {
         updateCookie(response);
@@ -36,6 +32,7 @@ class UserProvider extends TechFreneticProvider {
         prefs.userId = loggedUser.currentUser!.uid;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint(response.body);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -369,6 +366,7 @@ class UserProvider extends TechFreneticProvider {
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint(response.body);
       }
     } catch (e) {
       debugPrint(e.toString());
