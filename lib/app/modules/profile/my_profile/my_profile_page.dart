@@ -11,6 +11,7 @@ import 'package:techfrenetic/app/modules/profile/my_profile/interests/interests_
 import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
+import 'package:techfrenetic/app/providers/followers_provider.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
@@ -30,6 +31,7 @@ class MyProfilePage extends StatefulWidget {
 
 class _MyProfilePageState extends State<MyProfilePage> {
   final ProfileStore _profileStore = Modular.get();
+  final FollowersProvider _followersProvider = Modular.get();
   final ArticlesProvider _articlesProvider = ArticlesProvider();
   final CategoriesProvider _categoriesProvicer = CategoriesProvider();
   final UserPreferences _prefs = UserPreferences();
@@ -450,6 +452,34 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   textAlign: TextAlign.center,
                 ),
               ),
+              FutureBuilder(
+                future: Future.wait([
+                  _followersProvider.getFollowing(userId),
+                  _followersProvider.getFollowers(userId),
+                ]),
+                builder: (BuildContext context, AsyncSnapshot snapshot) {
+                  if (snapshot.hasData) {
+                    List<UserModel> following = snapshot.data[0];
+                    List<UserModel> followers = snapshot.data[1];
+                    return Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                            onPressed: () => Modular.to.pushNamed('/following',
+                                    arguments: {
+                                      'following': following,
+                                      'followers': followers
+                                    }),
+                            child: Text(
+                                "${following.length} Followers ${followers.length} Following")),
+                      ],
+                    );
+                  } else {
+                    return const SizedBox();
+                  }
+                },
+              )
             ],
           ),
         ),

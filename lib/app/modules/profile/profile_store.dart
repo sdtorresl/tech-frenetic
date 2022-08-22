@@ -11,4 +11,10 @@ abstract class _ProfileStoreBase with Store {
 
   @observable
   UserModel? loggedUser;
+
+  @observable
+  int following = 0;
+
+  @observable
+  int followers = 0;
 }

@@ -1,3 +1,5 @@
+import 'package:techfrenetic/app/modules/profile/my_profile/followers/followers_page.dart';
+
 import 'home_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/auth_guard.dart';
@@ -183,10 +185,23 @@ class HomeModule extends Module {
     ChildRoute(
       "/stories",
       child: (context, args) => StoriesViewPage(video: args.data),
+      guards: [
+        AuthGuard(),
+      ],
     ),
     ChildRoute(
       '/not_implemented',
       child: (context, args) => const NotImplementedPage(),
     ),
+    ChildRoute(
+      '/following',
+      child: (context, args) => FollowersPage(
+        followers: args.data['followers'],
+        following: args.data['following'],
+      ),
+      guards: [
+        AuthGuard(),
+      ],
+    )
   ];
 }

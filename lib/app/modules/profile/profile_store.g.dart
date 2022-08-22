@@ -39,11 +39,43 @@ mixin _$ProfileStore on _ProfileStoreBase, Store {
     });
   }
 
+  final _$followingAtom = Atom(name: '_ProfileStoreBase.following');
+
+  @override
+  int get following {
+    _$followingAtom.reportRead();
+    return super.following;
+  }
+
+  @override
+  set following(int value) {
+    _$followingAtom.reportWrite(value, super.following, () {
+      super.following = value;
+    });
+  }
+
+  final _$followersAtom = Atom(name: '_ProfileStoreBase.followers');
+
+  @override
+  int get followers {
+    _$followersAtom.reportRead();
+    return super.followers;
+  }
+
+  @override
+  set followers(int value) {
+    _$followersAtom.reportWrite(value, super.followers, () {
+      super.followers = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 index: ${index},
-loggedUser: ${loggedUser}
+loggedUser: ${loggedUser},
+following: ${following},
+followers: ${followers}
     ''';
   }
 }
