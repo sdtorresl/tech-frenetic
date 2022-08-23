@@ -38,11 +38,12 @@ class _MyProfilePageState extends State<MyProfilePage> {
   final UserProvider _userProvider = UserProvider();
 
   bool editable = false;
+  bool isFollowingUser = false;
   int articlesCount = 0;
   int postsCount = 0;
   int viewedCount = 0;
   String userId = '';
-  UserModel user = UserModel.empty();
+  late UserModel user;
 
   @override
   void initState() {
@@ -170,23 +171,25 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 Text(nameStr, style: Theme.of(context).textTheme.headline1),
               ],
             ),
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const EditNamePage();
-                    },
-                  );
-                },
-                icon: Icon(
-                  Icons.edit,
-                  color: Theme.of(context).indicatorColor,
-                ),
-              ),
-            ),
+            editable
+                ? Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const EditNamePage();
+                          },
+                        );
+                      },
+                      icon: Icon(
+                        Icons.edit,
+                        color: Theme.of(context).indicatorColor,
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
           ],
         );
       }
@@ -217,10 +220,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
       ),
       child: Column(
         children: [
-          _dashboardHeader(context),
-          const SizedBox(height: 20),
-          _dashboard(context),
-          const SizedBox(height: 20),
+          editable ? _dashboardHeader(context) : const SizedBox.shrink(),
+          editable ? const SizedBox(height: 20) : const SizedBox.shrink(),
+          editable ? _dashboard(context) : const SizedBox.shrink(),
+          editable ? const SizedBox(height: 20) : const SizedBox.shrink(),
           _aboutBody(context),
           const SizedBox(height: 20),
           _certificationsBody(context),
@@ -241,20 +244,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ListTile(
           title: Text(AppLocalizations.of(context)!.interest,
               style: Theme.of(context).textTheme.headline1),
-          trailing: IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return InterestsPage(user: user);
-                },
-              );
-            },
-            icon: Icon(
-              Icons.edit,
-              color: Theme.of(context).indicatorColor,
-            ),
-          ),
+          trailing: editable
+              ? IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return InterestsPage(user: user);
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).indicatorColor,
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
         FutureBuilder(
           future: _categoriesProvicer.getInterests(),
@@ -309,20 +314,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ListTile(
           title: Text(AppLocalizations.of(context)!.certifications,
               style: Theme.of(context).textTheme.headline1),
-          trailing: IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CertificationsPage(user: user);
-                },
-              );
-            },
-            icon: Icon(
-              Icons.edit,
-              color: Theme.of(context).indicatorColor,
-            ),
-          ),
+          trailing: editable
+              ? IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CertificationsPage(user: user);
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).indicatorColor,
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
         ...certificationsInfo
       ],
@@ -338,20 +345,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
             AppLocalizations.of(context)!.about,
             style: Theme.of(context).textTheme.headline1,
           ),
-          trailing: IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const EditSummaryPage();
-                },
-              );
-            },
-            icon: Icon(
-              Icons.edit,
-              color: Theme.of(context).indicatorColor,
-            ),
-          ),
+          trailing: editable
+              ? IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const EditSummaryPage();
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).indicatorColor,
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -432,7 +441,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
           child: Column(
             children: [
               GestureDetector(
-                onTap: () => Modular.to.pushNamed('/edit_avatar'),
+                onTap: editable
+                    ? () => Modular.to.pushNamed('/edit_avatar')
+                    : null,
                 child: AvatarWidget(
                   userId: user.uid.toString(),
                   radius: 40,
@@ -452,38 +463,61 @@ class _MyProfilePageState extends State<MyProfilePage> {
                   textAlign: TextAlign.center,
                 ),
               ),
-              FutureBuilder(
-                future: Future.wait([
-                  _followersProvider.getFollowing(userId),
-                  _followersProvider.getFollowers(userId),
-                ]),
-                builder: (BuildContext context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    List<UserModel> following = snapshot.data[0];
-                    List<UserModel> followers = snapshot.data[1];
-                    return Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                            onPressed: () => Modular.to.pushNamed('/following',
-                                    arguments: {
-                                      'following': following,
-                                      'followers': followers
-                                    }),
-                            child: Text(
-                                "${following.length} ${AppLocalizations.of(context)!.profile_followers} - ${followers.length}  ${AppLocalizations.of(context)!.profile_following}")),
-                      ],
-                    );
-                  } else {
-                    return const SizedBox();
-                  }
-                },
-              )
+              _followers()
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _followers() {
+    return FutureBuilder(
+      future: Future.wait([
+        _followersProvider.getFollowing(userId),
+        _followersProvider.getFollowers(userId),
+      ]),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          List<UserModel> following = snapshot.data[0];
+          List<UserModel> followers = snapshot.data[1];
+          return Column(
+            children: [
+              TextButton(
+                  onPressed: () => Modular.to.pushNamed('/following',
+                          arguments: {
+                            'following': following,
+                            'followers': followers
+                          }),
+                  child: Text(
+                      "${following.length} ${AppLocalizations.of(context)!.profile_followers} - ${followers.length}  ${AppLocalizations.of(context)!.profile_following}")),
+              editable ? const SizedBox.shrink() : _followButton()
+            ],
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
+    );
+  }
+
+  Widget _followButton() {
+    return FutureBuilder(
+      future: _followersProvider.getFollowing(_prefs.userId.toString()),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          List<UserModel> following = snapshot.data;
+          isFollowingUser = following
+              .where((element) => element.uid.toString() == _prefs.userId)
+              .isNotEmpty;
+        }
+        return ElevatedButton(
+          onPressed: () => isFollowingUser ? _unfollowUser() : _followUser(),
+          child: isFollowingUser
+              ? Text(AppLocalizations.of(context)!.profile_unfollow)
+              : Text(AppLocalizations.of(context)!.profile_follow),
+        );
+      },
     );
   }
 
@@ -602,5 +636,20 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ),
       ),
     );
+  }
+
+  _followUser() {
+    debugPrint("Follow");
+    _followersProvider
+        .addFollower(_prefs.userId!, user.uid.toString())
+        .then((value) {
+      setState(() {
+        isFollowingUser = value;
+      });
+    });
+  }
+
+  _unfollowUser() {
+    debugPrint("Unfollow");
   }
 }

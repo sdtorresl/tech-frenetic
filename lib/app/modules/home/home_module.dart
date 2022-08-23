@@ -1,4 +1,5 @@
 import 'package:techfrenetic/app/modules/profile/my_profile/followers/followers_page.dart';
+import 'package:techfrenetic/app/providers/followers_provider.dart';
 
 import 'home_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -41,6 +42,7 @@ class HomeModule extends Module {
     Bind.lazySingleton((i) => HomeStore()),
     Bind.lazySingleton((i) => UserProvider()),
     Bind.lazySingleton((i) => ProfileStore()),
+    Bind.lazySingleton((i) => FollowersProvider()),
   ];
 
   @override

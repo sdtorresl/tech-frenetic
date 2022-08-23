@@ -12,7 +12,7 @@ class FollowersProvider extends TechFreneticProvider {
   Future<List<UserModel>> getFollowing(String userId) async {
     List<UserModel> following = [];
     try {
-      Uri _url = Uri.parse("$baseUrl/api/en/v1/following/?user=$userId");
+      Uri _url = Uri.parse("$baseUrl/api/en/v1/following/$userId");
       debugPrint(_url.toString());
 
       var response = await http.get(_url, headers: sessionHeader);
@@ -20,7 +20,8 @@ class FollowersProvider extends TechFreneticProvider {
       if (response.statusCode == 200) {
         List<dynamic> decodedResponse = json.jsonDecode(response.body);
         if (decodedResponse.isNotEmpty) {
-          List<String> userIds = decodedResponse.first['users'].split(', ');
+          List<String> userIds =
+              decodedResponse.first['users']?.split(', ') ?? [];
           for (String id in userIds) {
             UserModel? user = await _userProvider.getUser(id);
             if (user != null) {
@@ -41,15 +42,17 @@ class FollowersProvider extends TechFreneticProvider {
     List<UserModel> followers = [];
 
     try {
-      Uri _url = Uri.parse("$baseUrl/api/en/v1/followers/?user=$userId");
+      Uri _url = Uri.parse("$baseUrl/api/en/v1/followers/$userId");
       debugPrint(_url.toString());
 
       var response = await http.get(_url, headers: sessionHeader);
 
       if (response.statusCode == 200) {
         List<dynamic> decodedResponse = json.jsonDecode(response.body);
+        debugPrint(decodedResponse.toString());
         if (decodedResponse.isNotEmpty) {
-          List<String> userIds = decodedResponse.first['users'].split(', ');
+          List<String> userIds =
+              decodedResponse.first['users']?.split(', ') ?? [];
           for (String id in userIds) {
             UserModel? user = await _userProvider.getUser(id);
             if (user != null) {
@@ -64,5 +67,38 @@ class FollowersProvider extends TechFreneticProvider {
       debugPrint(e.toString());
     }
     return followers;
+  }
+
+  Future<bool> addFollower(String userId, String followedUserId) async {
+    debugPrint("Adding follower $userId to $followedUserId...");
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
+      debugPrint(_url.toString());
+      Map<String, dynamic> body = {
+        "field_following": [
+          {"target_id": followedUserId, "target_type": "user"},
+        ]
+      };
+
+      Map<String, String> headers = {}
+        ..addAll(jsonHeader)
+        ..addAll(authHeader)
+        ..addAll(sessionHeader);
+
+      var response = await http.patch(
+        _url,
+        body: json.jsonEncode(body),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return false;
   }
 }
