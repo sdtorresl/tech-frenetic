@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/modules/community/widgets/stories_view_widget.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/certifications/certifications_page.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_name/edit_name_page.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_summary/edit_summary_page.dart';
@@ -37,8 +38,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
   final UserPreferences _prefs = UserPreferences();
   final UserProvider _userProvider = UserProvider();
 
-  bool editable = false;
-  bool isFollowingUser = false;
+  bool editable = true;
+  bool isFollowingUser = true;
   int articlesCount = 0;
   int postsCount = 0;
   int viewedCount = 0;
@@ -49,7 +50,8 @@ class _MyProfilePageState extends State<MyProfilePage> {
   void initState() {
     super.initState();
     userId = widget.userId ?? _prefs.userId!;
-    editable = widget.userId == _prefs.userId;
+    editable = userId == _prefs.userId;
+    isFollowingUser = false;
     //loadCounts();
   }
 
@@ -102,6 +104,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
     return ListView(
       children: [
         _profileHeader(context),
+        !editable ? const StoriesViewWidget() : const SizedBox.shrink(),
         _profileBody(context),
         const SizedBox(height: 60),
       ],
@@ -507,9 +510,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           List<UserModel> following = snapshot.data;
-          isFollowingUser = following
+          /* isFollowingUser = following
               .where((element) => element.uid.toString() == _prefs.userId)
-              .isNotEmpty;
+              .isNotEmpty; */
         }
         return ElevatedButton(
           onPressed: () => isFollowingUser ? _unfollowUser() : _followUser(),
@@ -640,16 +643,18 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   _followUser() {
     debugPrint("Follow");
-    _followersProvider
-        .addFollower(_prefs.userId!, user.uid.toString())
-        .then((value) {
-      setState(() {
-        isFollowingUser = value;
-      });
+    setState(() {
+      isFollowingUser = !isFollowingUser;
     });
+    /* _followersProvider
+        .addFollower(_prefs.userId!, user.uid.toString())
+        .then((value) {}); */
   }
 
   _unfollowUser() {
     debugPrint("Unfollow");
+    setState(() {
+      isFollowingUser = !isFollowingUser;
+    });
   }
 }
