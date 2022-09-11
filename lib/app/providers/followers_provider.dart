@@ -12,7 +12,7 @@ class FollowersProvider extends TechFreneticProvider {
   Future<List<UserModel>> getFollowing(String userId) async {
     List<UserModel> following = [];
     try {
-      Uri _url = Uri.parse("$baseUrl/api/en/v1/following/$userId");
+      Uri _url = Uri.parse("$baseUrl/api/en/v1/following?user=$userId");
       debugPrint(_url.toString());
 
       var response = await http.get(_url, headers: sessionHeader);
