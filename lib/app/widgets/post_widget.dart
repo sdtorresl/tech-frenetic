@@ -112,33 +112,46 @@ class _PostWidgetState extends State<PostWidget> {
             userId: widget.article.uid!,
           ),
           const SizedBox(width: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.article.displayName,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1!
-                    .copyWith(fontSize: 15),
-              ),
-              Row(
-                children: [
-                  Text(widget.article.role!,
-                      style: Theme.of(context).textTheme.bodyText1),
-                  SizedBox(
-                    child: SvgPicture.asset(
-                      'assets/img/icons/dot.svg',
-                      allowDrawingOutsideViewBox: true,
-                      semanticsLabel: 'Dot',
-                      color: Theme.of(context).primaryColor,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.article.displayName,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1!
+                      .copyWith(fontSize: 15),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        widget.article.role!,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        softWrap: true,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                  Text(timeago.format(created, locale: 'en_short'),
-                      style: Theme.of(context).textTheme.bodyText1),
-                ],
-              )
-            ],
+                    SizedBox(
+                      width: 20,
+                      child: SvgPicture.asset(
+                        'assets/img/icons/dot.svg',
+                        allowDrawingOutsideViewBox: true,
+                        semanticsLabel: 'Dot',
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(timeago.format(created, locale: 'en_short'),
+                          style: Theme.of(context).textTheme.bodyText1),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ],
       ),

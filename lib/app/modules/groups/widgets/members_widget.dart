@@ -64,23 +64,27 @@ class MembersWidget extends StatelessWidget {
           children: [
             AvatarWidget(
               userId: member.uid.toString(),
-              radius: 50,
+              radius: 35,
             ),
             const SizedBox(
-              width: 15,
+              width: 20,
             ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  member.userName,
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                Text(
-                  member.profession,
-                  style: Theme.of(context).textTheme.bodyText1,
-                ),
-              ],
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    member.userName,
+                    style: Theme.of(context).textTheme.headline2,
+                    softWrap: true,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  Text(
+                    member.profession,
+                    style: Theme.of(context).textTheme.bodyText1,
+                  ),
+                ],
+              ),
             ),
           ],
         ),
