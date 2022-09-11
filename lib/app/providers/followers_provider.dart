@@ -49,15 +49,13 @@ class FollowersProvider extends TechFreneticProvider {
 
       if (response.statusCode == 200) {
         List<dynamic> decodedResponse = json.jsonDecode(response.body);
-        debugPrint(decodedResponse.toString());
-        if (decodedResponse.isNotEmpty) {
-          List<String> userIds =
-              decodedResponse.first['users']?.split(', ') ?? [];
-          for (String id in userIds) {
-            UserModel? user = await _userProvider.getUser(id);
-            if (user != null) {
-              followers.add(user);
-            }
+        List<String> userIds =
+            decodedResponse.map((e) => e["id"] as String).toList();
+
+        for (String id in userIds) {
+          UserModel? user = await _userProvider.getUser(id);
+          if (user != null) {
+            followers.add(user);
           }
         }
       } else {
