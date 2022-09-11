@@ -96,15 +96,10 @@ class _JoinLeaveButtonWidgetState extends State<JoinLeaveButtonWidget> {
   Widget _leaveButton(int gUserId) {
     return ElevatedButton(
       onPressed: () async {
-        debugPrint("Leave group!");
         setState(() {
           _isLoading = true;
         });
-        bool leaved = await _groupsProvider.leaveGroup(
-            gUserId.toString(), widget.group.id);
-        if (leaved) {
-          debugPrint("Leaved!");
-        }
+        await _groupsProvider.leaveGroup(gUserId.toString(), widget.group.id);
         setState(() {
           _isLoading = false;
         });
