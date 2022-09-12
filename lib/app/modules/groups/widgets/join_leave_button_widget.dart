@@ -15,7 +15,7 @@ class JoinLeaveButtonWidget extends StatefulWidget {
 }
 
 class _JoinLeaveButtonWidgetState extends State<JoinLeaveButtonWidget> {
-  final UserPreferences _userPreferences = UserPreferences();
+  final UserPreferences _prefs = UserPreferences();
   final GroupsProvider _groupsProvider = GroupsProvider();
   late bool _isLoading;
 
@@ -27,7 +27,7 @@ class _JoinLeaveButtonWidgetState extends State<JoinLeaveButtonWidget> {
 
   @override
   Widget build(BuildContext context) {
-    String? userId = _userPreferences.userId;
+    int? userId = int.tryParse(_prefs.userId!);
     if (userId != null) {
       return FutureBuilder(
         future: _groupsProvider.getUserIdInGroup(userId, widget.group.id),
@@ -45,15 +45,14 @@ class _JoinLeaveButtonWidgetState extends State<JoinLeaveButtonWidget> {
     }
   }
 
-  Widget _joinButton(String userId) {
+  Widget _joinButton(int userId) {
     return ElevatedButton(
       onPressed: () async {
         debugPrint("Join group!");
         setState(() {
           _isLoading = true;
         });
-        bool joined = await _groupsProvider.joinGroup(
-            userId.toString(), int.parse(widget.group.id));
+        bool joined = await _groupsProvider.joinGroup(userId, widget.group.id);
         if (joined) {
           debugPrint("Joined!");
         }
@@ -99,7 +98,7 @@ class _JoinLeaveButtonWidgetState extends State<JoinLeaveButtonWidget> {
         setState(() {
           _isLoading = true;
         });
-        await _groupsProvider.leaveGroup(gUserId.toString(), widget.group.id);
+        await _groupsProvider.leaveGroup(gUserId, widget.group.id);
         setState(() {
           _isLoading = false;
         });

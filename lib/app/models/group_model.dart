@@ -21,7 +21,7 @@ class GroupModel extends Model {
     this.public = true,
   });
 
-  var id;
+  int id;
   String title;
   String? description;
   String? featured;
@@ -61,8 +61,10 @@ class GroupModel extends Model {
 
     debugPrint(picture);
 
+    int? id = json["id"] is String ? int.parse(json["id"]) : json["id"];
+
     return GroupModel(
-        id: json["id"] ?? json["nid"],
+        id: id ?? int.parse(json["nid"]),
         title: json["label"] ?? json["title"],
         description:
             json["field_group_description"] ?? json["field_description"] ?? '',

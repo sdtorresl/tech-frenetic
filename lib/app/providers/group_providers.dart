@@ -199,7 +199,7 @@ class GroupsProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<int?> getUserIdInGroup(String userId, var groupId) async {
+  Future<int?> getUserIdInGroup(int userId, int groupId) async {
     int? gUserId;
     try {
       Uri _url =
@@ -231,7 +231,7 @@ class GroupsProvider extends TechFreneticProvider {
     return gUserId;
   }
 
-  Future<bool> joinGroup(String userId, int groupId) async {
+  Future<bool> joinGroup(int userId, int groupId) async {
     try {
       Uri _url =
           Uri.parse("$baseUrl/api/entity/group_content?_format=hal_json");
@@ -280,7 +280,7 @@ class GroupsProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool> leaveGroup(String gUserId, String groupId) async {
+  Future<bool> leaveGroup(int gUserId, int groupId) async {
     try {
       Uri _url = Uri.parse(
           "$baseUrl/api/group/$groupId/content/$gUserId?_format=json");
