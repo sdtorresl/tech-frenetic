@@ -9,7 +9,7 @@ import 'package:techfrenetic/app/providers/user_provider.dart';
 class FollowersProvider extends TechFreneticProvider {
   final UserProvider _userProvider = UserProvider();
 
-  Future<List<UserModel>> getFollowing(String userId) async {
+  Future<List<UserModel>> getFollowing(int userId) async {
     List<UserModel> following = [];
     try {
       Uri _url = Uri.parse("$baseUrl/api/en/v1/following?user=$userId");
@@ -20,8 +20,12 @@ class FollowersProvider extends TechFreneticProvider {
       if (response.statusCode == 200) {
         List<dynamic> decodedResponse = json.jsonDecode(response.body);
         if (decodedResponse.isNotEmpty) {
-          List<String> userIds =
-              decodedResponse.first['users']?.split(', ') ?? [];
+          String? users = decodedResponse.first['users'];
+          List<String> userIds = users
+                  ?.split(', ')
+                  .where((element) => element.isNotEmpty)
+                  .toList() ??
+              [];
           for (String id in userIds) {
             UserModel? user = await _userProvider.getUser(id);
             if (user != null) {
@@ -38,7 +42,7 @@ class FollowersProvider extends TechFreneticProvider {
     return following;
   }
 
-  Future<List<UserModel>> getFollowers(String userId) async {
+  Future<List<UserModel>> getFollowers(int userId) async {
     List<UserModel> followers = [];
 
     try {
@@ -67,15 +71,19 @@ class FollowersProvider extends TechFreneticProvider {
     return followers;
   }
 
-  Future<bool> addFollower(String userId, String followedUserId) async {
-    debugPrint("Adding follower $userId to $followedUserId...");
+  Future<bool> addFollower(int userId, int followedUserId) async {
     try {
-      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
+      List<UserModel> alreadyFollowing = await getFollowing(userId);
+
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
       debugPrint(_url.toString());
+
+      List<dynamic> following = alreadyFollowing
+          .map((u) => {"target_id": u.uid, "target_type": "user"})
+          .toList();
+      following.add({"target_id": followedUserId, "target_type": "user"});
       Map<String, dynamic> body = {
-        "field_following": [
-          {"target_id": followedUserId, "target_type": "user"},
-        ]
+        "field_following": following.toSet().toList()
       };
 
       Map<String, String> headers = {}
@@ -98,5 +106,49 @@ class FollowersProvider extends TechFreneticProvider {
       debugPrint(e.toString());
     }
     return false;
+  }
+
+  Future<bool> removeFollower(int userId, int followedUserId) async {
+    try {
+      List<UserModel> alreadyFollowing = await getFollowing(userId);
+
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
+      debugPrint(_url.toString());
+
+      List<dynamic> following = alreadyFollowing
+          .where((u) => u.uid != followedUserId)
+          .map((u) => {"target_id": u.uid, "target_type": "user"})
+          .toList();
+      Map<String, dynamic> body = {"field_following": following};
+
+      debugPrint(following.toString());
+
+      Map<String, String> headers = {}
+        ..addAll(jsonHeader)
+        ..addAll(authHeader)
+        ..addAll(sessionHeader);
+
+      var response = await http.patch(
+        _url,
+        body: json.jsonEncode(body),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return false;
+  }
+
+  Future<bool> isFollowing(int userId, int followedUserId) async {
+    List<UserModel> alreadyFollowing = await getFollowing(userId);
+    bool isFollowing =
+        !alreadyFollowing.every((element) => element.uid != followedUserId);
+    return isFollowing;
   }
 }

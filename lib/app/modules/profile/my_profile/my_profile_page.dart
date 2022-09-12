@@ -15,6 +15,7 @@ import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/providers/followers_provider.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
+import 'package:techfrenetic/app/widgets/follow_button_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
 
@@ -43,14 +44,17 @@ class _MyProfilePageState extends State<MyProfilePage> {
   int articlesCount = 0;
   int postsCount = 0;
   int viewedCount = 0;
-  String userId = '';
+  late int userId;
   late UserModel user;
 
   @override
   void initState() {
     super.initState();
-    userId = widget.userId ?? _prefs.userId!;
-    editable = userId == _prefs.userId;
+    userId = widget.userId != null
+        ? int.parse(widget.userId!)
+        : int.parse(_prefs.userId!);
+    editable =
+        _prefs.userId != null ? userId == int.parse(_prefs.userId!) : false;
     isFollowingUser = false;
     //loadCounts();
   }
@@ -78,7 +82,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
       return Container(
         color: Theme.of(context).scaffoldBackgroundColor,
         child: FutureBuilder(
-          future: _userProvider.getUser(userId),
+          future: _userProvider.getUser(userId.toString()),
           builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
             if (snapshot.hasData) {
               if (snapshot.data != null) {
@@ -494,32 +498,14 @@ class _MyProfilePageState extends State<MyProfilePage> {
                           }),
                   child: Text(
                       "${following.length} ${AppLocalizations.of(context)!.profile_followers} - ${followers.length}  ${AppLocalizations.of(context)!.profile_following}")),
-              editable ? const SizedBox.shrink() : _followButton()
+              editable
+                  ? const SizedBox.shrink()
+                  : FollowButtonWidget(targetUserId: userId)
             ],
           );
         } else {
           return const SizedBox();
         }
-      },
-    );
-  }
-
-  Widget _followButton() {
-    return FutureBuilder(
-      future: _followersProvider.getFollowing(_prefs.userId.toString()),
-      builder: (BuildContext context, AsyncSnapshot snapshot) {
-        if (snapshot.hasData) {
-          List<UserModel> following = snapshot.data;
-          /* isFollowingUser = following
-              .where((element) => element.uid.toString() == _prefs.userId)
-              .isNotEmpty; */
-        }
-        return ElevatedButton(
-          onPressed: () => isFollowingUser ? _unfollowUser() : _followUser(),
-          child: isFollowingUser
-              ? Text(AppLocalizations.of(context)!.profile_unfollow)
-              : Text(AppLocalizations.of(context)!.profile_follow),
-        );
       },
     );
   }
@@ -639,22 +625,5 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ),
       ),
     );
-  }
-
-  _followUser() {
-    debugPrint("Follow");
-    setState(() {
-      isFollowingUser = !isFollowingUser;
-    });
-    /* _followersProvider
-        .addFollower(_prefs.userId!, user.uid.toString())
-        .then((value) {}); */
-  }
-
-  _unfollowUser() {
-    debugPrint("Unfollow");
-    setState(() {
-      isFollowingUser = !isFollowingUser;
-    });
   }
 }

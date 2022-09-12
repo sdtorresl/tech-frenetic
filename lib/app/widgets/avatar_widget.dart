@@ -42,72 +42,77 @@ class _AvatarWidgetState extends State<AvatarWidget>
 
   @override
   Widget build(BuildContext context) {
+    double pictureHeight = widget.radius * 2 - ((widget.radius * 2) * 0.15);
+    double pictureWidth = pictureHeight;
+
     if (widget.userId == _prefs.userId && _prefs.userAvatar.isNotEmpty) {
       return CircleAvatar(
         radius: widget.radius,
         backgroundColor: Colors.grey[200],
         child: ClipOval(
-          child: SvgPicture.asset(
-            "assets/img/avatars/${_prefs.userAvatar.isNotEmpty ? _prefs.userAvatar : 'avatar-01'}.svg",
-            semanticsLabel: _prefs.userName,
+          child: SizedBox(
+            height: pictureHeight,
+            width: pictureWidth,
+            child: SvgPicture.asset(
+              "assets/img/avatars/${_prefs.userAvatar.isNotEmpty ? _prefs.userAvatar : 'avatar-01'}.svg",
+              semanticsLabel: _prefs.userName,
+            ),
           ),
+          // clipper: MyCustomClipper(widget.radius),
         ),
       );
     }
 
     return FutureBuilder(
-      future: _userProvider.getProfile(widget.userId),
-      builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
-        UserModel user;
+        future: _userProvider.getProfile(widget.userId),
+        builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
+          UserModel user;
 
-        if (snapshot.hasData) {
-          user = snapshot.data!;
+          if (snapshot.hasData) {
+            user = snapshot.data!;
 
-          if (!_controller.isAnimating) {
-            _controller.reset();
-            _controller.forward();
-          }
+            if (!_controller.isAnimating) {
+              _controller.reset();
+              _controller.forward();
+            }
 
-          if (user.useAvatar) {
-            return CircleAvatar(
-              radius: widget.radius,
-              backgroundColor: Colors.grey[200],
-              child: ScaleTransition(
-                scale: Tween(begin: 0.0, end: 1.0).animate(_controller),
-                child: ClipOval(
-                  child: SvgPicture.asset(
-                    "assets/img/avatars/${user.avatar.isNotEmpty ? user.avatar : 'avatar-01'}.svg",
-                    semanticsLabel: user.name,
-                  ),
-                ),
-              ),
-            );
-          } else {
-            if ((user.picture ?? "").isNotEmpty) {
+            if (user.useAvatar) {
               return CircleAvatar(
                 radius: widget.radius,
                 backgroundColor: Colors.grey[200],
                 child: ScaleTransition(
                   scale: Tween(begin: 0.0, end: 1.0).animate(_controller),
                   child: ClipOval(
-                    child: CachedNetworkImage(imageUrl: user.picture!),
+                    child: SizedBox(
+                      height: pictureHeight,
+                      width: pictureWidth,
+                      child: SvgPicture.asset(
+                        "assets/img/avatars/${user.avatar.isNotEmpty ? user.avatar : 'avatar-01'}.svg",
+                        semanticsLabel: user.name,
+                      ),
+                    ),
                   ),
                 ),
               );
             } else {
-              return CircleAvatar(
-                radius: widget.radius,
-                backgroundColor: Colors.grey[200],
-              );
+              if ((user.picture ?? "").isNotEmpty) {
+                return CircleAvatar(
+                  radius: widget.radius,
+                  backgroundColor: Colors.grey[200],
+                  child: ScaleTransition(
+                    scale: Tween(begin: 0.0, end: 1.0).animate(_controller),
+                    child: ClipOval(
+                      child: CachedNetworkImage(imageUrl: user.picture!),
+                    ),
+                  ),
+                );
+              }
             }
           }
-        } else {
           return CircleAvatar(
             radius: widget.radius,
             backgroundColor: Colors.grey[200],
           );
-        }
-      },
-    );
+        });
   }
 }
