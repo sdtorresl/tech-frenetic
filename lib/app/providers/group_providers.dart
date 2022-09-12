@@ -374,4 +374,55 @@ class GroupsProvider extends TechFreneticProvider {
     }
     return users;
   }
+
+  Future<bool> createArticleInGroup(
+      int groupId, int userId, int articleId) async {
+    try {
+      Uri _url =
+          Uri.parse("$baseUrl/api/entity/group_content?_format=hal_json");
+      debugPrint(_url.toString());
+
+      String body = json.encode({
+        "_links": {
+          "type": {
+            "href":
+                "http://dev-techfrenetic.us.seedcloud.co/api/rest/type/group_content/group-group_node-article"
+          }
+        },
+        "type": [
+          {
+            "target_id": "group-group_node-article",
+            "target_type": "group_content_type"
+          }
+        ],
+        "uid": [
+          {"target_id": userId}
+        ],
+        "gid": [
+          {"target_id": groupId}
+        ],
+        "entity_id": [
+          {"target_id": articleId}
+        ]
+      });
+
+      Map<String, String> headers = {}
+        ..addAll(halHeader)
+        ..addAll(authHeader)
+        ..addAll(sessionHeader);
+
+      var response = await http.post(_url, headers: headers, body: body);
+
+      if (response.statusCode == 201) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint(response.reasonPhrase);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return false;
+  }
 }

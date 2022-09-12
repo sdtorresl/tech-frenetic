@@ -1,6 +1,8 @@
+import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/groups/widgets/join_leave_button_widget.dart';
 import 'package:techfrenetic/app/modules/groups/widgets/members_widget.dart';
+import 'package:techfrenetic/app/modules/posts/post_box_widget.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
@@ -31,6 +33,8 @@ class GroupPage extends StatefulWidget {
 
 class _GroupPageState extends ModularState<GroupPage, GroupController> {
   final GroupsProvider _groupsProvider = GroupsProvider();
+  final UserPreferences _prefs = UserPreferences();
+
   GroupModel group = GroupModel.empty();
 
   @override
@@ -343,6 +347,22 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
   }
 
   Widget _postArticle(BuildContext context) {
-    return const SizedBox();
+    return PostBoxWidget(
+      onPostLoaded: () {
+        setState(() {});
+      },
+      onArticleLoaded: (articleId) async {
+        debugPrint("El id de artículo es: $articleId");
+        int? userId = int.tryParse(_prefs.userId ?? "");
+        if (userId != null) {
+          bool created = await _groupsProvider.createArticleInGroup(
+              widget.groupId, userId, articleId);
+          if (created) {
+            debugPrint("Article $articleId linked to group ${widget.groupId}");
+            setState(() {});
+          }
+        }
+      },
+    );
   }
 }
