@@ -52,6 +52,7 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
               children: [
                 _header(context, group),
                 _details(context, group),
+                _postArticle(context),
                 _feeds(context, group)
               ],
             );
@@ -339,5 +340,9 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
         }
       },
     );
+  }
+
+  Widget _postArticle(BuildContext context) {
+    return const SizedBox();
   }
 }

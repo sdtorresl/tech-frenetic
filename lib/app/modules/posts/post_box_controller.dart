@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
 
-class CommunityController extends Disposable {
+class PostBoxController extends Disposable {
   final _postController = BehaviorSubject<String>();
 
   Stream<String> get postStream => _postController.stream;

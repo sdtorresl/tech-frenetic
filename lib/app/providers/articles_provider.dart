@@ -195,7 +195,7 @@ class ArticlesProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool> addArticle(String title, int category, String description,
+  Future<int?> addArticle(String title, int category, String description,
       String content, String tags, String imageId) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/entity/node?_format=json");
@@ -243,7 +243,8 @@ class ArticlesProvider extends TechFreneticProvider {
           headers: headers, body: json.jsonEncode(payload));
 
       if (response.statusCode == 201) {
-        return true;
+        var decodedResponse = json.jsonDecode(response.body);
+        return decodedResponse["nid"][0]["value"];
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
@@ -251,7 +252,7 @@ class ArticlesProvider extends TechFreneticProvider {
       debugPrint(e.toString());
     }
 
-    return false;
+    return null;
   }
 
   Future<ArticlesModel> getArticle(String id) async {
