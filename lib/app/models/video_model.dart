@@ -109,11 +109,13 @@ class Meta {
     this.author,
     this.downloadedFrom,
     this.name,
+    this.userId,
   });
 
   String? author;
   String? downloadedFrom;
   String? name;
+  int? userId;
 
   factory Meta.fromRawJson(String str) => Meta.fromJson(json.decode(str));
 
@@ -123,12 +125,14 @@ class Meta {
         author: json["author"],
         downloadedFrom: json["downloaded-from"],
         name: json["name"],
+        userId: int.tryParse(json["userId"] ?? ""),
       );
 
   Map<String, dynamic> toJson() => {
         "author": author,
         "downloaded-from": downloadedFrom,
         "name": name,
+        "userId": userId
       };
 }
 

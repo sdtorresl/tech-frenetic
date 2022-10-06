@@ -4,7 +4,8 @@ import 'package:techfrenetic/app/modules/community/widgets/stories_card_widget.d
 import 'package:techfrenetic/app/providers/video_provider.dart';
 
 class StoriesViewWidget extends StatelessWidget {
-  const StoriesViewWidget({Key? key}) : super(key: key);
+  final int? userId;
+  const StoriesViewWidget({Key? key, this.userId}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -13,17 +14,21 @@ class StoriesViewWidget extends StatelessWidget {
     double height = width * 6 / 4;
     VideoProvider videoProvider = VideoProvider();
 
-    return Container(
-      height: height,
-      margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
-      child: FutureBuilder(
-        future: videoProvider.getVideos(),
-        builder:
-            (BuildContext context, AsyncSnapshot<List<VideoModel>> snapshot) {
-          if (snapshot.hasData) {
-            List<VideoModel> videos = snapshot.data!;
+    return FutureBuilder(
+      future: videoProvider.getVideos(userId: userId),
+      builder:
+          (BuildContext context, AsyncSnapshot<List<VideoModel>> snapshot) {
+        if (snapshot.hasData) {
+          List<VideoModel> videos = snapshot.data!;
 
-            return ListView(
+          if (videos.isEmpty) {
+            return const SizedBox();
+          }
+
+          return Container(
+            height: height,
+            margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+            child: ListView(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
               children: videos
@@ -35,18 +40,21 @@ class StoriesViewWidget extends StatelessWidget {
                     ),
                   )
                   .toList(),
-            );
-          } else {
-            return const Center(
+            ),
+          );
+        } else {
+          return const Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Center(
               child: SizedBox(
                 height: 40,
                 width: 40,
                 child: CircularProgressIndicator(),
               ),
-            );
-          }
-        },
-      ),
+            ),
+          );
+        }
+      },
     );
   }
 }

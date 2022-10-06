@@ -10,7 +10,7 @@ import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:tus_client/tus_client.dart';
 
 class VideoProvider extends TechFreneticProvider {
-  Future<List<VideoModel>> getVideos() async {
+  Future<List<VideoModel>> getVideos({int? userId}) async {
     List<VideoModel> videos = [];
 
     try {
@@ -27,7 +27,14 @@ class VideoProvider extends TechFreneticProvider {
 
         for (var item in jsonResponse["result"]) {
           try {
-            videos.add(VideoModel.fromJson(item));
+            var videoModel = VideoModel.fromJson(item);
+            if (userId != null) {
+              if (videoModel.meta?.userId == userId) {
+                videos.add(videoModel);
+              }
+            } else {
+              videos.add(videoModel);
+            }
           } catch (e) {
             debugPrint("Exception getting video model");
             debugPrint(item);

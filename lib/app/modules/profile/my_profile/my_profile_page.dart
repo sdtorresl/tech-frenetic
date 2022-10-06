@@ -108,7 +108,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
     return ListView(
       children: [
         _profileHeader(context),
-        !editable ? const StoriesViewWidget() : const SizedBox.shrink(),
+        !editable
+            ? StoriesViewWidget(
+                userId: userId,
+              )
+            : const SizedBox.shrink(),
         _profileBody(context),
         const SizedBox(height: 60),
       ],
