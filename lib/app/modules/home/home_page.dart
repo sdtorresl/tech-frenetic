@@ -6,6 +6,7 @@ import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/modules/articles/add_articles_page.dart';
 import 'package:techfrenetic/app/modules/home/home_store.dart';
 import 'package:techfrenetic/app/modules/profile/profile_store.dart';
+import 'package:techfrenetic/app/modules/videos/video_source.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/expandable_fab.dart';
@@ -157,7 +158,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
           if (_key.currentState != null) {
             _key.currentState!.toggle();
           }
-          Modular.to.pushNamed("/community/video");
+          showVideoSources(context);
         },
         icon: const Icon(TechFreneticIcons.shareVideo),
       ),
