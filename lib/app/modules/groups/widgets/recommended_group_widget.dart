@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
 import 'package:techfrenetic/app/modules/groups/widgets/join_leave_button_widget.dart';
+import 'package:techfrenetic/app/providers/group_providers.dart';
 
 class RecommendedGroupWidget extends StatefulWidget {
   final GroupModel group;
@@ -17,6 +18,8 @@ class RecommendedGroupWidget extends StatefulWidget {
 }
 
 class _RecommendedGroupWidgetState extends State<RecommendedGroupWidget> {
+  final _groupProvider = GroupsProvider();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -41,13 +44,20 @@ class _RecommendedGroupWidgetState extends State<RecommendedGroupWidget> {
             style:
                 Theme.of(context).textTheme.headline1!.copyWith(fontSize: 15),
           ),
-          subtitle: Text(
-            "${widget.group.members != null ? widget.group.members!.length : 0} ${AppLocalizations.of(context)!.groups_members} - ${widget.group.posts != null ? widget.group.posts!.length : 0} ${AppLocalizations.of(context)!.groups_posts}",
-            style: Theme.of(context)
-                .textTheme
-                .bodyText1!
-                .copyWith(color: Theme.of(context).hintColor, fontSize: 13),
-          ),
+          subtitle: FutureBuilder(
+              future: Future.wait([
+                _groupProvider.getMembers(widget.group.id.toString()),
+                _groupProvider.getPosts(widget.group.id),
+              ]),
+              builder: (context, AsyncSnapshot snapshot) {
+                int members = snapshot.data[0]?.length ?? 0;
+                int posts = snapshot.data[1] ?? 0;
+                return Text(
+                  "$members ${AppLocalizations.of(context)!.groups_members} - $posts ${AppLocalizations.of(context)!.groups_posts}",
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: Theme.of(context).hintColor, fontSize: 13),
+                );
+              }),
           trailing: Container(
               constraints: const BoxConstraints(minWidth: 50, maxWidth: 150),
               child: JoinLeaveButtonWidget(group: widget.group))),

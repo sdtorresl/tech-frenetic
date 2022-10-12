@@ -5,6 +5,9 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/utils.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
 import 'package:techfrenetic/app/modules/groups/widgets/join_leave_button_widget.dart';
+import 'package:techfrenetic/app/providers/group_providers.dart';
+
+import '../../../models/user_model.dart';
 
 class FeaturedGroupWidget extends StatefulWidget {
   final GroupModel group;
@@ -16,6 +19,7 @@ class FeaturedGroupWidget extends StatefulWidget {
 }
 
 class _FeaturedGroupWidgetState extends State<FeaturedGroupWidget> {
+  final GroupsProvider _groupProvider = GroupsProvider();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -68,19 +72,33 @@ class _FeaturedGroupWidgetState extends State<FeaturedGroupWidget> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "${widget.group.members!.isNotEmpty ? widget.group.members : 0} - ${AppLocalizations.of(context)!.groups_members}",
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline1!
-                              .copyWith(fontSize: 13),
+                        FutureBuilder(
+                          future: _groupProvider
+                              .getMembers(widget.group.id.toString()),
+                          builder: (context,
+                              AsyncSnapshot<List<UserModel>> snapshot) {
+                            int members = snapshot.data?.length ?? 0;
+                            return Text(
+                              "$members - ${AppLocalizations.of(context)!.groups_members}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline1!
+                                  .copyWith(fontSize: 13),
+                            );
+                          },
                         ),
-                        Text(
-                          "${widget.group.posts!.isNotEmpty ? widget.group.posts : 0} - ${AppLocalizations.of(context)!.groups_posts}",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyText1!
-                              .copyWith(fontSize: 13),
+                        FutureBuilder(
+                          future: _groupProvider.getPosts(widget.group.id),
+                          builder: (context, AsyncSnapshot<int> snapshot) {
+                            int posts = snapshot.data ?? 0;
+                            return Text(
+                              "$posts - ${AppLocalizations.of(context)!.groups_posts}",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline1!
+                                  .copyWith(fontSize: 13),
+                            );
+                          },
                         ),
                       ],
                     ),
