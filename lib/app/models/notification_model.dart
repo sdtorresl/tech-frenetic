@@ -42,7 +42,7 @@ class NotificationModel extends Model {
 
     return NotificationModel(
       type: json["field_type"],
-      name: json["user_id"],
+      name: json["field_name"],
       body: json["notification_text"],
       created: DateTime.parse(json["created"]),
       id: json["id"],

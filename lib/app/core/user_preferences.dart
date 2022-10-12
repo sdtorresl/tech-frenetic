@@ -33,7 +33,7 @@ class UserPreferences {
 
   String? get logoutToken => _prefs.getString('logout_token');
 
-  set userName(String? userName) => _prefs.setString('name', userName!);
+  set userName(String? userName) => _prefs.setString('name', userName ?? '');
 
   String? get userName => _prefs.getString('name');
 
@@ -57,9 +57,9 @@ class UserPreferences {
       DateTime.tryParse(_prefs.getString('birthday') ?? '');
 
   set userAvatar(String? userAvatar) =>
-      _prefs.setString('field_user_Avatar', userAvatar!);
+      _prefs.setString('field_user_Avatar', userAvatar ?? '');
 
-  String get userAvatar => _prefs.getString('field_user_Avatar') ?? 'avatar-01';
+  String? get userAvatar => _prefs.getString('field_user_Avatar');
 
   set sessionExpirationDate(DateTime expirationDate) =>
       _prefs.setString('expiration_date', expirationDate.toIso8601String());

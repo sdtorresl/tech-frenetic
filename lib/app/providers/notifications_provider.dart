@@ -28,6 +28,7 @@ class NotificationsProvider extends TechFreneticProvider {
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = jsonDecode(response.body);
+        debugPrint(jsonResponse.toString());
         notifications = jsonResponse
             .map((item) => NotificationModel.fromMap(item))
             .toList();
@@ -72,7 +73,9 @@ class NotificationsProvider extends TechFreneticProvider {
   }
 
   Future<bool> postNotification(
-      String contentId, NotificationType type, int targetId) async {
+      {String? contentId,
+      required NotificationType type,
+      required int targetId}) async {
     try {
       Uri _url = Uri.parse(
           "$baseUrl/api/$locale/entity/notification?_format=hal_json");

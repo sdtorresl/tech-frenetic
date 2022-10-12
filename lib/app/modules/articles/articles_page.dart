@@ -340,9 +340,9 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
           articleId = widget.article.id;
         });
         _notificationsProvider.postNotification(
-          widget.article.id,
-          NotificationType.commentNotification,
-          commentId,
+          contentId: widget.article.id,
+          type: NotificationType.commentNotification,
+          targetId: commentId,
         );
       }
     });

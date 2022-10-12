@@ -2,7 +2,9 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:techfrenetic/app/models/image_model.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
+import 'package:techfrenetic/app/providers/notifications_provider.dart';
 import '../../common/validators.dart';
+import '../../models/notification_model.dart';
 
 class CreateGroupsController extends Disposable {
   final _nameController = BehaviorSubject<String>();
@@ -57,11 +59,16 @@ class CreateGroupsController extends Disposable {
 
   Future<bool> createGroup() async {
     GroupsProvider _groupProvider = GroupsProvider();
+    NotificationsProvider _notificationsProvider = NotificationsProvider();
 
     bool created = await _groupProvider.createGroup(
         name, description, rules, isPublic, image);
 
     if (created) {
+      _notificationsProvider.postNotification(
+        type: NotificationType.groupNotification,
+        targetId: 15, // TODO; Use group ID
+      );
       return true;
     } else {
       return false;

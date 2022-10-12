@@ -29,7 +29,7 @@ class UserProvider extends TechFreneticProvider {
 
         prefs.csrfToken = loggedUser.csrfToken;
         prefs.logoutToken = loggedUser.logoutToken;
-        prefs.userId = loggedUser.currentUser!.uid;
+        prefs.userId = loggedUser.currentUser?.uid;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
         debugPrint(response.body);
@@ -59,7 +59,9 @@ class UserProvider extends TechFreneticProvider {
       prefs.userId = null;
       prefs.sessionExpirationDate = DateTime.now();
       prefs.userId = null;
+      prefs.userName = null;
       prefs.userEmail = null;
+      prefs.userAvatar = null;
 
       cleanCookies();
 
@@ -70,7 +72,7 @@ class UserProvider extends TechFreneticProvider {
       }
     } catch (e) {
       debugPrint(e.toString());
-    } finally {}
+    }
 
     return false;
   }

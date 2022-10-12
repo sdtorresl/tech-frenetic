@@ -45,7 +45,9 @@ class _AvatarWidgetState extends State<AvatarWidget>
     double pictureHeight = widget.radius * 2 - ((widget.radius * 2) * 0.15);
     double pictureWidth = pictureHeight;
 
-    if (widget.userId == _prefs.userId && _prefs.userAvatar.isNotEmpty) {
+    if (widget.userId == _prefs.userId &&
+        _prefs.userAvatar != null &&
+        _prefs.userAvatar!.isNotEmpty) {
       return CircleAvatar(
         radius: widget.radius,
         backgroundColor: Colors.grey[200],
@@ -54,7 +56,7 @@ class _AvatarWidgetState extends State<AvatarWidget>
             height: pictureHeight,
             width: pictureWidth,
             child: SvgPicture.asset(
-              "assets/img/avatars/${_prefs.userAvatar.isNotEmpty ? _prefs.userAvatar : 'avatar-01'}.svg",
+              "assets/img/avatars/${_prefs.userAvatar}.svg",
               semanticsLabel: _prefs.userName,
             ),
           ),

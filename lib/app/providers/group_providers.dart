@@ -188,6 +188,7 @@ class GroupsProvider extends TechFreneticProvider {
       );
 
       if (response.statusCode == 201) {
+        debugPrint(response.body);
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');

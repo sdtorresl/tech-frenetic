@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:techfrenetic/app/modules/search/widgets/group_item_widget.dart';
 
 import '../../models/group_model.dart';
@@ -390,34 +389,6 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
                     user.userName,
                     style: Theme.of(context).textTheme.bodyText2,
                   )
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _groupItem(GroupModel group) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Card(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            children: [
-              CachedNetworkImage(imageUrl: group.picture),
-              const SizedBox(
-                width: 20,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    group.title,
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
                 ],
               )
             ],

@@ -63,7 +63,7 @@ class VideoProvider extends TechFreneticProvider {
       metadata: {
         'author': loggedUSer != null ? loggedUSer.userName : '',
         'userId': loggedUSer != null ? loggedUSer.uid.toString() : '',
-        'userAvatar': prefs.userAvatar
+        'userAvatar': prefs.userAvatar ?? ''
       },
       maxChunkSize: 5 * 1024 * 1024,
       store: TusMemoryStore(),
