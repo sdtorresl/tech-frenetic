@@ -1,3 +1,5 @@
+import 'package:techfrenetic/app/modules/search/widgets/group_item_widget.dart';
+
 import '../../models/group_model.dart';
 import '../../models/user_model.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -171,7 +173,7 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
                   });
                 },
               ),
-              hintText: 'Type here to search',
+              hintText: AppLocalizations.of(context)!.search_text,
               hintStyle: Theme.of(context)
                   .textTheme
                   .bodyText1!
@@ -285,22 +287,16 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
 
   Widget _groupResults() {
     return FutureBuilder(
-      future: groupsProvider.searchGroups(),
+      future: groupsProvider.searchGroups(searchText),
       builder:
           (BuildContext context, AsyncSnapshot<List<GroupModel>> snapshot) {
         if (snapshot.hasData) {
           List<GroupModel> results = snapshot.data ?? [];
 
-          results = results
-              .where((element) => element.title
-                  .toLowerCase()
-                  .contains(searchText.toLowerCase()))
-              .toList();
-
           debugPrint(results.toString());
 
           List<Widget> resultsWidgets =
-              results.map((e) => Text(e.title)).toList();
+              results.map((e) => GroupItemWidget(group: e)).toList();
 
           return Column(
             children: [

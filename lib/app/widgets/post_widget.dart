@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/providers/like_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
@@ -33,8 +32,6 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   Widget build(BuildContext context) {
-    UserPreferences prefs = UserPreferences();
-
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
       decoration: BoxDecoration(
@@ -115,33 +112,46 @@ class _PostWidgetState extends State<PostWidget> {
             userId: widget.article.uid!,
           ),
           const SizedBox(width: 20),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                widget.article.displayName,
-                style: Theme.of(context)
-                    .textTheme
-                    .headline1!
-                    .copyWith(fontSize: 15),
-              ),
-              Row(
-                children: [
-                  Text(widget.article.role!,
-                      style: Theme.of(context).textTheme.bodyText1),
-                  SizedBox(
-                    child: SvgPicture.asset(
-                      'assets/img/icons/dot.svg',
-                      allowDrawingOutsideViewBox: true,
-                      semanticsLabel: 'Dot',
-                      color: Theme.of(context).primaryColor,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  widget.article.displayName,
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline1!
+                      .copyWith(fontSize: 15),
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 4,
+                      child: Text(
+                        widget.article.role!,
+                        style: Theme.of(context).textTheme.bodyText1,
+                        softWrap: true,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
-                  ),
-                  Text(timeago.format(created, locale: 'en_short'),
-                      style: Theme.of(context).textTheme.bodyText1),
-                ],
-              )
-            ],
+                    SizedBox(
+                      width: 20,
+                      child: SvgPicture.asset(
+                        'assets/img/icons/dot.svg',
+                        allowDrawingOutsideViewBox: true,
+                        semanticsLabel: 'Dot',
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    Flexible(
+                      child: Text(timeago.format(created, locale: 'en_short'),
+                          style: Theme.of(context).textTheme.bodyText1),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ],
       ),

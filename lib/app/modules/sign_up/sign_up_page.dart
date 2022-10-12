@@ -5,7 +5,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_controller.dart';
-import 'package:techfrenetic/app/widgets/validate_text_widgt.dart';
+import 'package:techfrenetic/app/widgets/validate_text_widget.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({Key? key}) : super(key: key);
@@ -20,7 +20,8 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
 
   bool isPerson = true;
   bool _isLoading = false;
-  String password = '';
+  String _password = '';
+  String _confirmationPassword = '';
 
   @override
   Widget build(BuildContext context) {
@@ -310,10 +311,12 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
   }
 
   Widget _passwordValidation() {
-    bool passwordLength = password.length >= 8;
-    bool passwordHasNumbers = RegExp(r'\d').hasMatch(password);
-    bool passwordHasMixedCase = password.contains(RegExp(r'[A-Z]')) &&
-        password.contains(RegExp(r'[a-z]'));
+    bool passwordLength = _password.length >= 8;
+    bool passwordHasNumbers = RegExp(r'\d').hasMatch(_password);
+    bool passwordHasMixedCase = _password.contains(RegExp(r'[A-Z]')) &&
+        _password.contains(RegExp(r'[a-z]'));
+    bool passwordsMatch =
+        _password == _confirmationPassword && _password.isNotEmpty;
 
     return Column(
       children: [
@@ -328,6 +331,10 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
         ValidateTextWidget(
             isValid: passwordHasNumbers,
             text: AppLocalizations.of(context)!.pwd_number),
+        const SizedBox(height: 10),
+        ValidateTextWidget(
+            isValid: passwordsMatch,
+            text: AppLocalizations.of(context)!.pwd_match),
       ],
     );
   }
@@ -340,7 +347,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
             builder: (context, snapshot) {
               return TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'What´s your name?',
+                  hintText: AppLocalizations.of(context)!.your_name,
                   hintStyle: Theme.of(context)
                       .textTheme
                       .bodyText1!
@@ -361,7 +368,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
             builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
               return TextFormField(
                 decoration: InputDecoration(
-                  hintText: 'Your Email',
+                  hintText: AppLocalizations.of(context)!.your_email,
                   hintStyle: Theme.of(context)
                       .textTheme
                       .bodyText1!
@@ -384,7 +391,7 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
               obscureText: _isPasswordHidden1,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                hintText: 'Create password',
+                hintText: AppLocalizations.of(context)!.form1_password,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -404,8 +411,10 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
               ),
               onChanged: (value) {
                 store.changePassword(value);
+                store
+                    .changePasswordConfirmation(_confirmationPassword == value);
                 setState(() {
-                  password = value;
+                  _password = value;
                 });
               },
             );
@@ -413,12 +422,12 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
         ),
         const SizedBox(height: 20),
         StreamBuilder(
-          stream: store.passwordStream,
+          stream: store.passwordConfirmationStream,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             return TextFormField(
               obscureText: _isPasswordHidden2,
               decoration: InputDecoration(
-                hintText: 'Confirm your password',
+                hintText: AppLocalizations.of(context)!.form1_repassword,
                 hintStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
@@ -430,7 +439,18 @@ class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
                   onPressed: () =>
                       setState(() => _isPasswordHidden2 = !_isPasswordHidden2),
                 ),
+                errorText: snapshot.hasError ? snapshot.error.toString() : null,
+                errorStyle: Theme.of(context)
+                    .textTheme
+                    .headline4!
+                    .copyWith(color: Colors.red),
               ),
+              onChanged: (value) {
+                store.changePasswordConfirmation(value == _password);
+                setState(() {
+                  _confirmationPassword = value;
+                });
+              },
             );
           },
         ),

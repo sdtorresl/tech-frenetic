@@ -9,6 +9,7 @@ class TFAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Widget? leading;
   final Color? backgroundColor;
   final Color? foregroundColor;
+  final PreferredSizeWidget? bottom;
   final double elevation;
 
   TFAppBar({
@@ -20,6 +21,7 @@ class TFAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.backgroundColor,
     this.foregroundColor,
     this.elevation = 0,
+    this.bottom,
   }) : super(key: key);
 
   @override
@@ -41,6 +43,7 @@ class TFAppBar extends StatelessWidget implements PreferredSizeWidget {
           ),
       actions: actions,
       elevation: elevation,
+      bottom: bottom,
     );
   }
 

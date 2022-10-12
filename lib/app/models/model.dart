@@ -1,18 +1,28 @@
+import 'package:flutter/material.dart';
+
 class Model {
-  static dynamic returnValue(List<dynamic>? list, dynamic defaultValue,
+  static dynamic returnValue(dynamic value, dynamic defaultValue,
       {bool isList = false}) {
-    if (list == null) {
+    if (value == null) {
       return defaultValue;
     }
 
-    try {
-      if (list.isNotEmpty) {
-        return !isList
-            ? list[0]["value"]
-            : list.map((e) => e["value"]).toList();
+    if (value is List<dynamic>) {
+      try {
+        if (value.isNotEmpty) {
+          return !isList
+              ? value[0]["value"]
+              : value.map((e) => e["value"]).toList();
+        }
+        return defaultValue;
+      } catch (e) {
+        debugPrint(e.toString());
+        debugPrint("Returning default value: " + value[0].toString());
+        return defaultValue;
       }
-      return defaultValue;
-    } catch (e) {
+    } else if (value is String || value is int) {
+      return value;
+    } else {
       return defaultValue;
     }
   }

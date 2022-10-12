@@ -9,11 +9,13 @@ import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/models/notification_model.dart';
 import 'package:techfrenetic/app/modules/articles/articles_controller.dart';
 import 'package:techfrenetic/app/modules/articles/articles_image_page.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/providers/comments_provider.dart';
 import 'package:techfrenetic/app/providers/like_provider.dart';
+import 'package:techfrenetic/app/providers/notifications_provider.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/comments_widget.dart';
@@ -31,6 +33,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   late String articleId;
   final ArticlesProvider _articlesProvider = ArticlesProvider();
   final CommentsProvider _commentsProvider = CommentsProvider();
+  final NotificationsProvider _notificationsProvider = NotificationsProvider();
   TextEditingController commentTextController = TextEditingController();
   String likeAsset = 'assets/img/icons/light_bulb.svg';
   bool enabledLike = false;
@@ -328,13 +331,19 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     debugPrint("Comment is: ${store.comment}");
     _commentsProvider
         .addComment(widget.article.id, store.comment)
-        .then((value) {
-      if (value) {
+        .then((commentId) {
+      if (commentId != null) {
+        debugPrint("Comment ID is $commentId");
         commentTextController.clear();
         setState(() {
           // Force to rebuild the future builder
           articleId = widget.article.id;
         });
+        _notificationsProvider.postNotification(
+          contentId: widget.article.id,
+          type: NotificationType.commentNotification,
+          targetId: commentId,
+        );
       }
     });
   }

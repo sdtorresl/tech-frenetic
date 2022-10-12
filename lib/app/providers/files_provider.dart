@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:techfrenetic/app/models/image_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
-import 'package:uuid/uuid.dart';
 
 class FilesProvider extends TechFreneticProvider {
   Future<ImageModel?> uploadFile(File file) async {
@@ -44,9 +43,11 @@ class FilesProvider extends TechFreneticProvider {
           {"value": base64File}
         ]
       });
+      debugPrint(_url.toString());
       var response = await http.post(_url, headers: headers, body: body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        debugPrint(response.body);
         image = ImageModel.fromJson(response.body);
       } else {
         debugPrint(response.statusCode.toString());

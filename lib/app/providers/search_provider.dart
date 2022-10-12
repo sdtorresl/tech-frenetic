@@ -32,7 +32,8 @@ class SearchProvider extends TechFreneticProvider {
   Future<List<UserModel>> searchUsers(username) async {
     List<UserModel> users = [];
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/profile-search/$username");
+      Uri _url =
+          Uri.parse("$baseUrl/api/$locale/v1/search-users?search=$username");
 
       debugPrint("Getting search users results for $username...");
       debugPrint(_url.toString());

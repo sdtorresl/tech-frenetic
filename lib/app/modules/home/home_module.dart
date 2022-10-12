@@ -1,21 +1,25 @@
-import 'package:techfrenetic/app/modules/not_implemented/not_implemented_page.dart';
+import 'package:techfrenetic/app/modules/profile/my_profile/followers/followers_page.dart';
+import 'package:techfrenetic/app/providers/followers_provider.dart';
 
 import 'home_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/auth_guard.dart';
+import 'package:techfrenetic/app/core/onboarding_guard.dart';
 import 'package:techfrenetic/app/modules/about_us/about_us_page.dart';
 import 'package:techfrenetic/app/modules/articles/articles_module.dart';
 import 'package:techfrenetic/app/modules/choose_avatar/choose_avatar_module.dart';
 import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/contact_us/contact_us_module.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_module.dart';
-import 'package:techfrenetic/app/modules/create_meetups/create_meetups_module.dart';
 import 'package:techfrenetic/app/modules/edit_avatar/edit_avatar_page.dart';
 import 'package:techfrenetic/app/modules/events/events_page.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
 import 'package:techfrenetic/app/modules/groups/groups_module.dart';
 import 'package:techfrenetic/app/modules/home/home_store.dart';
 import 'package:techfrenetic/app/modules/login/login_module.dart';
+import 'package:techfrenetic/app/modules/meetups/meetups_module.dart';
+import 'package:techfrenetic/app/modules/not_implemented/not_implemented_page.dart';
+import 'package:techfrenetic/app/modules/notifications/notifications_module.dart';
 import 'package:techfrenetic/app/modules/privacy_policy/privacy_poicy_page.dart';
 import 'package:techfrenetic/app/modules/profile/profile_module.dart';
 import 'package:techfrenetic/app/modules/profile/profile_store.dart';
@@ -23,6 +27,7 @@ import 'package:techfrenetic/app/modules/search/search_module.dart';
 import 'package:techfrenetic/app/modules/sign_up/create_profile/create_profile_module.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
 import 'package:techfrenetic/app/modules/skills/skills_page.dart';
+import 'package:techfrenetic/app/modules/stories/stories_view_page.dart';
 import 'package:techfrenetic/app/modules/terms/terms_page.dart';
 import 'package:techfrenetic/app/modules/users_profiles/user_profile_module.dart';
 import 'package:techfrenetic/app/modules/vendors_search/vendors_search_page.dart';
@@ -37,6 +42,7 @@ class HomeModule extends Module {
     Bind.lazySingleton((i) => HomeStore()),
     Bind.lazySingleton((i) => UserProvider()),
     Bind.lazySingleton((i) => ProfileStore()),
+    Bind.lazySingleton((i) => FollowersProvider()),
   ];
 
   @override
@@ -52,6 +58,7 @@ class HomeModule extends Module {
       ],
       guards: [
         AuthGuard(),
+        OnboardingGuard(),
       ],
     ),
     ChildRoute('/events', child: (context, args) => const EventsPage()),
@@ -110,7 +117,7 @@ class HomeModule extends Module {
     ),
     ModuleRoute(
       '/create_meetups',
-      module: CreateMeetupsModule(),
+      module: MeetupsModule(),
       guards: [
         AuthGuard(),
       ],
@@ -152,6 +159,13 @@ class HomeModule extends Module {
       ],
     ),
     ModuleRoute(
+      '/notifications',
+      module: NotificationsModule(),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
+    ModuleRoute(
       '/create_profile',
       module: CreateProfileModule(),
     ),
@@ -161,7 +175,7 @@ class HomeModule extends Module {
     ),
     ChildRoute(
       '/edit_avatar',
-      child: (context, args) => const EditAvatarPage(),
+      child: (context, args) => EditAvatarPage(),
       guards: [
         AuthGuard(),
       ],
@@ -171,8 +185,25 @@ class HomeModule extends Module {
       module: ForgotPasswordModule(),
     ),
     ChildRoute(
+      "/stories",
+      child: (context, args) => StoriesViewPage(video: args.data),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
+    ChildRoute(
       '/not_implemented',
       child: (context, args) => const NotImplementedPage(),
     ),
+    ChildRoute(
+      '/following',
+      child: (context, args) => FollowersPage(
+        followers: args.data['followers'],
+        following: args.data['following'],
+      ),
+      guards: [
+        AuthGuard(),
+      ],
+    )
   ];
 }

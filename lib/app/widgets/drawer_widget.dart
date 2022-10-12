@@ -58,8 +58,8 @@ class CustomDrawer extends StatelessWidget {
           const SizedBox(
             height: 30,
           ),
-          _simpleMenuItem(context, AppLocalizations.of(context)!.about,
-              onPressed: () => Modular.to.popAndPushNamed("/about_us")),
+          /* _simpleMenuItem(context, AppLocalizations.of(context)!.about,
+              onPressed: () => Modular.to.popAndPushNamed("/about_us")), */
           _simpleMenuItem(
             context,
             AppLocalizations.of(context)!.contact,

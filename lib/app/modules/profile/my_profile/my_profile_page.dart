@@ -1,20 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
+import 'package:techfrenetic/app/modules/community/widgets/stories_view_widget.dart';
+import 'package:techfrenetic/app/modules/profile/my_profile/certifications/certifications_page.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_name/edit_name_page.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_summary/edit_summary_page.dart';
+import 'package:techfrenetic/app/modules/profile/my_profile/interests/interests_page.dart';
 import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
+import 'package:techfrenetic/app/providers/followers_provider.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
+import 'package:techfrenetic/app/widgets/follow_button_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
-
-import '../../certifications/certifications.dart';
-import '../../interests/interests_page.dart';
 
 class MyProfilePage extends StatefulWidget {
   final String? userId;
@@ -29,29 +32,31 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
-  final ProfileStore profileStore = Modular.get();
+  final ProfileStore _profileStore = Modular.get();
+  final FollowersProvider _followersProvider = Modular.get();
   final ArticlesProvider _articlesProvider = ArticlesProvider();
   final CategoriesProvider _categoriesProvicer = CategoriesProvider();
   final UserPreferences _prefs = UserPreferences();
   final UserProvider _userProvider = UserProvider();
 
-  bool editable = false;
+  bool editable = true;
+  bool isFollowingUser = true;
   int articlesCount = 0;
   int postsCount = 0;
   int viewedCount = 0;
-  String userId = '';
-  UserModel user = UserModel.empty();
+  late int userId;
+  late UserModel user;
 
   @override
   void initState() {
     super.initState();
-
-    debugPrint("User ID is ${widget.userId}");
-
-    userId = widget.userId ?? _prefs.userId!;
-    editable = widget.userId == userId || widget.userId == null;
-
-    loadCounts();
+    userId = widget.userId != null
+        ? int.parse(widget.userId!)
+        : int.parse(_prefs.userId!);
+    editable =
+        _prefs.userId != null ? userId == int.parse(_prefs.userId!) : false;
+    isFollowingUser = false;
+    //loadCounts();
   }
 
   void loadCounts() async {
@@ -70,32 +75,44 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Theme.of(context).scaffoldBackgroundColor,
-      child: FutureBuilder(
-        future: _userProvider.getUser(userId),
-        builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
-          if (snapshot.hasData) {
-            user = snapshot.data!;
-            return _profileView();
-          }
+    return Observer(builder: (context) {
+      if (_profileStore.loggedUser?.uid.toString() == _prefs.userId) {
+        user = _profileStore.loggedUser ?? UserModel.empty();
+      }
+      return Container(
+        color: Theme.of(context).scaffoldBackgroundColor,
+        child: FutureBuilder(
+          future: _userProvider.getUser(userId.toString()),
+          builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
+            if (snapshot.hasData) {
+              if (snapshot.data != null) {
+                user = snapshot.data!;
+                return _profileView();
+              }
+            }
 
-          return const Center(
-            child: SizedBox(
-              child: CircularProgressIndicator(),
-              width: 35.0,
-              height: 35.0,
-            ),
-          );
-        },
-      ),
-    );
+            return const Center(
+              child: SizedBox(
+                child: CircularProgressIndicator(),
+                width: 35.0,
+                height: 35.0,
+              ),
+            );
+          },
+        ),
+      );
+    });
   }
 
   Widget _profileView() {
     return ListView(
       children: [
         _profileHeader(context),
+        !editable
+            ? StoriesViewWidget(
+                userId: userId,
+              )
+            : const SizedBox.shrink(),
         _profileBody(context),
         const SizedBox(height: 60),
       ],
@@ -146,6 +163,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
         String nameStr = words;
 
         nameWidget = Stack(
+          alignment: AlignmentDirectional.center,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -164,23 +182,25 @@ class _MyProfilePageState extends State<MyProfilePage> {
                 Text(nameStr, style: Theme.of(context).textTheme.headline1),
               ],
             ),
-            Align(
-              alignment: Alignment.topRight,
-              child: IconButton(
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) {
-                      return const EditNamePage();
-                    },
-                  );
-                },
-                icon: Icon(
-                  Icons.edit,
-                  color: Theme.of(context).indicatorColor,
-                ),
-              ),
-            ),
+            editable
+                ? Align(
+                    alignment: Alignment.topRight,
+                    child: IconButton(
+                      onPressed: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return const EditNamePage();
+                          },
+                        );
+                      },
+                      icon: Icon(
+                        Icons.edit,
+                        color: Theme.of(context).indicatorColor,
+                      ),
+                    ),
+                  )
+                : const SizedBox.shrink(),
           ],
         );
       }
@@ -211,10 +231,10 @@ class _MyProfilePageState extends State<MyProfilePage> {
       ),
       child: Column(
         children: [
-          _dashboardHeader(context),
-          const SizedBox(height: 20),
-          _dashboard(context),
-          const SizedBox(height: 20),
+          editable ? _dashboardHeader(context) : const SizedBox.shrink(),
+          editable ? const SizedBox(height: 20) : const SizedBox.shrink(),
+          editable ? _dashboard(context) : const SizedBox.shrink(),
+          editable ? const SizedBox(height: 20) : const SizedBox.shrink(),
           _aboutBody(context),
           const SizedBox(height: 20),
           _certificationsBody(context),
@@ -235,20 +255,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ListTile(
           title: Text(AppLocalizations.of(context)!.interest,
               style: Theme.of(context).textTheme.headline1),
-          trailing: IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return InterestsPage(user: user);
-                },
-              );
-            },
-            icon: Icon(
-              Icons.edit,
-              color: Theme.of(context).indicatorColor,
-            ),
-          ),
+          trailing: editable
+              ? IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return InterestsPage(user: user);
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).indicatorColor,
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
         FutureBuilder(
           future: _categoriesProvicer.getInterests(),
@@ -303,20 +325,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ListTile(
           title: Text(AppLocalizations.of(context)!.certifications,
               style: Theme.of(context).textTheme.headline1),
-          trailing: IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CertificationsPage(user: user);
-                },
-              );
-            },
-            icon: Icon(
-              Icons.edit,
-              color: Theme.of(context).indicatorColor,
-            ),
-          ),
+          trailing: editable
+              ? IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return CertificationsPage(user: user);
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).indicatorColor,
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
         ...certificationsInfo
       ],
@@ -332,20 +356,22 @@ class _MyProfilePageState extends State<MyProfilePage> {
             AppLocalizations.of(context)!.about,
             style: Theme.of(context).textTheme.headline1,
           ),
-          trailing: IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return const EditSummaryPage();
-                },
-              );
-            },
-            icon: Icon(
-              Icons.edit,
-              color: Theme.of(context).indicatorColor,
-            ),
-          ),
+          trailing: editable
+              ? IconButton(
+                  onPressed: () {
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return const EditSummaryPage();
+                      },
+                    );
+                  },
+                  icon: Icon(
+                    Icons.edit,
+                    color: Theme.of(context).indicatorColor,
+                  ),
+                )
+              : const SizedBox.shrink(),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -395,8 +421,6 @@ class _MyProfilePageState extends State<MyProfilePage> {
   }
 
   Widget _profileHeader(BuildContext context) {
-    Widget nameWidget = _nameWidget();
-
     return Container(
       margin: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
@@ -428,31 +452,65 @@ class _MyProfilePageState extends State<MyProfilePage> {
           child: Column(
             children: [
               GestureDetector(
-                onTap: () => Modular.to.pushNamed('/edit_avatar'),
+                onTap: editable
+                    ? () => Modular.to.pushNamed('/edit_avatar')
+                    : null,
                 child: AvatarWidget(
                   userId: user.uid.toString(),
                   radius: 40,
                 ),
               ),
-              ListTile(
-                title: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Center(child: nameWidget),
-                ),
-                subtitle: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                      child: Text(user.profession),
-                    ),
-                  ],
+              Container(
+                child: _nameWidget(),
+                margin: const EdgeInsets.only(top: 15),
+              ),
+              Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10),
+                child: Text(
+                  user.profession,
+                  maxLines: 2,
+                  overflow: TextOverflow.fade,
+                  textAlign: TextAlign.center,
                 ),
               ),
+              _followers()
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _followers() {
+    return FutureBuilder(
+      future: Future.wait([
+        _followersProvider.getFollowing(userId),
+        _followersProvider.getFollowers(userId),
+      ]),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.hasData) {
+          List<UserModel> following = snapshot.data[0];
+          List<UserModel> followers = snapshot.data[1];
+          return Column(
+            children: [
+              TextButton(
+                  onPressed: () => Modular.to.pushNamed('/following',
+                          arguments: {
+                            'following': following,
+                            'followers': followers
+                          }),
+                  child: Text(
+                      "${following.length} ${AppLocalizations.of(context)!.profile_followers} - ${followers.length}  ${AppLocalizations.of(context)!.profile_following}")),
+              editable
+                  ? const SizedBox.shrink()
+                  : FollowButtonWidget(targetUserId: userId)
+            ],
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
     );
   }
 
@@ -487,7 +545,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             AppLocalizations.of(context)!.articles,
             articlesCount,
             () {
-              profileStore.index = 1;
+              _profileStore.index = 1;
               Modular.to.navigate('/profile/content');
             },
           ),
@@ -495,7 +553,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             AppLocalizations.of(context)!.your_profile,
             viewedCount,
             () {
-              profileStore.index = 1;
+              _profileStore.index = 1;
               Modular.to.navigate('/profile/content');
             },
           ),
@@ -503,7 +561,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
             AppLocalizations.of(context)!.post,
             postsCount,
             () {
-              profileStore.index = 2;
+              _profileStore.index = 2;
               Modular.to.navigate('/profile/activity');
             },
           ),

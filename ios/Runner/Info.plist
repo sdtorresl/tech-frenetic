@@ -45,5 +45,15 @@
 		</array>
 		<key>UIViewControllerBasedStatusBarAppearance</key>
 		<false />
+		<key>NSCameraUsageDescription</key>
+		<string>Tech Frenetic requiere acceder a tu cámara para grabar video</string>
+		<key>NSMicrophoneUsageDescription</key>
+		<string>Tech Frenetic requiere acceder a tu micrófono para grabar video</string>
+
+		<key>LSApplicationQueriesSchemes</key>
+		<array>
+			<string>https</string>
+			<string>http</string>
+		</array>
 	</dict>
 </plist>

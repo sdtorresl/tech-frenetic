@@ -3,26 +3,26 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/model.dart';
 
-class GroupsMembersModel extends Model {
-  GroupsMembersModel({
+class GroupMembersModel extends Model {
+  GroupMembersModel({
     required this.groupMembers,
   });
 
   final List<MemberModel> groupMembers;
 
-  factory GroupsMembersModel.fromJson(String str) =>
-      GroupsMembersModel.fromMap(json.decode(str));
+  factory GroupMembersModel.fromJson(String str) =>
+      GroupMembersModel.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
-  factory GroupsMembersModel.fromMap(Map<String, dynamic> json) {
+  factory GroupMembersModel.fromMap(Map<String, dynamic> json) {
     String members = Model.returnObject(json["field_group_members"], []);
     debugPrint(members.toString());
-    return GroupsMembersModel(
+    return GroupMembersModel(
       groupMembers: json["field_group_members"],
     );
   }
-  factory GroupsMembersModel.empty() => GroupsMembersModel(
+  factory GroupMembersModel.empty() => GroupMembersModel(
         groupMembers: [],
       );
   Map<String, dynamic> toMap() => {

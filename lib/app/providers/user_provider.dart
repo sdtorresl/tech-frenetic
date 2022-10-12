@@ -1,16 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:techfrenetic/app/core/exceptions.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
-import 'package:techfrenetic/app/models/profile_model.dart';
 import 'package:techfrenetic/app/models/session_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 import 'dart:convert' as json;
 
 class UserProvider extends TechFreneticProvider {
-  SessionModel? loggedUser;
-
   Future<SessionModel?> login(String email, String password) async {
     SessionModel? loggedUser;
 
@@ -19,11 +21,7 @@ class UserProvider extends TechFreneticProvider {
 
       String body = json.jsonEncode({'name': email, 'pass': password});
 
-      var response = await http.post(
-        _url,
-        body: body,
-        headers: <String, String>{'content-type': 'application/json'},
-      );
+      var response = await http.post(_url, body: body, headers: jsonHeader);
 
       if (response.statusCode == 200) {
         updateCookie(response);
@@ -31,9 +29,10 @@ class UserProvider extends TechFreneticProvider {
 
         prefs.csrfToken = loggedUser.csrfToken;
         prefs.logoutToken = loggedUser.logoutToken;
-        prefs.userId = loggedUser.currentUser!.uid;
+        prefs.userId = loggedUser.currentUser?.uid;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint(response.body);
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -60,7 +59,9 @@ class UserProvider extends TechFreneticProvider {
       prefs.userId = null;
       prefs.sessionExpirationDate = DateTime.now();
       prefs.userId = null;
+      prefs.userName = null;
       prefs.userEmail = null;
+      prefs.userAvatar = null;
 
       cleanCookies();
 
@@ -71,39 +72,16 @@ class UserProvider extends TechFreneticProvider {
       }
     } catch (e) {
       debugPrint(e.toString());
-    } finally {}
-
-    return false;
-  }
-
-  Future<bool> recoverPassword(String email) async {
-    Uri _url = Uri.parse("$baseUrl/api/user/lost-password?_format=json");
-    debugPrint("Rcovering password for user $email...");
-    debugPrint(_url.toString());
-
-    try {
-      String body = json.jsonEncode({"lang": "en", "mail": email});
-      var response = await http.post(
-        _url,
-        body: body,
-        headers: jsonHeader,
-      );
-
-      if (response.statusCode == 200) {
-        return true;
-      } else {
-        debugPrint('Request failed with status: ${response.statusCode}.');
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {}
+    }
 
     return false;
   }
 
   Future<UserModel?> getLoggedUser() async {
+    ProfileStore profileStore = Modular.get();
+
     String? userId = prefs.userId;
-    UserModel? userinfo;
+    UserModel? loggedUser;
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
 
@@ -118,17 +96,18 @@ class UserProvider extends TechFreneticProvider {
       );
 
       if (response.statusCode == 200) {
-        userinfo = UserModel.fromJson(response.body);
-        prefs.userName = userinfo.userName;
-        prefs.userEmail = userinfo.mail;
-        prefs.userAvatar = userinfo.avatar;
+        loggedUser = UserModel.fromJson(response.body);
+        profileStore.loggedUser = loggedUser;
+        prefs.userName = loggedUser.userName;
+        prefs.userEmail = loggedUser.mail;
+        prefs.userAvatar = loggedUser.avatar;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
       debugPrint(e.toString());
     }
-    return userinfo;
+    return loggedUser;
   }
 
   Future<UserModel?> getUser(String userId) async {
@@ -153,23 +132,19 @@ class UserProvider extends TechFreneticProvider {
     return userinfo;
   }
 
-  Future<ProfileModel?> getProfile(String userId) async {
-    ProfileModel userinfo = ProfileModel.empty();
+  Future<UserModel?> getProfile(String userId) async {
+    UserModel? user;
 
     try {
-      Uri _url = Uri.parse(
-          "$baseUrl/api/$locale/v1/full-profile?_format=json&id=$userId");
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/user-name/$userId");
 
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
-        List<dynamic> profiles = json.jsonDecode(response.body);
+        List<dynamic> users = json.jsonDecode(response.body);
 
-        if (profiles.isNotEmpty) {
-          userinfo = ProfileModel.fromJson(profiles[0]);
-          if (!userinfo.useAvatar) {
-            userinfo.picture = baseUrl + userinfo.picture;
-          }
+        if (users.isNotEmpty) {
+          user = UserModel.fromProfileMap(users.first);
         }
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
@@ -177,7 +152,7 @@ class UserProvider extends TechFreneticProvider {
     } catch (e) {
       debugPrint(e.toString());
     }
-    return userinfo;
+    return user;
   }
 
   bool isLogged() {
@@ -214,6 +189,7 @@ class UserProvider extends TechFreneticProvider {
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint('Request failed with status: ${response.body}.');
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -278,8 +254,10 @@ class UserProvider extends TechFreneticProvider {
         debugPrint('Request failed with status: ${response.statusCode}.');
         debugPrint(response.reasonPhrase);
       }
-    } catch (e) {
-      debugPrint(e.toString());
+    } on SocketException {
+      debugPrint('No Internet connection 😑');
+    } on FormatException {
+      debugPrint("Bad response format 👎");
     }
     return false;
   }
@@ -321,6 +299,203 @@ class UserProvider extends TechFreneticProvider {
     } catch (e) {
       debugPrint(e.toString());
     }
+    return false;
+  }
+
+  Future<bool> updateProfile(String username, String profesion) async {
+    if (prefs.userId == null) {
+      return false;
+    }
+
+    String userId = prefs.userId!;
+
+    debugPrint("Updating profile for user $userId...");
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
+
+      Map<String, dynamic> body = {
+        "name": [username],
+        "field_user_profession": [profesion]
+      };
+
+      Map<String, String> headers = {}
+        ..addAll(jsonHeader)
+        ..addAll(authHeader)
+        ..addAll(sessionHeader);
+
+      debugPrint(_url.toString());
+
+      var response = await http.patch(
+        _url,
+        body: json.jsonEncode(body),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint(response.reasonPhrase);
+        debugPrint(response.body);
+        if (RegExp(r'.*username.*is already taken.*').hasMatch(response.body)) {
+          throw UserExistsException();
+        }
+        throw BadRequestException();
+      }
+    } on SocketException {
+      debugPrint('No Internet connection 😑');
+    } on FormatException {
+      debugPrint("Bad response format 👎");
+    }
+
+    return false;
+  }
+
+  Future<bool> recoverPassword(String email) async {
+    Uri _url = Uri.parse("$baseUrl/api/user/lost-password?_format=json");
+    debugPrint("Recovering password for user $email...");
+    debugPrint(_url.toString());
+
+    try {
+      String body = json.jsonEncode({"lang": "en", "mail": email});
+      var response = await http.post(
+        _url,
+        body: body,
+        headers: jsonHeader,
+      );
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint(response.body);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    } finally {}
+
+    return false;
+  }
+
+  Future<bool> requestChangePassToken(String email) async {
+    Uri _url = Uri.parse("$baseUrl/api/user/lost-password?_format=json");
+    debugPrint("Sending token to email $email...");
+    debugPrint(_url.toString());
+
+    Map<String, dynamic> body = {"mail": email};
+    Map<String, String> headers = {};
+    headers
+      ..addAll(authHeader)
+      ..addAll(jsonHeader)
+      ..addAll(sessionHeader);
+
+    try {
+      var response = await http.post(
+        _url,
+        body: json.jsonEncode(body),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint("Email was sent successfully");
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return false;
+  }
+
+  Future<bool> updateLoggedUserPassword(
+      String token, String newPassword) async {
+    UserModel? loggedUser = await getLoggedUser();
+    if (loggedUser != null) {
+      Uri _url =
+          Uri.parse("$baseUrl/api/user/lost-password-reset?_format=json");
+      debugPrint("Updating password for user ${loggedUser.userName}...");
+      debugPrint(_url.toString());
+
+      Map<String, dynamic> body = {
+        "name": loggedUser.userName,
+        "temp_pass": token,
+        "new_pass": newPassword
+      };
+
+      Map<String, String> headers = jsonHeader;
+
+      try {
+        var response = await http.post(
+          _url,
+          body: json.jsonEncode(body),
+          headers: headers,
+        );
+
+        if (response.statusCode == 200) {
+          debugPrint("Password changed successfully");
+          return true;
+        } else {
+          debugPrint('Request failed with status: ${response.statusCode}.');
+          debugPrint('Request failed with status: ${response.body}.');
+          if (response.statusCode == 400) {
+            if (response.body.contains("This User was not found or invalid")) {
+              throw UserNotFoundException();
+            }
+            throw TokenInvalidException();
+          }
+        }
+      } on SocketException {
+        debugPrint('No Internet connection 😑');
+      } on FormatException {
+        debugPrint("Bad response format 👎");
+      }
+    }
+
+    return false;
+  }
+
+  Future<bool> updatePassword(
+      String username, String token, String newPassword) async {
+    Uri _url = Uri.parse("$baseUrl/api/user/lost-password-reset?_format=json");
+    debugPrint("Updating password for user $username...");
+    debugPrint(_url.toString());
+
+    Map<String, dynamic> body = {
+      "name": username,
+      "temp_pass": token,
+      "new_pass": newPassword
+    };
+
+    Map<String, String> headers = jsonHeader;
+
+    try {
+      var response = await http.post(
+        _url,
+        body: json.jsonEncode(body),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        debugPrint("Password changed successfully");
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint('Request failed with status: ${response.body}.');
+        if (response.statusCode == 400) {
+          if (response.body.contains("This User was not found or invalid")) {
+            throw UserNotFoundException();
+          }
+          throw TokenInvalidException();
+        }
+      }
+    } on SocketException {
+      debugPrint('No Internet connection 😑');
+    } on FormatException {
+      debugPrint("Bad response format 👎");
+    }
+
     return false;
   }
 }

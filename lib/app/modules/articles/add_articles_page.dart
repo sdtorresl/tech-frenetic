@@ -9,9 +9,8 @@ import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class AddArticlesPage extends StatefulWidget {
-  final String title;
-  const AddArticlesPage({Key? key, this.title = 'AddArticlesPage'})
-      : super(key: key);
+  final void Function(int articleId)? onArticleAdded;
+  const AddArticlesPage({Key? key, this.onArticleAdded}) : super(key: key);
   @override
   AddArticlesPageState createState() => AddArticlesPageState();
 }
@@ -21,6 +20,7 @@ CategoriesProvider categories = CategoriesProvider();
 class AddArticlesPageState extends State<AddArticlesPage> {
   late List<String> _selectedTags;
   TextEditingController tagsController = TextEditingController();
+  final ArticlesProvider articlesProvider = ArticlesProvider();
 
   String? title;
   ImageModel? uploadedImage;
@@ -110,7 +110,7 @@ class AddArticlesPageState extends State<AddArticlesPage> {
         children: [
           _titleField(context),
           ImageSelectionWidget(
-            onImageLoaded: (image) => this.uploadedImage = image,
+            onImageLoaded: (image) => uploadedImage = image,
           ),
           _descriptionField(context),
           _articleField(context),
@@ -274,35 +274,13 @@ class AddArticlesPageState extends State<AddArticlesPage> {
         category != "" &&
         description != "" &&
         content != "";
-    final ArticlesProvider articlesProvider = ArticlesProvider();
 
     return Row(
       children: [
         Expanded(
           flex: 4,
           child: ElevatedButton(
-            onPressed: isCompleted && !_isLoading
-                ? () async {
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    bool article = await articlesProvider.addArticle(
-                        title!,
-                        int.parse(category!),
-                        description ?? '',
-                        content ?? '',
-                        _selectedTags.join(", "),
-                        uploadedImage!.id.toString());
-                    setState(() {
-                      _isLoading = true;
-                    });
-                    if (article == true) {
-                      Modular.to.popAndPushNamed("/community");
-                    } else {
-                      debugPrint('Article not posted');
-                    }
-                  }
-                : null,
+            onPressed: isCompleted && !_isLoading ? _addArticle : null,
             child: Text(AppLocalizations.of(context)!.publish),
           ),
         ),
@@ -321,5 +299,29 @@ class AddArticlesPageState extends State<AddArticlesPage> {
         ),
       ],
     );
+  }
+
+  _addArticle() async {
+    setState(() {
+      _isLoading = true;
+    });
+    int? articleId = await articlesProvider.addArticle(
+        title!,
+        int.parse(category!),
+        description ?? '',
+        content ?? '',
+        _selectedTags.join(", "),
+        uploadedImage!.id.toString());
+    setState(() {
+      _isLoading = true;
+    });
+    if (articleId != null) {
+      if (widget.onArticleAdded != null) {
+        widget.onArticleAdded!(articleId);
+      }
+      Modular.to.popAndPushNamed("/community");
+    } else {
+      debugPrint('Article not posted');
+    }
   }
 }

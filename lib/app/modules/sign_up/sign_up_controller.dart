@@ -10,6 +10,7 @@ import '../../common/validators.dart';
 class SignUpController extends Disposable {
   final _emailController = BehaviorSubject<String>();
   final _passwordController = BehaviorSubject<String>();
+  final _confirmationPasswordController = BehaviorSubject<bool>();
   final _nameController = BehaviorSubject<String>();
   final _userTypeontroller = BehaviorSubject<String>.seeded('person');
   final _termsController = BehaviorSubject<bool>.seeded(false);
@@ -18,23 +19,34 @@ class SignUpController extends Disposable {
       _emailController.stream.transform(Validators.validateEmail);
   Stream<String> get passwordStream =>
       _passwordController.stream.transform(Validators.validateSignInPassword);
+  Stream<bool> get passwordConfirmationStream =>
+      _confirmationPasswordController.stream
+          .transform(Validators.validateConfirmPass);
   Stream<String> get nameStream =>
       _nameController.stream.transform(Validators.validateName);
   Stream<String> get userTypeStream =>
       _userTypeontroller.stream.transform(Validators.validateName);
   Stream<bool> get termsStream =>
       _termsController.stream.transform(Validators.validateTerms);
-  Stream<bool> get formValidStream => Rx.combineLatest4(termsStream, nameStream,
-      emailStream, passwordStream, (e, p, c, d) => true);
+  Stream<bool> get formValidStream => Rx.combineLatest5(
+      termsStream,
+      nameStream,
+      emailStream,
+      passwordStream,
+      passwordConfirmationStream,
+      (e, p, c, d, cp) => true);
 
   Function(String) get changeEmail => _emailController.sink.add;
   Function(String) get changePassword => _passwordController.sink.add;
+  Function(bool) get changePasswordConfirmation =>
+      _confirmationPasswordController.sink.add;
   Function(String) get changeName => _nameController.sink.add;
   Function(String) get changeUserType => _userTypeontroller.sink.add;
   Function(bool) get changeTerms => _termsController.sink.add;
 
   String get email => _emailController.value;
   String get password => _passwordController.value;
+  bool get passwordConfirmation => _confirmationPasswordController.value;
   String get name => _nameController.value;
   String get userType => _userTypeontroller.value;
   bool get terms => _termsController.value;

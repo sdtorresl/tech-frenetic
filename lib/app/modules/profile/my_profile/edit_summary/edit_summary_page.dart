@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/errors.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_summary/edit_summary_store.dart';
+import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -15,6 +17,7 @@ class EditSummaryPage extends StatefulWidget {
 }
 
 class _EditSummaryPageState extends State<EditSummaryPage> {
+  final ProfileStore _profileStore = Modular.get();
   final SummaryStore _summaryStore = SummaryStore();
   final TextEditingController _controller = TextEditingController();
   final UserProvider _userProvider = UserProvider();
@@ -121,7 +124,9 @@ class _EditSummaryPageState extends State<EditSummaryPage> {
                     .textTheme
                     .bodyText1!
                     .copyWith(color: Theme.of(context).hintColor),
-                errorText: TFError.getError(context, _summaryStore.error),
+                errorText: _summaryStore.hasErrors
+                    ? TFError.getError(context, _summaryStore.error)
+                    : null,
                 errorStyle: Theme.of(context)
                     .textTheme
                     .headline4!
@@ -161,14 +166,18 @@ class _EditSummaryPageState extends State<EditSummaryPage> {
     setState(() {
       _isLoading = true;
     });
-    bool updated = await _summaryStore.updateBiografy();
+    UserModel? user = await _summaryStore.updateBiografy();
+
+    if (user != null) {
+      _profileStore.loggedUser = user;
+    }
 
     setState(() {
       _isLoading = false;
     });
 
-    String message = updated
-        ? AppLocalizations.of(context)!.mssage_success
+    String message = user != null
+        ? AppLocalizations.of(context)!.message_success
         : AppLocalizations.of(context)!.error;
 
     SnackBar snackBar = SnackBar(

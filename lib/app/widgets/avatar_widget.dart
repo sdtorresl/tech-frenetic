@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
@@ -41,50 +42,79 @@ class _AvatarWidgetState extends State<AvatarWidget>
 
   @override
   Widget build(BuildContext context) {
-    if (widget.userId == _prefs.userId && _prefs.userAvatar.isNotEmpty) {
+    double pictureHeight = widget.radius * 2 - ((widget.radius * 2) * 0.15);
+    double pictureWidth = pictureHeight;
+
+    if (widget.userId == _prefs.userId &&
+        _prefs.userAvatar != null &&
+        _prefs.userAvatar!.isNotEmpty) {
       return CircleAvatar(
         radius: widget.radius,
         backgroundColor: Colors.grey[200],
         child: ClipOval(
-          child: SvgPicture.asset(
-            "assets/img/avatars/${_prefs.userAvatar.isNotEmpty ? _prefs.userAvatar : 'avatar-01'}.svg",
-            semanticsLabel: _prefs.userName,
+          child: SizedBox(
+            height: pictureHeight,
+            width: pictureWidth,
+            child: SvgPicture.asset(
+              "assets/img/avatars/${_prefs.userAvatar}.svg",
+              semanticsLabel: _prefs.userName,
+            ),
           ),
+          // clipper: MyCustomClipper(widget.radius),
         ),
       );
     }
 
     return FutureBuilder(
-      future: _userProvider.getUser(widget.userId),
-      builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
-        UserModel user = UserModel.empty();
+        future: _userProvider.getProfile(widget.userId),
+        builder: (BuildContext context, AsyncSnapshot<UserModel?> snapshot) {
+          UserModel user;
 
-        if (snapshot.hasData) {
-          user = snapshot.data!;
+          if (snapshot.hasData) {
+            user = snapshot.data!;
 
-          _controller.reset();
-          _controller.forward();
+            if (!_controller.isAnimating) {
+              _controller.reset();
+              _controller.forward();
+            }
 
-          return CircleAvatar(
-            radius: widget.radius,
-            backgroundColor: Colors.grey[200],
-            child: ScaleTransition(
-              scale: Tween(begin: 0.0, end: 1.0).animate(_controller),
-              child: ClipOval(
-                child: SvgPicture.asset(
-                  "assets/img/avatars/${user.avatar.isNotEmpty ? user.avatar : 'avatar-01'}.svg",
-                  semanticsLabel: user.name,
+            if (user.useAvatar) {
+              return CircleAvatar(
+                radius: widget.radius,
+                backgroundColor: Colors.grey[200],
+                child: ScaleTransition(
+                  scale: Tween(begin: 0.0, end: 1.0).animate(_controller),
+                  child: ClipOval(
+                    child: SizedBox(
+                      height: pictureHeight,
+                      width: pictureWidth,
+                      child: SvgPicture.asset(
+                        "assets/img/avatars/${user.avatar.isNotEmpty ? user.avatar : 'avatar-01'}.svg",
+                        semanticsLabel: user.name,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          );
-        } else {
+              );
+            } else {
+              if ((user.picture ?? "").isNotEmpty) {
+                return CircleAvatar(
+                  radius: widget.radius,
+                  backgroundColor: Colors.grey[200],
+                  child: ScaleTransition(
+                    scale: Tween(begin: 0.0, end: 1.0).animate(_controller),
+                    child: ClipOval(
+                      child: CachedNetworkImage(imageUrl: user.picture!),
+                    ),
+                  ),
+                );
+              }
+            }
+          }
           return CircleAvatar(
             radius: widget.radius,
             backgroundColor: Colors.grey[200],
           );
-        }
-      },
-    );
+        });
   }
 }

@@ -1,9 +1,12 @@
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter/material.dart';
-import 'package:techfrenetic/app/core/user_preferences.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/common/alert_dialog.dart';
+import 'package:techfrenetic/app/core/exceptions.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_name/profile_bloc.dart';
 import 'package:techfrenetic/app/providers/professions_provider.dart';
+import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class EditNamePage extends StatefulWidget {
@@ -13,22 +16,29 @@ class EditNamePage extends StatefulWidget {
   _EditNamePageState createState() => _EditNamePageState();
 }
 
-ProfessionsProvider professions = ProfessionsProvider();
-
 class _EditNamePageState extends State<EditNamePage> {
-  late final ProfileBloc _profileBloc;
-  late UserPreferences _prefs;
-  String? defaultValue;
+  final ProfessionsProvider _professionsProvider = ProfessionsProvider();
+  final UserProvider _userProvider = UserProvider();
+  final ProfileBloc _profileBloc = ProfileBloc();
+  final TextEditingController _nameController = TextEditingController();
+  bool _isUpdating = false;
 
   @override
   void initState() {
     super.initState();
-    _profileBloc = ProfileBloc();
-    _prefs = UserPreferences();
 
-    if (_prefs.userName != null) {
-      _profileBloc.changeName(_prefs.userName!);
-    }
+    _nameController.addListener(() {
+      _profileBloc.changeName(_nameController.text);
+    });
+
+    _userProvider.getLoggedUser().then((user) {
+      if (user != null) {
+        _nameController.text = user.userName;
+        if (user.profession.isNotEmpty) {
+          _profileBloc.changeProfession(user.profession);
+        }
+      }
+    });
   }
 
   @override
@@ -93,7 +103,7 @@ class _EditNamePageState extends State<EditNamePage> {
               ],
             ),
             IconButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Modular.to.popAndPushNamed('/profile/profile'),
               icon: const Icon(Icons.close),
             ),
           ],
@@ -125,11 +135,23 @@ class _EditNamePageState extends State<EditNamePage> {
     return StreamBuilder(
       stream: _profileBloc.nameFormStream,
       builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-        debugPrint("Data: ${snapshot.data.toString()}");
-        debugPrint(snapshot.hasError.toString());
         return ElevatedButton(
-          onPressed: !snapshot.hasData ? null : saveName,
-          child: Text(AppLocalizations.of(context)!.profile_save),
+          onPressed: !snapshot.hasData ? null : _updateProfile,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _isUpdating
+                  ? Container(
+                      height: 20,
+                      width: 40,
+                      child:
+                          const CircularProgressIndicator(color: Colors.white),
+                      padding: const EdgeInsets.only(right: 20),
+                    )
+                  : const SizedBox.shrink(),
+              Text(AppLocalizations.of(context)!.profile_save),
+            ],
+          ),
         );
       },
     );
@@ -137,7 +159,7 @@ class _EditNamePageState extends State<EditNamePage> {
 
   Widget _professionField() {
     return FutureBuilder(
-      future: professions.getProfessions(),
+      future: _professionsProvider.getProfessions(),
       builder: (BuildContext context,
           AsyncSnapshot<List<CategoriesModel>> snapshot) {
         List<String> professionsNames = [];
@@ -198,15 +220,14 @@ class _EditNamePageState extends State<EditNamePage> {
       stream: _profileBloc.nameStream,
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         return TextFormField(
-          initialValue: _profileBloc.name,
-          onChanged: _profileBloc.changeName,
+          controller: _nameController,
           decoration: InputDecoration(
             hintText: AppLocalizations.of(context)!.profile_your_name,
             hintStyle: Theme.of(context)
                 .textTheme
                 .bodyText1!
                 .copyWith(color: Theme.of(context).hintColor),
-            errorText: snapshot.hasError ? snapshot.error.toString() : "",
+            errorText: snapshot.hasError ? snapshot.error.toString() : null,
             errorStyle: Theme.of(context)
                 .textTheme
                 .headline4!
@@ -217,8 +238,49 @@ class _EditNamePageState extends State<EditNamePage> {
     );
   }
 
-  saveName() async {
-    debugPrint(_profileBloc.name);
-    debugPrint(_profileBloc.profession);
+  void _updateProfile() async {
+    if (_profileBloc.name != null && _profileBloc.profession != null) {
+      setState(() {
+        _isUpdating = true;
+      });
+      _userProvider
+          .updateProfile(_profileBloc.name!, _profileBloc.profession!)
+          .then((value) {
+        if (value) {
+          showMessage(
+            context,
+            title: AppLocalizations.of(context)!.message_success,
+            content:
+                Text(AppLocalizations.of(context)!.profile_account_updated),
+            actions: [
+              TextButton(
+                child: Text(
+                  AppLocalizations.of(context)!.close.toUpperCase(),
+                  style: Theme.of(context).textTheme.button!.copyWith(
+                      fontSize: 12, color: Theme.of(context).primaryColor),
+                ),
+                onPressed: () {
+                  Modular.to.pop();
+                  Modular.to.popAndPushNamed('/profile/profile');
+                },
+              ),
+            ],
+          );
+        }
+      }).catchError((error) {
+        if (error is UserExistsException) {
+          debugPrint("User already exists");
+          showMessage(
+            context,
+            title: AppLocalizations.of(context)!.error,
+            content: Text(AppLocalizations.of(context)!.error_user_exists),
+          );
+        }
+      }).whenComplete(() {
+        setState(() {
+          _isUpdating = false;
+        });
+      });
+    }
   }
 }

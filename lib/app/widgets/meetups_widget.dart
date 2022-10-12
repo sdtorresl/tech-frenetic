@@ -1,8 +1,9 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:techfrenetic/app/common/launch_url.dart';
 import 'package:techfrenetic/app/models/meetups_model.dart';
-
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 
 class MeetupWidget extends StatefulWidget {
@@ -77,7 +78,7 @@ class _MeetupWidgetState extends State<MeetupWidget> {
                   userId: widget.meetup.uid_1,
                 ),
                 Text(
-                  'By ' + widget.meetup.displayName,
+                  "${AppLocalizations.of(context)!.meetups_by} ${widget.meetup.displayName}",
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1!
@@ -110,6 +111,15 @@ class _MeetupWidgetState extends State<MeetupWidget> {
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ],
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    openUrl(widget.meetup.url);
+                  },
+                  child: Text(
+                    AppLocalizations.of(context)!.meetups_go_meeting,
+                  ),
                 ),
                 const SizedBox(height: 20),
               ],

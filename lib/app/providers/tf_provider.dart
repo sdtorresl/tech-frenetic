@@ -8,6 +8,12 @@ import 'package:intl/intl.dart';
 
 class TechFreneticProvider {
   final String baseUrl = GlobalConfiguration().getValue("api_url");
+  final String cloudflareUrl = GlobalConfiguration().getValue("cloudflare_url");
+  final String cloudflareAccount =
+      GlobalConfiguration().getValue("cloudflare_account");
+  final String cloudflareEmail =
+      GlobalConfiguration().getValue("cloudflare_email");
+  final String cloudflareKey = GlobalConfiguration().getValue("cloudflare_key");
   final prefs = UserPreferences();
 
   String authentication() {
@@ -19,6 +25,9 @@ class TechFreneticProvider {
   }
 
   Map<String, String> get basicAuth => {'Authorization': authentication()};
+
+  Map<String, String> get cloudflareAuth =>
+      {'X-Auth-Key': cloudflareKey, 'X-Auth-Email': cloudflareEmail};
 
   Map<String, String> get authHeader => {'X-CSRF-Token': prefs.csrfToken ?? ''};
 

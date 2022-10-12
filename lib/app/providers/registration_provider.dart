@@ -99,7 +99,7 @@ class RegistrationProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool?> selectAvatar(bool useAvatar, String userAvatar) async {
+  Future<bool> selectAvatar(bool useAvatar, String userAvatar) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
 

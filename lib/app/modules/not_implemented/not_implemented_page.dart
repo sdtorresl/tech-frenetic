@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 
 class NotImplementedPage extends StatelessWidget {
@@ -8,7 +8,9 @@ class NotImplementedPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TFAppBar(),
+      appBar: TFAppBar(
+        onPressed: () => Modular.to.pop(),
+      ),
       body: Container(
         color: Colors.white,
         child: Column(

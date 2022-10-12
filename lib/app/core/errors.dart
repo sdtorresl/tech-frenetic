@@ -11,11 +11,16 @@ enum ErrorType {
   fieldUppercase,
   fieldNumeric,
   fieldRequired,
+  invalidUrl,
+  dateRequired,
+  futureDateRequired,
+  nameRequired,
+  phoneRequired,
 }
 
 class TFError {
-  static String? getError(BuildContext context, ErrorType? errorType) {
-    if (errorType == null) return null;
+  static String getError(BuildContext context, ErrorType? errorType) {
+    if (errorType == null) return '';
 
     switch (errorType) {
       case ErrorType.summaryEmpty:
@@ -34,9 +39,18 @@ class TFError {
         return AppLocalizations.of(context)!.error_required;
       case ErrorType.fieldUppercase:
         return AppLocalizations.of(context)!.error_uperrcase;
-
+      case ErrorType.invalidUrl:
+        return AppLocalizations.of(context)!.error_wrong_url;
+      case ErrorType.dateRequired:
+        return AppLocalizations.of(context)!.error_date_required;
+      case ErrorType.nameRequired:
+        return AppLocalizations.of(context)!.error_name_required;
+      case ErrorType.phoneRequired:
+        return AppLocalizations.of(context)!.error_phone_required;
+      case ErrorType.futureDateRequired:
+        return AppLocalizations.of(context)!.error_when_future;
       default:
-        return null;
+        return AppLocalizations.of(context)!.message_error;
     }
   }
 }
