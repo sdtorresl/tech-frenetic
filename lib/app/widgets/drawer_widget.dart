@@ -58,8 +58,6 @@ class CustomDrawer extends StatelessWidget {
           const SizedBox(
             height: 30,
           ),
-          /* _simpleMenuItem(context, AppLocalizations.of(context)!.about,
-              onPressed: () => Modular.to.popAndPushNamed("/about_us")), */
           _simpleMenuItem(
             context,
             AppLocalizations.of(context)!.contact,
@@ -79,7 +77,8 @@ class CustomDrawer extends StatelessWidget {
               onPressed: () async {
                 UserProvider userProvider = UserProvider();
                 await userProvider.logout();
-                Modular.to.popAndPushNamed("/login");
+                Modular.to.pushNamedAndRemoveUntil(
+                    "/login", ModalRoute.withName("/login"));
               },
             ),
           ),

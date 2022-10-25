@@ -33,8 +33,6 @@ class TechFreneticProvider {
 
   Map<String, String> get sessionHeader => {'Cookie': prefs.cookies ?? ''};
 
-  Map<String, String> get logutHeader => {'token': prefs.logoutToken ?? ''};
-
   Map<String, String> get jsonHeader => {'Content-Type': 'application/json'};
 
   Map<String, String> get halHeader => {'Content-Type': 'application/hal+json'};
@@ -68,6 +66,13 @@ class TechFreneticProvider {
 
   void cleanCookies() {
     prefs.cookies = '';
+    prefs.csrfToken = null;
+    prefs.logoutToken = null;
     prefs.sessionExpirationDate = DateTime.now();
+    prefs.userAvatar = null;
+    prefs.userEmail = null;
+    prefs.userId = null;
+    prefs.userId = null;
+    prefs.userName = null;
   }
 }

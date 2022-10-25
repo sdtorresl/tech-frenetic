@@ -138,7 +138,8 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
           onTap: () async {
             UserProvider userProvider = UserProvider();
             await userProvider.logout();
-            Modular.to.popAndPushNamed("/login");
+            Modular.to.pushNamedAndRemoveUntil(
+                "/login", ModalRoute.withName("/login"));
           },
         ),
       ],
