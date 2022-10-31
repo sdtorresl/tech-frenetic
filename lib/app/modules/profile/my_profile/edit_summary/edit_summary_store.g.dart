@@ -6,7 +6,7 @@ part of 'edit_summary_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$SummaryStore on _SummaryStoreBase, Store {
   Computed<bool>? _$hasErrorsComputed;
@@ -17,7 +17,8 @@ mixin _$SummaryStore on _SummaryStoreBase, Store {
               name: '_SummaryStoreBase.hasErrors'))
           .value;
 
-  final _$errorAtom = Atom(name: '_SummaryStoreBase.error');
+  late final _$errorAtom =
+      Atom(name: '_SummaryStoreBase.error', context: context);
 
   @override
   ErrorType? get error {
@@ -32,7 +33,8 @@ mixin _$SummaryStore on _SummaryStoreBase, Store {
     });
   }
 
-  final _$summaryAtom = Atom(name: '_SummaryStoreBase.summary');
+  late final _$summaryAtom =
+      Atom(name: '_SummaryStoreBase.summary', context: context);
 
   @override
   String get summary {
@@ -47,8 +49,8 @@ mixin _$SummaryStore on _SummaryStoreBase, Store {
     });
   }
 
-  final _$_SummaryStoreBaseActionController =
-      ActionController(name: '_SummaryStoreBase');
+  late final _$_SummaryStoreBaseActionController =
+      ActionController(name: '_SummaryStoreBase', context: context);
 
   @override
   dynamic changeSummary(dynamic summary) {

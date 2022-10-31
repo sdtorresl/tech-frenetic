@@ -6,10 +6,11 @@ part of 'profile_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$ProfileStore on _ProfileStoreBase, Store {
-  final _$indexAtom = Atom(name: '_ProfileStoreBase.index');
+  late final _$indexAtom =
+      Atom(name: '_ProfileStoreBase.index', context: context);
 
   @override
   int get index {
@@ -24,7 +25,8 @@ mixin _$ProfileStore on _ProfileStoreBase, Store {
     });
   }
 
-  final _$loggedUserAtom = Atom(name: '_ProfileStoreBase.loggedUser');
+  late final _$loggedUserAtom =
+      Atom(name: '_ProfileStoreBase.loggedUser', context: context);
 
   @override
   UserModel? get loggedUser {
@@ -39,7 +41,8 @@ mixin _$ProfileStore on _ProfileStoreBase, Store {
     });
   }
 
-  final _$followingAtom = Atom(name: '_ProfileStoreBase.following');
+  late final _$followingAtom =
+      Atom(name: '_ProfileStoreBase.following', context: context);
 
   @override
   int get following {
@@ -54,7 +57,8 @@ mixin _$ProfileStore on _ProfileStoreBase, Store {
     });
   }
 
-  final _$followersAtom = Atom(name: '_ProfileStoreBase.followers');
+  late final _$followersAtom =
+      Atom(name: '_ProfileStoreBase.followers', context: context);
 
   @override
   int get followers {

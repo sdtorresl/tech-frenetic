@@ -68,7 +68,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         ],
       ),
       endDrawer: CustomDrawer(),
-      body: RouterOutlet(),
+      body: const RouterOutlet(),
       floatingActionButton: _floatingActionButton(),
       bottomNavigationBar: _bottomNavigationBar(),
     );

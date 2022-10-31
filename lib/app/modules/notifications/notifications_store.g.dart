@@ -6,11 +6,11 @@ part of 'notifications_store.dart';
 // StoreGenerator
 // **************************************************************************
 
-// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic
+// ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$NotificationsStore on _NotificationsStoreBase, Store {
-  final _$selectedNotificationsAtom =
-      Atom(name: '_NotificationsStoreBase.selectedNotifications');
+  late final _$selectedNotificationsAtom = Atom(
+      name: '_NotificationsStoreBase.selectedNotifications', context: context);
 
   @override
   ObservableList<NotificationModel> get selectedNotifications {
@@ -26,8 +26,8 @@ mixin _$NotificationsStore on _NotificationsStoreBase, Store {
     });
   }
 
-  final _$_NotificationsStoreBaseActionController =
-      ActionController(name: '_NotificationsStoreBase');
+  late final _$_NotificationsStoreBaseActionController =
+      ActionController(name: '_NotificationsStoreBase', context: context);
 
   @override
   dynamic clearNotifications() {
