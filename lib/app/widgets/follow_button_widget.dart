@@ -6,9 +6,13 @@ import 'package:techfrenetic/app/widgets/progress_button_widget.dart';
 
 class FollowButtonWidget extends StatefulWidget {
   final int targetUserId;
+  final Function()? onFollow;
 
-  const FollowButtonWidget({Key? key, required this.targetUserId})
-      : super(key: key);
+  const FollowButtonWidget({
+    Key? key,
+    required this.targetUserId,
+    this.onFollow,
+  }) : super(key: key);
 
   @override
   State<FollowButtonWidget> createState() => _FollowButtonWidgetState();
@@ -49,6 +53,10 @@ class _FollowButtonWidgetState extends State<FollowButtonWidget> {
     setState(() {
       _isFollowingUser = result;
     });
+
+    if (widget.onFollow != null) {
+      widget.onFollow!();
+    }
   }
 
   _unfollowUser() async {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
 import 'package:techfrenetic/app/modules/groups/widgets/join_leave_button_widget.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
@@ -24,7 +25,9 @@ class _RecommendedGroupWidgetState extends State<RecommendedGroupWidget> {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5.0),
-      child: ListTile(
+      child: GestureDetector(
+        onTap: () => Modular.to.pushNamed("/groups/${widget.group.id}"),
+        child: ListTile(
           leading: CircleAvatar(
             radius: 40,
             child: ClipOval(
@@ -59,8 +62,11 @@ class _RecommendedGroupWidgetState extends State<RecommendedGroupWidget> {
                 );
               }),
           trailing: Container(
-              constraints: const BoxConstraints(minWidth: 50, maxWidth: 150),
-              child: JoinLeaveButtonWidget(group: widget.group))),
+            constraints: const BoxConstraints(minWidth: 50, maxWidth: 150),
+            child: JoinLeaveButtonWidget(group: widget.group),
+          ),
+        ),
+      ),
     );
   }
 }

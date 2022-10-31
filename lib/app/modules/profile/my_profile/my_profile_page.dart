@@ -44,6 +44,7 @@ class _MyProfilePageState extends State<MyProfilePage> {
   int articlesCount = 0;
   int postsCount = 0;
   int viewedCount = 0;
+  int followers = 0;
   late int userId;
   late UserModel user;
 
@@ -490,21 +491,25 @@ class _MyProfilePageState extends State<MyProfilePage> {
       ]),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          List<UserModel> following = snapshot.data[0];
-          List<UserModel> followers = snapshot.data[1];
+          List<UserModel> followingList = snapshot.data[0];
+          List<UserModel> followersList = snapshot.data[1];
+          followers = followersList.length;
           return Column(
             children: [
               TextButton(
                   onPressed: () => Modular.to.pushNamed('/following',
                           arguments: {
-                            'following': following,
-                            'followers': followers
+                            'following': followingList,
+                            'followers': followersList
                           }),
                   child: Text(
-                      "${following.length} ${AppLocalizations.of(context)!.profile_followers} - ${followers.length}  ${AppLocalizations.of(context)!.profile_following}")),
+                      "$followers ${AppLocalizations.of(context)!.profile_followers} - ${followingList.length} ${AppLocalizations.of(context)!.profile_following}")),
               editable
                   ? const SizedBox.shrink()
-                  : FollowButtonWidget(targetUserId: userId)
+                  : FollowButtonWidget(
+                      targetUserId: userId,
+                      onFollow: onFollow,
+                    )
             ],
           );
         } else {
@@ -629,5 +634,11 @@ class _MyProfilePageState extends State<MyProfilePage> {
         ),
       ),
     );
+  }
+
+  void onFollow() {
+    setState(() {
+      followers += 1;
+    });
   }
 }
