@@ -1,3 +1,4 @@
+import 'package:techfrenetic/app/modules/courses/courses_module.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/followers/followers_page.dart';
 import 'package:techfrenetic/app/providers/followers_provider.dart';
 
@@ -97,6 +98,13 @@ class HomeModule extends Module {
     ChildRoute(
       '/terms',
       child: (context, args) => const TermsPage(),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
+    ModuleRoute(
+      '/courses',
+      module: CoursesModule(),
       guards: [
         AuthGuard(),
       ],

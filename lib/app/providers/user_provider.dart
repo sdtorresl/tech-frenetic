@@ -153,6 +153,10 @@ class UserProvider extends TechFreneticProvider {
     return tokenExists && !tokenExpired;
   }
 
+  Future<bool> isPremium() {
+    return Future.delayed(const Duration(milliseconds: 500), () => false);
+  }
+
   Future<bool> userUpdate(DateTime birthdate, String cellphone, String country,
       String email) async {
     try {
