@@ -9,7 +9,11 @@ class AppWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    Modular.setInitialRoute('/community');
+
+    return MaterialApp.router(
+      routeInformationParser: Modular.routeInformationParser,
+      routerDelegate: Modular.routerDelegate,
       debugShowCheckedModeBanner: false,
       title: 'Tech Frenetic',
       localizationsDelegates: const [
@@ -23,7 +27,6 @@ class AppWidget extends StatelessWidget {
         Locale('es', ''),
       ],
       theme: techFreneticTheme,
-      initialRoute: '/community',
-    ).modular();
+    );
   }
 }
