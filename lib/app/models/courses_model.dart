@@ -4,6 +4,7 @@
 
 import 'package:global_configuration/global_configuration.dart';
 
+import 'lesson_model.dart';
 import 'model.dart';
 
 class CourseModel extends Model {
@@ -13,6 +14,7 @@ class CourseModel extends Model {
     required this.id,
     required this.description,
     this.owner,
+    this.lessons,
   });
 
   String picture;
@@ -20,6 +22,7 @@ class CourseModel extends Model {
   String id;
   String? owner;
   String description;
+  List<LessonModel>? lessons;
 
   factory CourseModel.fromJson(Map<String, dynamic> json) {
     final String baseUrl = GlobalConfiguration().getValue("api_url");
@@ -30,6 +33,7 @@ class CourseModel extends Model {
       id: json["nid"],
       owner: json["uid"],
       description: json["field_description"],
+      lessons: json["lessons"],
     );
   }
 

@@ -1,8 +1,8 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:techfrenetic/app/modules/courses/widgets/course_card.dart';
 import 'package:techfrenetic/app/providers/courses_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
@@ -244,7 +244,7 @@ class CoursesPageState extends State<CoursesPage> {
   Widget _coursesDescription(ThemeData theme) {
     return Container(
       color: theme.primaryColor,
-      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 25),
+      padding: const EdgeInsets.symmetric(vertical: 50, horizontal: 35),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -296,8 +296,8 @@ class CoursesPageState extends State<CoursesPage> {
 
   Widget _coursesList(ThemeData theme) {
     return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 25),
-      color: Colors.amber,
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 35),
+      color: const Color.fromRGBO(254, 216, 6, 1),
       child: Column(
         children: [
           _courseListTitle(theme),
@@ -345,61 +345,12 @@ class CoursesPageState extends State<CoursesPage> {
   }
 
   Widget _courseItem(CourseModel course) {
-    final theme = Theme.of(context);
-
-    return SizedBox(
-      height: 240,
-      child: Stack(
-        children: [
-          Positioned(
-            bottom: 20,
-            top: 0,
-            left: 0,
-            right: 0,
-            child: CachedNetworkImage(
-              imageUrl: course.picture,
-              fit: BoxFit.cover,
-            ),
-          ),
-          Positioned(
-            bottom: 0,
-            left: 25,
-            right: 25,
-            child: Container(
-              decoration: const BoxDecoration(
-                borderRadius: BorderRadius.only(
-                  topRight: Radius.circular(15),
-                  bottomLeft: Radius.circular(15),
-                ),
-                color: Colors.white,
-              ),
-              padding: const EdgeInsets.all(20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Wrap(
-                    children: [
-                      Text(
-                        course.title,
-                        style: theme.textTheme.headline3
-                            ?.copyWith(color: theme.primaryColor),
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text(
-                    AppLocalizations.of(context)!.by + (course.owner ?? ''),
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
+    return GestureDetector(
+      onTap: () => Modular.to.pushNamed("/courses/${course.id}"),
+      child: CourseCard(
+        imageUrl: course.picture,
+        headline: course.title,
+        subtitle: AppLocalizations.of(context)!.by + (course.owner ?? ''),
       ),
     );
   }

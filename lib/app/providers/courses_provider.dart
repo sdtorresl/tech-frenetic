@@ -25,4 +25,27 @@ class CoursesProvider extends TechFreneticProvider {
     }
     return [];
   }
+
+  Future<CourseModel?> getCourse(int id) async {
+    CourseModel? course;
+
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/courses");
+      var response = await http.get(_url);
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
+        List<CourseModel> courses = List<CourseModel>.from(
+            jsonResponse["articles"].map((x) => CourseModel.fromJson(x)));
+        // TODO: Update method
+
+        return courses.first;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return course;
+  }
 }

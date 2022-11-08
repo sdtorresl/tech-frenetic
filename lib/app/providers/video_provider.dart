@@ -51,6 +51,28 @@ class VideoProvider extends TechFreneticProvider {
     return videos;
   }
 
+  Future<VideoModel?> getVideo(String videoId) async {
+    try {
+      var headers = cloudflareAuth;
+      Uri _url = Uri.parse("$cloudflareUrl/$cloudflareAccount/stream/$videoId");
+
+      debugPrint(_url.toString());
+
+      var response = await http.get(_url, headers: headers);
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
+        return VideoModel.fromJson(jsonResponse["result"]);
+      } else {
+        debugPrint(response.reasonPhrase);
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return null;
+  }
+
   uploadVideo(XFile file, void Function()? onComplete,
       Function(double)? onProgress) async {
     UserProvider _userProvider = UserProvider();
