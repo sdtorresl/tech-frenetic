@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'mappeable.dart';
 
-class Model extends Mappeable {
+class Model extends IMappeable {
   static dynamic returnValue(dynamic value, dynamic defaultValue,
       {bool isList = false}) {
     if (value == null) {
@@ -38,14 +38,12 @@ class Model extends Mappeable {
   }
 
   @override
-  Mappeable fromMap(Map<String, dynamic> map) {
-    // TODO: implement fromJson
+  IMappeable fromMap(Map<String, dynamic> map) {
     throw UnimplementedError();
   }
 
   @override
-  Mappeable fromJson(String json) {
-    // TODO: implement fromJson
+  IMappeable fromJson(String json) {
     throw UnimplementedError();
   }
 }

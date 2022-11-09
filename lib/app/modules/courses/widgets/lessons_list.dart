@@ -1,11 +1,13 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/models/dtos/paginator_dto.dart';
 import 'package:techfrenetic/app/models/lesson_model.dart';
 import 'package:techfrenetic/app/models/video_model.dart';
 import 'package:techfrenetic/app/providers/courses_provider.dart';
 import 'package:techfrenetic/app/providers/video_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/widgets/paginator_widget.dart';
 
 class LessonsList extends StatefulWidget {
   const LessonsList({super.key, required this.classId});
@@ -20,19 +22,14 @@ class _LessonsListState extends State<LessonsList> {
   final VideoProvider _videoProvider = Modular.get();
   final CoursesProvider _coursesProvider = Modular.get();
 
+  PaginatorDto<LessonModel> paginator = PaginatorDto(
+      totalItems: 0, itemsPerPage: 0, totalPages: 0, currentPage: 0);
   List<LessonModel> lessons = [];
+  int _currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-
-    _coursesProvider.getVideosByCourse(widget.classId).then(
-      (paginator) {
-        setState(() {
-          lessons = paginator.items;
-        });
-      },
-    );
   }
 
   @override
@@ -47,23 +44,48 @@ class _LessonsListState extends State<LessonsList> {
               style: Theme.of(context).textTheme.headline1?.copyWith(
                   color: Theme.of(context).primaryColor, fontSize: 22),
             ),
-            ...lessons
-                .map(
-                  (lesson) => FutureBuilder(
-                    future: _videoProvider.getVideo(lesson.videoId),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<VideoModel?> snapshot) {
-                      if (snapshot.hasData) {
-                        VideoModel? video = snapshot.data;
-                        return video != null
-                            ? _thumbnail(video, lesson, context)
-                            : const SizedBox.shrink();
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                )
-                .toList()
+            FutureBuilder(
+              future: _coursesProvider.getVideosByCourse(widget.classId,
+                  page: _currentPage),
+              builder: (BuildContext context, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  paginator = snapshot.data;
+                  lessons = paginator.items;
+
+                  return Column(
+                    children: [
+                      ...lessons
+                          .map(
+                            (lesson) => FutureBuilder(
+                              future: _videoProvider.getVideo(lesson.videoId),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<VideoModel?> snapshot) {
+                                if (snapshot.hasData) {
+                                  VideoModel? video = snapshot.data;
+                                  return video != null
+                                      ? _thumbnail(video, lesson, context)
+                                      : const SizedBox.shrink();
+                                }
+                                return const SizedBox.shrink();
+                              },
+                            ),
+                          )
+                          .toList(),
+                      PaginatorWidget(
+                        paginator: paginator,
+                        onPageChange: (int index) {
+                          setState(() {
+                            _currentPage = index;
+                          });
+                        },
+                      ),
+                    ],
+                  );
+                }
+
+                return const SizedBox.shrink();
+              },
+            ),
           ],
         ));
   }

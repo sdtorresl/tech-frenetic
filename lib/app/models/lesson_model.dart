@@ -1,4 +1,5 @@
 import 'package:techfrenetic/app/models/model.dart';
+import 'dart:convert';
 
 class LessonModel extends Model {
   final int id;
@@ -13,10 +14,14 @@ class LessonModel extends Model {
       this.description});
 
   @override
-  factory LessonModel.fromMap(Map<String, dynamic> json) => LessonModel(
-        id: int.parse(json["nid"]),
-        title: json["title"],
-        videoId: json["field_cloudflare_id"],
-        description: json["description"],
+  factory LessonModel.fromJson(String str) =>
+      LessonModel.fromMap(json.decode(str));
+
+  @override
+  factory LessonModel.fromMap(Map<String, dynamic> map) => LessonModel(
+        id: int.parse(map["nid"]),
+        title: map["title"],
+        videoId: map["field_cloudflare_id"],
+        description: map["description"],
       );
 }

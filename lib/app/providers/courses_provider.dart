@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:techfrenetic/app/models/dto/paginator.dart';
+import 'package:techfrenetic/app/models/dtos/paginator_dto.dart';
 import 'package:techfrenetic/app/models/courses_model.dart';
 import 'package:techfrenetic/app/models/lesson_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
@@ -47,9 +47,9 @@ class CoursesProvider extends TechFreneticProvider {
     return course;
   }
 
-  Future<Paginator<LessonModel>> getVideosByCourse(int id,
+  Future<PaginatorDto<LessonModel>> getVideosByCourse(int id,
       {int page = 0}) async {
-    Paginator<LessonModel> paginator = Paginator(
+    PaginatorDto<LessonModel> paginator = PaginatorDto(
         currentPage: page, itemsPerPage: 0, totalItems: 0, totalPages: 0);
 
     try {
@@ -59,7 +59,7 @@ class CoursesProvider extends TechFreneticProvider {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
-        paginator = Paginator.fromMap(jsonResponse, LessonModel.fromMap);
+        paginator = PaginatorDto.fromMap(jsonResponse, LessonModel.fromMap);
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
