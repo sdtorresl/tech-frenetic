@@ -3,14 +3,37 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/lesson_model.dart';
 import 'package:techfrenetic/app/models/video_model.dart';
+import 'package:techfrenetic/app/providers/courses_provider.dart';
 import 'package:techfrenetic/app/providers/video_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class LessonsList extends StatelessWidget {
-  LessonsList({super.key, required this.lessons});
+class LessonsList extends StatefulWidget {
+  const LessonsList({super.key, required this.classId});
 
-  final List<LessonModel> lessons;
+  final int classId;
+
+  @override
+  State<LessonsList> createState() => _LessonsListState();
+}
+
+class _LessonsListState extends State<LessonsList> {
   final VideoProvider _videoProvider = Modular.get();
+  final CoursesProvider _coursesProvider = Modular.get();
+
+  List<LessonModel> lessons = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    _coursesProvider.getVideosByCourse(widget.classId).then(
+      (paginator) {
+        setState(() {
+          lessons = paginator.items;
+        });
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -91,6 +114,12 @@ class LessonsList extends StatelessWidget {
             lesson.title,
             style: Theme.of(context).textTheme.headline2,
           ),
+          lesson.description != null
+              ? Text(
+                  lesson.description!,
+                  style: Theme.of(context).textTheme.headline2,
+                )
+              : const SizedBox.shrink(),
         ],
       ),
     );

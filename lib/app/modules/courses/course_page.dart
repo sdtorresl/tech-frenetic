@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/courses_model.dart';
-import 'package:techfrenetic/app/models/lesson_model.dart';
 import 'package:techfrenetic/app/modules/courses/widgets/course_card.dart';
 import 'package:techfrenetic/app/modules/courses/widgets/lessons_list.dart';
 import 'package:techfrenetic/app/providers/courses_provider.dart';
@@ -22,7 +21,7 @@ class CoursePage extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<CourseModel?> snapshot) {
           if (snapshot.hasData) {
             CourseModel course = snapshot.data!;
-            course.lessons = [
+            /* course.lessons = [
               LessonModel("2d02e4b8f69c7b7b19641ecaddca1c00",
                   "Ejemplo de video con titulo extra extra largo"),
               LessonModel(
@@ -33,17 +32,13 @@ class CoursePage extends StatelessWidget {
                   "0e6e31d3f649531234dd6352582264fe", "Ejemplo de video"),
               LessonModel(
                   "2d02e4b8f69c7b7b19641ecaddca1c00", "Ejemplo de video"),
-            ];
+            ]; */
 
             return CustomScrollView(
               slivers: [
                 SliverList(
-                  delegate: SliverChildListDelegate([
-                    _courseHeader(course),
-                    course.lessons != null
-                        ? LessonsList(lessons: course.lessons!)
-                        : const SizedBox.shrink(),
-                  ]),
+                  delegate: SliverChildListDelegate(
+                      [_courseHeader(course), LessonsList(classId: id)]),
                 ),
               ],
             );
