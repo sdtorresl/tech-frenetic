@@ -119,7 +119,8 @@ class AboutUsPage extends StatelessWidget {
                     onPressed: () {
                       UserPreferences userPreferences = UserPreferences();
                       userPreferences.newUser = false;
-                      Modular.to.pushNamed("/community");
+                      Modular.to.pushNamedAndRemoveUntil(
+                          "/community", ModalRoute.withName("/"));
                     },
                     child: Text(
                       AppLocalizations.of(context)!.become,

@@ -110,7 +110,8 @@ class _WelcomePageState extends State<WelcomePage> {
                   child: SizedBox(
                     width: 300,
                     child: ElevatedButton(
-                      onPressed: () => Modular.to.pushNamed("/login"),
+                      onPressed: () => Modular.to.pushNamedAndRemoveUntil(
+                          "/login", ModalRoute.withName("/")),
                       child: Text(
                         'Start now!',
                         style: Theme.of(context)

@@ -6,13 +6,31 @@ import 'package:techfrenetic/app/modules/posts/post_box_controller.dart';
 import 'package:techfrenetic/app/modules/videos/video_source.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 
-class PostBoxWidget extends StatelessWidget {
+class PostBoxWidget extends StatefulWidget {
   final void Function()? onPostLoaded;
   final void Function(int articleId)? onArticleLoaded;
-  PostBoxWidget({Key? key, this.onPostLoaded, this.onArticleLoaded})
+  const PostBoxWidget({Key? key, this.onPostLoaded, this.onArticleLoaded})
       : super(key: key);
 
+  @override
+  State<PostBoxWidget> createState() => _PostBoxWidgetState();
+}
+
+class _PostBoxWidgetState extends State<PostBoxWidget> {
   final PostBoxController store = PostBoxController();
+  final TextEditingController _textController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    _textController.addListener(() => store.changePost(_textController.text));
+  }
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +79,7 @@ class PostBoxWidget extends StatelessWidget {
                         context: context,
                         builder: (BuildContext context) {
                           return AddArticlesPage(
-                            onArticleAdded: onArticleLoaded,
+                            onArticleAdded: widget.onArticleLoaded,
                           );
                         },
                       );
@@ -80,6 +98,7 @@ class PostBoxWidget extends StatelessWidget {
               ),
             ),
             TextField(
+              controller: _textController,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: AppLocalizations.of(context)!.write_something,
@@ -89,7 +108,6 @@ class PostBoxWidget extends StatelessWidget {
                   color: Theme.of(context).splashColor,
                 ),
               ),
-              onChanged: store.changePost,
             ),
             StreamBuilder(
               stream: store.postStream,
@@ -103,8 +121,8 @@ class PostBoxWidget extends StatelessWidget {
                         children: [
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Colors.white, // background
-                              onPrimary: Colors.black, // foreground
+                              backgroundColor: Colors.white, // background
+                              foregroundColor: Colors.black, // foreground
                               elevation: 0,
                               side: const BorderSide(
                                   width: 1, color: Colors.black),
@@ -134,14 +152,12 @@ class PostBoxWidget extends StatelessWidget {
   }
 
   void addPost(String post) async {
-    debugPrint("Adding post with content: $post");
-
     ArticlesProvider articlesProvider = ArticlesProvider();
     bool created = await articlesProvider.addPost(post);
     if (created) {
-      store.changePost("");
-      if (onPostLoaded != null) {
-        onPostLoaded!();
+      _textController.text = "";
+      if (widget.onPostLoaded != null) {
+        widget.onPostLoaded!();
       }
     } else {
       debugPrint("Unexpected error creating post");

@@ -53,13 +53,16 @@ class _RecommendedGroupWidgetState extends State<RecommendedGroupWidget> {
                 _groupProvider.getPosts(widget.group.id),
               ]),
               builder: (context, AsyncSnapshot snapshot) {
-                int members = snapshot.data[0]?.length ?? 0;
-                int posts = snapshot.data[1] ?? 0;
-                return Text(
-                  "$members ${AppLocalizations.of(context)!.groups_members} - $posts ${AppLocalizations.of(context)!.groups_posts}",
-                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      color: Theme.of(context).hintColor, fontSize: 13),
-                );
+                if (snapshot.hasData) {
+                  int members = snapshot.data[0]?.length ?? 0;
+                  int posts = snapshot.data[1] ?? 0;
+                  return Text(
+                    "$members ${AppLocalizations.of(context)!.groups_members} - $posts ${AppLocalizations.of(context)!.groups_posts}",
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: Theme.of(context).hintColor, fontSize: 13),
+                  );
+                }
+                return const SizedBox.shrink();
               }),
           trailing: Container(
             constraints: const BoxConstraints(minWidth: 50, maxWidth: 150),
