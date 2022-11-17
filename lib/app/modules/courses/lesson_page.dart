@@ -24,15 +24,7 @@ class _LessonPageState extends State<LessonPage> {
     super.initState();
     _controller = VideoPlayerController.network(widget.video.playback!.hls)
       ..initialize().then((_) {
-        _controller.addListener(() {
-          setState(() {
-            if (elapsedSeconds != _controller.value.position.inSeconds) {
-              setState(() {
-                elapsedSeconds = _controller.value.position.inSeconds;
-              });
-            }
-          });
-        });
+        _controller.addListener(updateElapsedTime);
 
         setState(() {});
       });
@@ -41,6 +33,7 @@ class _LessonPageState extends State<LessonPage> {
   @override
   void dispose() {
     _controller.pause();
+    _controller.removeListener(updateElapsedTime);
     super.dispose();
   }
 
@@ -126,5 +119,13 @@ class _LessonPageState extends State<LessonPage> {
         ],
       ),
     );
+  }
+
+  void updateElapsedTime() {
+    if (elapsedSeconds != _controller.value.position.inSeconds && mounted) {
+      setState(() {
+        elapsedSeconds = _controller.value.position.inSeconds;
+      });
+    }
   }
 }
