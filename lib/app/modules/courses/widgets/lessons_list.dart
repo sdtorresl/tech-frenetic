@@ -62,9 +62,9 @@ class _LessonsListState extends State<LessonsList> {
                                   AsyncSnapshot<VideoModel?> snapshot) {
                                 if (snapshot.hasData) {
                                   VideoModel? video = snapshot.data;
-                                  return video != null
-                                      ? _thumbnail(video, lesson, context)
-                                      : const SizedBox.shrink();
+                                  if (video != null) {
+                                    return _thumbnail(video, lesson, context);
+                                  }
                                 }
                                 return const SizedBox.shrink();
                               },
@@ -97,39 +97,45 @@ class _LessonsListState extends State<LessonsList> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            height: 200,
-            width: double.infinity,
-            margin: const EdgeInsets.only(bottom: 15),
-            child: Stack(
-              children: [
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: CachedNetworkImage(
-                    imageUrl: video.thumbnail,
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                Positioned(
-                  top: 0,
-                  left: 0,
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    color: const Color.fromRGBO(50, 50, 50, 0.1),
-                    child: const Center(
-                      child: Icon(
-                        Icons.play_circle_fill_sharp,
-                        color: Colors.white,
-                        size: 75,
-                      ),
+          GestureDetector(
+            onTap: () => Modular.to.pushNamed(
+              '/courses/lesson',
+              arguments: {"title": lesson.title, "video": video},
+            ),
+            child: Container(
+              height: 200,
+              width: double.infinity,
+              margin: const EdgeInsets.only(bottom: 15),
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: CachedNetworkImage(
+                      imageUrl: video.thumbnail,
+                      fit: BoxFit.cover,
                     ),
                   ),
-                )
-              ],
+                  Positioned(
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      color: const Color.fromRGBO(50, 50, 50, 0.1),
+                      child: const Center(
+                        child: Icon(
+                          Icons.play_circle_fill_sharp,
+                          color: Colors.white,
+                          size: 75,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
           Text(

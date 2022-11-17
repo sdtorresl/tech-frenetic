@@ -21,18 +21,6 @@ class CoursePage extends StatelessWidget {
         builder: (BuildContext context, AsyncSnapshot<CourseModel?> snapshot) {
           if (snapshot.hasData) {
             CourseModel course = snapshot.data!;
-            /* course.lessons = [
-              LessonModel("2d02e4b8f69c7b7b19641ecaddca1c00",
-                  "Ejemplo de video con titulo extra extra largo"),
-              LessonModel(
-                  "a3389294282d228175dc33badc1ee579", "Ejemplo de video"),
-              LessonModel(
-                  "03d78483408e740ee0a8920ef82ecf3b", "Ejemplo de video"),
-              LessonModel(
-                  "0e6e31d3f649531234dd6352582264fe", "Ejemplo de video"),
-              LessonModel(
-                  "2d02e4b8f69c7b7b19641ecaddca1c00", "Ejemplo de video"),
-            ]; */
 
             return CustomScrollView(
               slivers: [

@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:techfrenetic/app/core/utils.dart';
 import 'package:techfrenetic/app/providers/video_provider.dart';
 import 'package:video_player/video_player.dart';
 
@@ -118,7 +119,7 @@ class _PreviewPageState extends State<PreviewPage>
                         borderRadius: BorderRadius.circular(50),
                       ),
                       child: Text(
-                        _elapsedTime(elapsedSeconds.toInt()),
+                        elapsedTime(elapsedSeconds.toInt()),
                         style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                               color: Colors.white,
                             ),
@@ -150,15 +151,6 @@ class _PreviewPageState extends State<PreviewPage>
         child: const Icon(Icons.send),
       ),
     );
-  }
-
-  String _elapsedTime(int elapsedSeconds) {
-    String twoDigits(int n) => n.toString().padLeft(2, "0");
-    Duration duration = Duration(seconds: elapsedSeconds);
-    String hours = twoDigits(duration.inHours.remainder(60));
-    String minutes = twoDigits(duration.inMinutes.remainder(60));
-    String seconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$hours:$minutes:$seconds";
   }
 
   void _playPause() {

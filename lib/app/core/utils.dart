@@ -15,3 +15,12 @@ extension StringExtension on String {
     return "${this[0].toUpperCase()}${substring(1).toLowerCase()}";
   }
 }
+
+String elapsedTime(int elapsedSeconds) {
+  String twoDigits(int n) => n.toString().padLeft(2, "0");
+  Duration duration = Duration(seconds: elapsedSeconds);
+  String hours = twoDigits(duration.inHours.remainder(60));
+  String minutes = twoDigits(duration.inMinutes.remainder(60));
+  String seconds = twoDigits(duration.inSeconds.remainder(60));
+  return "$hours:$minutes:$seconds";
+}
