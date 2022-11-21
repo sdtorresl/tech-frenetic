@@ -257,6 +257,8 @@
     "premium_start": "Empieza ya",
     "premium_title_premium_span": "Mejora",
     "premium_title_premium": "tus habilidades con",
+    "premium_premium_success": "Ya eres Premium!",
+    "premium_premium_failed": "Hubo un error al procesar tu pago",
     "profile_about": "Acerca de",
     "profile_account_updated": "Tu información ha sido actualizada correctamente",
     "profile_activity_title": "Mi actividad",

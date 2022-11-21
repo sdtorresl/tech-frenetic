@@ -3,5 +3,6 @@
     "cloudflare_url": "https://api.cloudflare.com/client/v4/accounts",
     "cloudflare_account": "2109b8cde692b67fa7bfc9813be44b5f",
     "cloudflare_email": "amorales@seedem.co",
-    "cloudflare_key": "da707d74993bcbec86e113023ca82b0cefc3f"
+    "cloudflare_key": "da707d74993bcbec86e113023ca82b0cefc3f",
+    "stripe_key": "pk_test_51LUcVBJlJ9qAFvakubReyIsjSh7NohNQG2uTsBgDjcmpPWigjBhVw32NJQYveQp86GQUUf19pflRyShEyYIN9jFI00BnchyGsI"
 }
