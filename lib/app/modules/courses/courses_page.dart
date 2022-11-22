@@ -35,11 +35,12 @@ class CoursesPageState extends State<CoursesPage> {
         future: _userProvider.isPremium(),
         builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
           if (snapshot.hasData) {
-            // _isPremium = snapshot.data!;
+            _isPremium = _isPremium ? _isPremium : snapshot.data!;
             return _isPremium
                 ? _premiumUser()
                 : PremiumPage(
                     onPremium: () => setState(() {
+                      // TODO: Update premium status
                       _isPremium = true;
                     }),
                   );

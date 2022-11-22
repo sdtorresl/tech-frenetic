@@ -153,8 +153,32 @@ class UserProvider extends TechFreneticProvider {
     return tokenExists && !tokenExpired;
   }
 
-  Future<bool> isPremium() {
-    return Future.delayed(const Duration(milliseconds: 500), () => false);
+  Future<bool> isPremium() async {
+    //return Future.delayed(const Duration(milliseconds: 500), () => false);
+
+    Uri _url = Uri.parse("$baseUrl/api/$locale/v1/user-name/$userId");
+    debugPrint(_url.toString());
+
+    try {
+      Map<String, String> headers = {}
+        ..addAll(jsonHeader)
+        ..addAll(authHeader)
+        ..addAll(sessionHeader);
+
+      var response = await http.get(
+        _url,
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        List<dynamic> userResponse = json.jsonDecode(response.body);
+        return userResponse.first['Roles'] == "Premium";
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return false;
   }
 
   Future<bool> userUpdate(DateTime birthdate, String cellphone, String country,
@@ -169,11 +193,10 @@ class UserProvider extends TechFreneticProvider {
         "mail": {"value": email}
       };
 
-      Map<String, String> headers = {};
-      headers.addAll(jsonHeader);
-      headers.addAll(authHeader);
-      headers.addAll(sessionHeader);
-      headers.addAll(headers);
+      Map<String, String> headers = {}
+        ..addAll(jsonHeader)
+        ..addAll(authHeader)
+        ..addAll(sessionHeader);
 
       var response = await http.patch(
         _url,

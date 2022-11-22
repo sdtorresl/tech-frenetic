@@ -46,7 +46,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   .startsWith('https://techfrenetic.com/en/success')) {
                 Navigator.of(context).pop(true);
               } else if (request.url
-                  .startsWith('https://techfrenetic.com/en/canceled')) {
+                  .startsWith('https://techfrenetic.com/en/cancel')) {
                 Navigator.of(context).pop(false);
               }
 
