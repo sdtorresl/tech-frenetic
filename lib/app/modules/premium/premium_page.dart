@@ -124,14 +124,8 @@ class _PremiumPageState extends State<PremiumPage> {
     if (sessionId != null) {
       final result = await Navigator.of(context).push(MaterialPageRoute(
           builder: (_) => CheckoutPage(sessionId: sessionId)));
-      if (result) {
-        if (widget.onPremium != null) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(
-                AppLocalizations.of(context)?.premium_premium_success ?? ''),
-          ));
-          widget.onPremium!();
-        }
+      if (result && widget.onPremium != null) {
+        widget.onPremium!();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
           content:

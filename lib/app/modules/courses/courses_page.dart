@@ -38,12 +38,22 @@ class CoursesPageState extends State<CoursesPage> {
             _isPremium = _isPremium ? _isPremium : snapshot.data!;
             return _isPremium
                 ? _premiumUser()
-                : PremiumPage(
-                    onPremium: () => setState(() {
-                      // TODO: Update premium status
-                      _isPremium = true;
-                    }),
-                  );
+                : PremiumPage(onPremium: () {
+                    _userProvider.makePremium().then(
+                      (updated) {
+                        if (updated) {
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            content: Text(AppLocalizations.of(context)
+                                    ?.premium_premium_success ??
+                                ''),
+                          ));
+                          setState(() {
+                            _isPremium = true;
+                          });
+                        }
+                      },
+                    );
+                  });
           } else {
             return const Center(
               child: CircularProgressIndicator(),

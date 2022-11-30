@@ -154,8 +154,6 @@ class UserProvider extends TechFreneticProvider {
   }
 
   Future<bool> isPremium() async {
-    //return Future.delayed(const Duration(milliseconds: 500), () => false);
-
     Uri _url = Uri.parse("$baseUrl/api/$locale/v1/user-name/$userId");
     debugPrint(_url.toString());
 
@@ -173,6 +171,34 @@ class UserProvider extends TechFreneticProvider {
       if (response.statusCode == 200) {
         List<dynamic> userResponse = json.jsonDecode(response.body);
         return userResponse.first['Roles'] == "Premium";
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+
+    return false;
+  }
+
+  Future makePremium() async {
+    Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
+    debugPrint(_url.toString());
+
+    try {
+      Map<String, String> headers = jsonHeader
+        ..addAll(authHeader)
+        ..addAll(sessionHeader);
+
+      String body = json.jsonEncode({
+        "roles": [
+          {"target_id": "premiun"}
+        ]
+      });
+
+      var response = await http.patch(_url, headers: headers, body: body);
+      debugPrint(response.body);
+
+      if (response.statusCode == 200) {
+        return true;
       }
     } catch (e) {
       debugPrint(e.toString());
