@@ -27,6 +27,7 @@ class CoursesModule extends Module {
       child: (context, args) => LessonPage(
         title: args.data["title"],
         video: args.data["video"],
+        description: args.data["description"],
       ),
     )
   ];

@@ -5,10 +5,15 @@ import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:video_player/video_player.dart';
 
 class LessonPage extends StatefulWidget {
-  const LessonPage({Key? key, required this.title, required this.video})
+  const LessonPage(
+      {Key? key,
+      required this.title,
+      required this.video,
+      required this.description})
       : super(key: key);
 
   final String title;
+  final String description;
   final VideoModel video;
 
   @override
@@ -48,23 +53,32 @@ class _LessonPageState extends State<LessonPage> {
             .headline1
             ?.copyWith(color: Theme.of(context).primaryColor),
       )),
-      body: Center(
-        child: _controller.value.isInitialized
-            ? AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: Stack(
-                  children: [
-                    VideoPlayer(_controller),
-                    Positioned(
-                      left: 0,
-                      bottom: 0,
-                      right: 0,
-                      child: _controlBar(),
-                    )
-                  ],
-                ),
-              )
-            : const CircularProgressIndicator(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Center(
+            child: _controller.value.isInitialized
+                ? AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: Stack(
+                      children: [
+                        VideoPlayer(_controller),
+                        Positioned(
+                          left: 0,
+                          bottom: 0,
+                          right: 0,
+                          child: _controlBar(),
+                        )
+                      ],
+                    ),
+                  )
+                : const CircularProgressIndicator(),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(top: 35, left: 20, right: 20),
+            child: Text(widget.description),
+          )
+        ],
       ),
     );
   }

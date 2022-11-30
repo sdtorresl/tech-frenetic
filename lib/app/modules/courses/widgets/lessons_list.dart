@@ -100,7 +100,11 @@ class _LessonsListState extends State<LessonsList> {
           GestureDetector(
             onTap: () => Modular.to.pushNamed(
               '/courses/lesson',
-              arguments: {"title": lesson.title, "video": video},
+              arguments: {
+                "title": lesson.title,
+                "video": video,
+                "description": lesson.description
+              },
             ),
             child: Container(
               height: 200,
