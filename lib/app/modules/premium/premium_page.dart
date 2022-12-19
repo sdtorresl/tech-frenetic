@@ -4,7 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/modules/premium/checkout_page.dart';
 import 'package:techfrenetic/app/providers/stripe_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
-import 'package:techfrenetic/app/widgets/progress_buttom.dart';
+import 'package:techfrenetic/app/widgets/progress_button.dart';
 
 class PremiumPage extends StatefulWidget {
   const PremiumPage({Key? key, this.onPremium}) : super(key: key);

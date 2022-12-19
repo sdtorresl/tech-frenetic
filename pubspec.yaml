@@ -69,6 +69,9 @@ dependencies:
   flutter_triple: ^1.2.8-dev.1
   flutter_modular: ^5.0.3
   webview_flutter: ^2.8.0
+  intl_phone_number_input: ^0.7.1
+  firebase_auth: ^4.2.0
+  firebase_core: ^2.4.0
 
 dev_dependencies:
   flutter_test:

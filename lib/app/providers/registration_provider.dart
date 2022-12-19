@@ -63,7 +63,7 @@ class RegistrationProvider extends TechFreneticProvider {
   }
 
   Future<bool?> createProfile(String companyName, String profession,
-      String country, String description) async {
+      String country, String description, String? cellphone) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
 
@@ -71,7 +71,8 @@ class RegistrationProvider extends TechFreneticProvider {
         "field_biography": {"value": description},
         "field_company": {"value": companyName},
         "field_user_location": {"value": country},
-        "field_user_profession": {"value": profession}
+        "field_user_profession": {"value": profession},
+        "field_cellphone": {"value": cellphone},
       };
 
       Map<String, String> headers = {};
@@ -137,5 +138,10 @@ class RegistrationProvider extends TechFreneticProvider {
       debugPrint(e.toString());
     }
     return false;
+  }
+
+  Future<bool> validateCode(int code) {
+    // TODO: Validate code
+    return Future.delayed(const Duration(microseconds: 100), () => false);
   }
 }

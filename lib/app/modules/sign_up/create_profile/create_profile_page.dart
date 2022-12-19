@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
+import 'package:techfrenetic/app/core/errors.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/providers/countries_provider.dart';
 import 'package:techfrenetic/app/providers/professions_provider.dart';
@@ -19,9 +21,8 @@ class CreateProfilePage extends StatefulWidget {
 ProfessionsProvider professions = ProfessionsProvider();
 CountriesProvider countries = CountriesProvider();
 
-class _CreateProfilePageState
-    extends ModularState<CreateProfilePage, CreateProfileController> {
-  bool _isLoading = false;
+class _CreateProfilePageState extends State<CreateProfilePage> {
+  final CreateProfileController _profileController = Modular.get();
   String? defaultValue;
   String? defaultProfession;
   String? defaultCountry;
@@ -54,8 +55,7 @@ class _CreateProfilePageState
                         fontSize: 12, color: Theme.of(context).primaryColor),
                   ),
                   onPressed: () {
-                    Modular.to
-                        .pushNamedAndRemoveUntil("/community", (p0) => true);
+                    Modular.to.pushReplacementNamed("/community");
                   },
                 ),
               ],
@@ -100,26 +100,12 @@ class _CreateProfilePageState
                   child: SizedBox(
                     width: 400,
                     child: StreamBuilder(
-                        stream: store.formValidStream,
+                        stream: _profileController.formValidStream,
                         builder: (context, snapshot) {
                           return ElevatedButton(
-                            onPressed: snapshot.hasData && !_isLoading
-                                ? () async {
-                                    setState(() {
-                                      _isLoading = true;
-                                    });
-                                    bool createProfile =
-                                        await store.createProfile();
-                                    setState(() {
-                                      _isLoading = false;
-                                    });
-                                    if (createProfile) {
-                                      Modular.to.pushNamedAndRemoveUntil(
-                                          '/choose_avatar', (p0) => false);
-                                    } else {
-                                      debugPrint("Profile not created");
-                                    }
-                                  }
+                            onPressed: snapshot.hasData
+                                ? () => Modular.to
+                                    .pushNamed('/create_profile/confirm_number')
                                 : null,
                             child: Text(
                               AppLocalizations.of(context)!.continue_button,
@@ -145,7 +131,7 @@ class _CreateProfilePageState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         StreamBuilder(
-          stream: store.companynameStream,
+          stream: _profileController.companynameStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
@@ -160,13 +146,13 @@ class _CreateProfilePageState
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: store.changeCompanyName,
+              onChanged: _profileController.changeCompanyName,
             );
           },
         ),
         const SizedBox(height: 25),
         StreamBuilder<Object>(
-            stream: store.professionStream,
+            stream: _profileController.professionStream,
             builder: (context, snapshot) {
               return FutureBuilder(
                 future: professions.getProfessions(),
@@ -204,7 +190,7 @@ class _CreateProfilePageState
                         setState(
                           () {
                             defaultValue = newValue!;
-                            store.changeProfession(newValue);
+                            _profileController.changeProfession(newValue);
                             debugPrint(defaultValue);
                           },
                         );
@@ -224,7 +210,7 @@ class _CreateProfilePageState
             }),
         const SizedBox(height: 25),
         StreamBuilder(
-          stream: store.countryStream,
+          stream: _profileController.countryStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return FutureBuilder(
               future: countries.getCountries(),
@@ -247,7 +233,7 @@ class _CreateProfilePageState
                       setState(
                         () {
                           defaultCountry = newValue;
-                          store.changeCountry(defaultCountry!);
+                          _profileController.changeCountry(defaultCountry!);
                         },
                       );
                     },
@@ -280,6 +266,43 @@ class _CreateProfilePageState
           },
         ),
         const SizedBox(height: 25),
+        StreamBuilder(
+          stream: _profileController.phoneStream,
+          builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InternationalPhoneNumberInput(
+                  onInputChanged: (PhoneNumber number) {
+                    _profileController.changePhone(number.phoneNumber ?? '');
+                    debugPrint("Phone: ${snapshot.data}");
+                  },
+                  selectorConfig: const SelectorConfig(
+                    selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+                  ),
+                  ignoreBlank: false,
+                  selectorTextStyle: const TextStyle(color: Colors.black),
+                  formatInput: false,
+                  keyboardType: const TextInputType.numberWithOptions(
+                      signed: true, decimal: true),
+                  inputBorder: const OutlineInputBorder(),
+                ),
+                snapshot.hasError
+                    ? Text(
+                        TFError.getError(context, snapshot.error as ErrorType),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: Colors.red),
+                      )
+                    : const SizedBox.shrink()
+              ],
+            );
+          },
+        ),
+        const SizedBox(
+          height: 25,
+        ),
         Text(
           AppLocalizations.of(context)!.meetups_lbl_description,
           style: Theme.of(context)
@@ -288,7 +311,7 @@ class _CreateProfilePageState
               .copyWith(color: Theme.of(context).hintColor),
         ),
         StreamBuilder(
-          stream: store.descriptionStream,
+          stream: _profileController.descriptionStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               decoration: InputDecoration(
@@ -305,7 +328,7 @@ class _CreateProfilePageState
                     .headline4!
                     .copyWith(color: Colors.red),
               ),
-              onChanged: store.changeDescription,
+              onChanged: _profileController.changeDescription,
             );
           },
         ),
