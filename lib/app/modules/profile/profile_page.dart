@@ -89,7 +89,7 @@ class ProfilePageState extends State<ProfilePage>
               },
             ),
           ),
-          Expanded(
+          const Expanded(
             child: RouterOutlet(),
           ),
         ],

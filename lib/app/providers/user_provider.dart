@@ -8,7 +8,7 @@ import 'package:techfrenetic/app/core/exceptions.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/models/session_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
-import 'package:techfrenetic/app/modules/profile/profile_store.dart';
+import 'package:techfrenetic/app/modules/home/home_store.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 import 'dart:convert' as json;
 
@@ -70,7 +70,7 @@ class UserProvider extends TechFreneticProvider {
   }
 
   Future<UserModel?> getLoggedUser() async {
-    ProfileStore profileStore = Modular.get();
+    final HomeStore _homeStore = Modular.get();
 
     String? userId = prefs.userId;
     UserModel? loggedUser;
@@ -88,7 +88,7 @@ class UserProvider extends TechFreneticProvider {
 
       if (response.statusCode == 200) {
         loggedUser = UserModel.fromJson(response.body);
-        profileStore.loggedUser = loggedUser;
+        _homeStore.loggedUser = loggedUser;
         prefs.userName = loggedUser.userName;
         prefs.userEmail = loggedUser.mail;
         prefs.userAvatar = loggedUser.avatar;

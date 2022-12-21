@@ -25,10 +25,27 @@ mixin _$HomeStore on _HomeStoreBase, Store {
     });
   }
 
+  late final _$loggedUserAtom =
+      Atom(name: '_HomeStoreBase.loggedUser', context: context);
+
+  @override
+  UserModel? get loggedUser {
+    _$loggedUserAtom.reportRead();
+    return super.loggedUser;
+  }
+
+  @override
+  set loggedUser(UserModel? value) {
+    _$loggedUserAtom.reportWrite(value, super.loggedUser, () {
+      super.loggedUser = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
-selectedPage: ${selectedPage}
+selectedPage: ${selectedPage},
+loggedUser: ${loggedUser}
     ''';
   }
 }
