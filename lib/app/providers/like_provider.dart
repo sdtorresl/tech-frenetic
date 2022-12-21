@@ -48,8 +48,6 @@ class LikeProvider extends TechFreneticProvider {
         body: json.encode(body),
         headers: headers,
       );
-      debugPrint(response.statusCode.toString());
-      debugPrint(response.body);
 
       if (response.statusCode == 201) {
         likeModel = LikeModel.fromJson(response.body);

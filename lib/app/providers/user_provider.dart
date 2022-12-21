@@ -78,7 +78,6 @@ class UserProvider extends TechFreneticProvider {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
 
       Map<String, String> headers = {};
-
       headers.addAll(sessionHeader);
       headers.addAll(headers);
 
@@ -106,9 +105,6 @@ class UserProvider extends TechFreneticProvider {
     UserModel? userinfo;
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
-      debugPrint("Getting user information with id $userId");
-      debugPrint(_url.toString());
-
       var response = await http.get(
         _url,
       );

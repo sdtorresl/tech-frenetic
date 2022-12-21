@@ -39,7 +39,6 @@ class RegistrationProvider extends TechFreneticProvider {
         body: json.encode(body),
         headers: headers,
       );
-      debugPrint(response.statusCode.toString());
 
       if (response.statusCode == 422) {
         debugPrint(response.body);
@@ -96,7 +95,6 @@ class RegistrationProvider extends TechFreneticProvider {
         body: json.encode(body),
         headers: headers,
       );
-      debugPrint(response.statusCode.toString());
 
       if (response.statusCode == 200) {
         debugPrint(response.body);
@@ -135,7 +133,6 @@ class RegistrationProvider extends TechFreneticProvider {
         body: json.encode(body),
         headers: headers,
       );
-      debugPrint(response.statusCode.toString());
 
       if (response.statusCode == 200) {
         debugPrint(response.body);

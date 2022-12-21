@@ -13,8 +13,6 @@ class FollowersProvider extends TechFreneticProvider {
     List<UserModel> following = [];
     try {
       Uri _url = Uri.parse("$baseUrl/api/en/v1/following?user=$userId");
-      debugPrint(_url.toString());
-
       var response = await http.get(_url, headers: sessionHeader);
 
       if (response.statusCode == 200) {
@@ -47,7 +45,6 @@ class FollowersProvider extends TechFreneticProvider {
 
     try {
       Uri _url = Uri.parse("$baseUrl/api/en/v1/followers/$userId");
-      debugPrint(_url.toString());
 
       var response = await http.get(_url, headers: sessionHeader);
 
@@ -76,7 +73,6 @@ class FollowersProvider extends TechFreneticProvider {
       List<UserModel> alreadyFollowing = await getFollowing(userId);
 
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
-      debugPrint(_url.toString());
 
       List<dynamic> following = alreadyFollowing
           .map((u) => {"target_id": u.uid, "target_type": "user"})
