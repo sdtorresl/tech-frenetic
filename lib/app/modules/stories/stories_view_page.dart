@@ -6,8 +6,8 @@ import 'package:techfrenetic/app/modules/stories/single_video_item.dart';
 import 'package:techfrenetic/app/providers/video_provider.dart';
 
 class StoriesViewPage extends StatefulWidget {
-  const StoriesViewPage({Key? key, required VideoModel video})
-      : super(key: key);
+  final VideoModel video;
+  const StoriesViewPage({Key? key, required this.video}) : super(key: key);
 
   @override
   State<StoriesViewPage> createState() => _StoriesViewPageState();
@@ -25,6 +25,7 @@ class _StoriesViewPageState extends State<StoriesViewPage> {
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.hasData) {
             List<VideoModel> videos = snapshot.data;
+            int currentVideo = videos.indexOf(widget.video);
             return Swiper(
               itemBuilder: (BuildContext context, int index) {
                 return SingleVideoItem(
@@ -33,8 +34,9 @@ class _StoriesViewPageState extends State<StoriesViewPage> {
               },
               itemCount: videos.length,
               scrollDirection: Axis.vertical,
-              // pagination:
-              //     const SwiperPagination(alignment: Alignment.centerRight),
+              index: currentVideo,
+              /* pagination:
+                  const SwiperPagination(alignment: Alignment.centerRight), */
             );
           } else {
             return const Center(

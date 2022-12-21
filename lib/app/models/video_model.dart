@@ -102,6 +102,16 @@ class VideoModel {
         "playback": playback != null ? playback!.toJson() : playback,
         "watermark": watermark,
       };
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is VideoModel &&
+          runtimeType == other.runtimeType &&
+          uid == other.uid;
+
+  @override
+  int get hashCode => uid.hashCode;
 }
 
 class Meta {
