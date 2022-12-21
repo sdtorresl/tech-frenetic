@@ -22,11 +22,13 @@ class PostWidget extends StatefulWidget {
 class _PostWidgetState extends State<PostWidget> {
   String likeAsset = '';
   bool enabledLike = true;
+  int currentLikes = 0;
 
   @override
   void initState() {
     super.initState();
     enabledLike = true;
+    currentLikes = int.tryParse(widget.article.likes ?? '0') ?? 0;
     likeAsset = 'assets/img/icons/light_bulb.svg';
   }
 
@@ -241,7 +243,7 @@ class _PostWidgetState extends State<PostWidget> {
           const SizedBox(
             width: 10,
           ),
-          Text(widget.article.likes!),
+          Text(currentLikes.toString()),
           const SizedBox(
             width: 10,
           ),
@@ -295,6 +297,7 @@ class _PostWidgetState extends State<PostWidget> {
           likeProvider.like(widget.article.id);
           setState(() {
             enabledLike = false;
+            currentLikes++;
             likeAsset = 'assets/img/icons/bright_bulb.svg';
           });
         },
@@ -309,6 +312,7 @@ class _PostWidgetState extends State<PostWidget> {
           setState(
             () {
               enabledLike = true;
+              currentLikes--;
               likeAsset = 'assets/img/icons/light_bulb.svg';
             },
           );
