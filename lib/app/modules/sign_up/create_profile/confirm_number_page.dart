@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:techfrenetic/app/core/exceptions.dart';
 import 'package:techfrenetic/app/modules/sign_up/create_profile/create_profile_controller.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -31,8 +30,7 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
     }
     _codeEditingController.addListener(() {
       if (_codeEditingController.text.isNotEmpty) {
-        _profileController
-            .changeCode(int.tryParse(_codeEditingController.text));
+        _profileController.changeCode(_codeEditingController.text);
       }
     });
     _verifyPhone();
@@ -131,7 +129,9 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
           stream: _profileController.submitValidStream,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             return ProgressButton(
-              onPressed: snapshot.hasData ? _createProfile : null,
+              onPressed: snapshot.hasData && _invalidTries < 3
+                  ? _validateAndCreateProfile
+                  : null,
               text: AppLocalizations.of(context)?.confirm ?? '',
             );
           },
@@ -179,15 +179,23 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
     );
   }
 
-  Future _createProfile() async {
-    bool createProfile = false;
-    try {
-      createProfile = await _profileController.createProfile();
-    } on InvalidCodeException {
+  Future _validateAndCreateProfile() async {
+    final bool codeValid = await _validateCode();
+    if (!codeValid) {
       setState(() {
         _invalidTries++;
       });
+      return;
     }
+    _createProfile();
+  }
+
+  Future<bool> _validateCode() {
+    return _profileController.validateCode();
+  }
+
+  Future _createProfile() async {
+    bool createProfile = await _profileController.createProfile();
 
     if (createProfile) {
       Modular.to.pushNamedAndRemoveUntil('/choose_avatar', (p0) => false);
@@ -196,15 +204,39 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
     }
   }
 
-  _verifyPhone() async {
+  Future _verifyPhone() async {
     await FirebaseAuth.instance.verifyPhoneNumber(
       phoneNumber: _profileController.phone,
       verificationCompleted: (PhoneAuthCredential credential) {
         debugPrint("Verification completed");
+        _createProfile();
       },
       verificationFailed: (FirebaseAuthException e) {
-        debugPrint("Verification failed");
-        debugPrint(e.toString());
+        String error = AppLocalizations.of(context)?.error ?? '';
+        switch (e.code) {
+          case 'session-expired':
+            error = AppLocalizations.of(context)?.sms_code ?? '';
+            break;
+          case 'invalid-phone-number':
+            error = AppLocalizations.of(context)?.sms_invalid_number ?? '';
+            break;
+          default:
+            debugPrint(e.code);
+        }
+
+        var snackBar = SnackBar(
+          duration: const Duration(seconds: 5),
+          content: Text(error),
+          backgroundColor: Colors.red,
+          action: SnackBarAction(
+            label: AppLocalizations.of(context)?.back ?? '',
+            textColor: Colors.white,
+            onPressed: () {
+              Modular.to.pop();
+            },
+          ),
+        );
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       },
       codeSent: (String verificationId, int? resendToken) {
         debugPrint("Code was sent");

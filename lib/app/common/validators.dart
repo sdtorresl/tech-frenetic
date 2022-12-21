@@ -189,10 +189,10 @@ class Validators {
     },
   );
 
-  static final validateCode = StreamTransformer<int?, int>.fromHandlers(
+  static final validateCode = StreamTransformer<String, String>.fromHandlers(
     handleData: (code, sink) {
       if (code.toString().length >= 6) {
-        sink.add(code!);
+        sink.add(code);
       } else {
         sink.addError(ErrorType.fieldRequired);
       }
