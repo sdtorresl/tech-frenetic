@@ -30,6 +30,7 @@ class UserProvider extends TechFreneticProvider {
         prefs.csrfToken = loggedUser.csrfToken;
         prefs.logoutToken = loggedUser.logoutToken;
         prefs.userId = loggedUser.currentUser?.uid;
+        getLoggedUser();
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
         debugPrint(response.body);
