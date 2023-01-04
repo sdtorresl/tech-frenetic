@@ -1,3 +1,4 @@
+import 'package:techfrenetic/app/modules/articles/articles_store.dart';
 import 'package:techfrenetic/app/modules/courses/courses_module.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/followers/followers_page.dart';
 import 'package:techfrenetic/app/providers/followers_provider.dart';
@@ -41,6 +42,7 @@ class HomeModule extends Module {
   @override
   final List<Bind> binds = [
     Bind.lazySingleton((i) => HomeStore()),
+    Bind.lazySingleton((i) => ArticlesStore()),
     Bind.lazySingleton((i) => UserProvider()),
     Bind.lazySingleton((i) => ProfileStore()),
     Bind.lazySingleton((i) => FollowersProvider()),

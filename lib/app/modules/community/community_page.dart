@@ -106,10 +106,10 @@ class CommunityPageState extends State<CommunityPage> {
   }
 
   Widget _feeds() {
-    ArticlesProvider _articlesProvideer = ArticlesProvider();
+    ArticlesProvider _articlesProvider = ArticlesProvider();
 
     return FutureBuilder(
-      future: _articlesProvideer.getWall(),
+      future: _articlesProvider.getWall(),
       builder:
           (BuildContext context, AsyncSnapshot<List<ArticlesModel>> snapshot) {
         if (snapshot.hasData) {

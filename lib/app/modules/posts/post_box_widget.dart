@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:techfrenetic/app/modules/articles/add_articles_page.dart';
+import 'package:techfrenetic/app/modules/articles/add_article_page.dart';
+import 'package:techfrenetic/app/modules/articles/add_video_article_page.dart';
 import 'package:techfrenetic/app/modules/posts/post_box_controller.dart';
-import 'package:techfrenetic/app/modules/videos/video_source.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 
 class PostBoxWidget extends StatefulWidget {
@@ -78,7 +78,7 @@ class _PostBoxWidgetState extends State<PostBoxWidget> {
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return AddArticlesPage(
+                          return AddArticlePage(
                             onArticleAdded: widget.onArticleLoaded,
                           );
                         },
@@ -91,7 +91,14 @@ class _PostBoxWidgetState extends State<PostBoxWidget> {
                       size: 20,
                     ),
                     onTap: () {
-                      showVideoSources(context);
+                      showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AddVideoArticlePage(
+                            onArticleAdded: widget.onArticleLoaded,
+                          );
+                        },
+                      );
                     },
                   ),
                 ],

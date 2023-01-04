@@ -73,7 +73,7 @@ class VideoProvider extends TechFreneticProvider {
     return null;
   }
 
-  uploadVideo(XFile file, void Function()? onComplete,
+  uploadVideo(XFile file, void Function(String? videoId)? onComplete,
       Function(double)? onProgress) async {
     UserProvider _userProvider = UserProvider();
     UserModel? loggedUSer = await _userProvider.getLoggedUser();
@@ -93,13 +93,9 @@ class VideoProvider extends TechFreneticProvider {
 
     await client.upload(
       onComplete: () {
-        debugPrint("Complete!");
-
-        // Prints the uploaded file URL
-        debugPrint(client.uploadUrl.toString());
-
         if (onComplete != null) {
-          onComplete();
+          String? videoId = client.uploadUrl?.path.split('/').last;
+          onComplete(videoId);
         }
       },
       onProgress: onProgress,

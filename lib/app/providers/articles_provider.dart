@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/article_user_model.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:techfrenetic/app/models/dtos/article_dto.dart';
 import 'package:techfrenetic/app/models/group_model.dart';
 import 'dart:convert' as json;
 
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
 class ArticlesProvider extends TechFreneticProvider {
-  Future<List<ArticlesModel>> getWall() async {
+  Future<List<ArticlesModel>> getWall({int page = 0}) async {
     List<ArticlesModel> articles = [];
 
     try {
@@ -195,58 +196,30 @@ class ArticlesProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<int?> addArticle(String title, int category, String description,
-      String content, String tags, String imageId) async {
+  Future<int?> addArticle(ArticlesModel article) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/entity/node?_format=json");
+      ArticleDTO articleDto = ArticleDTO(article: article, locale: locale);
+      debugPrint(articleDto.toJson());
 
-      Map<String, dynamic> payload = {
-        'type': [
-          {'target_id': "article", 'target_type': "node_type"}
-        ],
-        'title': [
-          {'value': title}
-        ],
-        'langcode': [
-          {'value': locale}
-        ],
-        'field_image': [
-          {'target_id': imageId, "alt": "Imagen $title"}
-        ],
-        'field_frenetic_content': [
-          {'value': true}
-        ],
-        'field_main_category': [
-          {'target_id': category}
-        ],
-        'field_draft': [
-          {'value': false}
-        ],
-        'field_summary': [
-          {'value': description}
-        ],
-        "body": [
-          {"value": content}
-        ],
-        "field_tag": [
-          {"value": tags}
-        ]
-      };
+      Map<String, String> headers = {}
+        ..addAll(jsonHeader)
+        ..addAll(authHeader)
+        ..addAll(basicAuth)
+        ..addAll(sessionHeader);
 
-      Map<String, String> headers = {};
-      headers.addAll(jsonHeader);
-      headers.addAll(authHeader);
-      headers.addAll(basicAuth);
-      headers.addAll(sessionHeader);
-
-      var response = await http.post(_url,
-          headers: headers, body: json.jsonEncode(payload));
+      var response = await http.post(
+        _url,
+        headers: headers,
+        body: articleDto.toJson(),
+      );
 
       if (response.statusCode == 201) {
         var decodedResponse = json.jsonDecode(response.body);
         return decodedResponse["nid"][0]["value"];
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
+        debugPrint('Body: ${response.body}.');
       }
     } catch (e) {
       debugPrint(e.toString());

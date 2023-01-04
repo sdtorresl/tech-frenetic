@@ -39,28 +39,31 @@ class WallModel {
 
 class ArticlesModel {
   ArticlesModel({
+    required this.displayName,
     required this.id,
     required this.title,
-    required this.displayName,
-    this.user,
-    this.role,
-    this.summary,
-    this.type,
-    this.date,
-    this.url,
-    this.comments,
-    this.views,
-    this.video,
+    this.body,
     this.category,
-    this.likes,
+    this.comments,
+    this.date,
+    this.description,
+    this.duration,
     this.image,
     this.isPremium,
     this.isVideo,
-    this.duration,
+    this.likes,
+    this.role,
+    this.summary,
+    this.tags,
     this.thumbnail,
-    this.body,
-    this.votes,
+    this.type,
     this.uid,
+    this.url,
+    this.user,
+    this.video,
+    this.videoId,
+    this.views,
+    this.votes,
   });
 
   final String id;
@@ -71,6 +74,7 @@ class ArticlesModel {
   final String? summary;
   final String? type;
   final DateTime? date;
+  final String? description;
   final String? url;
   final String? comments;
   final String? views;
@@ -85,6 +89,8 @@ class ArticlesModel {
   final String? body;
   final String? votes;
   final String? uid;
+  final String? videoId;
+  final String? tags;
 
   factory ArticlesModel.fromJson(String str) =>
       ArticlesModel.fromMap(json.decode(str));
@@ -95,33 +101,33 @@ class ArticlesModel {
     final String _baseUrl = GlobalConfiguration().getValue("api_url");
 
     return ArticlesModel(
-      id: json["id"],
-      title: json["title"],
-      displayName: json["display_name"],
-      user: json["user"],
-      role: json["role"],
-      summary: json["summary"],
-      type: json["type"],
-      date: DateTime.parse(json["date"]),
-      url: json["url"],
-      comments: json["comments"],
-      views: json["views"],
-      video: json["video"],
-      likes: json["likes"],
-      image: json["image"] != null && json["image"] != ""
-          ? _baseUrl + json["image"]
-          : null,
-      category: json["category"],
-      isPremium: json["is_premium"] == "True",
-      isVideo: json["is_video"] == "True",
-      duration: json["duration"],
-      thumbnail: json["thumbnail"] != null && json["thumbnail"] != ""
-          ? _baseUrl + json["thumbnail"]
-          : null,
-      body: json["body"],
-      votes: json["votes"],
-      uid: json["uid"] ?? json["uid_1"],
-    );
+        id: json["id"],
+        title: json["title"],
+        displayName: json["display_name"],
+        user: json["user"],
+        role: json["role"],
+        summary: json["summary"],
+        type: json["type"],
+        date: DateTime.parse(json["date"]),
+        url: json["url"],
+        comments: json["comments"],
+        views: json["views"],
+        video: json["video"],
+        likes: json["likes"],
+        image: json["image"] != null && json["image"] != ""
+            ? _baseUrl + json["image"]
+            : null,
+        category: json["category"],
+        isPremium: json["is_premium"] == "True",
+        isVideo: json["is_video"] == "True",
+        duration: json["duration"],
+        thumbnail: json["thumbnail"] != null && json["thumbnail"] != ""
+            ? _baseUrl + json["thumbnail"]
+            : null,
+        body: json["body"],
+        votes: json["votes"],
+        uid: json["uid"] ?? json["uid_1"],
+        videoId: json["field_cloudflare_id"]);
   }
 
   factory ArticlesModel.empty() => ArticlesModel(
