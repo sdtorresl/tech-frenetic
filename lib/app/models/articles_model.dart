@@ -49,8 +49,8 @@ class ArticlesModel {
     this.description,
     this.duration,
     this.image,
-    this.isPremium,
-    this.isVideo,
+    this.isPremium = false,
+    this.isVideo = true,
     this.likes,
     this.role,
     this.summary,
@@ -82,8 +82,8 @@ class ArticlesModel {
   final String? category;
   final String? likes;
   final String? image;
-  final bool? isPremium;
-  final bool? isVideo;
+  final bool isPremium;
+  final bool isVideo;
   final String? duration;
   final String? thumbnail;
   final String? body;
@@ -119,7 +119,7 @@ class ArticlesModel {
             : null,
         category: json["category"],
         isPremium: json["is_premium"] == "True",
-        isVideo: json["is_video"] == "True",
+        isVideo: json["field_cloudflare_id"].toString().isNotEmpty,
         duration: json["duration"],
         thumbnail: json["thumbnail"] != null && json["thumbnail"] != ""
             ? _baseUrl + json["thumbnail"]

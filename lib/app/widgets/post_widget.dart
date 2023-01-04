@@ -4,12 +4,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/models/video_model.dart';
 import 'package:techfrenetic/app/providers/like_provider.dart';
+import 'package:techfrenetic/app/providers/video_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
+import 'package:techfrenetic/app/widgets/video_player_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:share_plus/share_plus.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:intl/intl.dart';
+import 'package:video_player/video_player.dart';
 
 class PostWidget extends StatefulWidget {
   final ArticlesModel article;
@@ -20,9 +24,12 @@ class PostWidget extends StatefulWidget {
 }
 
 class _PostWidgetState extends State<PostWidget> {
+  final VideoProvider _videoProvider = VideoProvider();
+
   String likeAsset = '';
   bool enabledLike = true;
   int currentLikes = 0;
+  VideoPlayerController? _controller1;
 
   @override
   void initState() {
@@ -30,6 +37,14 @@ class _PostWidgetState extends State<PostWidget> {
     enabledLike = true;
     currentLikes = int.tryParse(widget.article.likes ?? '0') ?? 0;
     likeAsset = 'assets/img/icons/light_bulb.svg';
+
+    if (widget.article.isVideo) {
+      _controller1 = VideoPlayerController.network(
+          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4')
+        ..initialize().then((_) {
+          setState(() {});
+        });
+    }
   }
 
   @override
@@ -64,11 +79,13 @@ class _PostWidgetState extends State<PostWidget> {
               onTap: () => Modular.to
                   .pushNamed("/users_profiles", arguments: widget.article.uid)),
           _postSummary(context),
-          GestureDetector(
-            child: _postImage(context),
-            onTap: () => Modular.to
-                .pushNamed("/community/article", arguments: widget.article),
-          ),
+          widget.article.isVideo
+              ? _postVideo(context)
+              : GestureDetector(
+                  child: _postImage(context),
+                  onTap: () => Modular.to.pushNamed("/community/article",
+                      arguments: widget.article),
+                ),
           _postTitle(context),
           _postTags(context),
           _postInteractions(context),
@@ -103,7 +120,7 @@ class _PostWidgetState extends State<PostWidget> {
         : const SizedBox();
   }
 
-  Padding _postAuthor(BuildContext context) {
+  Widget _postAuthor(BuildContext context) {
     final created = widget.article.date!;
 
     return Padding(
@@ -158,6 +175,29 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       ),
     );
+  }
+
+  Widget _postVideo(BuildContext context) {
+    Widget videoWidget = const SizedBox();
+    if (widget.article.isVideo && widget.article.videoId != null) {
+      videoWidget = FutureBuilder(
+        future: _videoProvider.getVideo(widget.article.videoId!),
+        builder: (BuildContext context, AsyncSnapshot<VideoModel?> snapshot) {
+          if (snapshot.hasData) {
+            VideoModel? video = snapshot.data;
+            if (video != null && video.playback != null) {
+              return VideoPlayerWidget(url: video.playback!.hls);
+            }
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+    }
+
+    return videoWidget;
   }
 
   Widget _postImage(BuildContext context) {
@@ -284,7 +324,7 @@ class _PostWidgetState extends State<PostWidget> {
     );
   }
 
-  Widget likeButton(context) {
+  Widget _likeButton(context) {
     LikeProvider likeProvider = LikeProvider();
     Widget likeButton;
 
@@ -362,7 +402,7 @@ class _PostWidgetState extends State<PostWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              likeButton(context),
+              _likeButton(context),
               _actionButton(
                 context: context,
                 iconAsset: 'assets/img/icons/coment.svg',
