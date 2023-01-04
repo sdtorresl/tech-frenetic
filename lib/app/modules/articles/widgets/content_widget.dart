@@ -3,10 +3,22 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/modules/articles/articles_store.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class ContentWidget extends StatelessWidget {
-  ContentWidget({Key? key}) : super(key: key);
+class ContentWidget extends StatefulWidget {
+  const ContentWidget({Key? key}) : super(key: key);
 
-  final ArticlesStore articlesStore = Modular.get();
+  @override
+  State<ContentWidget> createState() => _ContentWidgetState();
+}
+
+class _ContentWidgetState extends State<ContentWidget> {
+  final ArticlesStore _articlesStore = Modular.get();
+  final TextEditingController _controller = TextEditingController();
+
+  @override
+  void initState() {
+    _controller.text = _articlesStore.content ?? '';
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +27,8 @@ class ContentWidget extends StatelessWidget {
       minLines: 5,
       decoration: InputDecoration(
           labelText: AppLocalizations.of(context)?.articles_content ?? ''),
-      onChanged: articlesStore.setContent,
+      controller: _controller,
+      onChanged: _articlesStore.setContent,
     );
   }
 }

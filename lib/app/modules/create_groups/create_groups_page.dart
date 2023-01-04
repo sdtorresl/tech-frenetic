@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/core/errors.dart';
-import 'package:techfrenetic/app/modules/articles/widgets/image_selection_widget.dart';
+import 'package:techfrenetic/app/modules/create_groups/widgets/image_selection_widget.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_controller.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
 

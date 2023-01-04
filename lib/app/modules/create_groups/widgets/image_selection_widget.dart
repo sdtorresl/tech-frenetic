@@ -2,16 +2,18 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:techfrenetic/app/modules/articles/articles_store.dart';
+import 'package:techfrenetic/app/models/image_model.dart';
 import 'package:techfrenetic/app/providers/files_provider.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ImageSelectionWidget extends StatefulWidget {
   const ImageSelectionWidget({
     Key? key,
+    required this.onImageLoaded,
   }) : super(key: key);
+
+  final Function(ImageModel?) onImageLoaded;
 
   @override
   State<ImageSelectionWidget> createState() => _ImageSelectionWidgetState();
@@ -19,16 +21,14 @@ class ImageSelectionWidget extends StatefulWidget {
 
 class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
   FilesProvider filesProvider = FilesProvider();
-  final ArticlesStore _articlesStore = Modular.get();
   bool _loadingPicture = false;
+  File? image;
 
   @override
   Widget build(BuildContext context) {
     Widget imageBox = GestureDetector(
       onTap: () => pickImage(),
-      child: _articlesStore.imageUrl != null
-          ? _imagePreviewBox()
-          : _selectImageBox(),
+      child: image != null ? _imagePreviewBox() : _selectImageBox(),
     );
 
     return Column(
@@ -74,7 +74,7 @@ class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
               fit: BoxFit.cover,
               clipBehavior: Clip.hardEdge,
               child: Image.file(
-                File(_articlesStore.imageUrl!),
+                image!,
               ),
             ),
           ),
@@ -110,18 +110,17 @@ class _ImageSelectionWidgetState extends State<ImageSelectionWidget> {
 
       if (image == null) return;
 
-      _articlesStore.imageUrl = image.path;
       final tempImage = File(image.path);
-
       setState(() {
+        this.image = tempImage;
         _loadingPicture = true;
       });
 
       filesProvider.uploadFile(tempImage).then((image) {
         setState(() {
           _loadingPicture = false;
+          widget.onImageLoaded(image);
         });
-        _articlesStore.uploadedImage = image;
       }).onError((error, stackTrace) {
         debugPrint("Error loading image: $error");
         setState(() {

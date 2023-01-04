@@ -62,6 +62,22 @@ mixin _$ArticlesStore on _ArticlesStore, Store {
     });
   }
 
+  late final _$imageUrlAtom =
+      Atom(name: '_ArticlesStore.imageUrl', context: context);
+
+  @override
+  String? get imageUrl {
+    _$imageUrlAtom.reportRead();
+    return super.imageUrl;
+  }
+
+  @override
+  set imageUrl(String? value) {
+    _$imageUrlAtom.reportWrite(value, super.imageUrl, () {
+      super.imageUrl = value;
+    });
+  }
+
   late final _$uploadedVideoAtom =
       Atom(name: '_ArticlesStore.uploadedVideo', context: context);
 
@@ -82,13 +98,13 @@ mixin _$ArticlesStore on _ArticlesStore, Store {
       Atom(name: '_ArticlesStore.category', context: context);
 
   @override
-  String get category {
+  String? get category {
     _$categoryAtom.reportRead();
     return super.category;
   }
 
   @override
-  set category(String value) {
+  set category(String? value) {
     _$categoryAtom.reportWrite(value, super.category, () {
       super.category = value;
     });
@@ -273,6 +289,7 @@ mixin _$ArticlesStore on _ArticlesStore, Store {
     return '''
 title: ${title},
 uploadedImage: ${uploadedImage},
+imageUrl: ${imageUrl},
 uploadedVideo: ${uploadedVideo},
 category: ${category},
 description: ${description},

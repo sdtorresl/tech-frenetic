@@ -73,8 +73,12 @@ class VideoProvider extends TechFreneticProvider {
     return null;
   }
 
-  uploadVideo(XFile file, void Function(String? videoId)? onComplete,
-      Function(double)? onProgress) async {
+  uploadVideo(
+    XFile file,
+    void Function(String? videoId)? onComplete,
+    Function(double)? onProgress, {
+    String tag = "story",
+  }) async {
     UserProvider _userProvider = UserProvider();
     UserModel? loggedUSer = await _userProvider.getLoggedUser();
 
@@ -85,7 +89,8 @@ class VideoProvider extends TechFreneticProvider {
       metadata: {
         'author': loggedUSer != null ? loggedUSer.userName : '',
         'userId': loggedUSer != null ? loggedUSer.uid.toString() : '',
-        'userAvatar': prefs.userAvatar ?? ''
+        'userAvatar': prefs.userAvatar ?? '',
+        'tag': tag
       },
       maxChunkSize: 5 * 1024 * 1024,
       store: TusMemoryStore(),

@@ -16,9 +16,11 @@ abstract class _ArticlesStore extends Disposable with Store {
   @observable
   ImageModel? uploadedImage;
   @observable
+  String? imageUrl;
+  @observable
   VideoModel? uploadedVideo;
   @observable
-  String category = "1";
+  String? category;
   @observable
   String? description;
   @observable
@@ -90,7 +92,7 @@ abstract class _ArticlesStore extends Disposable with Store {
       content != null &&
       uploadedVideo != null;
 
-  late List<ReactionDisposer> _disposers;
+  List<ReactionDisposer> _disposers = [];
 
   @action
   void validateTitle(String? value) {
@@ -152,6 +154,8 @@ abstract class _ArticlesStore extends Disposable with Store {
 
     isLoading = true;
 
+    _clearForm();
+
     return articleId;
   }
 
@@ -174,10 +178,22 @@ abstract class _ArticlesStore extends Disposable with Store {
     debugPrint("Title: " + title.toString());
     debugPrint("Image: " + uploadedImage.toString());
     debugPrint("Video: " + uploadedVideo.toString());
-    debugPrint("Category: " + category);
+    debugPrint("Category: " + category.toString());
     debugPrint("Description: " + description.toString());
     debugPrint("Content: " + content.toString());
     debugPrint("Tags: " + selectedTags.toString());
+  }
+
+  void _clearForm() {
+    title = null;
+    uploadedImage = null;
+    imageUrl = null;
+    uploadedVideo = null;
+    category = null;
+    description = null;
+    content = null;
+    selectedTags = ObservableList.of([]);
+    isLoading = false;
   }
 }
 

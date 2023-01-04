@@ -16,28 +16,24 @@ class CategoriesWidget extends StatelessWidget {
     return FutureBuilder(
       future: _categoriesProvider.getCategories(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
-        List<String> categoriesNames = [];
         if (snapshot.hasData) {
-          List<CategoriesModel> categoriesModel = snapshot.data;
-          for (var models in categoriesModel) {
-            categoriesNames.add(models.category);
-          }
-          String? defaultValue = categoriesNames.first;
+          List<CategoriesModel> categories = snapshot.data;
+
+          articlesStore.category =
+              articlesStore.category ?? categories.first.id;
           return DropdownButtonFormField<String>(
               decoration: InputDecoration(
                 labelText:
                     AppLocalizations.of(context)?.articles_categories ?? '',
               ),
-              value: defaultValue,
+              value: articlesStore.category,
               isExpanded: true,
-              items: categoriesNames.map(
-                (String valueItem) {
-                  return DropdownMenuItem<String>(
-                    child: Text(valueItem),
-                    value: valueItem,
-                  );
-                },
-              ).toList(),
+              items: categories
+                  .map((CategoriesModel valueItem) => DropdownMenuItem<String>(
+                        child: Text(valueItem.category),
+                        value: valueItem.id,
+                      ))
+                  .toList(),
               onChanged: articlesStore.setCategory);
         } else {
           return Text(

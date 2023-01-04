@@ -19,11 +19,12 @@ class AddArticlePage extends StatefulWidget {
 }
 
 class AddArticlePageState extends State<AddArticlePage> {
-  final ArticlesStore articlesStore = Modular.get();
+  final ArticlesStore _articlesStore = Modular.get();
 
   @override
   void initState() {
     super.initState();
+    _articlesStore.setupValidations();
   }
 
   @override
@@ -103,9 +104,7 @@ class AddArticlePageState extends State<AddArticlePage> {
       child: ListView(
         children: [
           TitleWidget(),
-          ImageSelectionWidget(
-            onImageLoaded: (image) => articlesStore.uploadedImage = image,
-          ),
+          const ImageSelectionWidget(),
           const DescriptionWidget(),
           ContentWidget(),
           const SizedBox(height: 60),
@@ -128,7 +127,7 @@ class AddArticlePageState extends State<AddArticlePage> {
           flex: 4,
           child: Observer(builder: (context) {
             return ElevatedButton(
-              onPressed: articlesStore.isCompleted && !articlesStore.isLoading
+              onPressed: _articlesStore.isCompleted && !_articlesStore.isLoading
                   ? _addArticle
                   : null,
               child: Text(AppLocalizations.of(context)!.publish),
@@ -153,7 +152,7 @@ class AddArticlePageState extends State<AddArticlePage> {
   }
 
   _addArticle() async {
-    int? articleId = await articlesStore.addArticle();
+    int? articleId = await _articlesStore.addArticle();
 
     if (articleId != null) {
       if (widget.onArticleAdded != null) {

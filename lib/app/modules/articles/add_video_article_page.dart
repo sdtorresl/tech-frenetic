@@ -20,11 +20,12 @@ class AddVideoArticlePage extends StatefulWidget {
 }
 
 class AddVideoArticlePageState extends State<AddVideoArticlePage> {
-  final ArticlesStore articlesStore = Modular.get();
+  final ArticlesStore _articlesStore = Modular.get();
 
   @override
   void initState() {
     super.initState();
+    _articlesStore.setupValidations();
   }
 
   @override
@@ -102,9 +103,7 @@ class AddVideoArticlePageState extends State<AddVideoArticlePage> {
       child: ListView(
         children: [
           TitleWidget(),
-          ImageSelectionWidget(
-            onImageLoaded: (image) => articlesStore.uploadedImage = image,
-          ),
+          const ImageSelectionWidget(),
           const VideoSelectionWidget(),
           const DescriptionWidget(),
           ContentWidget(),
@@ -128,10 +127,10 @@ class AddVideoArticlePageState extends State<AddVideoArticlePage> {
           flex: 4,
           child: Observer(builder: (context) {
             return ElevatedButton(
-              onPressed:
-                  articlesStore.isCompletedWithVideo && !articlesStore.isLoading
-                      ? _addArticle
-                      : null,
+              onPressed: _articlesStore.isCompletedWithVideo &&
+                      !_articlesStore.isLoading
+                  ? _addArticle
+                  : null,
               child: Text(AppLocalizations.of(context)!.publish),
             );
           }),
@@ -154,7 +153,7 @@ class AddVideoArticlePageState extends State<AddVideoArticlePage> {
   }
 
   _addArticle() async {
-    int? articleId = await articlesStore.addArticle();
+    int? articleId = await _articlesStore.addArticle();
 
     if (articleId != null) {
       if (widget.onArticleAdded != null) {
@@ -164,5 +163,12 @@ class AddVideoArticlePageState extends State<AddVideoArticlePage> {
     } else {
       debugPrint('Article not posted');
     }
+  }
+
+  @override
+  void dispose() {
+    debugPrint("Dispose video");
+    _articlesStore.dispose();
+    super.dispose();
   }
 }
