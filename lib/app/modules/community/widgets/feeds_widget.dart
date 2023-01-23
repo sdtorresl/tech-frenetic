@@ -4,6 +4,8 @@ import 'package:techfrenetic/app/modules/posts/post_box_widget.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
 
+import 'stories_view_widget.dart';
+
 class FeedsWidget extends StatefulWidget {
   const FeedsWidget({Key? key}) : super(key: key);
 
@@ -16,7 +18,7 @@ class _FeedsWidgetState extends State<FeedsWidget> {
   int _page = 0;
   List _posts = [];
   bool _isFirstLoading = true;
-  bool _isLoadingMore = false;
+  bool _isMoreLoading = false;
   bool _hasNextPage = true;
   late ScrollController _scrollController;
 
@@ -25,15 +27,19 @@ class _FeedsWidgetState extends State<FeedsWidget> {
     setState(() {
       _isFirstLoading = false;
       _posts = articles;
+      _page = 0;
     });
   }
 
   void _loadMore() async {
+    bool isEndOfScroll = _scrollController.position.extentAfter < 10;
+
     if (_hasNextPage == true &&
         _isFirstLoading == false &&
-        _isLoadingMore == false) {
+        _isMoreLoading == false &&
+        isEndOfScroll) {
       setState(() {
-        _isLoadingMore = true;
+        _isMoreLoading = true;
       });
 
       _page = _page + 1;
@@ -48,7 +54,7 @@ class _FeedsWidgetState extends State<FeedsWidget> {
 
       setState(() {
         _posts.addAll(articles);
-        _isLoadingMore = false;
+        _isMoreLoading = false;
       });
     }
   }
@@ -72,18 +78,24 @@ class _FeedsWidgetState extends State<FeedsWidget> {
         children: [
           PostBoxWidget(
             onPostLoaded: () {
-              setState(() {});
+              setState(() {
+                _posts = [];
+                _isFirstLoading = true;
+                _isMoreLoading = false;
+                _hasNextPage = true;
+              });
+              _firsLoad();
             },
             onArticleLoaded: (id) {
               debugPrint("El id de artículo es: $id");
             },
           ),
-          //    const StoriesViewWidget(),
+          const StoriesViewWidget(),
           ...postsWidgets,
-          _isLoadingMore
-              ? const SizedBox(
-                  height: 50,
-                  child: CircularProgressIndicator(),
+          _isMoreLoading
+              ? const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 10),
+                  child: Center(child: CircularProgressIndicator()),
                 )
               : const SizedBox.shrink(),
           const SizedBox(height: 60),
