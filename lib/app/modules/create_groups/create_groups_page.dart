@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
 import 'package:techfrenetic/app/core/errors.dart';
+import 'package:techfrenetic/app/models/group_user_model.dart';
 import 'package:techfrenetic/app/modules/create_groups/widgets/image_selection_widget.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_controller.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
@@ -16,8 +17,8 @@ class CreateGroupsPage extends StatefulWidget {
   _CreateGroupsPageState createState() => _CreateGroupsPageState();
 }
 
-class _CreateGroupsPageState
-    extends ModularState<CreateGroupsPage, CreateGroupsController> {
+class _CreateGroupsPageState extends State<CreateGroupsPage> {
+  final CreateGroupsController store = Modular.get();
   final GroupsProvider _groupsProvider = Modular.get();
   TextEditingController _membersTextController = TextEditingController();
 
@@ -319,21 +320,21 @@ class _CreateGroupsPageState
         FutureBuilder(
           future: _groupsProvider.getUsers(),
           builder: (BuildContext context,
-              AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
-            List<String> users = [];
+              AsyncSnapshot<List<GroupUserModel>> snapshot) {
+            List<GroupUserModel> users = [];
 
             if (snapshot.hasData) {
-              users = List<String>.from(
-                  snapshot.data!.map((e) => e["name"]).toList());
+              users = snapshot.data!;
             }
 
             return RawAutocomplete(
               optionsBuilder: (TextEditingValue textEditingValue) {
                 if (textEditingValue.text == '') {
-                  return const Iterable<String>.empty();
+                  return const Iterable<GroupUserModel>.empty();
                 }
-                return users.where((String option) {
-                  return option.contains(textEditingValue.text.toLowerCase());
+                return users.where((GroupUserModel option) {
+                  return option.name
+                      .contains(textEditingValue.text.toLowerCase());
                 });
               },
               fieldViewBuilder: (BuildContext context,
@@ -351,13 +352,13 @@ class _CreateGroupsPageState
                   },
                 );
               },
-              onSelected: (String selection) {
+              onSelected: (GroupUserModel selection) {
                 _membersTextController.clear();
                 store.addMember(selection);
               },
               optionsViewBuilder: (BuildContext context,
-                  AutocompleteOnSelected<String> onSelected,
-                  Iterable<String> options) {
+                  AutocompleteOnSelected<GroupUserModel> onSelected,
+                  Iterable<GroupUserModel> options) {
                 return Align(
                   alignment: Alignment.topLeft,
                   child: Material(
@@ -368,13 +369,14 @@ class _CreateGroupsPageState
                         padding: const EdgeInsets.all(8.0),
                         itemCount: options.length,
                         itemBuilder: (BuildContext context, int index) {
-                          final String option = options.elementAt(index);
+                          final GroupUserModel option =
+                              options.elementAt(index);
                           return GestureDetector(
                             onTap: () {
                               onSelected(option);
                             },
                             child: ListTile(
-                              title: Text(option),
+                              title: Text(option.name),
                             ),
                           );
                         },
@@ -388,10 +390,11 @@ class _CreateGroupsPageState
         ),
         StreamBuilder(
           stream: store.namePersonStream,
-          builder:
-              (BuildContext context, AsyncSnapshot<Iterable<String>> snapshot) {
-            List<String> selectedUsers =
-                snapshot.hasData ? List<String>.from(snapshot.data!) : [];
+          builder: (BuildContext context,
+              AsyncSnapshot<Iterable<GroupUserModel>> snapshot) {
+            List<GroupUserModel> selectedUsers = snapshot.hasData
+                ? List<GroupUserModel>.from(snapshot.data!)
+                : [];
             return Wrap(
               spacing: 5,
               children:
@@ -400,7 +403,7 @@ class _CreateGroupsPageState
                   padding:
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   label: Text(
-                    selectedUsers[index],
+                    selectedUsers[index].name,
                     style: Theme.of(context)
                         .textTheme
                         .bodyText1!

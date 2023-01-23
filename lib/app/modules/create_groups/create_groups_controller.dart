@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:techfrenetic/app/models/group_user_model.dart';
 import 'package:techfrenetic/app/models/image_model.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
 import 'package:techfrenetic/app/providers/notifications_provider.dart';
@@ -10,7 +11,8 @@ class CreateGroupsController extends Disposable {
   final _nameController = BehaviorSubject<String>();
   final _descriptionController = BehaviorSubject<String>();
   final _rulesController = BehaviorSubject<String>();
-  final _membersController = BehaviorSubject<Iterable<String>>.seeded([]);
+  final _membersController =
+      BehaviorSubject<Iterable<GroupUserModel>>.seeded([]);
   final _isPublicController = BehaviorSubject<bool>();
   final _imageController = BehaviorSubject<ImageModel>();
 
@@ -20,7 +22,8 @@ class CreateGroupsController extends Disposable {
       _descriptionController.stream.transform(Validators.validateName);
   Stream<String> get rulesStream =>
       _rulesController.stream.transform(Validators.validateName);
-  Stream<Iterable<String>> get namePersonStream => _membersController.stream;
+  Stream<Iterable<GroupUserModel>> get namePersonStream =>
+      _membersController.stream;
   Stream<bool> get isPublicStream => _isPublicController;
   Stream<ImageModel> get imageStream => _imageController;
 
@@ -35,15 +38,15 @@ class CreateGroupsController extends Disposable {
   Function(String) get changeName => _nameController.sink.add;
   Function(String) get changeDescription => _descriptionController.sink.add;
   Function(String) get changeRules => _rulesController.sink.add;
-  Function(String) get addMember => (String member) {
-        List<String> newMembers = List.from(members);
+  Function(GroupUserModel) get addMember => (GroupUserModel member) {
+        List<GroupUserModel> newMembers = List.from(members);
         if (!newMembers.contains(member)) {
           newMembers.add(member);
           _membersController.sink.add(newMembers);
         }
       };
-  Function(String) get removeMember => (String member) {
-        List<String> newMembers = List.from(members);
+  Function(GroupUserModel) get removeMember => (GroupUserModel member) {
+        List<GroupUserModel> newMembers = List.from(members);
         newMembers.removeWhere((item) => item == member);
         _membersController.sink.add(newMembers);
       };
@@ -53,7 +56,7 @@ class CreateGroupsController extends Disposable {
   String get name => _nameController.value;
   String get description => _descriptionController.value;
   String get rules => _rulesController.value;
-  Iterable<String> get members => _membersController.value;
+  Iterable<GroupUserModel> get members => _membersController.value;
   bool get isPublic => _isPublicController.value;
   ImageModel get image => _imageController.value;
 
