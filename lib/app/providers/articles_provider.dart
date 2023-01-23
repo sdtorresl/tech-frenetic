@@ -13,7 +13,8 @@ class ArticlesProvider extends TechFreneticProvider {
     List<ArticlesModel> articles = [];
 
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/wall?filters=yes");
+      Uri _url =
+          Uri.parse("$baseUrl/api/$locale/v1/wall?filters=yes&page=$page");
       var response = await http.get(_url);
 
       debugPrint("Getting wall information...");

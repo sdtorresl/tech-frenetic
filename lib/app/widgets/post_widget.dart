@@ -42,7 +42,9 @@ class _PostWidgetState extends State<PostWidget> {
       _controller1 = VideoPlayerController.network(
           'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4')
         ..initialize().then((_) {
-          setState(() {});
+          if (mounted) {
+            setState(() {});
+          }
         });
     }
   }
@@ -335,11 +337,13 @@ class _PostWidgetState extends State<PostWidget> {
         text: 'Cool',
         onPressed: () {
           likeProvider.like(widget.article.id);
-          setState(() {
-            enabledLike = false;
-            currentLikes++;
-            likeAsset = 'assets/img/icons/bright_bulb.svg';
-          });
+          if (mounted) {
+            setState(() {
+              enabledLike = false;
+              currentLikes++;
+              likeAsset = 'assets/img/icons/bright_bulb.svg';
+            });
+          }
         },
       );
     } else {
@@ -442,5 +446,11 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _controller1?.dispose();
+    super.dispose();
   }
 }

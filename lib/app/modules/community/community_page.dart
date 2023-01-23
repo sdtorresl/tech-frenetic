@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:techfrenetic/app/models/articles_model.dart';
-import 'package:techfrenetic/app/modules/community/widgets/stories_view_widget.dart';
+import 'package:techfrenetic/app/modules/community/widgets/feeds_widget.dart';
 import 'package:techfrenetic/app/modules/meetups/meetups_page.dart';
-import 'package:techfrenetic/app/providers/articles_provider.dart';
-import 'package:techfrenetic/app/widgets/post_widget.dart';
 import 'package:techfrenetic/app/modules/groups/groups_page.dart';
-import 'package:techfrenetic/app/modules/posts/post_box_widget.dart';
 
 class CommunityPage extends StatefulWidget {
   const CommunityPage({Key? key}) : super(key: key);
@@ -93,7 +89,7 @@ class CommunityPageState extends State<CommunityPage> {
               ),
               Expanded(
                 child: TabBarView(children: [
-                  _feeds(),
+                  const FeedsWidget(),
                   _meetups(),
                   _groups(),
                 ]),
@@ -102,44 +98,6 @@ class CommunityPageState extends State<CommunityPage> {
           ),
         );
       }),
-    );
-  }
-
-  Widget _feeds() {
-    ArticlesProvider _articlesProvider = ArticlesProvider();
-
-    return FutureBuilder(
-      future: _articlesProvider.getWall(),
-      builder:
-          (BuildContext context, AsyncSnapshot<List<ArticlesModel>> snapshot) {
-        if (snapshot.hasData) {
-          List<ArticlesModel> articles = snapshot.data ?? [];
-          List<Widget> postsWidgets = [];
-
-          for (ArticlesModel article in articles) {
-            postsWidgets.add(PostWidget(article: article));
-          }
-
-          return ListView(
-            shrinkWrap: true,
-            children: [
-              PostBoxWidget(
-                onPostLoaded: () {
-                  setState(() {});
-                },
-                onArticleLoaded: (id) {
-                  debugPrint("El id de artículo es: $id");
-                },
-              ),
-              const StoriesViewWidget(),
-              ...postsWidgets,
-              const SizedBox(height: 60),
-            ],
-          );
-        } else {
-          return const Center(child: CircularProgressIndicator());
-        }
-      },
     );
   }
 

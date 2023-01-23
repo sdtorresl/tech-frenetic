@@ -45,6 +45,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
   void dispose() {
     _controller.pause();
     _controller.removeListener(_updateElapsedTime);
+    _controller.dispose();
     super.dispose();
   }
 
@@ -141,6 +142,8 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
         elapsedSeconds = _controller.value.position.inSeconds;
       });
     }
-    setState(() {}); // Update the state if the playback has finished
+    if (mounted) {
+      setState(() {}); // Update the state if the playback has finished
+    }
   }
 }
