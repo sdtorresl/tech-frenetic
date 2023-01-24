@@ -376,6 +376,7 @@
     "sms_phone_not_correct": "¿El número no es correcto?",
     "sms_resend": "Reenviar el código",
     "sms_resend_confirmation": "El código ha sido reenviado",
+    "sms_too_many_requests": "Se han bloqueado las peticiones desde este dispositivo de acuedo a que se ha detectado actividad inusual. Intenta de nuevo más tarde.",
     "subscribtion": "Subscripción",
     "tab_content": "Artículos",
     "tab_create": "Crear",

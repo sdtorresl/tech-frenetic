@@ -376,6 +376,7 @@
     "sms_phone_not_correct": "The phone number is not correct?",
     "sms_resend": "Resend code",
     "sms_resend_confirmation": "The code has been resend",
+    "sms_too_many_requests": "We have blocked all requests from this device due to unusual activity. Try again later.",
     "subscribtion": "Subscription",
     "tab_content": "Content",
     "tab_create": "Create",

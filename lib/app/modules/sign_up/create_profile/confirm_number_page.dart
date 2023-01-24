@@ -214,14 +214,17 @@ class _ConfirmNumberPageState extends State<ConfirmNumberPage> {
       verificationFailed: (FirebaseAuthException e) {
         String error = AppLocalizations.of(context)?.error ?? '';
         switch (e.code) {
+          case 'too-many-requests':
+            error = AppLocalizations.of(context)?.sms_too_many_requests ?? '';
+            break;
           case 'session-expired':
-            error = AppLocalizations.of(context)?.sms_code ?? '';
+            error = AppLocalizations.of(context)?.sms_code_expired ?? '';
             break;
           case 'invalid-phone-number':
             error = AppLocalizations.of(context)?.sms_invalid_number ?? '';
             break;
           default:
-            debugPrint(e.code);
+            error = e.message ?? AppLocalizations.of(context)?.error ?? '';
         }
 
         var snackBar = SnackBar(

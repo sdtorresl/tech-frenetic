@@ -44,7 +44,7 @@ class ArticlesModel {
     required this.title,
     this.body,
     this.category,
-    this.comments,
+    this.comments = 0,
     this.date,
     this.description,
     this.duration,
@@ -76,7 +76,7 @@ class ArticlesModel {
   final DateTime? date;
   final String? description;
   final String? url;
-  final String? comments;
+  final int comments;
   final String? views;
   final String? video;
   final String? category;
@@ -110,7 +110,7 @@ class ArticlesModel {
         type: json["type"],
         date: DateTime.parse(json["date"]),
         url: json["url"],
-        comments: json["comments"],
+        comments: int.tryParse(json["comments"]) ?? 0,
         views: json["views"],
         video: json["video"],
         likes: json["likes"],
@@ -140,7 +140,7 @@ class ArticlesModel {
       type: "",
       date: null,
       url: "",
-      comments: "",
+      comments: 0,
       views: "",
       video: "",
       category: "",

@@ -270,23 +270,31 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   }
 
   Widget _articleInteractions() {
-    Widget _comments = const SizedBox();
-    if (article.comments != '0' && article.comments == '1') {
-      _comments = Row(
-        children: [
-          SizedBox(
-            child: SvgPicture.asset(
-              'assets/img/icons/dot.svg',
-              allowDrawingOutsideViewBox: true,
-              semanticsLabel: 'Dot',
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          Text(article.comments! + ' ' + AppLocalizations.of(context)!.comment),
-        ],
-      );
-    }
-    return _comments;
+    return widget.article.comments != 0
+        ? Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 5.0),
+                child: SizedBox(
+                  child: SvgPicture.asset(
+                    'assets/img/icons/dot.svg',
+                    allowDrawingOutsideViewBox: true,
+                    semanticsLabel: 'Dot',
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Modular.to.pushNamed("/community/article",
+                      arguments: widget.article);
+                },
+                child: Text(
+                    "${widget.article.comments} ${widget.article.comments < 1 ? AppLocalizations.of(context)!.comment : AppLocalizations.of(context)!.comments}"),
+              ),
+            ],
+          )
+        : const SizedBox.shrink();
   }
 
   Widget _commentsForm() {

@@ -29,7 +29,7 @@ class _PostWidgetState extends State<PostWidget> {
   String likeAsset = '';
   bool enabledLike = true;
   int currentLikes = 0;
-  VideoPlayerController? _controller1;
+  VideoPlayerController? _videoPlayerController;
 
   @override
   void initState() {
@@ -39,7 +39,7 @@ class _PostWidgetState extends State<PostWidget> {
     likeAsset = 'assets/img/icons/light_bulb.svg';
 
     if (widget.article.isVideo) {
-      _controller1 = VideoPlayerController.network(
+      _videoPlayerController = VideoPlayerController.network(
           'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4')
         ..initialize().then((_) {
           if (mounted) {
@@ -230,50 +230,33 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   Widget _postInteractions(BuildContext context) {
-    Widget _comments = const SizedBox();
     Widget _likes = const SizedBox();
 
-    if (widget.article.comments != '0' && widget.article.comments == '1') {
-      _comments = Row(
-        children: [
-          const SizedBox(
-            width: 10,
-          ),
-          SizedBox(
-            child: SvgPicture.asset(
-              'assets/img/icons/dot.svg',
-              allowDrawingOutsideViewBox: true,
-              semanticsLabel: 'Dot',
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          Text(widget.article.comments! +
-              ' ' +
-              AppLocalizations.of(context)!.comment),
-        ],
-      );
-    }
-
-    if (widget.article.comments != '0' && widget.article.comments != '1') {
-      _comments = Row(
-        children: [
-          const SizedBox(
-            width: 10,
-          ),
-          SizedBox(
-            child: SvgPicture.asset(
-              'assets/img/icons/dot.svg',
-              allowDrawingOutsideViewBox: true,
-              semanticsLabel: 'Dot',
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          Text(widget.article.comments! +
-              ' ' +
-              AppLocalizations.of(context)!.comments),
-        ],
-      );
-    }
+    Widget _comments = widget.article.comments != 0
+        ? Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 5.0),
+                child: SizedBox(
+                  child: SvgPicture.asset(
+                    'assets/img/icons/dot.svg',
+                    allowDrawingOutsideViewBox: true,
+                    semanticsLabel: 'Dot',
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Modular.to.pushNamed("/community/article",
+                      arguments: widget.article);
+                },
+                child: Text(
+                    "${widget.article.comments} ${widget.article.comments < 1 ? AppLocalizations.of(context)!.comment : AppLocalizations.of(context)!.comments}"),
+              ),
+            ],
+          )
+        : const SizedBox.shrink();
 
     if (widget.article.likes != '0') {
       _likes = Row(
@@ -450,7 +433,7 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   void dispose() {
-    _controller1?.dispose();
+    _videoPlayerController?.dispose();
     super.dispose();
   }
 }

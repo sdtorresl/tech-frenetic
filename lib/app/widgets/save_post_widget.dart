@@ -130,7 +130,7 @@ class _SaveState extends State<SavedPost> {
             ),
             const SizedBox(width: 5),
             Text(
-              widget.savedPost.comments! +
+              widget.savedPost.comments.toString() +
                   ' ' +
                   AppLocalizations.of(context)!.comments2,
               style: Theme.of(context).textTheme.bodyText1,
