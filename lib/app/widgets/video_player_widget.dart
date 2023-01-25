@@ -138,14 +138,9 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
 
   void _updateElapsedTime() {
     if (elapsedSeconds != _controller.value.position.inSeconds && mounted) {
-      if (mounted) {
-        setState(() {
-          elapsedSeconds = _controller.value.position.inSeconds;
-        });
-      }
-    }
-    if (mounted) {
-      setState(() {}); // Update the state if the playback has finished
+      setState(() {
+        elapsedSeconds = _controller.value.position.inSeconds;
+      });
     }
   }
 }

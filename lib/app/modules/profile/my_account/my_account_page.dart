@@ -21,8 +21,8 @@ class MyAccountPage extends StatefulWidget {
   _MyAccountPageState createState() => _MyAccountPageState();
 }
 
-class _MyAccountPageState
-    extends ModularState<MyAccountPage, MyAccountController> {
+class _MyAccountPageState extends State<MyAccountPage> {
+  final MyAccountController _accountController = Modular.get();
   final CountriesProvider _countriesProvider = CountriesProvider();
   final UserProvider _userProvider = UserProvider();
   UserModel? _user;
@@ -46,15 +46,16 @@ class _MyAccountPageState
     super.initState();
 
     _emailController.addListener(() {
-      store.changeEmail(_emailController.text);
+      _accountController.changeEmail(_emailController.text);
     });
 
     _cellphoneController.addListener(() {
-      store.changeCellphone(_cellphoneController.text);
+      _accountController.changeCellphone(_cellphoneController.text);
     });
 
     _dateController.addListener(() {
-      store.changeBirthdate(_dateFormat.parse(_dateController.text));
+      _accountController
+          .changeBirthdate(_dateFormat.parse(_dateController.text));
     });
 
     _userProvider.getLoggedUser().then((user) {
@@ -72,7 +73,7 @@ class _MyAccountPageState
           _dateController.text = _dateFormat.format(user.birthdate!);
         }
         if (user.location != null) {
-          store.changeCountry(user.location!);
+          _accountController.changeCountry(user.location!);
         }
       }
     });
@@ -162,7 +163,7 @@ class _MyAccountPageState
 
   @override
   void dispose() {
-    store.dispose();
+    _accountController.dispose();
     super.dispose();
   }
 
@@ -197,7 +198,7 @@ class _MyAccountPageState
           ),
         ),
         StreamBuilder(
-          stream: store.birthdateStream,
+          stream: _accountController.birthdateStream,
           builder: (context, snapshot) {
             return TextFormField(
               controller: _dateController,
@@ -245,7 +246,7 @@ class _MyAccountPageState
           ),
         ),
         StreamBuilder(
-          stream: store.cellphoneStream,
+          stream: _accountController.cellphoneStream,
           builder: (context, snapshot) {
             return TextFormField(
               controller: _cellphoneController,
@@ -281,43 +282,45 @@ class _MyAccountPageState
           ),
         ),
         StreamBuilder(
-          stream: store.countryStream,
+          stream: _accountController.countryStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return FutureBuilder(
               future: _countriesProvider.getCountries(),
-              builder: (BuildContext context, AsyncSnapshot snapshot) {
-                List<String> countriesNames = [];
+              builder: (BuildContext context,
+                  AsyncSnapshot<List<CategoriesModel>> snapshot) {
+                List<CategoriesModel> countries = [];
                 if (snapshot.hasData) {
-                  List<CategoriesModel> categoriesModel = snapshot.data;
-                  for (var models in categoriesModel) {
-                    countriesNames.add(models.category);
-                  }
+                  countries = snapshot.data!;
+
+                  return DropdownButton<String>(
+                    value: _accountController.country,
+                    isExpanded: true,
+                    underline: Container(
+                      height: 0.5,
+                      color: Colors.black,
+                    ),
+                    onChanged: (country) {
+                      if (country != null) {
+                        _accountController.changeCountry(country);
+                      }
+                    },
+                    hint: Text(
+                      AppLocalizations.of(context)!.your_country,
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyText1!
+                          .copyWith(color: Theme.of(context).hintColor),
+                    ),
+                    items: countries
+                        .map<DropdownMenuItem<String>>(
+                            (CategoriesModel c) => DropdownMenuItem<String>(
+                                  child: Text(c.category),
+                                  value: c.category,
+                                ))
+                        .toList(),
+                  );
                 }
-                return DropdownButton<String>(
-                  value: store.country,
-                  isExpanded: true,
-                  underline: Container(
-                    height: 0.5,
-                    color: Colors.black,
-                  ),
-                  onChanged: (country) {
-                    store.changeCountry(country!);
-                  },
-                  hint: Text(
-                    AppLocalizations.of(context)!.your_country,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(color: Theme.of(context).hintColor),
-                  ),
-                  items: countriesNames
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      child: Text(value),
-                      value: value,
-                    );
-                  }).toList(),
-                );
+                return const SizedBox.shrink();
               },
             );
           },
@@ -337,7 +340,7 @@ class _MyAccountPageState
           ),
         ),
         StreamBuilder(
-          stream: store.emailStream,
+          stream: _accountController.emailStream,
           builder: (context, snapshot) {
             return TextFormField(
               controller: _emailController,
@@ -409,7 +412,7 @@ class _MyAccountPageState
           ),
         ),
         StreamBuilder(
-          stream: store.tokenStream,
+          stream: _accountController.tokenStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               obscureText: _isTokenHidden,
@@ -432,7 +435,7 @@ class _MyAccountPageState
                     .copyWith(color: Colors.red),
               ),
               onChanged: (value) {
-                store.changeToken(value);
+                _accountController.changeToken(value);
               },
             );
           },
@@ -441,7 +444,7 @@ class _MyAccountPageState
           height: 10,
         ),
         StreamBuilder(
-          stream: store.newPasswordStream,
+          stream: _accountController.newPasswordStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
             return TextFormField(
               obscureText: _isPasswordHidden,
@@ -466,8 +469,8 @@ class _MyAccountPageState
                     .copyWith(color: Colors.red),
               ),
               onChanged: (value) {
-                store.changeNewPassword(value);
-                store.changeNewConfirmationPassword(
+                _accountController.changeNewPassword(value);
+                _accountController.changeNewConfirmationPassword(
                     value == _confirmationPassword);
               },
             );
@@ -477,7 +480,7 @@ class _MyAccountPageState
           height: 10,
         ),
         StreamBuilder(
-          stream: store.passwordConfirmationStream,
+          stream: _accountController.passwordConfirmationStream,
           builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
             //String password = snapshot.data ?? '';
             return TextFormField(
@@ -503,7 +506,8 @@ class _MyAccountPageState
                     .copyWith(color: Colors.red),
               ),
               onChanged: (value) {
-                store.changeNewConfirmationPassword(value == store.newPassword);
+                _accountController.changeNewConfirmationPassword(
+                    value == _accountController.newPassword);
                 setState(() {
                   _confirmationPassword = value;
                 });
@@ -533,7 +537,7 @@ class _MyAccountPageState
                       .copyWith(color: Colors.black),
                 ),
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.white,
+                  backgroundColor: Colors.white,
                   elevation: 0,
                   side: const BorderSide(width: 1.5, color: Colors.black),
                 ),
@@ -576,7 +580,7 @@ class _MyAccountPageState
 
   Widget _passwordValidation() {
     return StreamBuilder(
-      stream: store.newPasswordStream,
+      stream: _accountController.newPasswordStream,
       initialData: '',
       builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
         String password = snapshot.data ?? '';
@@ -612,7 +616,7 @@ class _MyAccountPageState
 
   Widget updateButton() {
     return StreamBuilder<bool>(
-      stream: store.formValidStream,
+      stream: _accountController.formValidStream,
       builder: (context, snapshot) {
         bool formVald = false;
         if (snapshot.hasData) {
@@ -673,8 +677,8 @@ class _MyAccountPageState
           ],
         ),
         style: ElevatedButton.styleFrom(
-          primary: Colors.white,
-          onPrimary: Colors.black,
+          foregroundColor: Colors.black,
+          backgroundColor: Colors.white,
           elevation: 0,
           side: const BorderSide(width: 1.5, color: Colors.black),
         ),
@@ -687,7 +691,7 @@ class _MyAccountPageState
       _isLoading = true;
     });
 
-    store.update().then(
+    _accountController.update().then(
       (updated) {
         List<Widget> actions = [
           TextButton(
@@ -781,7 +785,7 @@ class _MyAccountPageState
     String title = '';
     Widget content = const SizedBox.shrink();
 
-    store.updatePassword().then(
+    _accountController.updatePassword().then(
       (updated) {
         title = updated
             ? AppLocalizations.of(context)!.message_success
