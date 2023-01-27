@@ -27,7 +27,7 @@ class EditAvatarPage extends StatelessWidget {
                         fontSize: 12, color: Theme.of(context).primaryColor),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Modular.to.pop();
                   },
                 ),
                 TextButton(
@@ -39,8 +39,8 @@ class EditAvatarPage extends StatelessWidget {
                         fontSize: 12, color: Theme.of(context).primaryColor),
                   ),
                   onPressed: () {
-                    Modular.to
-                        .pushNamedAndRemoveUntil("/profile/", (p0) => false);
+                    Modular.to.pushNamedAndRemoveUntil(
+                        "/profile/profile", (p0) => false);
                   },
                 ),
               ],
