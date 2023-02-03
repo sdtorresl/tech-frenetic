@@ -37,6 +37,8 @@ class WallModel {
   String toString() => toJson();
 }
 
+enum ArticleType { post, article }
+
 class ArticlesModel {
   ArticlesModel({
     required this.displayName,
@@ -72,7 +74,7 @@ class ArticlesModel {
   final String? user;
   final String? role;
   final String? summary;
-  final String? type;
+  final ArticleType? type;
   final DateTime? date;
   final String? description;
   final String? url;
@@ -107,7 +109,9 @@ class ArticlesModel {
         user: json["user"],
         role: json["role"],
         summary: json["summary"],
-        type: json["type"],
+        type: ArticleType.values.firstWhere(
+            (e) => e.name.toString() == (json["type"] as String).toLowerCase(),
+            orElse: () => ArticleType.post),
         date: DateTime.parse(json["date"]),
         url: json["url"],
         comments: int.tryParse(json["comments"]) ?? 0,
@@ -137,7 +141,7 @@ class ArticlesModel {
       user: "",
       role: "",
       summary: "",
-      type: "",
+      type: ArticleType.article,
       date: null,
       url: "",
       comments: 0,
@@ -157,7 +161,7 @@ class ArticlesModel {
         "user": user,
         "role": role,
         "summary": summary,
-        "type": type,
+        "type": type?.name,
         "date": date != null ? date!.toIso8601String() : null,
         "url": url,
         "comments": comments,

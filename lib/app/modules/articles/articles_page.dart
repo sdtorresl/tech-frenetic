@@ -193,7 +193,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
 
     debugPrint("Article: ${article.toString()}");
 
-    if (widget.article.type == "Article") {
+    if (widget.article.type == ArticleType.article) {
       final String baseUrl = GlobalConfiguration().getValue("api_url");
       final String locale =
           Intl.getCurrentLocale().startsWith("es") ? "es" : "en";

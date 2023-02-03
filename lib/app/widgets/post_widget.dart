@@ -3,9 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:techfrenetic/app/common/icons.dart';
+import 'package:techfrenetic/app/core/extensions.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/models/notification_model.dart';
 import 'package:techfrenetic/app/models/video_model.dart';
+import 'package:techfrenetic/app/providers/comments_provider.dart';
 import 'package:techfrenetic/app/providers/like_provider.dart';
+import 'package:techfrenetic/app/providers/notifications_provider.dart';
 import 'package:techfrenetic/app/providers/video_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/video_player_widget.dart';
@@ -14,6 +19,8 @@ import 'package:share_plus/share_plus.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
+
+import 'comments_widget.dart';
 
 class PostWidget extends StatefulWidget {
   final ArticlesModel article;
@@ -25,11 +32,16 @@ class PostWidget extends StatefulWidget {
 
 class _PostWidgetState extends State<PostWidget> {
   final VideoProvider _videoProvider = VideoProvider();
+  final CommentsProvider _commentsProvider = CommentsProvider();
+  final NotificationsProvider _notificationsProvider = NotificationsProvider();
 
   String likeAsset = '';
   bool enabledLike = true;
   int currentLikes = 0;
   VideoPlayerController? _videoPlayerController;
+  final TextEditingController _commentTextController = TextEditingController();
+
+  bool _postCommentsVisible = false;
 
   @override
   void initState() {
@@ -81,17 +93,12 @@ class _PostWidgetState extends State<PostWidget> {
               onTap: () => Modular.to
                   .pushNamed("/users_profiles", arguments: widget.article.uid)),
           _postSummary(context),
-          widget.article.isVideo
-              ? _postVideo(context)
-              : GestureDetector(
-                  child: _postImage(context),
-                  onTap: () => Modular.to.pushNamed("/community/article",
-                      arguments: widget.article),
-                ),
+          widget.article.isVideo ? _postVideo(context) : _postImage(context),
           _postTitle(context),
           _postTags(context),
           _postInteractions(context),
-          _postActionBar(context)
+          _postActionBar(context),
+          _postCommentsVisible ? _postComments() : const SizedBox.shrink(),
         ],
       ),
     );
@@ -203,24 +210,29 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   Widget _postImage(BuildContext context) {
-    Widget _image = const SizedBox();
+    Widget _imageWidget = const SizedBox();
     if (widget.article.image != null) {
-      _image = CachedNetworkImage(
-        placeholder: (context, value) => const LinearProgressIndicator(),
-        errorWidget: (context, value, e) => const Icon(Icons.error),
-        imageUrl: widget.article.image!,
+      _imageWidget = GestureDetector(
+        child: CachedNetworkImage(
+          placeholder: (context, value) => const LinearProgressIndicator(),
+          errorWidget: (context, value, e) => const Icon(Icons.error),
+          imageUrl: widget.article.image!,
+        ),
+        onTap: () => Modular.to
+            .pushNamed("/community/article", arguments: widget.article),
       );
     }
 
-    return _image;
+    return _imageWidget;
   }
 
   Widget _postTitle(BuildContext context) {
     if (widget.article.title.isNotEmpty) {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+        //child: Html(data: widget.article.title),
         child: Text(
-          widget.article.title,
+          widget.article.title.parseHtmlString().trim(),
           style: Theme.of(context).textTheme.headline4!,
         ),
       );
@@ -232,7 +244,9 @@ class _PostWidgetState extends State<PostWidget> {
   Widget _postInteractions(BuildContext context) {
     Widget _likes = const SizedBox();
 
-    Widget _comments = widget.article.comments != 0
+    Widget _commentText = Text(
+        "${widget.article.comments} ${widget.article.comments == 1 ? AppLocalizations.of(context)!.comment : AppLocalizations.of(context)!.comments}");
+    Widget _comments = widget.article.comments >= 0
         ? Row(
             children: [
               Padding(
@@ -246,14 +260,14 @@ class _PostWidgetState extends State<PostWidget> {
                   ),
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  Modular.to.pushNamed("/community/article",
-                      arguments: widget.article);
-                },
-                child: Text(
-                    "${widget.article.comments} ${widget.article.comments < 1 ? AppLocalizations.of(context)!.comment : AppLocalizations.of(context)!.comments}"),
-              ),
+              widget.article.type == ArticleType.article
+                  ? GestureDetector(
+                      onTap: () {
+                        Modular.to.pushNamed("/community/article",
+                            arguments: widget.article);
+                      },
+                      child: _commentText)
+                  : _commentText,
             ],
           )
         : const SizedBox.shrink();
@@ -354,7 +368,7 @@ class _PostWidgetState extends State<PostWidget> {
     String articleLink;
     String articlePath = widget.article.url!;
 
-    if (widget.article.type == 'Article') {
+    if (widget.article.type == ArticleType.article) {
       final String baseUrl = GlobalConfiguration().getValue("api_url");
       final String locale =
           Intl.getCurrentLocale().startsWith("es") ? "es" : "en";
@@ -394,10 +408,13 @@ class _PostWidgetState extends State<PostWidget> {
                 context: context,
                 iconAsset: 'assets/img/icons/coment.svg',
                 text: AppLocalizations.of(context)!.comment2,
-                onPressed: () {
+                onPressed: () => setState(() {
+                  _postCommentsVisible = !_postCommentsVisible;
+                }),
+                /* onPressed: () {
                   Modular.to.pushNamed("/community/article",
                       arguments: widget.article);
-                },
+                }, */
               ),
               _shareButton(context),
             ],
@@ -435,5 +452,51 @@ class _PostWidgetState extends State<PostWidget> {
   void dispose() {
     _videoPlayerController?.dispose();
     super.dispose();
+  }
+
+  Widget _postComments() {
+    return Column(
+      children: [CommentsWidget(articleId: widget.article.id), _commentsForm()],
+    );
+  }
+
+  Widget _commentsForm() {
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 15, top: 10),
+      child: SafeArea(
+        child: Row(
+          children: [
+            Flexible(
+              child: TextField(
+                keyboardType: TextInputType.multiline,
+                controller: _commentTextController,
+                onSubmitted: (value) => submitComment(),
+              ),
+            ),
+            IconButton(
+              onPressed: submitComment,
+              icon: const Icon(TechFreneticIcons.comment),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  void submitComment() {
+    _commentsProvider
+        .addComment(widget.article.id, _commentTextController.text)
+        .then((commentId) {
+      if (commentId != null) {
+        debugPrint("Comment ID is $commentId");
+        _commentTextController.clear();
+        setState(() {});
+        _notificationsProvider.postNotification(
+          contentId: widget.article.id,
+          type: NotificationType.commentNotification,
+          targetId: commentId,
+        );
+      }
+    });
   }
 }
