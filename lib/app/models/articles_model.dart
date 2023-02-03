@@ -102,6 +102,12 @@ class ArticlesModel {
   factory ArticlesModel.fromMap(Map<String, dynamic> json) {
     final String _baseUrl = GlobalConfiguration().getValue("api_url");
 
+    ArticleType type = json["type"] != null
+        ? ArticleType.values.firstWhere(
+            (e) => e.name.toString() == (json["type"] as String).toLowerCase(),
+            orElse: () => ArticleType.post)
+        : ArticleType.article;
+
     return ArticlesModel(
         id: json["id"],
         title: json["title"],
@@ -109,9 +115,7 @@ class ArticlesModel {
         user: json["user"],
         role: json["role"],
         summary: json["summary"],
-        type: ArticleType.values.firstWhere(
-            (e) => e.name.toString() == (json["type"] as String).toLowerCase(),
-            orElse: () => ArticleType.post),
+        type: type,
         date: DateTime.parse(json["date"]),
         url: json["url"],
         comments: int.tryParse(json["comments"]) ?? 0,
