@@ -365,6 +365,8 @@
     "sign_up": "Unirme",
     "skills": "Habilidades",
     "skills_title": "Mejora tus habilidades",
+    "sms_request_verification": "Verificar datos",
+    "sms_validation_description": "Hemos enviado un código de validación a tu teléfono. Por favor ingrésalo para confirmar tus cambios.",
     "sms_code": "Ingresa el código SMS",
     "sms_code_expired": "El código ha expirado",
     "sms_code_not_correct": "El código no es correcto, por favor revísalo cuidadosamente y escríbelo de nuevo.",

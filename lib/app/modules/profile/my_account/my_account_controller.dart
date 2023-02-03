@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:rxdart/rxdart.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
@@ -64,6 +65,7 @@ class MyAccountController extends Disposable {
 
   @override
   void dispose() {
+    debugPrint("Disposed!!!");
     _emailController.close();
     _countryController.close();
     _cellphoneController.close();

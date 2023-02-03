@@ -1,4 +1,8 @@
+import 'package:intl_phone_number_input/intl_phone_number_input.dart';
+import 'package:techfrenetic/app/core/errors.dart';
 import 'package:techfrenetic/app/core/exceptions.dart';
+import 'package:techfrenetic/app/core/extensions.dart';
+import 'package:techfrenetic/app/modules/profile/my_account/widgets/validate_code_page.dart';
 
 import './my_account_controller.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -34,43 +38,47 @@ class _MyAccountPageState extends State<MyAccountPage> {
   bool _isTokenHidden = true;
   bool _isPasswordHidden = true;
   String _confirmationPassword = '';
+  bool _validationStarted = false;
+  PhoneNumber? _initialPhoneNumber;
 
   final _emailController = TextEditingController();
   final _cellphoneController = TextEditingController();
   final _dateController = TextEditingController();
 
   final DateFormat _dateFormat = DateFormat('dd/MM/yyyy');
+  List<CategoriesModel> _countries = [];
 
   @override
   void initState() {
     super.initState();
 
-    _emailController.addListener(() {
-      _accountController.changeEmail(_emailController.text);
-    });
-
     _cellphoneController.addListener(() {
       _accountController.changeCellphone(_cellphoneController.text);
     });
 
-    _dateController.addListener(() {
-      _accountController
-          .changeBirthdate(_dateFormat.parse(_dateController.text));
-    });
+    _countriesProvider
+        .getCountries()
+        .then((countries) => _countries = countries);
 
     _userProvider.getLoggedUser().then((user) {
       setState(() {
         _user = user;
       });
       if (user != null) {
-        if (user.mail != null) {
-          _emailController.text = user.mail!;
+        if (_accountController.email.isEmpty) {
+          _accountController.changeEmail(user.mail ?? '');
         }
-        if (user.cellphone != null) {
-          _cellphoneController.text = user.cellphone!;
+        if (_accountController.cellphone.isEmpty) {
+          user.cellphone?.tryPhoneParse().then((PhoneNumber? value) {
+            _accountController.changeCellphone(value?.phoneNumber ?? '');
+
+            setState(() {
+              _initialPhoneNumber = value;
+            });
+          });
         }
         if (user.birthdate != null) {
-          _dateController.text = _dateFormat.format(user.birthdate!);
+          _accountController.changeBirthdate(user.birthdate!);
         }
         if (user.location != null) {
           _accountController.changeCountry(user.location!);
@@ -129,7 +137,20 @@ class _MyAccountPageState extends State<MyAccountPage> {
                 ),
               ),
             ),
-            _userDataForm(context),
+            _validationStarted
+                ? ValidateCodePage(
+                    phoneNumber: _accountController.cellphone,
+                    onValidated: () {
+                      setState(() {
+                        _validationStarted = false;
+                      });
+                      _updatePersonalData(context);
+                    },
+                    onBack: () => setState(() {
+                      _validationStarted = false;
+                    }),
+                  )
+                : _userDataForm(context),
             _passwordchange(context),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 50.0),
@@ -177,11 +198,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
           const SizedBox(height: 30),
           _countriesField(context),
           const SizedBox(height: 30),
-          _phoneField(context),
+          _phoneField(),
           const SizedBox(height: 30),
           _birthdateField(context),
           const SizedBox(height: 30),
-          updateButton(),
+          _sendCodeButton(),
         ],
       ),
     );
@@ -199,7 +220,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
         ),
         StreamBuilder(
           stream: _accountController.birthdateStream,
-          builder: (context, snapshot) {
+          builder: (context, AsyncSnapshot<DateTime> snapshot) {
+            if (snapshot.hasData) {
+              _dateController.text = _dateFormat.format(snapshot.data!);
+            }
+
             return TextFormField(
               controller: _dateController,
               readOnly: true,
@@ -235,7 +260,58 @@ class _MyAccountPageState extends State<MyAccountPage> {
     );
   }
 
-  Widget _phoneField(context) {
+  Widget _phoneField() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          AppLocalizations.of(context)!.profile_type_phone,
+          style: Theme.of(context)
+              .textTheme
+              .bodyText1!
+              .copyWith(color: Theme.of(context).hintColor),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InternationalPhoneNumberInput(
+              onInputChanged: (PhoneNumber number) {
+                debugPrint(_accountController.cellphone);
+                _accountController.changeCellphone(number.phoneNumber ?? '');
+              },
+              initialValue: _initialPhoneNumber,
+              hintText: '5555555',
+              selectorConfig: const SelectorConfig(
+                selectorType: PhoneInputSelectorType.BOTTOM_SHEET,
+              ),
+              ignoreBlank: false,
+              selectorTextStyle: const TextStyle(color: Colors.black),
+              formatInput: false,
+              keyboardType: const TextInputType.numberWithOptions(
+                  signed: true, decimal: true),
+              inputBorder: const OutlineInputBorder(),
+            ),
+            StreamBuilder(
+              stream: _accountController.cellphoneStream,
+              builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
+                return snapshot.hasError
+                    ? Text(
+                        TFError.getError(context, snapshot.error as ErrorType),
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodySmall
+                            ?.copyWith(color: Colors.red),
+                      )
+                    : const SizedBox.shrink();
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _phoneField2(context) {
     return Column(
       children: [
         Align(
@@ -247,7 +323,11 @@ class _MyAccountPageState extends State<MyAccountPage> {
         ),
         StreamBuilder(
           stream: _accountController.cellphoneStream,
-          builder: (context, snapshot) {
+          builder: (context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.hasData) {
+              _cellphoneController.text = snapshot.data!;
+            }
+
             return TextFormField(
               controller: _cellphoneController,
               keyboardType: TextInputType.number,
@@ -257,8 +337,9 @@ class _MyAccountPageState extends State<MyAccountPage> {
                     .textTheme
                     .bodyText1!
                     .copyWith(color: Theme.of(context).highlightColor),
-                errorText:
-                    snapshot.hasError ? 'Ingrese un numero de telefono' : null,
+                errorText: snapshot.hasError
+                    ? AppLocalizations.of(context)?.error_phone_required
+                    : null,
                 errorStyle: Theme.of(context)
                     .textTheme
                     .headline4!
@@ -284,47 +365,35 @@ class _MyAccountPageState extends State<MyAccountPage> {
         StreamBuilder(
           stream: _accountController.countryStream,
           builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-            return FutureBuilder(
-              future: _countriesProvider.getCountries(),
-              builder: (BuildContext context,
-                  AsyncSnapshot<List<CategoriesModel>> snapshot) {
-                List<CategoriesModel> countries = [];
-                if (snapshot.hasData) {
-                  countries = snapshot.data!;
-
-                  return DropdownButton<String>(
-                    value: _accountController.country,
-                    isExpanded: true,
-                    underline: Container(
-                      height: 0.5,
-                      color: Colors.black,
-                    ),
-                    onChanged: (country) {
-                      if (country != null) {
-                        _accountController.changeCountry(country);
-                      }
-                    },
-                    hint: Text(
-                      AppLocalizations.of(context)!.your_country,
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyText1!
-                          .copyWith(color: Theme.of(context).hintColor),
-                    ),
-                    items: countries
-                        .map<DropdownMenuItem<String>>(
-                            (CategoriesModel c) => DropdownMenuItem<String>(
-                                  child: Text(c.category),
-                                  value: c.category,
-                                ))
-                        .toList(),
-                  );
+            return DropdownButton<String>(
+              value: _accountController.country,
+              isExpanded: true,
+              underline: Container(
+                height: 0.5,
+                color: Colors.black,
+              ),
+              onChanged: (country) {
+                if (country != null) {
+                  _accountController.changeCountry(country);
                 }
-                return const SizedBox.shrink();
               },
+              hint: Text(
+                AppLocalizations.of(context)!.your_country,
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyText1!
+                    .copyWith(color: Theme.of(context).hintColor),
+              ),
+              items: _countries
+                  .map<DropdownMenuItem<String>>(
+                      (CategoriesModel c) => DropdownMenuItem<String>(
+                            child: Text(c.category),
+                            value: c.category,
+                          ))
+                  .toList(),
             );
           },
-        ),
+        )
       ],
     );
   }
@@ -341,7 +410,10 @@ class _MyAccountPageState extends State<MyAccountPage> {
         ),
         StreamBuilder(
           stream: _accountController.emailStream,
-          builder: (context, snapshot) {
+          builder: (context, AsyncSnapshot<String> snapshot) {
+            if (snapshot.hasData) {
+              _emailController.text = snapshot.data!;
+            }
             return TextFormField(
               controller: _emailController,
               readOnly: true,
@@ -614,7 +686,44 @@ class _MyAccountPageState extends State<MyAccountPage> {
     );
   }
 
-  Widget updateButton() {
+  Widget _sendCodeButton() {
+    return StreamBuilder<bool>(
+      stream: _accountController.formValidStream,
+      builder: (context, snapshot) {
+        bool formVald = snapshot.data ?? false;
+
+        return ElevatedButton(
+          onPressed: !_isLoading && formVald
+              ? () => setState(() {
+                    _validationStarted = !_validationStarted;
+                  })
+              : null,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              _isLoading
+                  ? Container(
+                      height: 20,
+                      width: 40,
+                      child: const CircularProgressIndicator(),
+                      padding: const EdgeInsets.only(right: 20),
+                    )
+                  : const SizedBox.shrink(),
+              Text(
+                AppLocalizations.of(context)!.save_changes,
+                style: Theme.of(context)
+                    .textTheme
+                    .button!
+                    .copyWith(color: Colors.white),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _updateButton() {
     return StreamBuilder<bool>(
       stream: _accountController.formValidStream,
       builder: (context, snapshot) {
