@@ -108,6 +108,10 @@ class ArticlesModel {
             orElse: () => ArticleType.post)
         : ArticleType.article;
 
+    var isVideo = json["field_cloudflare_id"] != null
+        ? (json["field_cloudflare_id"] as String).isNotEmpty
+        : json["is_video"] == "True";
+
     return ArticlesModel(
         id: json["id"],
         title: json["title"],
@@ -127,7 +131,7 @@ class ArticlesModel {
             : null,
         category: json["category"],
         isPremium: json["is_premium"] == "True",
-        isVideo: json["field_cloudflare_id"].toString().isNotEmpty,
+        isVideo: isVideo,
         duration: json["duration"],
         thumbnail: json["thumbnail"] != null && json["thumbnail"] != ""
             ? _baseUrl + json["thumbnail"]

@@ -407,10 +407,6 @@ class _PostWidgetState extends State<PostWidget> {
                 onPressed: () => setState(() {
                   _postCommentsVisible = !_postCommentsVisible;
                 }),
-                /* onPressed: () {
-                  Modular.to.pushNamed("/community/article",
-                      arguments: widget.article);
-                }, */
               ),
               _shareButton(context),
             ],

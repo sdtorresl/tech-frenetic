@@ -232,23 +232,19 @@ class ArticlesProvider extends TechFreneticProvider {
   Future<ArticlesModel> getArticle(String id) async {
     ArticlesModel article = ArticlesModel.empty();
 
-    try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/article/$id");
-      debugPrint("Getting article information with id $id...");
-      debugPrint(_url.toString());
+    Uri _url = Uri.parse("$baseUrl/api/$locale/v1/article/$id");
+    debugPrint("Getting article information with id $id...");
+    debugPrint(_url.toString());
 
-      var response = await http.get(_url);
+    var response = await http.get(_url);
 
-      if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = json.jsonDecode(response.body);
-        if (jsonResponse.isNotEmpty) {
-          article = ArticlesModel.fromMap(jsonResponse[0]);
-        }
-      } else {
-        debugPrint('Request failed with status: ${response.statusCode}.');
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.jsonDecode(response.body);
+      if (jsonResponse.isNotEmpty) {
+        article = ArticlesModel.fromMap(jsonResponse[0]);
       }
-    } catch (e) {
-      debugPrint(e.toString());
+    } else {
+      debugPrint('Request failed with status: ${response.statusCode}.');
     }
 
     return article;
@@ -257,21 +253,17 @@ class ArticlesProvider extends TechFreneticProvider {
   Future<UserByArticleModel> getUserByArticle(String articleUrl) async {
     UserByArticleModel userByArticleModel = UserByArticleModel.empty();
 
-    try {
-      Uri _url = Uri.parse("$baseUrl$articleUrl?_format=json");
+    Uri _url = Uri.parse("$baseUrl$articleUrl?_format=json");
 
-      var response = await http.get(_url);
+    var response = await http.get(_url);
 
-      if (response.statusCode == 200) {
-        Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
-        ArticleDetailsModel details = ArticleDetailsModel.fromMap(jsonResponse);
-        userByArticleModel = details.revisionUid;
-        return userByArticleModel;
-      } else {
-        debugPrint('Request failed with status: ${response.statusCode}.');
-      }
-    } catch (e) {
-      debugPrint(e.toString());
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
+      ArticleDetailsModel details = ArticleDetailsModel.fromMap(jsonResponse);
+      userByArticleModel = details.revisionUid;
+      return userByArticleModel;
+    } else {
+      debugPrint('Request failed with status: ${response.statusCode}.');
     }
 
     return userByArticleModel;

@@ -251,10 +251,10 @@ class ArticlesPageState extends State<ArticlesPage> {
       ),
       title: Text(
         widget.article.category!.toUpperCase(),
-        style: theme.textTheme.headline5!.copyWith(color: Colors.white),
+        style: theme.textTheme.headline5!,
       ),
-      backgroundColor: Theme.of(context).primaryColorDark,
-      foregroundColor: Colors.white,
+/*       backgroundColor: Theme.of(context).primaryColorDark,
+      foregroundColor: Colors.white, */
       actions: [_likeButton(), _shareButton],
     );
   }
@@ -265,7 +265,8 @@ class ArticlesPageState extends State<ArticlesPage> {
     return IconButton(
       icon: Icon(
         TechFreneticIcons.lightBulb,
-        color: enabledLike ? Colors.yellow : Colors.white,
+        color:
+            enabledLike ? Colors.orangeAccent : Theme.of(context).primaryColor,
       ),
       onPressed: () {
         likeProvider.like(widget.article.id);
