@@ -18,7 +18,6 @@ import 'package:timeago/timeago.dart' as timeago;
 import 'package:share_plus/share_plus.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:intl/intl.dart';
-import 'package:video_player/video_player.dart';
 
 import 'comments_widget.dart';
 
@@ -38,7 +37,6 @@ class _PostWidgetState extends State<PostWidget> {
   String likeAsset = '';
   bool enabledLike = true;
   int currentLikes = 0;
-  VideoPlayerController? _videoPlayerController;
   final TextEditingController _commentTextController = TextEditingController();
 
   bool _postCommentsVisible = false;
@@ -49,16 +47,6 @@ class _PostWidgetState extends State<PostWidget> {
     enabledLike = true;
     currentLikes = int.tryParse(widget.article.likes ?? '0') ?? 0;
     likeAsset = 'assets/img/icons/light_bulb.svg';
-
-    if (widget.article.isVideo) {
-      _videoPlayerController = VideoPlayerController.network(
-          'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4')
-        ..initialize().then((_) {
-          if (mounted) {
-            setState(() {});
-          }
-        });
-    }
   }
 
   @override
@@ -228,13 +216,21 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget _postTitle(BuildContext context) {
     if (widget.article.title.isNotEmpty) {
+      Widget text = Text(
+        widget.article.title.parseHtmlString().trim(),
+        style: Theme.of(context).textTheme.headline4!,
+      );
+
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
         //child: Html(data: widget.article.title),
-        child: Text(
-          widget.article.title.parseHtmlString().trim(),
-          style: Theme.of(context).textTheme.headline4!,
-        ),
+        child: widget.article.type == ArticleType.article
+            ? TextButton(
+                child: text,
+                onPressed: () => Modular.to
+                    .pushNamed("/community/article", arguments: widget.article),
+              )
+            : text,
       );
     } else {
       return const SizedBox();
@@ -450,7 +446,6 @@ class _PostWidgetState extends State<PostWidget> {
 
   @override
   void dispose() {
-    _videoPlayerController?.dispose();
     super.dispose();
   }
 
