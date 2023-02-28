@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:intl/intl.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/models/notification_model.dart';
@@ -230,16 +231,12 @@ class ArticlesPageState extends State<ArticlesPage> {
       final String baseUrl = GlobalConfiguration().getValue("api_url");
       final String locale =
           Intl.getCurrentLocale().startsWith("es") ? "es" : "en";
-      String articlePath = widget.article.url!;
-      List<String> splitUrl = articlePath.split('/');
-      String urlEnd = splitUrl.last;
       String articleLink = "$baseUrl/$locale/${article.id}";
 
       _shareButton = IconButton(
         onPressed: () {
-          debugPrint(articleLink);
-          /* Share.share(articleLink,
-              subject: AppLocalizations.of(context)!.share_message + '\n'); */
+          Share.share(articleLink,
+              subject: AppLocalizations.of(context)!.share_message + '\n');
         },
         icon: const Icon(TechFreneticIcons.share),
       );

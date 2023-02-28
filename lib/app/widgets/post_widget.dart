@@ -361,16 +361,13 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget _shareButton(context) {
     Widget shareButton;
-    String articleLink;
-    String articlePath = widget.article.url!;
 
     if (widget.article.type == ArticleType.article) {
       final String baseUrl = GlobalConfiguration().getValue("api_url");
       final String locale =
           Intl.getCurrentLocale().startsWith("es") ? "es" : "en";
-      List<String> splitUrl = articlePath.split('/');
-      String urlEnd = splitUrl.last;
-      articleLink = baseUrl + '/$locale/' + urlEnd;
+
+      String articleLink = "$baseUrl/$locale/${widget.article.id}";
       shareButton = _actionButton(
         context: context,
         iconAsset: 'assets/img/icons/share.svg',
