@@ -110,10 +110,10 @@ class _PostBoxWidgetState extends State<PostBoxWidget> {
                 border: InputBorder.none,
                 hintText: AppLocalizations.of(context)!.write_something,
                 hintStyle: Theme.of(context).inputDecorationTheme.hintStyle,
-                prefixIcon: Icon(
+                /* prefixIcon: Icon(
                   Icons.account_circle,
                   color: Theme.of(context).splashColor,
-                ),
+                ), */
               ),
             ),
             StreamBuilder(
