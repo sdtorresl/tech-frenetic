@@ -61,11 +61,26 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
       },
       onDoubleTap: () => _togglePlay(),
       child: _controller.value.isInitialized
-          ? AspectRatio(
-              aspectRatio: _controller.value.aspectRatio,
+          ? Container(
+              height: 200,
+              width: double.infinity,
+              color: Colors.black,
               child: Stack(
                 children: [
-                  VideoPlayer(_controller),
+                  Positioned(
+                    left: 0,
+                    bottom: 0,
+                    right: 0,
+                    top: 0,
+                    child: ClipRRect(
+                      child: Center(
+                        child: AspectRatio(
+                          aspectRatio: _controller.value.aspectRatio,
+                          child: VideoPlayer(_controller),
+                        ),
+                      ),
+                    ),
+                  ),
                   Positioned(
                     left: 0,
                     bottom: 0,

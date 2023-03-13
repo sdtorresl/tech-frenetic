@@ -102,11 +102,11 @@ class AddVideoArticlePageState extends State<AddVideoArticlePage> {
     return Form(
       child: ListView(
         children: [
-          TitleWidget(),
+          const TitleWidget(),
           const ImageSelectionWidget(),
           const VideoSelectionWidget(),
           const DescriptionWidget(),
-          ContentWidget(),
+          const ContentWidget(),
           const SizedBox(height: 60),
           CategoriesWidget(),
           const SizedBox(height: 50),

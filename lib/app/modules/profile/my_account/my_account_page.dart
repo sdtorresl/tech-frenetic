@@ -414,15 +414,22 @@ class _MyAccountPageState extends State<MyAccountPage> {
             if (snapshot.hasData) {
               _emailController.text = snapshot.data!;
             }
-            return TextFormField(
-              controller: _emailController,
-              readOnly: true,
-              decoration: InputDecoration(
-                errorText: snapshot.hasError ? snapshot.error.toString() : null,
-                errorStyle: Theme.of(context)
-                    .textTheme
-                    .headline4!
-                    .copyWith(color: Colors.red),
+            return Theme(
+              data: ThemeData(
+                disabledColor: Colors.grey,
+              ),
+              child: TextFormField(
+                controller: _emailController,
+                enabled: false,
+                style: const TextStyle(color: Colors.grey),
+                decoration: InputDecoration(
+                  errorText:
+                      snapshot.hasError ? snapshot.error.toString() : null,
+                  errorStyle: Theme.of(context)
+                      .textTheme
+                      .headline4!
+                      .copyWith(color: Colors.red),
+                ),
               ),
             );
           },

@@ -16,7 +16,7 @@ class CoursesProvider extends TechFreneticProvider {
       if (response.statusCode == 200) {
         Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
         List<CourseModel> courses = List<CourseModel>.from(
-            jsonResponse["articles"].map((x) => CourseModel.fromJson(x)));
+            jsonResponse["rows"].map((x) => CourseModel.fromJson(x)));
 
         return courses;
       } else {

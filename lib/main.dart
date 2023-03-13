@@ -25,6 +25,7 @@ void main() async {
 
   await GlobalConfiguration().loadFromPath("assets/cfg/app_settings.json");
   await Firebase.initializeApp();
+
   runApp(
     ModularApp(
       module: AppModule(),

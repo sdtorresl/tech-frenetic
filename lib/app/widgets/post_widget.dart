@@ -37,6 +37,7 @@ class _PostWidgetState extends State<PostWidget> {
   String likeAsset = '';
   bool enabledLike = true;
   int currentLikes = 0;
+  int _comments = 0;
   final TextEditingController _commentTextController = TextEditingController();
 
   bool _postCommentsVisible = false;
@@ -46,6 +47,7 @@ class _PostWidgetState extends State<PostWidget> {
     super.initState();
     enabledLike = true;
     currentLikes = int.tryParse(widget.article.likes ?? '0') ?? 0;
+    _comments = widget.article.comments;
     likeAsset = 'assets/img/icons/light_bulb.svg';
   }
 
@@ -205,6 +207,8 @@ class _PostWidgetState extends State<PostWidget> {
           placeholder: (context, value) => const LinearProgressIndicator(),
           errorWidget: (context, value, e) => const Icon(Icons.error),
           imageUrl: widget.article.image!,
+          height: 250,
+          fit: BoxFit.cover,
         ),
         onTap: () => Modular.to
             .pushNamed("/community/article", arguments: widget.article),
@@ -241,8 +245,8 @@ class _PostWidgetState extends State<PostWidget> {
     Widget _likes = const SizedBox();
 
     Widget _commentText = Text(
-        "${widget.article.comments} ${widget.article.comments == 1 ? AppLocalizations.of(context)!.comment : AppLocalizations.of(context)!.comments}");
-    Widget _comments = widget.article.comments >= 0
+        "${_comments.toString()} ${_comments == 1 ? AppLocalizations.of(context)!.comment : AppLocalizations.of(context)!.comments}");
+    Widget commentsWidget = _comments >= 0
         ? Row(
             children: [
               Padding(
@@ -296,7 +300,7 @@ class _PostWidgetState extends State<PostWidget> {
           child: Row(
             children: [
               _likes,
-              _comments,
+              commentsWidget,
               const SizedBox(
                 width: 10,
               ),
@@ -478,7 +482,9 @@ class _PostWidgetState extends State<PostWidget> {
       if (commentId != null) {
         debugPrint("Comment ID is $commentId");
         _commentTextController.clear();
-        setState(() {});
+        setState(() {
+          _comments++;
+        });
         _notificationsProvider.postNotification(
           contentId: widget.article.id,
           type: NotificationType.commentNotification,

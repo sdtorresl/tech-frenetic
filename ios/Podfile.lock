@@ -1,6 +1,10 @@
 PODS:
   - camera_avfoundation (0.0.1):
     - Flutter
+  - cometchat (3.0.5):
+    - CometChatPro (= 3.0.911-beta3)
+    - Flutter
+  - CometChatPro (3.0.911-beta3)
   - Firebase/Auth (10.3.0):
     - Firebase/CoreOnly
     - FirebaseAuth (~> 10.3.0)
@@ -77,6 +81,7 @@ PODS:
 
 DEPENDENCIES:
   - camera_avfoundation (from `.symlinks/plugins/camera_avfoundation/ios`)
+  - cometchat (from `.symlinks/plugins/cometchat/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - Flutter (from `Flutter`)
@@ -95,6 +100,7 @@ DEPENDENCIES:
 
 SPEC REPOS:
   trunk:
+    - CometChatPro
     - Firebase
     - FirebaseAuth
     - FirebaseCore
@@ -108,6 +114,8 @@ SPEC REPOS:
 EXTERNAL SOURCES:
   camera_avfoundation:
     :path: ".symlinks/plugins/camera_avfoundation/ios"
+  cometchat:
+    :path: ".symlinks/plugins/cometchat/ios"
   firebase_auth:
     :path: ".symlinks/plugins/firebase_auth/ios"
   firebase_core:
@@ -141,6 +149,8 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   camera_avfoundation: 07c77549ea54ad95d8581be86617c094a46280d9
+  cometchat: 54e07aa2cc756f011ab04adb9403254caec4a2ae
+  CometChatPro: 97e17dcf784fcf9f16fde592a9e8fb1b782ac391
   Firebase: f92fc551ead69c94168d36c2b26188263860acd9
   firebase_auth: 579a0dc15451491cc83fccaa5102296635f24938
   firebase_core: 6f2f753e316765799d88568232ed59e300ff53db
@@ -166,6 +176,6 @@ SPEC CHECKSUMS:
   wakelock: d0fc7c864128eac40eba1617cb5264d9c940b46f
   webview_flutter_wkwebview: 005fbd90c888a42c5690919a1527ecc6649e1162
 
-PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
+PODFILE CHECKSUM: 977d36d45c92c1000e70377b4456cf3540d78d3d
 
 COCOAPODS: 1.11.3

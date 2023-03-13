@@ -119,7 +119,7 @@ class ArticlesProvider extends TechFreneticProvider {
         WallModel wall = WallModel.fromMap(jsonResponse);
 
         for (ArticlesModel content in wall.articles) {
-          if (content.type == 'Article' && username == content.user) {
+          if (content.type == ArticleType.article && username == content.user) {
             articles.add(content);
           }
         }
@@ -148,8 +148,8 @@ class ArticlesProvider extends TechFreneticProvider {
         WallModel wall = WallModel.fromMap(jsonResponse);
 
         posts = wall.articles
-            .where(
-                (content) => content.type == 'Post' && username == content.user)
+            .where((content) =>
+                content.type == ArticleType.post && username == content.user)
             .toList();
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');

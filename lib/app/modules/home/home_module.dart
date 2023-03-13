@@ -1,4 +1,5 @@
 import 'package:techfrenetic/app/modules/articles/articles_store.dart';
+import 'package:techfrenetic/app/modules/chat/chat_module.dart';
 import 'package:techfrenetic/app/modules/courses/courses_module.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/followers/followers_page.dart';
 import 'package:techfrenetic/app/providers/followers_provider.dart';
@@ -193,6 +194,10 @@ class HomeModule extends Module {
     ModuleRoute(
       '/forgot',
       module: ForgotPasswordModule(),
+    ),
+    ModuleRoute(
+      '/chat',
+      module: ChatModule(),
     ),
     ChildRoute(
       "/stories",

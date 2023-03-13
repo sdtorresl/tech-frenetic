@@ -199,11 +199,20 @@ class _HomePageState extends State<HomePage> {
         },
         icon: const Icon(TechFreneticIcons.article),
       ),
+      ActionButton(
+        onPressed: () {
+          if (_key.currentState != null) {
+            _key.currentState!.toggle();
+          }
+          Modular.to.pushNamed('/chat');
+        },
+        icon: const Icon(Icons.chat_rounded),
+      ),
     ];
 
     return ExpandableFab(
       key: _key,
-      distance: 70.0,
+      distance: 110.0,
       children: actions,
     );
   }
