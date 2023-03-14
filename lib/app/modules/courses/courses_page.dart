@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/models/dtos/paginator_dto.dart';
 import 'package:techfrenetic/app/modules/courses/widgets/course_card.dart';
 import 'package:techfrenetic/app/modules/premium/premium_page.dart';
 import 'package:techfrenetic/app/providers/courses_provider.dart';
+import 'package:techfrenetic/app/widgets/paginator_widget.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
 
 import '../../models/courses_model.dart';
@@ -19,6 +21,7 @@ class CoursesPage extends StatefulWidget {
 
 class CoursesPageState extends State<CoursesPage> {
   bool _isPremium = false;
+  int _currentPage = 0;
   final UserProvider _userProvider = Modular.get();
   final CoursesProvider _coursesProvider = Modular.get();
 
@@ -148,20 +151,31 @@ class CoursesPageState extends State<CoursesPage> {
             ),
           ),
           FutureBuilder(
-            future: _coursesProvider.getCourses(),
+            future: _coursesProvider.getCourses(page: _currentPage),
             builder: (BuildContext context,
-                AsyncSnapshot<List<CourseModel>> snapshot) {
+                AsyncSnapshot<PaginatorDto<CourseModel>> snapshot) {
               if (snapshot.hasData) {
-                List<CourseModel> courses = snapshot.data!;
+                PaginatorDto paginator = snapshot.data!;
+                List<CourseModel> courses =
+                    paginator.items as List<CourseModel>;
                 return Column(
-                  children: courses
-                      .map(
-                        (course) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: _courseItem(course),
-                        ),
-                      )
-                      .toList(),
+                  children: [
+                    ...courses
+                        .map(
+                          (course) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: _courseItem(course),
+                          ),
+                        )
+                        .toList(),
+                    PaginatorWidget(
+                        paginator: paginator,
+                        onPageChange: (int nextPage) {
+                          setState(() {
+                            _currentPage = nextPage;
+                          });
+                        })
+                  ],
                 );
               }
               return const SizedBox(
