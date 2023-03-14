@@ -97,7 +97,7 @@ class UserProvider extends TechFreneticProvider {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Error logging user: " + e.toString());
     }
     return loggedUser;
   }
@@ -116,7 +116,7 @@ class UserProvider extends TechFreneticProvider {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Error getting user: " + e.toString());
     }
     return userinfo;
   }
