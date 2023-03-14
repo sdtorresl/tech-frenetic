@@ -35,8 +35,8 @@ class CoursesProvider extends TechFreneticProvider {
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = json.jsonDecode(response.body);
-        course = CourseModel.fromMap(jsonResponse.first);
+        Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
+        course = CourseModel.fromMap(jsonResponse["rows"].first);
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }

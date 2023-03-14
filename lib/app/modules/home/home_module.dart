@@ -4,6 +4,8 @@ import 'package:techfrenetic/app/modules/courses/courses_module.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/followers/followers_page.dart';
 import 'package:techfrenetic/app/providers/followers_provider.dart';
 
+import '../courses/course_page.dart';
+import '../courses/lesson_page.dart';
 import 'home_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/auth_guard.dart';
@@ -29,7 +31,6 @@ import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/modules/search/search_module.dart';
 import 'package:techfrenetic/app/modules/sign_up/create_profile/create_profile_module.dart';
 import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
-import 'package:techfrenetic/app/modules/skills/skills_page.dart';
 import 'package:techfrenetic/app/modules/stories/stories_view_page.dart';
 import 'package:techfrenetic/app/modules/terms/terms_page.dart';
 import 'package:techfrenetic/app/modules/users_profiles/user_profile_module.dart';
@@ -56,7 +57,13 @@ class HomeModule extends Module {
       child: (_, args) => const HomePage(),
       children: [
         ModuleRoute('/community/', module: CommunityModule()),
-        ChildRoute('/skills', child: (context, args) => const SkillsPage()),
+        ModuleRoute(
+          '/courses',
+          module: CoursesModule(),
+          guards: [
+            AuthGuard(),
+          ],
+        ),
         ChildRoute('/vendors', child: (context, args) => const VendorsPage()),
         ModuleRoute('/profile', module: ProfileModule()),
       ],
@@ -106,13 +113,6 @@ class HomeModule extends Module {
       ],
     ),
     ModuleRoute(
-      '/courses',
-      module: CoursesModule(),
-      guards: [
-        AuthGuard(),
-      ],
-    ),
-    ModuleRoute(
       '/users_profiles',
       module: UsersProfilesModule(),
       guards: [
@@ -153,6 +153,18 @@ class HomeModule extends Module {
       guards: [
         AuthGuard(),
       ],
+    ),
+    ChildRoute(
+      "/courses/:id",
+      child: (_, args) => CoursePage(id: int.parse(args.params["id"])),
+    ),
+    ChildRoute(
+      "/courses/lesson",
+      child: (context, args) => LessonPage(
+        title: args.data["title"],
+        video: args.data["video"],
+        description: args.data["description"],
+      ),
     ),
     ModuleRoute(
       '/login',

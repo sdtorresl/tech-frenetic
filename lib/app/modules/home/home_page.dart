@@ -30,7 +30,7 @@ class _HomePageState extends State<HomePage> {
 
   final List<String> _pages = [
     '/community',
-    '/skills',
+    '/courses',
     '/vendors',
     '/profile/profile'
   ];

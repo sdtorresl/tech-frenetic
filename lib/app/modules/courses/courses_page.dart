@@ -10,7 +10,6 @@ import 'package:techfrenetic/app/widgets/separator.dart';
 
 import '../../models/courses_model.dart';
 import '../../providers/user_provider.dart';
-import '../../widgets/appbar_widget.dart';
 
 class CoursesPage extends StatefulWidget {
   final String title;
@@ -27,43 +26,35 @@ class CoursesPageState extends State<CoursesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TFAppBar(
-        title: Text(
-          AppLocalizations.of(context)?.tech_premium ?? '',
-          style: Theme.of(context).textTheme.headline3!,
-        ),
-      ),
-      body: FutureBuilder(
-        future: _userProvider.isPremium(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (snapshot.hasData) {
-            _isPremium = _isPremium ? _isPremium : snapshot.data!;
-            return _isPremium
-                ? _premiumUser()
-                : PremiumPage(onPremium: () {
-                    _userProvider.makePremium().then(
-                      (updated) {
-                        if (updated) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(AppLocalizations.of(context)
-                                    ?.premium_premium_success ??
-                                ''),
-                          ));
-                          setState(() {
-                            _isPremium = true;
-                          });
-                        }
-                      },
-                    );
-                  });
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
+    return FutureBuilder(
+      future: _userProvider.isPremium(),
+      builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+        if (snapshot.hasData) {
+          _isPremium = _isPremium ? _isPremium : snapshot.data!;
+          return _isPremium
+              ? _premiumUser()
+              : PremiumPage(onPremium: () {
+                  _userProvider.makePremium().then(
+                    (updated) {
+                      if (updated) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text(AppLocalizations.of(context)
+                                  ?.premium_premium_success ??
+                              ''),
+                        ));
+                        setState(() {
+                          _isPremium = true;
+                        });
+                      }
+                    },
+                  );
+                });
+        } else {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
+      },
     );
   }
 
