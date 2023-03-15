@@ -60,7 +60,11 @@ class MyAccountController extends Disposable {
     _prefs.userPhone = cellphone;
 
     return await _userProvider.userUpdate(
-        birthdate!, cellphone, country!, email);
+      birthdate,
+      cellphone,
+      country,
+      email,
+    );
   }
 
   @override

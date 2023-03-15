@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:libphonenumber_plugin/libphonenumber_plugin.dart' as p;
 
@@ -21,5 +22,12 @@ extension StringParsing on String {
     RegExp exp = RegExp(r"<[^>]*>", multiLine: true, caseSensitive: true);
 
     return replaceAll(exp, '');
+  }
+}
+
+extension ParseUtils on String {
+  DateTime toDateTime({DateFormat? format}) {
+    format ??= DateFormat('dd/mm/yyyy');
+    return format.parse(this);
   }
 }

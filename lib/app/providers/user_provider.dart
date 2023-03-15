@@ -204,17 +204,25 @@ class UserProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool> userUpdate(DateTime birthdate, String cellphone, String country,
-      String email) async {
+  Future<bool> userUpdate(DateTime? birthdate, String cellphone,
+      String? country, String email) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
 
       Map<String, dynamic> body = {
-        "field_birthdate": {"value": DateFormat("yy-MM-dd").format(birthdate)},
         "field_cellphone": {"value": cellphone},
         "field_user_location": {"value": country},
         "mail": {"value": email}
       };
+      if (birthdate != null) {
+        body.addAll(
+          {
+            "field_birthdate": {
+              "value": DateFormat("yy-MM-dd").format(birthdate)
+            }
+          },
+        );
+      }
 
       Map<String, String> headers = {}
         ..addAll(jsonHeader)

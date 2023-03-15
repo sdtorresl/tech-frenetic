@@ -52,6 +52,10 @@ class _MyAccountPageState extends State<MyAccountPage> {
   void initState() {
     super.initState();
 
+    _dateController.addListener(() {
+      _accountController.changeBirthdate(_dateController.text.toDateTime());
+    });
+
     _cellphoneController.addListener(() {
       _accountController.changeCellphone(_cellphoneController.text);
     });

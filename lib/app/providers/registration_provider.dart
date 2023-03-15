@@ -81,7 +81,7 @@ class RegistrationProvider extends TechFreneticProvider {
         "field_user_profession": {"value": profession},
         "field_cellphone": {"value": cellphone},
         "field_birthdate": {"value": DateFormat("yy-MM-dd").format(birthdate)},
-        "field_genre": {"value": genre},
+        //"field_genre": {"value": genre},
       };
 
       Map<String, String> headers = {};

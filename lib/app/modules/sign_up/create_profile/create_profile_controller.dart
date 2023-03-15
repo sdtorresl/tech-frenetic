@@ -65,6 +65,7 @@ class CreateProfileController extends Disposable {
   String? get code => _codeController.valueOrNull;
 
   Future<bool> validateCode() async {
+    debugPrint("Validate code with $verificationId and $code");
     try {
       await FirebaseAuth.instance
           .signInWithCredential(PhoneAuthProvider.credential(

@@ -167,11 +167,13 @@ class _ValidateCodePageState extends State<ValidateCodePage> {
 
   Future<bool> _validateCode() async {
     if (_verificationId != null) {
+      debugPrint(
+          "Validating code with $_verificationId and ${_codeEditingController.text}");
       try {
         await FirebaseAuth.instance
             .signInWithCredential(PhoneAuthProvider.credential(
           verificationId: _verificationId!,
-          smsCode: _codeEditingController.value.toString(),
+          smsCode: _codeEditingController.text,
         ));
       } catch (e) {
         if (e is FirebaseAuthException) {
@@ -197,7 +199,7 @@ class _ValidateCodePageState extends State<ValidateCodePage> {
       },
       verificationFailed: _showError,
       codeSent: (String verificationId, int? resendToken) {
-        debugPrint("Code was sent");
+        debugPrint("Code was sent, verification ID is $verificationId");
         setState(() {
           _codeSent = true;
           _sentCodes++;
