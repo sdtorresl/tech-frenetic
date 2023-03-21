@@ -16,7 +16,8 @@ class MeetupsWallModel {
 
   factory MeetupsWallModel.fromMap(Map<String, dynamic> json) {
     return MeetupsWallModel(
-      results: int.tryParse(json["results"]) ?? 0,
+      results:
+          json["results"] is String ? int.tryParse(json["results"]) ?? 0 : 0,
       articles: List<MeetupsModel>.from(
         json["articles"].map((x) => MeetupsModel.fromMap(x)),
       ),

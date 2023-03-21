@@ -21,7 +21,7 @@ class PaginatorDto<T extends IMappeable> {
       PaginatorDto(
         currentPage: json["pager"]["current_page"] ?? 0,
         totalItems: json["pager"]["total_items"],
-        totalPages: json["pager"]["total_pages"],
+        totalPages: json["pager"]["total_pages"] + 1,
         itemsPerPage: json["pager"]["items_per_page"],
         items: List<T>.from(json["rows"].map((x) => mapper.call(x))),
       );

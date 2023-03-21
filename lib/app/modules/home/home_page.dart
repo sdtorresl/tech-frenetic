@@ -233,7 +233,7 @@ class _HomePageState extends State<HomePage> {
               icon: const Icon(Icons.people_alt_outlined)),
           TitledNavigationBarItem(
               title: Text(AppLocalizations.of(context)!.skills),
-              icon: const Icon(Icons.home)),
+              icon: const Icon(Icons.school)),
           TitledNavigationBarItem(
               title: Text(AppLocalizations.of(context)!.vendors),
               icon: const Icon(Icons.card_travel)),
