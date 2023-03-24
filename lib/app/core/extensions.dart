@@ -23,6 +23,11 @@ extension StringParsing on String {
 
     return replaceAll(exp, '');
   }
+
+  String toCreditCard() {
+    RegExp regExp = RegExp(r"[^0-9]");
+    return replaceAll(regExp, '');
+  }
 }
 
 extension ParseUtils on String {

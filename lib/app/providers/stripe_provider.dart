@@ -1,9 +1,20 @@
 import 'dart:convert' as json;
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
+import 'package:techfrenetic/app/models/payment_method_response.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
 class StripeProvider extends TechFreneticProvider {
+  String _authentication() {
+    String username = GlobalConfiguration().getValue('stripe_key');
+    String password = '';
+    String basicAuthValue =
+        'Basic ' + base64Encode(utf8.encode('$username:$password'));
+    return basicAuthValue;
+  }
+
   Future<String?> createCheckout() async {
     String? sessionId;
 
@@ -24,5 +35,31 @@ class StripeProvider extends TechFreneticProvider {
       debugPrint(e.toString());
     }
     return sessionId;
+  }
+
+  Future<PaymentMethodResponse> addPaymentMethod(
+      String cardNumber, int expMonth, int expYear, String cvc) async {
+    Map<String, String> headers = {
+      'Authorization': _authentication(),
+      'Content-Type': 'application/x-www-form-urlencoded'
+    };
+
+    Uri _url = Uri.parse("https://api.stripe.com/v1/payment_methods");
+    Map<String, String> body = {
+      'type': 'card',
+      'card[number]': cardNumber,
+      'card[exp_month]': expMonth.toString(),
+      'card[exp_year]': expYear.toString(),
+      'card[cvc]': cvc
+    };
+
+    var response = await http.post(_url, body: body, headers: headers);
+
+    if (response.statusCode == 200) {
+      Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
+      return PaymentMethodResponse.fromJson(jsonResponse);
+    } else {
+      throw Exception(response.reasonPhrase);
+    }
   }
 }
