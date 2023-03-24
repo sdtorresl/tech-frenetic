@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:http/http.dart' as http;
+import 'package:techfrenetic/app/models/credit_card_model.dart';
 import 'package:techfrenetic/app/models/payment_method_response.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
-class StripeProvider extends TechFreneticProvider {
+class PaymentsProvider extends TechFreneticProvider {
   String _authentication() {
     String username = GlobalConfiguration().getValue('stripe_key');
     String password = '';
@@ -61,5 +63,51 @@ class StripeProvider extends TechFreneticProvider {
     } else {
       throw Exception(response.reasonPhrase);
     }
+  }
+
+  Future<bool> createOrder(UserModel user, CreditCardModel card) async {
+    Map<String, String> headers = authHeader
+      ..addAll(sessionHeader)
+      ..addAll(jsonHeader);
+
+    Uri _url = Uri.parse("$baseUrl/api/$locale/commerce/order/create");
+    Map<String, dynamic> body = {
+      "order": {
+        "type": "default",
+        "email": user.mail,
+        "store": 1,
+        "order_items": [
+          {
+            "type": "default",
+            "title": "Knit Hat in Midnight Plumkkkk",
+            "quantity": 1,
+            "purchased_entity": {"sku": "TFPREMIUM"},
+            "unit_price": {"number": 10, "currency_code": "USD"}
+          }
+        ]
+      },
+      "user": {"mail": user.mail, "name": user.userName, "status": "TRUE"},
+      "payment": {
+        "gateway": "pago_premium",
+        "type": "credit_card",
+        "details": {
+          "type": "credit_card",
+          "expiration": {
+            "month": card.month.toString(),
+            "year": card.year.toString()
+          },
+          "stripe_payment_method_id": card.stripePaymentId
+        }
+      }
+    };
+
+    var response =
+        await http.post(_url, body: jsonEncode(body), headers: headers);
+
+    if (response.statusCode == 201) {
+      return true;
+    }
+
+    return false;
   }
 }

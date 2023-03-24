@@ -1,16 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:techfrenetic/app/core/extensions.dart';
 import 'package:techfrenetic/app/core/utils/card_utils.dart';
+import 'package:techfrenetic/app/models/credit_card_model.dart';
 import 'package:techfrenetic/app/models/enums/card_type_enum.dart';
 import 'package:techfrenetic/app/models/payment_method_response.dart';
-import 'package:techfrenetic/app/providers/stripe_provider.dart';
+import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/modules/home/home_store.dart';
+import 'package:techfrenetic/app/providers/payments_provider.dart';
 
 part 'card_number_store.g.dart';
 
 class CardNumberStore = _CardNumberStoreBase with _$CardNumberStore;
 
 abstract class _CardNumberStoreBase with Store {
+  final HomeStore homeStore = Modular.get();
+
   @observable
   String? cardNumber;
 
@@ -153,11 +159,22 @@ abstract class _CardNumberStoreBase with Store {
       int year = int.parse(expirationDate!.split('/')[1]);
       year = CardUtils.convertYearTo4Digits(year);
 
-      StripeProvider stripeProvider = StripeProvider();
+      PaymentsProvider paymentsProvider = PaymentsProvider();
       try {
-        PaymentMethodResponse payment = await stripeProvider.addPaymentMethod(
+        PaymentMethodResponse payment = await paymentsProvider.addPaymentMethod(
             cardNumber!, month, year, cvv!);
-        debugPrint(payment.card?.checks.toString());
+        CreditCardModel creditCard = CreditCardModel(
+            month: month,
+            year: year,
+            number: cardNumber!,
+            cvv: cvv,
+            stripePaymentId: payment.id);
+        UserModel? loggedUser = homeStore.loggedUser;
+        if (loggedUser != null) {
+          bool orderCreated =
+              await paymentsProvider.createOrder(loggedUser, creditCard);
+          debugPrint("Order: $orderCreated");
+        }
       } catch (e) {
         debugPrint(e.toString());
       }

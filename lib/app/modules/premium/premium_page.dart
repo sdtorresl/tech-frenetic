@@ -3,7 +3,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/modules/premium/checkout_page.dart';
 import 'package:techfrenetic/app/modules/premium/widgets/card_number_module.dart';
-import 'package:techfrenetic/app/providers/stripe_provider.dart';
+import 'package:techfrenetic/app/providers/payments_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 class PremiumPage extends StatefulWidget {
@@ -116,7 +116,7 @@ class _PremiumPageState extends State<PremiumPage> {
   }
 
   Future<dynamic> _becamePremium() async {
-    StripeProvider _stripeProvider = StripeProvider();
+    PaymentsProvider _stripeProvider = PaymentsProvider();
     String? sessionId = await _stripeProvider.createCheckout();
     if (sessionId != null) {
       final result = await Navigator.of(context).push(MaterialPageRoute(
