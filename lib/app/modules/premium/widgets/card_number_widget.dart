@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:techfrenetic/app/core/utils/card_month_input_formatter.dart';
 import 'package:techfrenetic/app/core/utils/card_number_input_formatter.dart';
+import 'package:techfrenetic/app/modules/courses/courses_store.dart';
 import 'package:techfrenetic/app/modules/premium/widgets/card_number_store.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -19,6 +20,7 @@ class CardNumberWidget extends StatefulWidget {
 
 class _CardNumberWidgetState extends State<CardNumberWidget> {
   final CardNumberStore store = Modular.get();
+  final CoursesStore _coursesStore = Modular.get();
 
   @override
   void initState() {
@@ -35,7 +37,7 @@ class _CardNumberWidgetState extends State<CardNumberWidget> {
             content: Text(
                 AppLocalizations.of(context)?.premium_premium_success ?? ''),
           ));
-          setState(() {});
+          _coursesStore.checkIfPremium();
         } else {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(
