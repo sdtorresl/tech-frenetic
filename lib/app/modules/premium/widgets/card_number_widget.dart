@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 import 'package:techfrenetic/app/core/utils/card_month_input_formatter.dart';
 import 'package:techfrenetic/app/core/utils/card_number_input_formatter.dart';
 import 'package:techfrenetic/app/modules/premium/widgets/card_number_store.dart';
@@ -23,6 +24,28 @@ class _CardNumberWidgetState extends State<CardNumberWidget> {
   void initState() {
     super.initState();
     store.setupValidations();
+  }
+
+  @override
+  void didChangeDependencies() {
+    store.disposers.add(autorun((_) {
+      if (store.orderCreated != null) {
+        if (store.orderCreated == true) {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                AppLocalizations.of(context)?.premium_premium_success ?? ''),
+          ));
+          setState(() {});
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(
+                AppLocalizations.of(context)?.premium_premium_failed ?? ''),
+          ));
+        }
+      }
+    }));
+
+    super.didChangeDependencies();
   }
 
   @override

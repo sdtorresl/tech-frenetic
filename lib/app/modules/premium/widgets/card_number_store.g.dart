@@ -73,6 +73,22 @@ mixin _$CardNumberStore on _CardNumberStoreBase, Store {
     });
   }
 
+  late final _$orderCreatedAtom =
+      Atom(name: '_CardNumberStoreBase.orderCreated', context: context);
+
+  @override
+  bool? get orderCreated {
+    _$orderCreatedAtom.reportRead();
+    return super.orderCreated;
+  }
+
+  @override
+  set orderCreated(bool? value) {
+    _$orderCreatedAtom.reportWrite(value, super.orderCreated, () {
+      super.orderCreated = value;
+    });
+  }
+
   late final _$_CardNumberStoreBaseActionController =
       ActionController(name: '_CardNumberStoreBase', context: context);
 
@@ -148,7 +164,8 @@ mixin _$CardNumberStore on _CardNumberStoreBase, Store {
 cardNumber: ${cardNumber},
 expirationDate: ${expirationDate},
 cvv: ${cvv},
-cardType: ${cardType}
+cardType: ${cardType},
+orderCreated: ${orderCreated}
     ''';
   }
 }

@@ -29,12 +29,15 @@ abstract class _CardNumberStoreBase with Store {
   @observable
   CardType cardType = CardType.invalid;
 
-  List<ReactionDisposer> _disposers = [];
+  @observable
+  bool? orderCreated;
+
+  List<ReactionDisposer> disposers = [];
 
   final CardErrorState error = CardErrorState();
 
   void setupValidations() {
-    _disposers = [
+    disposers = [
       reaction((_) => cardNumber, validateCard),
       reaction((_) => expirationDate, validateExpiryDate),
       reaction((_) => cvv, validateCVV)
@@ -141,7 +144,7 @@ abstract class _CardNumberStoreBase with Store {
   }
 
   void dispose() {
-    for (final d in _disposers) {
+    for (final d in disposers) {
       d();
     }
   }
@@ -152,9 +155,6 @@ abstract class _CardNumberStoreBase with Store {
     validateCVV(cvv);
 
     if (!error.hasErrors) {
-      debugPrint("Card is $cardNumber");
-      debugPrint("CVV is $cvv");
-
       int month = int.parse(expirationDate!.split('/')[0]);
       int year = int.parse(expirationDate!.split('/')[1]);
       year = CardUtils.convertYearTo4Digits(year);
@@ -171,9 +171,8 @@ abstract class _CardNumberStoreBase with Store {
             stripePaymentId: payment.id);
         UserModel? loggedUser = homeStore.loggedUser;
         if (loggedUser != null) {
-          bool orderCreated =
+          orderCreated =
               await paymentsProvider.createOrder(loggedUser, creditCard);
-          debugPrint("Order: $orderCreated");
         }
       } catch (e) {
         debugPrint(e.toString());
