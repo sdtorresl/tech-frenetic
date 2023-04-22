@@ -15,6 +15,22 @@ abstract class _ChatStoreBase with Store {
   final String _appId = GlobalConfiguration().getValue('cometchat_appid');
   final String _key = GlobalConfiguration().getValue('cometchat_key');
 
+  @observable
+  bool loading = false;
+  @observable
+  var users = ObservableList<User>.of([]);
+  @observable
+  var conversations = ObservableList<Conversation>.of([]);
+  @observable
+  var groups = ObservableList<Group>.of([]);
+
+  final ConversationsRequest _conversationRequest =
+      (ConversationsRequestBuilder()..limit = 50).build();
+  final UsersRequest _usersRequest = (UsersRequestBuilder()
+        ..limit = 50
+        ..friendsOnly = false)
+      .build();
+
   void initialize() async {
     AppSettings appSettings = (AppSettingsBuilder()
           ..subscriptionType = CometChatSubscriptionType.allUsers
@@ -31,14 +47,31 @@ abstract class _ChatStoreBase with Store {
     final user = await CometChat.getLoggedInUser();
     if (user == null) {
       //TODO: Use the UID
-      await CometChat.login("usertest01", _key, onSuccess: (User user) {
+      await CometChat.login("superhero1", _key, onSuccess: (User? user) {
         debugPrint("Login Successful : $user");
       }, onError: (CometChatException e) {
         debugPrint("Login failed with exception:  ${e.message}");
       });
     }
+  }
 
-    ConversationsRequest conversationRequest =
-        (ConversationsRequestBuilder()..limit = 50).build();
+  void getUsers() async {
+    loading = true;
+    _usersRequest.fetchNext(
+        onSuccess: (List<User> users) {
+          this.users.addAll(users);
+          loading = false;
+        },
+        onError: (error) => throw error);
+  }
+
+  void getConversations() async {
+    loading = true;
+    _conversationRequest.fetchNext(
+        onSuccess: (List<Conversation> conversations) {
+          conversations.addAll(conversations);
+          loading = false;
+        },
+        onError: (error) => throw error);
   }
 }
