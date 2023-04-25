@@ -25,6 +25,56 @@ mixin _$ChatStore on _ChatStoreBase, Store {
     });
   }
 
+  late final _$messageEditingControllerAtom =
+      Atom(name: '_ChatStoreBase.messageEditingController', context: context);
+
+  @override
+  TextEditingController get messageEditingController {
+    _$messageEditingControllerAtom.reportRead();
+    return super.messageEditingController;
+  }
+
+  @override
+  set messageEditingController(TextEditingController value) {
+    _$messageEditingControllerAtom
+        .reportWrite(value, super.messageEditingController, () {
+      super.messageEditingController = value;
+    });
+  }
+
+  late final _$filterEditingControllerAtom =
+      Atom(name: '_ChatStoreBase.filterEditingController', context: context);
+
+  @override
+  TextEditingController get filterEditingController {
+    _$filterEditingControllerAtom.reportRead();
+    return super.filterEditingController;
+  }
+
+  @override
+  set filterEditingController(TextEditingController value) {
+    _$filterEditingControllerAtom
+        .reportWrite(value, super.filterEditingController, () {
+      super.filterEditingController = value;
+    });
+  }
+
+  late final _$loggedUserAtom =
+      Atom(name: '_ChatStoreBase.loggedUser', context: context);
+
+  @override
+  User? get loggedUser {
+    _$loggedUserAtom.reportRead();
+    return super.loggedUser;
+  }
+
+  @override
+  set loggedUser(User? value) {
+    _$loggedUserAtom.reportWrite(value, super.loggedUser, () {
+      super.loggedUser = value;
+    });
+  }
+
   late final _$usersAtom = Atom(name: '_ChatStoreBase.users', context: context);
 
   @override
@@ -72,13 +122,33 @@ mixin _$ChatStore on _ChatStoreBase, Store {
     });
   }
 
+  late final _$messagesAtom =
+      Atom(name: '_ChatStoreBase.messages', context: context);
+
+  @override
+  ObservableList<BaseMessage> get messages {
+    _$messagesAtom.reportRead();
+    return super.messages;
+  }
+
+  @override
+  set messages(ObservableList<BaseMessage> value) {
+    _$messagesAtom.reportWrite(value, super.messages, () {
+      super.messages = value;
+    });
+  }
+
   @override
   String toString() {
     return '''
 loading: ${loading},
+messageEditingController: ${messageEditingController},
+filterEditingController: ${filterEditingController},
+loggedUser: ${loggedUser},
 users: ${users},
 conversations: ${conversations},
-groups: ${groups}
+groups: ${groups},
+messages: ${messages}
     ''';
   }
 }

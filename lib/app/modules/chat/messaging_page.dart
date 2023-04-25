@@ -1,7 +1,13 @@
+import 'package:bubble/bubble.dart';
 import 'package:cometchat/cometchat_sdk.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:techfrenetic/app/modules/chat/chat_store.dart';
 import 'package:techfrenetic/app/modules/chat/widgets/avatar_chat_widget.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
+import 'package:timeago/timeago.dart' as timeago;
 
 class MessagingPage extends StatefulWidget {
   final User user;
@@ -12,6 +18,14 @@ class MessagingPage extends StatefulWidget {
 }
 
 class _MessagingPageState extends State<MessagingPage> {
+  final ChatStore _chatStore = Modular.get();
+
+  @override
+  void initState() {
+    _chatStore.getMessages(widget.user.uid);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -40,73 +54,130 @@ class _MessagingPageState extends State<MessagingPage> {
           ],
         ),
       ),
-      body: const Center(
-          child: Padding(
-        padding: EdgeInsets.all(20.0),
-        child: Text(
-          'Aún no has iniciado una conversación con este usuario. ¡Dile "Hola"!',
-          textAlign: TextAlign.center,
-        ),
-      )),
+      body: _messagesList(),
       bottomNavigationBar: _messageInput(),
     );
   }
 
-  Widget _messageInput() {
-    return SafeArea(
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(width: 1, color: Colors.black12),
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.black12,
+  Widget _messagesList() {
+    if (_chatStore.messages.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(20.0),
+          child: Text(
+            'Aún no has iniciado una conversación con este usuario. ¡Dile "Hola"!',
+            textAlign: TextAlign.center,
+          ),
         ),
-        clipBehavior: Clip.hardEdge,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+      );
+    }
+
+    return Observer(builder: (context) {
+      return ListView.builder(
+        itemCount: _chatStore.messages.length,
+        itemBuilder: (context, index) {
+          return _messageBubble(_chatStore.messages[index]);
+        },
+      );
+    });
+  }
+
+  Widget _messageInput() {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: const BorderRadius.only(
+          topLeft: Radius.circular(10),
+          topRight: Radius.circular(10),
+        ),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 5,
+            blurRadius: 7,
+            offset: const Offset(0, 3), // changes position of shadow
+          ),
+        ],
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+      child: SafeArea(
+        child: Row(
           children: [
-            Container(
-              padding: const EdgeInsets.all(10.0),
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                border: Border(
-                  bottom: BorderSide(color: Colors.black12, width: 1),
-                  top: BorderSide(color: Colors.black12, width: 1),
-                  left: BorderSide(color: Colors.black12, width: 1),
-                  right: BorderSide(color: Colors.black12, width: 1),
-                ),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(10),
-                  topRight: Radius.circular(10),
-                ),
-              ),
-              child: const Text(
-                'Introduce tu mensaje aquí',
+            Flexible(
+              child: TextField(
+                keyboardType: TextInputType.multiline,
+                decoration:
+                    const InputDecoration(hintText: 'Enter your message here'),
+                controller: _chatStore.messageEditingController,
+                //onSubmitted: (value) => submitComment(),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.all(5),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  const Flexible(
-                    child: SizedBox(
-                      height: 40,
-                      child: TextField(),
-                    ),
-                  ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: const Icon(Icons.send_outlined),
-                  )
-                ],
-              ),
+            IconButton(
+              onPressed: sendMessage,
+              icon: const Icon(Icons.send_outlined),
             )
           ],
         ),
-        margin: const EdgeInsets.all(20),
       ),
     );
+  }
+
+  Widget _messageBubble(BaseMessage message) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: const EdgeInsets.only(left: 20, top: 10),
+          child: AvatarChatWidget(
+            url: message.sender?.avatar,
+          ),
+        ),
+        Expanded(
+          child: Bubble(
+            margin: const BubbleEdges.symmetric(horizontal: 20, vertical: 10),
+            nip: BubbleNip.leftTop,
+            color: Theme.of(context).backgroundColor,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: Text(
+                        message.sender?.name ?? '',
+                        style: Theme.of(context).textTheme.headline3,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 5),
+                      child: SvgPicture.asset(
+                        'assets/img/icons/dot.svg',
+                        allowDrawingOutsideViewBox: true,
+                        semanticsLabel: 'Dot',
+                        color: Theme.of(context).primaryColor,
+                      ),
+                    ),
+                    message.deliveredAt != null
+                        ? Text(
+                            timeago.format(message.deliveredAt!,
+                                locale: 'en_short'),
+                            style: Theme.of(context).textTheme.bodyText1)
+                        : const SizedBox.shrink(),
+                  ],
+                ),
+                message is TextMessage
+                    ? Text((message).text)
+                    : const Text("Media message")
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  void sendMessage() {
+    _chatStore.sendMessage(receiverID: widget.user.uid);
   }
 }

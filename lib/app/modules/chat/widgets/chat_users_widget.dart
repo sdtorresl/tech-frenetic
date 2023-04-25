@@ -15,7 +15,6 @@ class ChatUsersWidget extends StatefulWidget {
 
 class _ChatUsersWidgetState extends State<ChatUsersWidget> {
   final ChatStore _chatStore = Modular.get();
-  final TextEditingController _searchController = TextEditingController();
 
   String? filter;
 
@@ -32,7 +31,7 @@ class _ChatUsersWidgetState extends State<ChatUsersWidget> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
           child: TextField(
-            controller: _searchController,
+            controller: _chatStore.filterEditingController,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.search),
               labelText: AppLocalizations.of(context)?.search ?? '',
@@ -41,6 +40,10 @@ class _ChatUsersWidgetState extends State<ChatUsersWidget> {
         ),
         Expanded(
           child: Observer(builder: (context) {
+            if (_chatStore.loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
             return ListView.builder(
               itemCount: _chatStore.users.length,
               itemBuilder: (context, index) {

@@ -7,7 +7,7 @@ import 'package:techfrenetic/app/modules/home/home_store.dart';
 class ChatModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind.lazySingleton((i) => ChatStore()),
+    Bind.singleton((i) => ChatStore()),
     Bind.lazySingleton((i) => HomeStore()),
   ];
 
