@@ -2,24 +2,30 @@ import 'package:cometchat/cometchat_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 
-part 'chat_users_store.g.dart';
+part 'messaging_store.g.dart';
 
-class ChatUsersStore = _ChatStoreBase with _$ChatUsersStore;
+class MessagingStore = _ChatStoreBase with _$MessagingStore;
 
 abstract class _ChatStoreBase with Store {
   @observable
   bool loading = false;
   @observable
   TextEditingController messageEditingController = TextEditingController();
-
+  @observable
   var messages = ObservableList<BaseMessage>.of([]);
 
-  void initialize(String id, {bool groupMessages = false}) async {
-    loading = true;
+  @action
+  void addMessage(BaseMessage message) => messages.add(message);
+
+  @action
+  setLoading(bool value) => loading = value;
+
+  @action
+  Future<void> getMessages(String id, {bool groupMessages = false}) async {
+    setLoading(true);
 
     MessagesRequestBuilder messageRequestBuilder = MessagesRequestBuilder()
-      ..limit = 50
-      ..messageId = -1;
+      ..limit = 50;
 
     if (groupMessages) {
       messageRequestBuilder.guid = id;
@@ -29,19 +35,11 @@ abstract class _ChatStoreBase with Store {
 
     MessagesRequest messageRequest = messageRequestBuilder.build();
 
-    messageRequest.fetchNext(
+    await messageRequest.fetchPrevious(
         onSuccess: (List<BaseMessage> list) {
-          for (BaseMessage message in list) {
-            if (message is TextMessage) {
-              messages = ObservableList.of(list);
-              debugPrint("Text message received successfully: " +
-                  (message).toString());
-            } else if (message is MediaMessage) {
-              debugPrint("Media message received successfully: " +
-                  (message).toString());
-            }
-          }
-          loading = false;
+          messages = ObservableList<BaseMessage>.of(list);
+
+          setLoading(false);
         },
         onError: (error) => throw error);
   }
@@ -51,6 +49,8 @@ abstract class _ChatStoreBase with Store {
     String receiverType = CometChatConversationType.user,
     String type = CometChatMessageType.text,
   }) {
+    if (messageEditingController.text.isEmpty) return;
+
     TextMessage textMessage = TextMessage(
         text: messageEditingController.text,
         receiverUid: receiverID,
@@ -58,8 +58,9 @@ abstract class _ChatStoreBase with Store {
         type: type);
 
     CometChat.sendMessage(textMessage, onSuccess: (TextMessage message) {
-      debugPrint("Message sent successfully:  $message");
-      messages.add(message);
+      debugPrint("Message sent successfully:  ${message.text}");
+      addMessage(message);
+      debugPrint(messages.toString());
       messageEditingController.text = '';
     }, onError: (CometChatException e) {
       debugPrint("Message sending failed with exception:  ${e.message}");

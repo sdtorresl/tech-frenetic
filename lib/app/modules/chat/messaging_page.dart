@@ -2,9 +2,8 @@ import 'package:bubble/bubble.dart';
 import 'package:cometchat/cometchat_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:techfrenetic/app/modules/chat/chat_store.dart';
+import 'package:techfrenetic/app/modules/chat/messaging_store.dart';
 import 'package:techfrenetic/app/modules/chat/widgets/avatar_chat_widget.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -18,12 +17,11 @@ class MessagingPage extends StatefulWidget {
 }
 
 class _MessagingPageState extends State<MessagingPage> {
-  final ChatStore _chatStore = Modular.get();
+  final MessagingStore _messagingStore = MessagingStore();
 
   @override
   void initState() {
     super.initState();
-    _chatStore.getMessages(widget.user.uid);
   }
 
   @override
@@ -60,26 +58,37 @@ class _MessagingPageState extends State<MessagingPage> {
   }
 
   Widget _messagesList() {
-    if (_chatStore.messages.isEmpty) {
-      return const Center(
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Text(
-            'Aún no has iniciado una conversación con este usuario. ¡Dile "Hola"!',
-            textAlign: TextAlign.center,
-          ),
-        ),
-      );
-    }
+    return FutureBuilder(
+      future: _messagingStore.getMessages(widget.user.uid),
+      builder: (BuildContext context, snapshot) {
+        if (_messagingStore.loading) {
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        }
 
-    return Observer(builder: (context) {
-      return ListView.builder(
-        itemCount: _chatStore.messages.length,
-        itemBuilder: (context, index) {
-          return _messageBubble(_chatStore.messages[index]);
-        },
-      );
-    });
+        if (_messagingStore.messages.isEmpty) {
+          return const Center(
+            child: Padding(
+              padding: EdgeInsets.all(20.0),
+              child: Text(
+                'Aún no has iniciado una conversación con este usuario. ¡Dile "Hola"!',
+                textAlign: TextAlign.center,
+              ),
+            ),
+          );
+        }
+
+        return Observer(builder: (context) {
+          return ListView.builder(
+            itemCount: _messagingStore.messages.length,
+            itemBuilder: (context, index) {
+              return _messageBubble(_messagingStore.messages[index]);
+            },
+          );
+        });
+      },
+    );
   }
 
   Widget _messageInput() {
@@ -108,7 +117,7 @@ class _MessagingPageState extends State<MessagingPage> {
                 keyboardType: TextInputType.multiline,
                 decoration:
                     const InputDecoration(hintText: 'Enter your message here'),
-                controller: _chatStore.messageEditingController,
+                controller: _messagingStore.messageEditingController,
                 //onSubmitted: (value) => submitComment(),
               ),
             ),
@@ -167,7 +176,7 @@ class _MessagingPageState extends State<MessagingPage> {
                   ],
                 ),
                 message is TextMessage
-                    ? Text((message).text)
+                    ? Text(message.text)
                     : const Text("Media message")
               ],
             ),
@@ -178,6 +187,6 @@ class _MessagingPageState extends State<MessagingPage> {
   }
 
   void sendMessage() {
-    _chatStore.sendMessage(receiverID: widget.user.uid);
+    _messagingStore.sendMessage(receiverID: widget.user.uid);
   }
 }
