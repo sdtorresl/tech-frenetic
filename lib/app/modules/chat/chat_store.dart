@@ -22,6 +22,8 @@ abstract class _ChatStoreBase with Store {
   @observable
   TextEditingController filterEditingController = TextEditingController();
   @observable
+  TextEditingController groupsSearchEditingController = TextEditingController();
+  @observable
   User? loggedUser;
   @observable
   var users = ObservableList<User>.of([]);
@@ -62,6 +64,10 @@ abstract class _ChatStoreBase with Store {
     filterEditingController.addListener(() {
       getUsers();
     });
+
+    groupsSearchEditingController.addListener(() {
+      getGroups();
+    });
   }
 
   void getUsers() async {
@@ -75,9 +81,29 @@ abstract class _ChatStoreBase with Store {
     }
 
     final UsersRequest usersRequest = usersRequestBuilder.build();
+    usersRequest.fetchNext(onSuccess: (List<User> users) {
+      this.users = ObservableList<User>.of(users);
+      loading = false;
+    }, onError: (error) {
+      loading = false;
+      throw error;
+    });
+  }
+
+  void getGroups() async {
+    loading = true;
+    final groupsRequestBuilder = GroupsRequestBuilder()
+      ..limit = 50
+      ..joinedOnly = true;
+
+    if (groupsSearchEditingController.text.isNotEmpty) {
+      groupsRequestBuilder.searchKeyword = groupsSearchEditingController.text;
+    }
+
+    final GroupsRequest usersRequest = groupsRequestBuilder.build();
     usersRequest.fetchNext(
-        onSuccess: (List<User> users) {
-          this.users = ObservableList<User>.of(users);
+        onSuccess: (List<Group> groups) {
+          this.groups = ObservableList<Group>.of(groups);
           loading = false;
         },
         onError: (error) => throw error);
@@ -93,14 +119,20 @@ abstract class _ChatStoreBase with Store {
         onError: (error) => throw error);
   }
 
-  void getMessages(String uid) async {
-    loading = true;
+  void getMessages(String id, {bool groupMessages = false}) async {
+    //loading = true;
 
-    MessagesRequest messageRequest = (MessagesRequestBuilder()
-          ..uid = uid
-          ..limit = 50
-          ..messageId = -1)
-        .build();
+    MessagesRequestBuilder messageRequestBuilder = MessagesRequestBuilder()
+      ..limit = 50
+      ..messageId = -1;
+
+    if (groupMessages) {
+      messageRequestBuilder.guid = id;
+    } else {
+      messageRequestBuilder.uid = id;
+    }
+
+    MessagesRequest messageRequest = messageRequestBuilder.build();
 
     messageRequest.fetchNext(
         onSuccess: (List<BaseMessage> list) {

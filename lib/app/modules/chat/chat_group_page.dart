@@ -8,22 +8,23 @@ import 'package:techfrenetic/app/modules/chat/chat_store.dart';
 import 'package:techfrenetic/app/modules/chat/widgets/avatar_chat_widget.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class MessagingPage extends StatefulWidget {
-  final User user;
-  const MessagingPage({super.key, required this.user});
+class ChatGroupPage extends StatefulWidget {
+  final Group group;
+  const ChatGroupPage({super.key, required this.group});
 
   @override
-  State<MessagingPage> createState() => _MessagingPageState();
+  State<ChatGroupPage> createState() => _ChatGroupPageState();
 }
 
-class _MessagingPageState extends State<MessagingPage> {
+class _ChatGroupPageState extends State<ChatGroupPage> {
   final ChatStore _chatStore = Modular.get();
 
   @override
   void initState() {
+    _chatStore.getMessages(widget.group.guid, groupMessages: true);
     super.initState();
-    _chatStore.getMessages(widget.user.uid);
   }
 
   @override
@@ -32,7 +33,7 @@ class _MessagingPageState extends State<MessagingPage> {
       appBar: TFAppBar(
         title: Row(
           children: [
-            AvatarChatWidget(url: widget.user.avatar),
+            AvatarChatWidget(url: widget.group.icon),
             const SizedBox(
               width: 10,
             ),
@@ -41,10 +42,11 @@ class _MessagingPageState extends State<MessagingPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  widget.user.name,
+                  widget.group.name,
                   style: Theme.of(context).textTheme.headline1,
                 ),
-                Text(widget.user.status ?? '',
+                Text(
+                    "${widget.group.membersCount} ${AppLocalizations.of(context)?.groups_members ?? ''}",
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium
@@ -65,7 +67,7 @@ class _MessagingPageState extends State<MessagingPage> {
         child: Padding(
           padding: EdgeInsets.all(20.0),
           child: Text(
-            'Aún no has iniciado una conversación con este usuario. ¡Dile "Hola"!',
+            'Aún no has iniciado una conversación en este grupo. Di "Hola"!',
             textAlign: TextAlign.center,
           ),
         ),
@@ -178,6 +180,9 @@ class _MessagingPageState extends State<MessagingPage> {
   }
 
   void sendMessage() {
-    _chatStore.sendMessage(receiverID: widget.user.uid);
+    _chatStore.sendMessage(
+      receiverID: widget.group.guid,
+      receiverType: CometChatReceiverType.group,
+    );
   }
 }

@@ -59,6 +59,23 @@ mixin _$ChatStore on _ChatStoreBase, Store {
     });
   }
 
+  late final _$groupsSearchEditingControllerAtom = Atom(
+      name: '_ChatStoreBase.groupsSearchEditingController', context: context);
+
+  @override
+  TextEditingController get groupsSearchEditingController {
+    _$groupsSearchEditingControllerAtom.reportRead();
+    return super.groupsSearchEditingController;
+  }
+
+  @override
+  set groupsSearchEditingController(TextEditingController value) {
+    _$groupsSearchEditingControllerAtom
+        .reportWrite(value, super.groupsSearchEditingController, () {
+      super.groupsSearchEditingController = value;
+    });
+  }
+
   late final _$loggedUserAtom =
       Atom(name: '_ChatStoreBase.loggedUser', context: context);
 
@@ -144,6 +161,7 @@ mixin _$ChatStore on _ChatStoreBase, Store {
 loading: ${loading},
 messageEditingController: ${messageEditingController},
 filterEditingController: ${filterEditingController},
+groupsSearchEditingController: ${groupsSearchEditingController},
 loggedUser: ${loggedUser},
 users: ${users},
 conversations: ${conversations},

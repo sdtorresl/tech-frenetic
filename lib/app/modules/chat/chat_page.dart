@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/modules/chat/chat_store.dart';
 import 'package:techfrenetic/app/modules/chat/widgets/chat_conversations_widget.dart';
+import 'package:techfrenetic/app/modules/chat/widgets/chat_groups_widget.dart';
 import 'package:techfrenetic/app/modules/chat/widgets/chat_users_widget.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 
@@ -27,7 +28,7 @@ class ChatPageState extends State<ChatPage> {
   static const List<Widget> _pages = <Widget>[
     ChatConversationsWidget(),
     ChatUsersWidget(),
-    ChatUsersWidget(),
+    ChatGroupsWidget(),
   ];
 
   @override

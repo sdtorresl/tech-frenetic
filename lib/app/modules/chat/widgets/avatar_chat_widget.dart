@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class AvatarChatWidget extends StatefulWidget {
   final String? url;
@@ -47,7 +48,9 @@ class _AvatarChatWidgetState extends State<AvatarChatWidget>
           height: pictureHeight,
           width: pictureWidth,
           child: widget.url != null
-              ? CachedNetworkImage(imageUrl: widget.url!)
+              ? widget.url!.toLowerCase().contains('svg')
+                  ? SvgPicture.network(widget.url!)
+                  : CachedNetworkImage(imageUrl: widget.url!)
               : const Icon(
                   Icons.person,
                 ),
