@@ -113,7 +113,7 @@ abstract class _ChatStoreBase with Store {
     loading = true;
     _conversationRequest.fetchNext(
         onSuccess: (List<Conversation> conversations) {
-          conversations.addAll(conversations);
+          this.conversations = ObservableList<Conversation>.of(conversations);
           loading = false;
         },
         onError: (error) => throw error);

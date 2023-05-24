@@ -1,12 +1,10 @@
-import 'package:bubble/bubble.dart';
 import 'package:cometchat/cometchat_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:techfrenetic/app/modules/chat/messaging_store.dart';
 import 'package:techfrenetic/app/modules/chat/widgets/avatar_chat_widget.dart';
+import 'package:techfrenetic/app/modules/chat/widgets/message_widget.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
-import 'package:timeago/timeago.dart' as timeago;
 
 class MessagingPage extends StatefulWidget {
   final User user;
@@ -21,6 +19,7 @@ class _MessagingPageState extends State<MessagingPage> {
 
   @override
   void initState() {
+    _messagingStore.initializeListeners();
     super.initState();
   }
 
@@ -83,7 +82,7 @@ class _MessagingPageState extends State<MessagingPage> {
           return ListView.builder(
             itemCount: _messagingStore.messages.length,
             itemBuilder: (context, index) {
-              return _messageBubble(_messagingStore.messages[index]);
+              return MessageWidget(message: _messagingStore.messages[index]);
             },
           );
         });
@@ -128,61 +127,6 @@ class _MessagingPageState extends State<MessagingPage> {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _messageBubble(BaseMessage message) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Container(
-          margin: const EdgeInsets.only(left: 20, top: 10),
-          child: AvatarChatWidget(
-            url: message.sender?.avatar,
-          ),
-        ),
-        Expanded(
-          child: Bubble(
-            margin: const BubbleEdges.symmetric(horizontal: 20, vertical: 10),
-            nip: BubbleNip.leftTop,
-            color: Theme.of(context).backgroundColor,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Text(
-                        message.sender?.name ?? '',
-                        style: Theme.of(context).textTheme.headline3,
-                      ),
-                    ),
-                    Container(
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      child: SvgPicture.asset(
-                        'assets/img/icons/dot.svg',
-                        allowDrawingOutsideViewBox: true,
-                        semanticsLabel: 'Dot',
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                    message.deliveredAt != null
-                        ? Text(
-                            timeago.format(message.deliveredAt!,
-                                locale: 'en_short'),
-                            style: Theme.of(context).textTheme.bodyText1)
-                        : const SizedBox.shrink(),
-                  ],
-                ),
-                message is TextMessage
-                    ? Text(message.text)
-                    : const Text("Media message")
-              ],
-            ),
-          ),
-        )
-      ],
     );
   }
 

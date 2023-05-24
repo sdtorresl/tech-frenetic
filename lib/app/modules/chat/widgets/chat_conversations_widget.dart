@@ -1,9 +1,11 @@
+import 'package:cometchat/cometchat_sdk.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../chat_store.dart';
+import 'avatar_chat_widget.dart';
 
 class ChatConversationsWidget extends StatefulWidget {
   const ChatConversationsWidget({super.key});
@@ -20,7 +22,7 @@ class _ChatConversationsWidgetState extends State<ChatConversationsWidget> {
   @override
   void initState() {
     super.initState();
-    _chatStore.getUsers();
+    _chatStore.getConversations();
   }
 
   @override
@@ -39,14 +41,23 @@ class _ChatConversationsWidgetState extends State<ChatConversationsWidget> {
         ),
         Expanded(
           child: Observer(builder: (context) {
+            if (_chatStore.loading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
             return ListView.builder(
               itemCount: _chatStore.conversations.length,
               itemBuilder: (context, index) {
+                AppEntity entity =
+                    _chatStore.conversations[index].conversationWith;
+                final title =
+                    entity is Group ? (entity).name : (entity as User).name;
+
                 return ListTile(
-                  // leading: AvatarChatWidget(
-                  //   url: _chatStore.conversations[index].,
-                  // ),
-                  title: Text(_chatStore.conversations[index].toString()),
+                  leading: AvatarChatWidget(
+                    url: _chatStore.users[index].avatar,
+                  ),
+                  title: Text(title),
                   onTap: () => Modular.to.pushNamed('/chat/message',
                       arguments: _chatStore.conversations[index]),
                 );

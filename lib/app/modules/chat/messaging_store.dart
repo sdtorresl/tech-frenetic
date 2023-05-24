@@ -6,7 +6,7 @@ part 'messaging_store.g.dart';
 
 class MessagingStore = _ChatStoreBase with _$MessagingStore;
 
-abstract class _ChatStoreBase with Store {
+abstract class _ChatStoreBase with Store, MessageListener {
   @observable
   bool loading = false;
   @observable
@@ -44,6 +44,10 @@ abstract class _ChatStoreBase with Store {
         onError: (error) => throw error);
   }
 
+  void initializeListeners() {
+    CometChat.addMessageListener("listenerId", this);
+  }
+
   void sendMessage({
     required String receiverID,
     String receiverType = CometChatConversationType.user,
@@ -65,5 +69,31 @@ abstract class _ChatStoreBase with Store {
     }, onError: (CometChatException e) {
       debugPrint("Message sending failed with exception:  ${e.message}");
     });
+  }
+
+  @override
+  void onTextMessageReceived(TextMessage textMessage) {
+    debugPrint(
+        "Text message received successfully: ${textMessage.conversationId}");
+
+    CometChat.getConversationFromMessage(
+      textMessage,
+      onSuccess: (conversation) => {
+        debugPrint("Conversation Object $conversation"),
+      },
+      onError: (error) => {
+        debugPrint("Error while converting message object $error"),
+      },
+    );
+  }
+
+  @override
+  void onMediaMessageReceived(MediaMessage mediaMessage) {
+    debugPrint("Media message received successfully: $mediaMessage");
+  }
+
+  @override
+  void onCustomMessageReceived(CustomMessage customMessage) {
+    debugPrint("Custom message received successfully: $customMessage");
   }
 }
