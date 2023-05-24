@@ -14,13 +14,13 @@ class ChatPage extends StatefulWidget {
 }
 
 class ChatPageState extends State<ChatPage> {
-  ChatStore chatStore = Modular.get();
-  int _selectedIndex = 1;
+  final ChatStore _chatStore = Modular.get();
+  int _selectedIndex = 0;
 
   @override
   void initState() {
+    _chatStore.initialize();
     super.initState();
-    chatStore.initialize();
   }
 
   static const List<String> _titles = ['Chats', 'Usuarios', 'Grupos'];

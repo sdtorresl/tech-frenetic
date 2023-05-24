@@ -55,11 +55,14 @@ class _ChatConversationsWidgetState extends State<ChatConversationsWidget> {
 
                 return ListTile(
                   leading: AvatarChatWidget(
-                    url: _chatStore.users[index].avatar,
-                  ),
+                      url: entity is Group
+                          ? entity.icon
+                          : (entity as User).avatar),
                   title: Text(title),
-                  onTap: () => Modular.to.pushNamed('/chat/message',
-                      arguments: _chatStore.conversations[index]),
+                  onTap: () => Modular.to.pushNamed(
+                    entity is Group ? '/chat/group' : '/chat/message',
+                    arguments: entity,
+                  ),
                 );
               },
             );

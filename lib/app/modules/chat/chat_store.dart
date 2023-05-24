@@ -34,9 +34,6 @@ abstract class _ChatStoreBase with Store {
   @observable
   var messages = ObservableList<BaseMessage>.of([]);
 
-  final ConversationsRequest _conversationRequest =
-      (ConversationsRequestBuilder()..limit = 50).build();
-
   void initialize() async {
     AppSettings appSettings = (AppSettingsBuilder()
           ..subscriptionType = CometChatSubscriptionType.allUsers
@@ -111,6 +108,9 @@ abstract class _ChatStoreBase with Store {
 
   void getConversations() async {
     loading = true;
+    final ConversationsRequest _conversationRequest =
+        (ConversationsRequestBuilder()..limit = 50).build();
+
     _conversationRequest.fetchNext(
         onSuccess: (List<Conversation> conversations) {
           this.conversations = ObservableList<Conversation>.of(conversations);
