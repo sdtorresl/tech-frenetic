@@ -17,7 +17,6 @@ class ChatConversationsWidget extends StatefulWidget {
 
 class _ChatConversationsWidgetState extends State<ChatConversationsWidget> {
   final ChatStore _chatStore = Modular.get();
-  final TextEditingController _searchController = TextEditingController();
 
   @override
   void initState() {
@@ -32,7 +31,7 @@ class _ChatConversationsWidgetState extends State<ChatConversationsWidget> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 5),
           child: TextField(
-            controller: _searchController,
+            controller: _chatStore.conversationSearchController,
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.search),
               labelText: AppLocalizations.of(context)?.search ?? '',
@@ -60,7 +59,7 @@ class _ChatConversationsWidgetState extends State<ChatConversationsWidget> {
                           : (entity as User).avatar),
                   title: Text(title),
                   onTap: () => Modular.to.pushNamed(
-                    entity is Group ? '/chat/group' : '/chat/message',
+                    '/chat/message',
                     arguments: entity,
                   ),
                 );

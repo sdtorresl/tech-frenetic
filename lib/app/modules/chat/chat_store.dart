@@ -18,6 +18,8 @@ abstract class _ChatStoreBase with Store {
   @observable
   bool loading = false;
   @observable
+  TextEditingController conversationSearchController = TextEditingController();
+  @observable
   TextEditingController messageEditingController = TextEditingController();
   @observable
   TextEditingController filterEditingController = TextEditingController();
@@ -50,7 +52,7 @@ abstract class _ChatStoreBase with Store {
     loggedUser = await CometChat.getLoggedInUser();
     if (loggedUser == null) {
       //TODO: Use the UID
-      await CometChat.login("superhero1", _key, onSuccess: (User? user) {
+      await CometChat.login("superhero2", _key, onSuccess: (User? user) {
         debugPrint("Login Successful : $user");
         loggedUser = user;
       }, onError: (CometChatException e) {
@@ -64,6 +66,10 @@ abstract class _ChatStoreBase with Store {
 
     groupsSearchEditingController.addListener(() {
       getGroups();
+    });
+
+    conversationSearchController.addListener(() {
+      getConversations();
     });
   }
 
@@ -113,7 +119,8 @@ abstract class _ChatStoreBase with Store {
 
     _conversationRequest.fetchNext(
         onSuccess: (List<Conversation> conversations) {
-          this.conversations = ObservableList<Conversation>.of(conversations);
+          this.conversations = ObservableList<Conversation>.of(conversations
+              .where((c) => conversationMatchFilter(c.conversationWith)));
           loading = false;
         },
         onError: (error) => throw error);
@@ -169,5 +176,15 @@ abstract class _ChatStoreBase with Store {
     }, onError: (CometChatException e) {
       debugPrint("Message sending failed with exception:  ${e.message}");
     });
+  }
+
+  bool conversationMatchFilter(AppEntity entity) {
+    if (entity is User) {
+      return entity.name
+          .contains(conversationSearchController.text.toLowerCase());
+    }
+    return (entity as Group)
+        .name
+        .contains(conversationSearchController.text.toLowerCase());
   }
 }

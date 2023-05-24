@@ -5,10 +5,11 @@ import 'package:techfrenetic/app/modules/chat/messaging_store.dart';
 import 'package:techfrenetic/app/modules/chat/widgets/avatar_chat_widget.dart';
 import 'package:techfrenetic/app/modules/chat/widgets/message_widget.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MessagingPage extends StatefulWidget {
-  final User user;
-  const MessagingPage({super.key, required this.user});
+  final AppEntity entity;
+  const MessagingPage({super.key, required this.entity});
 
   @override
   State<MessagingPage> createState() => _MessagingPageState();
@@ -19,46 +20,82 @@ class _MessagingPageState extends State<MessagingPage> {
 
   @override
   void initState() {
-    _messagingStore.initializeListeners();
+    _messagingStore.initializeListeners(widget.entity);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: TFAppBar(
-        title: Row(
-          children: [
-            AvatarChatWidget(url: widget.user.avatar),
-            const SizedBox(
-              width: 10,
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  widget.user.name,
-                  style: Theme.of(context).textTheme.headline1,
-                ),
-                Text(widget.user.status ?? '',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium
-                        ?.copyWith(color: Colors.grey)),
-              ],
-            ),
-          ],
-        ),
-      ),
+      appBar: widget.entity is User ? _usersHeader() : _groupHeader(),
       body: _messagesList(),
       bottomNavigationBar: _messageInput(),
     );
   }
 
+  PreferredSizeWidget _groupHeader() {
+    Group group = (widget.entity as Group);
+
+    return TFAppBar(
+      title: Row(
+        children: [
+          AvatarChatWidget(url: group.icon),
+          const SizedBox(
+            width: 10,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                group.name,
+                style: Theme.of(context).textTheme.headline1,
+              ),
+              Text(
+                  "${group.membersCount} ${AppLocalizations.of(context)?.groups_members ?? ''}",
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: Colors.grey)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  PreferredSizeWidget _usersHeader() {
+    User user = (widget.entity as User);
+    return TFAppBar(
+      title: Row(
+        children: [
+          AvatarChatWidget(url: user.avatar),
+          const SizedBox(
+            width: 10,
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                user.name,
+                style: Theme.of(context).textTheme.headline1,
+              ),
+              Text(user.status ?? '',
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodyMedium
+                      ?.copyWith(color: Colors.grey)),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _messagesList() {
     return FutureBuilder(
-      future: _messagingStore.getMessages(widget.user.uid),
+      future: _messagingStore.getMessages(widget.entity),
       builder: (BuildContext context, snapshot) {
         if (_messagingStore.loading) {
           return const Center(
@@ -67,11 +104,13 @@ class _MessagingPageState extends State<MessagingPage> {
         }
 
         if (_messagingStore.messages.isEmpty) {
-          return const Center(
+          return Center(
             child: Padding(
-              padding: EdgeInsets.all(20.0),
+              padding: const EdgeInsets.all(20.0),
               child: Text(
-                'Aún no has iniciado una conversación con este usuario. ¡Dile "Hola"!',
+                widget.entity is User
+                    ? 'Aún no has iniciado una conversación con este usuario. ¡Dile "Hola"!'
+                    : 'Aún no has iniciado una conversación en este grupo. Di "Hola"!',
                 textAlign: TextAlign.center,
               ),
             ),
@@ -80,9 +119,11 @@ class _MessagingPageState extends State<MessagingPage> {
 
         return Observer(builder: (context) {
           return ListView.builder(
+            controller: _messagingStore.scrollController,
             itemCount: _messagingStore.messages.length,
             itemBuilder: (context, index) {
-              return MessageWidget(message: _messagingStore.messages[index]);
+              BaseMessage message = _messagingStore.messages[index];
+              return MessageWidget(message: message);
             },
           );
         });
@@ -131,6 +172,14 @@ class _MessagingPageState extends State<MessagingPage> {
   }
 
   void sendMessage() {
-    _messagingStore.sendMessage(receiverID: widget.user.uid);
+    if (widget.entity is User) {
+      _messagingStore.sendMessage(receiverID: (widget.entity as User).uid);
+    }
+    if (widget.entity is Group) {
+      _messagingStore.sendMessage(
+        receiverID: (widget.entity as Group).guid,
+        receiverType: CometChatReceiverType.group,
+      );
+    }
   }
 }

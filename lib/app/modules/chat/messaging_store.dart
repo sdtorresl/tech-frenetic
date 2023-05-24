@@ -8,29 +8,35 @@ class MessagingStore = _ChatStoreBase with _$MessagingStore;
 
 abstract class _ChatStoreBase with Store, MessageListener {
   @observable
+  String? activeUid;
+  @observable
   bool loading = false;
   @observable
   TextEditingController messageEditingController = TextEditingController();
+  final ScrollController scrollController = ScrollController();
   @observable
   var messages = ObservableList<BaseMessage>.of([]);
 
   @action
-  void addMessage(BaseMessage message) => messages.add(message);
+  void addMessage(BaseMessage message) {
+    messages.add(message);
+    _scrollToBottom();
+  }
 
   @action
   setLoading(bool value) => loading = value;
 
   @action
-  Future<void> getMessages(String id, {bool groupMessages = false}) async {
+  Future<void> getMessages(AppEntity entity) async {
     setLoading(true);
-
+    activeUid = entity is User ? entity.uid : (entity as Group).guid;
     MessagesRequestBuilder messageRequestBuilder = MessagesRequestBuilder()
       ..limit = 50;
 
-    if (groupMessages) {
-      messageRequestBuilder.guid = id;
+    if (entity is Group) {
+      messageRequestBuilder.guid = activeUid;
     } else {
-      messageRequestBuilder.uid = id;
+      messageRequestBuilder.uid = activeUid;
     }
 
     MessagesRequest messageRequest = messageRequestBuilder.build();
@@ -38,14 +44,24 @@ abstract class _ChatStoreBase with Store, MessageListener {
     await messageRequest.fetchPrevious(
         onSuccess: (List<BaseMessage> list) {
           messages = ObservableList<BaseMessage>.of(list);
-
           setLoading(false);
+          _scrollToBottom();
         },
         onError: (error) => throw error);
   }
 
-  void initializeListeners() {
-    CometChat.addMessageListener("listenerId", this);
+  void _scrollToBottom() {
+    scrollController.animateTo(
+      scrollController.position.maxScrollExtent,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.easeOut,
+    );
+  }
+
+  void initializeListeners(AppEntity entity) {
+    activeUid = entity is User ? entity.uid : (entity as Group).guid;
+
+    CometChat.addMessageListener(activeUid!, this);
   }
 
   void sendMessage({
@@ -78,8 +94,19 @@ abstract class _ChatStoreBase with Store, MessageListener {
 
     CometChat.getConversationFromMessage(
       textMessage,
-      onSuccess: (conversation) => {
-        debugPrint("Conversation Object $conversation"),
+      onSuccess: (conversation) {
+        switch (conversation.conversationType) {
+          case ConversationType.group:
+            if (activeUid == (conversation.conversationWith as Group).guid) {
+              addMessage(textMessage);
+            }
+            break;
+          case ConversationType.user:
+            if (activeUid == (conversation.conversationWith as User).uid) {
+              addMessage(textMessage);
+            }
+            break;
+        }
       },
       onError: (error) => {
         debugPrint("Error while converting message object $error"),

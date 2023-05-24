@@ -9,6 +9,22 @@ part of 'messaging_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$MessagingStore on _ChatStoreBase, Store {
+  late final _$activeUidAtom =
+      Atom(name: '_ChatStoreBase.activeUid', context: context);
+
+  @override
+  String? get activeUid {
+    _$activeUidAtom.reportRead();
+    return super.activeUid;
+  }
+
+  @override
+  set activeUid(String? value) {
+    _$activeUidAtom.reportWrite(value, super.activeUid, () {
+      super.activeUid = value;
+    });
+  }
+
   late final _$loadingAtom =
       Atom(name: '_ChatStoreBase.loading', context: context);
 
@@ -62,9 +78,8 @@ mixin _$MessagingStore on _ChatStoreBase, Store {
       AsyncAction('_ChatStoreBase.getMessages', context: context);
 
   @override
-  Future<void> getMessages(String id, {bool groupMessages = false}) {
-    return _$getMessagesAsyncAction
-        .run(() => super.getMessages(id, groupMessages: groupMessages));
+  Future<void> getMessages(AppEntity entity) {
+    return _$getMessagesAsyncAction.run(() => super.getMessages(entity));
   }
 
   late final _$_ChatStoreBaseActionController =
@@ -95,6 +110,7 @@ mixin _$MessagingStore on _ChatStoreBase, Store {
   @override
   String toString() {
     return '''
+activeUid: ${activeUid},
 loading: ${loading},
 messageEditingController: ${messageEditingController},
 messages: ${messages}

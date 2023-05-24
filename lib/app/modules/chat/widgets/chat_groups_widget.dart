@@ -60,7 +60,7 @@ class _ChatGroupsWidgetState extends State<ChatGroupsWidget> {
                         ?.copyWith(fontSize: 12, color: Colors.grey),
                   ),
                   onTap: () => Modular.to.pushNamed(
-                    '/chat/group',
+                    '/chat/message',
                     arguments: _chatStore.groups[index],
                   ),
                 );
