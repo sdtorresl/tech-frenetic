@@ -81,11 +81,15 @@ class _MessagingPageState extends State<MessagingPage> {
                 user.name,
                 style: Theme.of(context).textTheme.headline1,
               ),
-              Text(user.status ?? '',
-                  style: Theme.of(context)
-                      .textTheme
-                      .bodyMedium
-                      ?.copyWith(color: Colors.grey)),
+              Observer(
+                builder: (context) {
+                  return Text(_messagingStore.status ?? '',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(color: Colors.grey));
+                },
+              ),
             ],
           ),
         ],

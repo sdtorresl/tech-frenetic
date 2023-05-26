@@ -25,6 +25,22 @@ mixin _$MessagingStore on _ChatStoreBase, Store {
     });
   }
 
+  late final _$statusAtom =
+      Atom(name: '_ChatStoreBase.status', context: context);
+
+  @override
+  String? get status {
+    _$statusAtom.reportRead();
+    return super.status;
+  }
+
+  @override
+  set status(String? value) {
+    _$statusAtom.reportWrite(value, super.status, () {
+      super.status = value;
+    });
+  }
+
   late final _$loadingAtom =
       Atom(name: '_ChatStoreBase.loading', context: context);
 
@@ -111,6 +127,7 @@ mixin _$MessagingStore on _ChatStoreBase, Store {
   String toString() {
     return '''
 activeUid: ${activeUid},
+status: ${status},
 loading: ${loading},
 messageEditingController: ${messageEditingController},
 messages: ${messages}

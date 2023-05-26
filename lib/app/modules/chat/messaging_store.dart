@@ -6,9 +6,11 @@ part 'messaging_store.g.dart';
 
 class MessagingStore = _ChatStoreBase with _$MessagingStore;
 
-abstract class _ChatStoreBase with Store, MessageListener {
+abstract class _ChatStoreBase with Store, MessageListener, UserListener {
   @observable
   String? activeUid;
+  @observable
+  String? status;
   @observable
   bool loading = false;
   @observable
@@ -62,6 +64,7 @@ abstract class _ChatStoreBase with Store, MessageListener {
     activeUid = entity is User ? entity.uid : (entity as Group).guid;
 
     CometChat.addMessageListener(activeUid!, this);
+    CometChat.addUserListener(activeUid!, this);
   }
 
   void sendMessage({
@@ -122,5 +125,21 @@ abstract class _ChatStoreBase with Store, MessageListener {
   @override
   void onCustomMessageReceived(CustomMessage customMessage) {
     debugPrint("Custom message received successfully: $customMessage");
+  }
+
+  @override
+  void onUserOnline(User user) {
+    debugPrint("User ${user.uid} is now online");
+    if (activeUid == user.uid) {
+      status = "Online";
+    }
+  }
+
+  @override
+  void onUserOffline(User user) {
+    debugPrint("User ${user.uid} is now offline");
+    if (activeUid == user.uid) {
+      status = "Offline";
+    }
   }
 }
