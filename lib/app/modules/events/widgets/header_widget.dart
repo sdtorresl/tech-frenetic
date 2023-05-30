@@ -13,6 +13,7 @@ class HeaderWidget extends StatelessWidget {
     var image2Width = (screenWidth * 0.7 / 2).round();
     var image2Height = (screenWidth * 0.7 / 3).round();
     var image3Width = (screenWidth / 4).round();
+
     return Container(
       padding: const EdgeInsets.all(30),
       decoration: const BoxDecoration(

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:techfrenetic/app/models/events_model.dart';
+import 'package:techfrenetic/app/modules/events/widgets/featured_event_widget.dart';
 import 'package:techfrenetic/app/modules/events/widgets/header_widget.dart';
+import 'package:techfrenetic/app/modules/events/widgets/place_widget.dart';
+import 'package:techfrenetic/app/modules/events/widgets/upcoming_event_Widget.dart';
 import 'package:techfrenetic/app/providers/featured_events_provider.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
-import 'package:techfrenetic/app/widgets/separator.dart';
 
 class EventsPage extends StatefulWidget {
   const EventsPage({Key? key}) : super(key: key);
@@ -32,8 +35,59 @@ class _EventsPageState extends State<EventsPage> {
     return Scaffold(
       appBar: TFAppBar(),
       body: ListView(
-        children: const [
-          HeaderWidget(),
+        children: [
+          const HeaderWidget(),
+          const PlaceWidget(),
+          Image.network(
+            "https://picsum.photos/700/300",
+            fit: BoxFit.fitWidth,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(left: 35.0, top: 40, bottom: 40),
+            child: Row(
+              children: [
+                Text(
+                  "Featured ",
+                  textAlign: TextAlign.left,
+                  textScaleFactor: 2,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: const Color.fromRGBO(5, 105, 216, 1),
+                      fontWeight: FontWeight.bold,
+                      backgroundColor: Colors.blue[200]),
+                ),
+                Text(
+                  "Events",
+                  textAlign: TextAlign.left,
+                  textScaleFactor: 2,
+                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: const Color.fromARGB(255, 0, 0, 0),
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ],
+            ),
+          ),
+          FutureBuilder(
+            future: _eventsprovider.getFeaturedEvents(),
+            builder: (BuildContext context, AsyncSnapshot snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                List<EventsModel> events = snapshot.data;
+
+                List<Widget> eventsWidgets = [];
+                for (var event in events) {
+                  eventsWidgets.add(
+                    FeaturedEventWidget(
+                      event: event,
+                    ),
+                  );
+                }
+                return Column(children: eventsWidgets);
+              }
+
+              return const CircularProgressIndicator();
+            },
+          ),
+          const UpcomingEventWidget()
 
           /* FutureBuilder(
             future: _eventsprovider.getFeaturedEvents(),
@@ -57,7 +111,7 @@ class _EventsPageState extends State<EventsPage> {
                 return const Center(child: CircularProgressIndicator());
               }
             },
-          ),*/
+          ), */
           //const FeaturedEventsWidget(),
           //eventSerch(),
           //const UpcomingEventsWidget(),
