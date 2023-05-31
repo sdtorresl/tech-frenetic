@@ -42,6 +42,32 @@ final ThemeData techFreneticTheme = ThemeData(
       ),
     ),
   ),
+  outlinedButtonTheme: OutlinedButtonThemeData(
+    style: ButtonStyle(
+      padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          const EdgeInsets.all(10)),
+      backgroundColor:
+          MaterialStateProperty.all<Color>(const Color(0xf5f9ffff)),
+      textStyle: MaterialStateProperty.resolveWith<TextStyle>(
+          (Set<MaterialState> states) {
+        return const TextStyle(
+          fontFamily: 'NunitoSans',
+          fontSize: 20,
+          fontStyle: FontStyle.normal,
+        );
+      }),
+      shape: MaterialStateProperty.all<OutlinedBorder>(
+        const RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+        ),
+      ),
+      side: MaterialStateProperty.all<BorderSide>(
+        const BorderSide(
+          color: Color(0xff006ee8),
+        ),
+      ),
+    ),
+  ),
   buttonTheme: const ButtonThemeData(
     textTheme: ButtonTextTheme.primary,
     minWidth: 140,

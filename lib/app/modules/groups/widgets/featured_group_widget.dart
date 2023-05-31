@@ -45,10 +45,16 @@ class _FeaturedGroupWidgetState extends State<FeaturedGroupWidget> {
         children: [
           GestureDetector(
             onTap: () => Modular.to.pushNamed("/groups/${widget.group.id}"),
-            child: CachedNetworkImage(
-              placeholder: (context, value) => const LinearProgressIndicator(),
-              errorWidget: (context, value, e) => const Icon(Icons.error),
-              imageUrl: widget.group.picture,
+            child: SizedBox(
+              height: 300,
+              width: double.infinity,
+              child: CachedNetworkImage(
+                placeholder: (context, value) =>
+                    const LinearProgressIndicator(),
+                errorWidget: (context, value, e) => const Icon(Icons.error),
+                fit: BoxFit.fitWidth,
+                imageUrl: widget.group.picture,
+              ),
             ),
           ),
           const SizedBox(

@@ -47,7 +47,6 @@ class FilesProvider extends TechFreneticProvider {
       var response = await http.post(_url, headers: headers, body: body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        debugPrint(response.body);
         image = ImageModel.fromJson(response.body);
       } else {
         debugPrint(response.statusCode.toString());

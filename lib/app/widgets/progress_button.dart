@@ -4,7 +4,7 @@ class ProgressButton extends StatefulWidget {
   const ProgressButton({Key? key, required this.onPressed, required this.text})
       : super(key: key);
 
-  final Future Function() onPressed;
+  final Future Function()? onPressed;
   final String text;
 
   @override
@@ -17,15 +17,17 @@ class _ProgressButtonState extends State<ProgressButton> {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () async {
-        setState(() {
-          _isLoading = true;
-        });
-        await widget.onPressed();
-        setState(() {
-          _isLoading = false;
-        });
-      },
+      onPressed: widget.onPressed != null
+          ? () async {
+              setState(() {
+                _isLoading = true;
+              });
+              await widget.onPressed!();
+              setState(() {
+                _isLoading = false;
+              });
+            }
+          : null,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

@@ -214,7 +214,7 @@ class _PreviewPageState extends State<PreviewPage>
         : const SizedBox.shrink();
   }
 
-  void onComplete() {
+  void onComplete(String? videoId) {
     setState(() {
       _isUploading = false;
     });

@@ -3,7 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 class TFAppBar extends StatelessWidget implements PreferredSizeWidget {
   final void Function()? onPressed;
-  final Text? title;
+  final Widget? title;
   final List<Widget>? actions;
   final AppBar appBar = AppBar();
   final Widget? leading;

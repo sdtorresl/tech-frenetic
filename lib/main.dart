@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:global_configuration/global_configuration.dart';
@@ -23,6 +24,8 @@ void main() async {
   await prefs.initPrefs();
 
   await GlobalConfiguration().loadFromPath("assets/cfg/app_settings.json");
+  await Firebase.initializeApp();
+
   runApp(
     ModularApp(
       module: AppModule(),

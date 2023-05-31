@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 
 class RegistrationProvider extends TechFreneticProvider {
@@ -38,7 +39,6 @@ class RegistrationProvider extends TechFreneticProvider {
         body: json.encode(body),
         headers: headers,
       );
-      debugPrint(response.statusCode.toString());
 
       if (response.statusCode == 422) {
         debugPrint(response.body);
@@ -62,8 +62,15 @@ class RegistrationProvider extends TechFreneticProvider {
     return null;
   }
 
-  Future<bool?> createProfile(String companyName, String profession,
-      String country, String description) async {
+  Future<bool?> createProfile(
+    String companyName,
+    String profession,
+    String country,
+    String description,
+    String? cellphone,
+    String? genre,
+    DateTime birthdate,
+  ) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
 
@@ -71,7 +78,10 @@ class RegistrationProvider extends TechFreneticProvider {
         "field_biography": {"value": description},
         "field_company": {"value": companyName},
         "field_user_location": {"value": country},
-        "field_user_profession": {"value": profession}
+        "field_user_profession": {"value": profession},
+        "field_cellphone": {"value": cellphone},
+        "field_birthdate": {"value": DateFormat("yy-MM-dd").format(birthdate)},
+        //"field_genre": {"value": genre},
       };
 
       Map<String, String> headers = {};
@@ -85,7 +95,6 @@ class RegistrationProvider extends TechFreneticProvider {
         body: json.encode(body),
         headers: headers,
       );
-      debugPrint(response.statusCode.toString());
 
       if (response.statusCode == 200) {
         debugPrint(response.body);
@@ -124,7 +133,6 @@ class RegistrationProvider extends TechFreneticProvider {
         body: json.encode(body),
         headers: headers,
       );
-      debugPrint(response.statusCode.toString());
 
       if (response.statusCode == 200) {
         debugPrint(response.body);

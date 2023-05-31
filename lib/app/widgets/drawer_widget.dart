@@ -55,13 +55,8 @@ class CustomDrawer extends StatelessWidget {
               Modular.to.popAndPushNamed('/vendors');
             },
           ),
-          _menuItem(
-            context,
-            AppLocalizations.of(context)!.tech_premium,
-            onPressed: () {
-              Modular.to.popAndPushNamed('/courses');
-            },
-          ),
+          _simpleMenuItem(context, AppLocalizations.of(context)!.profile,
+              onPressed: () => Modular.to.popAndPushNamed('/create_profile')),
           const SizedBox(
             height: 30,
           ),

@@ -8,7 +8,7 @@ import 'package:techfrenetic/app/core/exceptions.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/models/session_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
-import 'package:techfrenetic/app/modules/profile/profile_store.dart';
+import 'package:techfrenetic/app/modules/home/home_store.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 import 'dart:convert' as json;
 
@@ -30,6 +30,7 @@ class UserProvider extends TechFreneticProvider {
         prefs.csrfToken = loggedUser.csrfToken;
         prefs.logoutToken = loggedUser.logoutToken;
         prefs.userId = loggedUser.currentUser?.uid;
+        getLoggedUser();
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
         debugPrint(response.body);
@@ -70,7 +71,7 @@ class UserProvider extends TechFreneticProvider {
   }
 
   Future<UserModel?> getLoggedUser() async {
-    ProfileStore profileStore = Modular.get();
+    final HomeStore _homeStore = Modular.get();
 
     String? userId = prefs.userId;
     UserModel? loggedUser;
@@ -78,7 +79,6 @@ class UserProvider extends TechFreneticProvider {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
 
       Map<String, String> headers = {};
-
       headers.addAll(sessionHeader);
       headers.addAll(headers);
 
@@ -89,7 +89,7 @@ class UserProvider extends TechFreneticProvider {
 
       if (response.statusCode == 200) {
         loggedUser = UserModel.fromJson(response.body);
-        profileStore.loggedUser = loggedUser;
+        _homeStore.loggedUser = loggedUser;
         prefs.userName = loggedUser.userName;
         prefs.userEmail = loggedUser.mail;
         prefs.userAvatar = loggedUser.avatar;
@@ -97,7 +97,7 @@ class UserProvider extends TechFreneticProvider {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Error logging user: " + e.toString());
     }
     return loggedUser;
   }
@@ -106,9 +106,6 @@ class UserProvider extends TechFreneticProvider {
     UserModel? userinfo;
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=json");
-      debugPrint("Getting user information with id $userId");
-      debugPrint(_url.toString());
-
       var response = await http.get(
         _url,
       );
@@ -119,7 +116,7 @@ class UserProvider extends TechFreneticProvider {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
-      debugPrint(e.toString());
+      debugPrint("Error getting user: " + e.toString());
     }
     return userinfo;
   }
@@ -207,17 +204,25 @@ class UserProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool> userUpdate(DateTime birthdate, String cellphone, String country,
-      String email) async {
+  Future<bool> userUpdate(DateTime? birthdate, String cellphone,
+      String? country, String email) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/user/$userId?_format=hal_json");
 
       Map<String, dynamic> body = {
-        "field_birthdate": {"value": DateFormat("yy-MM-dd").format(birthdate)},
         "field_cellphone": {"value": cellphone},
         "field_user_location": {"value": country},
         "mail": {"value": email}
       };
+      if (birthdate != null) {
+        body.addAll(
+          {
+            "field_birthdate": {
+              "value": DateFormat("yy-MM-dd").format(birthdate)
+            }
+          },
+        );
+      }
 
       Map<String, String> headers = {}
         ..addAll(jsonHeader)

@@ -34,7 +34,7 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
                           fontSize: 12, color: Theme.of(context).primaryColor),
                     ),
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      Modular.to.pop();
                     },
                   ),
                   TextButton(
@@ -46,8 +46,7 @@ class _ChooseAvatarPageState extends State<ChooseAvatarPage> {
                           fontSize: 12, color: Theme.of(context).primaryColor),
                     ),
                     onPressed: () {
-                      Modular.to.pushNamedAndRemoveUntil(
-                          "/community/", (p0) => false);
+                      Modular.to.pop();
                     },
                   ),
                 ],

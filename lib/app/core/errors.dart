@@ -16,6 +16,7 @@ enum ErrorType {
   futureDateRequired,
   nameRequired,
   phoneRequired,
+  phoneInvalid
 }
 
 class TFError {
@@ -47,6 +48,8 @@ class TFError {
         return AppLocalizations.of(context)!.error_name_required;
       case ErrorType.phoneRequired:
         return AppLocalizations.of(context)!.error_phone_required;
+      case ErrorType.phoneInvalid:
+        return AppLocalizations.of(context)!.error_phone_invalid;
       case ErrorType.futureDateRequired:
         return AppLocalizations.of(context)!.error_when_future;
       default:

@@ -13,3 +13,7 @@ class UserExistsException implements Exception {
 class BadRequestException implements Exception {
   String errMsg() => 'Invalid data';
 }
+
+class InvalidCodeException implements Exception {
+  String errMsg() => 'Invalid code';
+}

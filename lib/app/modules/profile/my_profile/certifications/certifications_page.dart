@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/modules/home/home_store.dart';
 import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
@@ -15,6 +16,7 @@ class CertificationsPage extends StatefulWidget {
 }
 
 class _CertificationsPageState extends State<CertificationsPage> {
+  final HomeStore _homeStore = Modular.get();
   final ProfileStore _profileStore = Modular.get();
   final UserProvider _userProvider = UserProvider();
   final TextEditingController _certificationsController =
@@ -241,7 +243,7 @@ class _CertificationsPageState extends State<CertificationsPage> {
     setState(() {
       _isSaving = false;
     });
-    _profileStore.loggedUser = await _userProvider.getLoggedUser();
+    _homeStore.loggedUser = await _userProvider.getLoggedUser();
     Modular.to.pop();
   }
 }

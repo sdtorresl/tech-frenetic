@@ -78,7 +78,6 @@ class MeetupsProvider extends TechFreneticProvider {
           {"target_id": "meetup", "target_type": "node_type"}
         ]
       };
-      debugPrint(DateFormat('yyyy-MM-ddTHH:mm:ss-SSS').format(date).toString());
       Map<String, String> headers = {};
       headers
         ..addAll(authHeader)

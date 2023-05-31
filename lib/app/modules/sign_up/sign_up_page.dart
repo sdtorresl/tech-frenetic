@@ -14,7 +14,8 @@ class SignUpPage extends StatefulWidget {
   _SignUpPageState createState() => _SignUpPageState();
 }
 
-class _SignUpPageState extends ModularState<SignUpPage, SignUpController> {
+class _SignUpPageState extends State<SignUpPage> {
+  SignUpController store = Modular.get();
   bool _isPasswordHidden1 = true;
   bool _isPasswordHidden2 = true;
 

@@ -55,5 +55,3 @@ class ProfileModule extends Module {
     ),
   ];
 }
-
-class SingUpController {}

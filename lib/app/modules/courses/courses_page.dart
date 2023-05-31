@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/models/dtos/paginator_dto.dart';
+import 'package:techfrenetic/app/modules/courses/courses_store.dart';
 import 'package:techfrenetic/app/modules/courses/widgets/course_card.dart';
 import 'package:techfrenetic/app/modules/premium/premium_page.dart';
 import 'package:techfrenetic/app/providers/courses_provider.dart';
+import 'package:techfrenetic/app/widgets/paginator_widget.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
 
 import '../../models/courses_model.dart';
-import '../../providers/user_provider.dart';
-import '../../widgets/appbar_widget.dart';
 
 class CoursesPage extends StatefulWidget {
   final String title;
@@ -18,50 +20,27 @@ class CoursesPage extends StatefulWidget {
 }
 
 class CoursesPageState extends State<CoursesPage> {
-  bool _isPremium = false;
-  final UserProvider _userProvider = Modular.get();
+  int _currentPage = 0;
   final CoursesProvider _coursesProvider = Modular.get();
+  final CoursesStore _coursesStore = Modular.get();
+
+  @override
+  void initState() {
+    _coursesStore.checkIfPremium();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: TFAppBar(
-        title: Text(
-          AppLocalizations.of(context)?.tech_premium ?? '',
-          style: Theme.of(context).textTheme.headline3!,
-        ),
-      ),
-      body: FutureBuilder(
-        future: _userProvider.isPremium(),
-        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
-          if (snapshot.hasData) {
-            _isPremium = _isPremium ? _isPremium : snapshot.data!;
-            return _isPremium
-                ? _premiumUser()
-                : PremiumPage(onPremium: () {
-                    _userProvider.makePremium().then(
-                      (updated) {
-                        if (updated) {
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                            content: Text(AppLocalizations.of(context)
-                                    ?.premium_premium_success ??
-                                ''),
-                          ));
-                          setState(() {
-                            _isPremium = true;
-                          });
-                        }
-                      },
-                    );
-                  });
-          } else {
-            return const Center(
-              child: CircularProgressIndicator(),
-            );
-          }
-        },
-      ),
-    );
+    return Observer(builder: (_) {
+      if (_coursesStore.isLoading) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      }
+
+      return _coursesStore.isPremium ? _premiumUser() : const PremiumPage();
+    });
   }
 
   Widget _premiumUser() {
@@ -148,20 +127,31 @@ class CoursesPageState extends State<CoursesPage> {
             ),
           ),
           FutureBuilder(
-            future: _coursesProvider.getCourses(),
+            future: _coursesProvider.getCourses(page: _currentPage),
             builder: (BuildContext context,
-                AsyncSnapshot<List<CourseModel>> snapshot) {
+                AsyncSnapshot<PaginatorDto<CourseModel>> snapshot) {
               if (snapshot.hasData) {
-                List<CourseModel> courses = snapshot.data!;
+                PaginatorDto paginator = snapshot.data!;
+                List<CourseModel> courses =
+                    paginator.items as List<CourseModel>;
                 return Column(
-                  children: courses
-                      .map(
-                        (course) => Padding(
-                          padding: const EdgeInsets.symmetric(vertical: 10.0),
-                          child: _courseItem(course),
-                        ),
-                      )
-                      .toList(),
+                  children: [
+                    ...courses
+                        .map(
+                          (course) => Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: _courseItem(course),
+                          ),
+                        )
+                        .toList(),
+                    PaginatorWidget(
+                        paginator: paginator,
+                        onPageChange: (int nextPage) {
+                          setState(() {
+                            _currentPage = nextPage;
+                          });
+                        })
+                  ],
                 );
               }
               return const SizedBox(

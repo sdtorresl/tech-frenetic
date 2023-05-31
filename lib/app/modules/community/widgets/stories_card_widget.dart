@@ -27,16 +27,17 @@ class StoryCardWidget extends StatelessWidget {
         child: Container(
           margin: EdgeInsets.only(right: width / (cardsInView * 2)),
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Theme.of(context).primaryColorLight,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.5),
-                  spreadRadius: 1,
-                  blurRadius: 1,
-                  offset: const Offset(1, 1), // changes position of shadow
-                ),
-              ]),
+            borderRadius: BorderRadius.circular(10),
+            color: Theme.of(context).primaryColorLight,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.5),
+                spreadRadius: 1,
+                blurRadius: 1,
+                offset: const Offset(1, 1), // changes position of shadow
+              ),
+            ],
+          ),
           width: width,
           clipBehavior: Clip.hardEdge,
           child: Stack(

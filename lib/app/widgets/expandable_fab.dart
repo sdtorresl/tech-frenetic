@@ -77,7 +77,7 @@ class ExpandableFabState extends State<ExpandableFab>
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
-        double maxDimension = _controller.value * widget.distance * 2.5;
+        double maxDimension = _controller.value * widget.distance * 2;
         return Positioned(
           right: -20,
           bottom: -15,

@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/modules/community/widgets/stories_view_widget.dart';
+import 'package:techfrenetic/app/modules/home/home_store.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/certifications/certifications_page.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_name/edit_name_page.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_summary/edit_summary_page.dart';
@@ -32,6 +33,7 @@ class MyProfilePage extends StatefulWidget {
 }
 
 class _MyProfilePageState extends State<MyProfilePage> {
+  final HomeStore _homeStore = Modular.get();
   final ProfileStore _profileStore = Modular.get();
   final FollowersProvider _followersProvider = Modular.get();
   final ArticlesProvider _articlesProvider = ArticlesProvider();
@@ -77,8 +79,9 @@ class _MyProfilePageState extends State<MyProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (context) {
-      if (_profileStore.loggedUser?.uid.toString() == _prefs.userId) {
-        user = _profileStore.loggedUser ?? UserModel.empty();
+      if (_homeStore.loggedUser?.uid.toString() == _prefs.userId &&
+          _homeStore.loggedUser != null) {
+        user = _homeStore.loggedUser!;
       }
       return Container(
         color: Theme.of(context).scaffoldBackgroundColor,

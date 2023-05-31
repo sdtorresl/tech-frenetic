@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:techfrenetic/app/models/group_model.dart';
+import 'package:techfrenetic/app/models/group_user_model.dart';
 import 'package:techfrenetic/app/models/groups_members_model.dart';
 import 'package:techfrenetic/app/models/image_model.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
@@ -376,8 +377,8 @@ class GroupsProvider extends TechFreneticProvider {
     return posts;
   }
 
-  Future<List<Map<String, dynamic>>> getUsers() async {
-    List<Map<String, dynamic>> users = [];
+  Future<List<GroupUserModel>> getUsers() async {
+    List<GroupUserModel> users = [];
 
     try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/v1/group-user-list");
@@ -385,7 +386,9 @@ class GroupsProvider extends TechFreneticProvider {
       var response = await http.get(_url);
       if (response.statusCode == 200) {
         var jsonResponse = jsonDecode(response.body);
-        users = List<Map<String, dynamic>>.from(jsonResponse["articles"]);
+        users = List<Map<String, dynamic>>.from(jsonResponse["articles"])
+            .map((e) => GroupUserModel.fromJson(e))
+            .toList();
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }

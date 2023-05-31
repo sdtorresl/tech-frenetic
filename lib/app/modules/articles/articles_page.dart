@@ -10,15 +10,18 @@ import 'package:share_plus/share_plus.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/models/notification_model.dart';
+import 'package:techfrenetic/app/models/video_model.dart';
 import 'package:techfrenetic/app/modules/articles/articles_controller.dart';
 import 'package:techfrenetic/app/modules/articles/articles_image_page.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/providers/comments_provider.dart';
 import 'package:techfrenetic/app/providers/like_provider.dart';
 import 'package:techfrenetic/app/providers/notifications_provider.dart';
+import 'package:techfrenetic/app/providers/video_provider.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/comments_widget.dart';
+import 'package:techfrenetic/app/widgets/video_player_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 class ArticlesPage extends StatefulWidget {
@@ -28,21 +31,29 @@ class ArticlesPage extends StatefulWidget {
   ArticlesPageState createState() => ArticlesPageState();
 }
 
-class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
-  ArticlesModel article = ArticlesModel.empty();
+class ArticlesPageState extends State<ArticlesPage> {
+  final ArticlesController _articlesController = Modular.get();
+
+  late ArticlesModel article;
   late String articleId;
+
   final ArticlesProvider _articlesProvider = ArticlesProvider();
   final CommentsProvider _commentsProvider = CommentsProvider();
   final NotificationsProvider _notificationsProvider = NotificationsProvider();
+  final VideoProvider _videoProvider = VideoProvider();
   TextEditingController commentTextController = TextEditingController();
   String likeAsset = 'assets/img/icons/light_bulb.svg';
   bool enabledLike = false;
+  int comments = 0;
 
   @override
   void initState() {
+    article = widget.article;
     articleId = widget.article.id;
+    comments = widget.article.comments;
+
     commentTextController.addListener(() {
-      store.changeComment(commentTextController.text);
+      _articlesController.changeComment(commentTextController.text);
     });
     super.initState();
   }
@@ -71,7 +82,7 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
                     children: [
                       _articleTitle(),
                       _articleHeader(),
-                      _articleImage(),
+                      article.isVideo ? _articleVideo() : _articleImage(),
                       _articleSummary(),
                       _articleInteractions(),
                       CommentsWidget(articleId: widget.article.id),
@@ -118,6 +129,29 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     } else {
       return const SizedBox();
     }
+  }
+
+  Widget _articleVideo() {
+    Widget videoWidget = const SizedBox();
+    if (widget.article.isVideo && widget.article.videoId != null) {
+      videoWidget = FutureBuilder(
+        future: _videoProvider.getVideo(widget.article.videoId!),
+        builder: (BuildContext context, AsyncSnapshot<VideoModel?> snapshot) {
+          if (snapshot.hasData) {
+            VideoModel? video = snapshot.data;
+            if (video != null && video.playback != null) {
+              return VideoPlayerWidget(url: video.playback!.hls);
+            }
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
+      );
+    }
+
+    return videoWidget;
   }
 
   Widget _avatar() {
@@ -193,19 +227,16 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
 
     debugPrint("Article: ${article.toString()}");
 
-    if (widget.article.type == "Article") {
+    if (widget.article.type == ArticleType.article) {
       final String baseUrl = GlobalConfiguration().getValue("api_url");
       final String locale =
           Intl.getCurrentLocale().startsWith("es") ? "es" : "en";
-      String articlePath = widget.article.url!;
-      List<String> splitUrl = articlePath.split('/');
-      String urlEnd = splitUrl.last;
-      String articleLink = "$baseUrl/$locale/$urlEnd";
+      String articleLink = "$baseUrl/$locale/${article.id}";
 
       _shareButton = IconButton(
-        onPressed: () => {
+        onPressed: () {
           Share.share(articleLink,
-              subject: AppLocalizations.of(context)!.share_message + '\n')
+              subject: AppLocalizations.of(context)!.share_message + '\n');
         },
         icon: const Icon(TechFreneticIcons.share),
       );
@@ -218,10 +249,10 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
       ),
       title: Text(
         widget.article.category!.toUpperCase(),
-        style: theme.textTheme.headline5!.copyWith(color: Colors.white),
+        style: theme.textTheme.headline5!,
       ),
-      backgroundColor: Theme.of(context).primaryColorDark,
-      foregroundColor: Colors.white,
+/*       backgroundColor: Theme.of(context).primaryColorDark,
+      foregroundColor: Colors.white, */
       actions: [_likeButton(), _shareButton],
     );
   }
@@ -232,7 +263,8 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
     return IconButton(
       icon: Icon(
         TechFreneticIcons.lightBulb,
-        color: enabledLike ? Colors.yellow : Colors.white,
+        color:
+            enabledLike ? Colors.orangeAccent : Theme.of(context).primaryColor,
       ),
       onPressed: () {
         likeProvider.like(widget.article.id);
@@ -270,11 +302,11 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   }
 
   Widget _articleInteractions() {
-    Widget _comments = const SizedBox();
-    if (article.comments != '0' && article.comments == '1') {
-      _comments = Row(
-        children: [
-          SizedBox(
+    return Row(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 5.0, left: 10),
+          child: SizedBox(
             child: SvgPicture.asset(
               'assets/img/icons/dot.svg',
               allowDrawingOutsideViewBox: true,
@@ -282,11 +314,17 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
               color: Theme.of(context).primaryColor,
             ),
           ),
-          Text(article.comments! + ' ' + AppLocalizations.of(context)!.comment),
-        ],
-      );
-    }
-    return _comments;
+        ),
+        GestureDetector(
+          onTap: () {
+            Modular.to
+                .pushNamed("/community/article", arguments: widget.article);
+          },
+          child: Text(
+              "$comments ${comments == 1 ? AppLocalizations.of(context)!.comment : AppLocalizations.of(context)!.comments}"),
+        ),
+      ],
+    );
   }
 
   Widget _commentsForm() {
@@ -328,15 +366,15 @@ class ArticlesPageState extends ModularState<ArticlesPage, ArticlesController> {
   }
 
   void submitComment() {
-    debugPrint("Comment is: ${store.comment}");
+    debugPrint("Comment is: ${_articlesController.comment}");
     _commentsProvider
-        .addComment(widget.article.id, store.comment)
+        .addComment(widget.article.id, _articlesController.comment)
         .then((commentId) {
       if (commentId != null) {
         debugPrint("Comment ID is $commentId");
         commentTextController.clear();
         setState(() {
-          // Force to rebuild the future builder
+          comments = comments + 1;
           articleId = widget.article.id;
         });
         _notificationsProvider.postNotification(

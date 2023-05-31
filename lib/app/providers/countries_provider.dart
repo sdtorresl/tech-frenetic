@@ -12,18 +12,12 @@ class CountriesProvider extends TechFreneticProvider {
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
-        if (response.statusCode == 200) {
-          List<dynamic> jsonResponse = json.jsonDecode(response.body);
-          List<CategoriesModel> countries = [];
-
-          for (var item in jsonResponse) {
-            CategoriesModel country = CategoriesModel.fromMap(item);
-            countries.add(country);
-          }
-          return countries;
-        } else {
-          debugPrint('Request failed with status: ${response.statusCode}.');
-        }
+        List<dynamic> jsonResponse = json.jsonDecode(response.body);
+        List<CategoriesModel> countries =
+            jsonResponse.map((e) => CategoriesModel.fromMap(e)).toList();
+        return countries;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
       debugPrint(e.toString());

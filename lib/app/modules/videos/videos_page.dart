@@ -13,8 +13,8 @@ class VideosPage extends StatefulWidget {
   VideosPageState createState() => VideosPageState();
 }
 
-class VideosPageState extends ModularState<VideosPage, VideosController>
-    with WidgetsBindingObserver {
+class VideosPageState extends State<VideosPage> with WidgetsBindingObserver {
+  VideosController controller = Modular.get();
   CameraController? _controller;
   bool _isCameraInitialized = false;
   bool isRecording = false;

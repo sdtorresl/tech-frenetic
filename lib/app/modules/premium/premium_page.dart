@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/modules/premium/checkout_page.dart';
-import 'package:techfrenetic/app/providers/stripe_provider.dart';
+import 'package:techfrenetic/app/modules/premium/widgets/card_number_module.dart';
+import 'package:techfrenetic/app/providers/payments_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
-import 'package:techfrenetic/app/widgets/progress_buttom.dart';
 
 class PremiumPage extends StatefulWidget {
   const PremiumPage({Key? key, this.onPremium}) : super(key: key);
@@ -37,7 +37,7 @@ class _PremiumPageState extends State<PremiumPage> {
           ],
         ),
         Padding(
-          padding: const EdgeInsets.all(25.0),
+          padding: const EdgeInsets.symmetric(horizontal: 25),
           child: ListView(
             children: [
               _header(theme),
@@ -97,10 +97,7 @@ class _PremiumPageState extends State<PremiumPage> {
           const SizedBox(
             height: 20,
           ),
-          ProgressButton(
-            onPressed: _becamePremium,
-            text: AppLocalizations.of(context)?.premium_start ?? '',
-          ),
+          CardNumberModule(),
           const SizedBox(
             height: 25,
           ),
@@ -119,7 +116,7 @@ class _PremiumPageState extends State<PremiumPage> {
   }
 
   Future<dynamic> _becamePremium() async {
-    StripeProvider _stripeProvider = StripeProvider();
+    PaymentsProvider _stripeProvider = PaymentsProvider();
     String? sessionId = await _stripeProvider.createCheckout();
     if (sessionId != null) {
       final result = await Navigator.of(context).push(MaterialPageRoute(
@@ -138,6 +135,9 @@ class _PremiumPageState extends State<PremiumPage> {
   Widget _header(ThemeData theme) {
     return Column(
       children: [
+        const SizedBox(
+          height: 25,
+        ),
         Row(
           children: [
             HighlightContainer(

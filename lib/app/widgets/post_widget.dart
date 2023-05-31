@@ -3,13 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:techfrenetic/app/common/icons.dart';
+import 'package:techfrenetic/app/core/extensions.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
+import 'package:techfrenetic/app/models/notification_model.dart';
+import 'package:techfrenetic/app/models/video_model.dart';
+import 'package:techfrenetic/app/providers/comments_provider.dart';
 import 'package:techfrenetic/app/providers/like_provider.dart';
+import 'package:techfrenetic/app/providers/notifications_provider.dart';
+import 'package:techfrenetic/app/providers/video_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
+import 'package:techfrenetic/app/widgets/video_player_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:share_plus/share_plus.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:intl/intl.dart';
+
+import 'comments_widget.dart';
 
 class PostWidget extends StatefulWidget {
   final ArticlesModel article;
@@ -20,13 +30,24 @@ class PostWidget extends StatefulWidget {
 }
 
 class _PostWidgetState extends State<PostWidget> {
+  final VideoProvider _videoProvider = VideoProvider();
+  final CommentsProvider _commentsProvider = CommentsProvider();
+  final NotificationsProvider _notificationsProvider = NotificationsProvider();
+
   String likeAsset = '';
   bool enabledLike = true;
+  int currentLikes = 0;
+  int _comments = 0;
+  final TextEditingController _commentTextController = TextEditingController();
+
+  bool _postCommentsVisible = false;
 
   @override
   void initState() {
     super.initState();
     enabledLike = true;
+    currentLikes = int.tryParse(widget.article.likes ?? '0') ?? 0;
+    _comments = widget.article.comments;
     likeAsset = 'assets/img/icons/light_bulb.svg';
   }
 
@@ -62,15 +83,12 @@ class _PostWidgetState extends State<PostWidget> {
               onTap: () => Modular.to
                   .pushNamed("/users_profiles", arguments: widget.article.uid)),
           _postSummary(context),
-          GestureDetector(
-            child: _postImage(context),
-            onTap: () => Modular.to
-                .pushNamed("/community/article", arguments: widget.article),
-          ),
+          widget.article.isVideo ? _postVideo(context) : _postImage(context),
           _postTitle(context),
           _postTags(context),
           _postInteractions(context),
-          _postActionBar(context)
+          _postActionBar(context),
+          _postCommentsVisible ? _postComments() : const SizedBox.shrink(),
         ],
       ),
     );
@@ -101,7 +119,7 @@ class _PostWidgetState extends State<PostWidget> {
         : const SizedBox();
   }
 
-  Padding _postAuthor(BuildContext context) {
+  Widget _postAuthor(BuildContext context) {
     final created = widget.article.date!;
 
     return Padding(
@@ -158,27 +176,65 @@ class _PostWidgetState extends State<PostWidget> {
     );
   }
 
-  Widget _postImage(BuildContext context) {
-    Widget _image = const SizedBox();
-    if (widget.article.image != null) {
-      _image = CachedNetworkImage(
-        placeholder: (context, value) => const LinearProgressIndicator(),
-        errorWidget: (context, value, e) => const Icon(Icons.error),
-        imageUrl: widget.article.image!,
+  Widget _postVideo(BuildContext context) {
+    Widget videoWidget = const SizedBox();
+    if (widget.article.isVideo && widget.article.videoId != null) {
+      videoWidget = FutureBuilder(
+        future: _videoProvider.getVideo(widget.article.videoId!),
+        builder: (BuildContext context, AsyncSnapshot<VideoModel?> snapshot) {
+          if (snapshot.hasData) {
+            VideoModel? video = snapshot.data;
+            if (video != null && video.playback != null) {
+              return VideoPlayerWidget(url: video.playback!.hls);
+            }
+          }
+
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        },
       );
     }
 
-    return _image;
+    return videoWidget;
+  }
+
+  Widget _postImage(BuildContext context) {
+    Widget _imageWidget = const SizedBox();
+    if (widget.article.image != null) {
+      _imageWidget = GestureDetector(
+        child: CachedNetworkImage(
+          placeholder: (context, value) => const LinearProgressIndicator(),
+          errorWidget: (context, value, e) => const Icon(Icons.error),
+          imageUrl: widget.article.image!,
+          height: 250,
+          fit: BoxFit.cover,
+        ),
+        onTap: () => Modular.to
+            .pushNamed("/community/article", arguments: widget.article),
+      );
+    }
+
+    return _imageWidget;
   }
 
   Widget _postTitle(BuildContext context) {
     if (widget.article.title.isNotEmpty) {
+      Widget text = Text(
+        widget.article.title.parseHtmlString().trim(),
+        style: Theme.of(context).textTheme.headline4!,
+      );
+
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-        child: Text(
-          widget.article.title,
-          style: Theme.of(context).textTheme.headline4!,
-        ),
+        //child: Html(data: widget.article.title),
+        child: widget.article.type == ArticleType.article
+            ? TextButton(
+                child: text,
+                onPressed: () => Modular.to
+                    .pushNamed("/community/article", arguments: widget.article),
+              )
+            : text,
       );
     } else {
       return const SizedBox();
@@ -186,50 +242,35 @@ class _PostWidgetState extends State<PostWidget> {
   }
 
   Widget _postInteractions(BuildContext context) {
-    Widget _comments = const SizedBox();
     Widget _likes = const SizedBox();
 
-    if (widget.article.comments != '0' && widget.article.comments == '1') {
-      _comments = Row(
-        children: [
-          const SizedBox(
-            width: 10,
-          ),
-          SizedBox(
-            child: SvgPicture.asset(
-              'assets/img/icons/dot.svg',
-              allowDrawingOutsideViewBox: true,
-              semanticsLabel: 'Dot',
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          Text(widget.article.comments! +
-              ' ' +
-              AppLocalizations.of(context)!.comment),
-        ],
-      );
-    }
-
-    if (widget.article.comments != '0' && widget.article.comments != '1') {
-      _comments = Row(
-        children: [
-          const SizedBox(
-            width: 10,
-          ),
-          SizedBox(
-            child: SvgPicture.asset(
-              'assets/img/icons/dot.svg',
-              allowDrawingOutsideViewBox: true,
-              semanticsLabel: 'Dot',
-              color: Theme.of(context).primaryColor,
-            ),
-          ),
-          Text(widget.article.comments! +
-              ' ' +
-              AppLocalizations.of(context)!.comments),
-        ],
-      );
-    }
+    Widget _commentText = Text(
+        "${_comments.toString()} ${_comments == 1 ? AppLocalizations.of(context)!.comment : AppLocalizations.of(context)!.comments}");
+    Widget commentsWidget = _comments >= 0
+        ? Row(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 5.0),
+                child: SizedBox(
+                  child: SvgPicture.asset(
+                    'assets/img/icons/dot.svg',
+                    allowDrawingOutsideViewBox: true,
+                    semanticsLabel: 'Dot',
+                    color: Theme.of(context).primaryColor,
+                  ),
+                ),
+              ),
+              widget.article.type == ArticleType.article
+                  ? GestureDetector(
+                      onTap: () {
+                        Modular.to.pushNamed("/community/article",
+                            arguments: widget.article);
+                      },
+                      child: _commentText)
+                  : _commentText,
+            ],
+          )
+        : const SizedBox.shrink();
 
     if (widget.article.likes != '0') {
       _likes = Row(
@@ -241,7 +282,7 @@ class _PostWidgetState extends State<PostWidget> {
           const SizedBox(
             width: 10,
           ),
-          Text(widget.article.likes!),
+          Text(currentLikes.toString()),
           const SizedBox(
             width: 10,
           ),
@@ -259,7 +300,7 @@ class _PostWidgetState extends State<PostWidget> {
           child: Row(
             children: [
               _likes,
-              _comments,
+              commentsWidget,
               const SizedBox(
                 width: 10,
               ),
@@ -282,7 +323,7 @@ class _PostWidgetState extends State<PostWidget> {
     );
   }
 
-  Widget likeButton(context) {
+  Widget _likeButton(context) {
     LikeProvider likeProvider = LikeProvider();
     Widget likeButton;
 
@@ -293,10 +334,13 @@ class _PostWidgetState extends State<PostWidget> {
         text: 'Cool',
         onPressed: () {
           likeProvider.like(widget.article.id);
-          setState(() {
-            enabledLike = false;
-            likeAsset = 'assets/img/icons/bright_bulb.svg';
-          });
+          if (mounted) {
+            setState(() {
+              enabledLike = false;
+              currentLikes++;
+              likeAsset = 'assets/img/icons/bright_bulb.svg';
+            });
+          }
         },
       );
     } else {
@@ -309,6 +353,7 @@ class _PostWidgetState extends State<PostWidget> {
           setState(
             () {
               enabledLike = true;
+              currentLikes--;
               likeAsset = 'assets/img/icons/light_bulb.svg';
             },
           );
@@ -320,16 +365,13 @@ class _PostWidgetState extends State<PostWidget> {
 
   Widget _shareButton(context) {
     Widget shareButton;
-    String articleLink;
-    String articlePath = widget.article.url!;
 
-    if (widget.article.type == 'Article') {
+    if (widget.article.type == ArticleType.article) {
       final String baseUrl = GlobalConfiguration().getValue("api_url");
       final String locale =
           Intl.getCurrentLocale().startsWith("es") ? "es" : "en";
-      List<String> splitUrl = articlePath.split('/');
-      String urlEnd = splitUrl.last;
-      articleLink = baseUrl + '/$locale/' + urlEnd;
+
+      String articleLink = "$baseUrl/$locale/${widget.article.id}";
       shareButton = _actionButton(
         context: context,
         iconAsset: 'assets/img/icons/share.svg',
@@ -358,15 +400,14 @@ class _PostWidgetState extends State<PostWidget> {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              likeButton(context),
+              _likeButton(context),
               _actionButton(
                 context: context,
                 iconAsset: 'assets/img/icons/coment.svg',
                 text: AppLocalizations.of(context)!.comment2,
-                onPressed: () {
-                  Modular.to.pushNamed("/community/article",
-                      arguments: widget.article);
-                },
+                onPressed: () => setState(() {
+                  _postCommentsVisible = !_postCommentsVisible;
+                }),
               ),
               _shareButton(context),
             ],
@@ -398,5 +439,58 @@ class _PostWidgetState extends State<PostWidget> {
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  Widget _postComments() {
+    return Column(
+      children: [CommentsWidget(articleId: widget.article.id), _commentsForm()],
+    );
+  }
+
+  Widget _commentsForm() {
+    return Container(
+      padding: const EdgeInsets.only(left: 10, right: 10, bottom: 15, top: 10),
+      child: SafeArea(
+        child: Row(
+          children: [
+            Flexible(
+              child: TextField(
+                keyboardType: TextInputType.multiline,
+                controller: _commentTextController,
+                onSubmitted: (value) => submitComment(),
+              ),
+            ),
+            IconButton(
+              onPressed: submitComment,
+              icon: const Icon(TechFreneticIcons.comment),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  void submitComment() {
+    _commentsProvider
+        .addComment(widget.article.id, _commentTextController.text)
+        .then((commentId) {
+      if (commentId != null) {
+        debugPrint("Comment ID is $commentId");
+        _commentTextController.clear();
+        setState(() {
+          _comments++;
+        });
+        _notificationsProvider.postNotification(
+          contentId: widget.article.id,
+          type: NotificationType.commentNotification,
+          targetId: commentId,
+        );
+      }
+    });
   }
 }

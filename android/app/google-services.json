@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "561556376341",
+    "project_id": "tech-frenetic-1d608",
+    "storage_bucket": "tech-frenetic-1d608.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:561556376341:android:8e40137e505ee49a1bf71c",
+        "android_client_info": {
+          "package_name": "co.innovaciones.techfrenetic"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "561556376341-4ntmkqcv1m86b0cnriklftmi1mf5rgon.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBjhFDHtk6UfW9x-xKa9oaufFh8lG-Md9I"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "561556376341-4ntmkqcv1m86b0cnriklftmi1mf5rgon.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
