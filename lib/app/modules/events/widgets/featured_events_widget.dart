@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/events_model.dart';
+import 'package:techfrenetic/app/modules/events/widgets/featured_event_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 import '../../../providers/featured_events_provider.dart';
-import 'featured_event_widget.dart';
 
 class FeaturedEventsWidget extends StatefulWidget {
   const FeaturedEventsWidget({super.key});

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/core/extensions.dart';
 import 'package:techfrenetic/app/models/events_model.dart';
+import 'package:techfrenetic/app/modules/events/widgets/category_widget.dart';
 
 class FeaturedEventWidget extends StatelessWidget {
   final EventsModel event;
@@ -90,19 +91,8 @@ class FeaturedEventWidget extends StatelessWidget {
               Positioned(
                 left: 10,
                 bottom: 10,
-                child: Card(
-                  elevation: 3,
-                  color: const Color(0xffddedfe),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(3),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Text(
-                      event.category,
-                      style: Theme.of(context).textTheme.bodyLarge,
-                    ),
-                  ),
+                child: CategoryWidget(
+                  category: event.category,
                 ),
               )
             ],

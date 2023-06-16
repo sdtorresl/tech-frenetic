@@ -38,7 +38,7 @@ class _EventsPageState extends State<EventsPage> {
             fit: BoxFit.fitWidth,
           ),
           const FeaturedEventsWidget(),
-          // const UpcomingEventWidget()
+          //const UpcomingEventWidget()
 
           /* FutureBuilder(
             future: _eventsprovider.getFeaturedEvents(),
