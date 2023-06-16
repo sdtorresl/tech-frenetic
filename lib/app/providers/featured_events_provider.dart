@@ -11,18 +11,16 @@ class FeaturedEventsProvider extends TechFreneticProvider {
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
-        if (response.statusCode == 200) {
-          List<dynamic> jsonResponse = json.jsonDecode(response.body);
-          List<EventsModel> events = [];
+        List<dynamic> jsonResponse = json.jsonDecode(response.body);
+        List<EventsModel> events = [];
 
-          for (var item in jsonResponse) {
-            EventsModel event = EventsModel.fromMap(item);
-            events.add(event);
-          }
-          return events;
-        } else {
-          debugPrint('Request failed with status: ${response.statusCode}.');
+        for (var item in jsonResponse) {
+          EventsModel event = EventsModel.fromMap(item);
+          events.add(event);
         }
+        return events;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
       }
     } catch (e) {
       debugPrint(e.toString());

@@ -1,0 +1,68 @@
+import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/models/events_model.dart';
+import 'package:techfrenetic/app/widgets/highlight_container.dart';
+
+import '../../../providers/featured_events_provider.dart';
+import 'featured_event_widget.dart';
+
+class FeaturedEventsWidget extends StatefulWidget {
+  const FeaturedEventsWidget({super.key});
+
+  @override
+  State<FeaturedEventsWidget> createState() => _FeaturedEventsWidgetState();
+}
+
+class _FeaturedEventsWidgetState extends State<FeaturedEventsWidget> {
+  final FeaturedEventsProvider _eventsprovider = FeaturedEventsProvider();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(left: 35.0, top: 40, bottom: 40),
+          child: Row(
+            children: [
+              HighlightContainer(
+                child: Text(
+                  "Featured",
+                  textAlign: TextAlign.left,
+                  textScaleFactor: 2,
+                  style: Theme.of(context).textTheme.headline3?.copyWith(
+                        color: const Color.fromRGBO(5, 105, 216, 1),
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+              ),
+              const SizedBox(
+                width: 5,
+              ),
+              Text(
+                "Events",
+                textAlign: TextAlign.left,
+                textScaleFactor: 2,
+                style: Theme.of(context).textTheme.headline3,
+              ),
+            ],
+          ),
+        ),
+        FutureBuilder(
+          future: _eventsprovider.getFeaturedEvents(),
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              List<EventsModel> events = snapshot.data;
+              List<Widget> eventsWidgets = events
+                  .map((e) => FeaturedEventWidget(
+                        event: e,
+                      ))
+                  .toList();
+              return Column(children: eventsWidgets);
+            }
+
+            return const Center(child: CircularProgressIndicator());
+          },
+        ),
+      ],
+    );
+  }
+}

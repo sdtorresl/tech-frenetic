@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/core/extensions.dart';
 import 'package:techfrenetic/app/models/events_model.dart';
 
 class FeaturedEventWidget extends StatelessWidget {
@@ -12,31 +13,100 @@ class FeaturedEventWidget extends StatelessWidget {
       padding: const EdgeInsets.only(left: 35, right: 35, bottom: 25),
       child: Column(
         children: [
-          event.image != null
-              ? Image.network(
-                  event.image!,
-                  fit: BoxFit.fitWidth,
-                  height: 250,
-                  width: double.infinity,
-                )
-              : const SizedBox.shrink(),
+          _cardHeader(context),
           Container(
             alignment: Alignment.centerLeft,
-            color: const Color.fromARGB(255, 255, 238, 0),
-            child: Padding(
+            color: Theme.of(context).colorScheme.primaryContainer,
+            child: Container(
               padding: const EdgeInsets.all(20.0),
-              child: Text(
-                "Coming on: ${event.startDate}",
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: const Color.fromARGB(255, 0, 0, 0),
-                      fontWeight: FontWeight.normal,
-                    ),
-                textAlign: TextAlign.left,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    event.eventName,
+                    style: Theme.of(context).textTheme.headline2?.copyWith(
+                          color: Colors.white,
+                        ),
+                  ),
+                  const SizedBox(
+                    height: 15,
+                  ),
+                  Text(
+                    event.location,
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                        ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Coming on: ${event.startDate.toHumanDate()}",
+                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                          color: Colors.white,
+                          fontWeight: FontWeight.normal,
+                        ),
+                    textAlign: TextAlign.left,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton.icon(
+                        style: TextButton.styleFrom(
+                          foregroundColor: Colors.white,
+                        ),
+                        onPressed: () {
+                          debugPrint("Hello");
+                        },
+                        label: const Icon(Icons.arrow_forward),
+                        icon: const Text('Learn more'),
+                      ),
+                    ],
+                  )
+                ],
               ),
             ),
           ),
         ],
       ),
     );
+  }
+
+  _cardHeader(BuildContext context) {
+    return event.image != null
+        ? Stack(
+            children: [
+              Image.network(
+                event.image!,
+                fit: BoxFit.fitWidth,
+                height: 175,
+                width: double.infinity,
+              ),
+              Positioned(
+                left: 10,
+                bottom: 10,
+                child: Card(
+                  elevation: 3,
+                  color: const Color(0xffddedfe),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(3),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Text(
+                      event.category,
+                      style: Theme.of(context).textTheme.bodyLarge,
+                    ),
+                  ),
+                ),
+              )
+            ],
+          )
+        : const SizedBox.shrink();
   }
 }
