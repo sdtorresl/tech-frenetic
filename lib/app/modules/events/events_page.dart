@@ -5,6 +5,8 @@ import 'package:techfrenetic/app/modules/events/widgets/header_widget.dart';
 import 'package:techfrenetic/app/modules/events/widgets/place_widget.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 
+import 'widgets/upcoming_events_widget.dart';
+
 class EventsPage extends StatefulWidget {
   const EventsPage({Key? key}) : super(key: key);
 
@@ -38,7 +40,7 @@ class _EventsPageState extends State<EventsPage> {
             fit: BoxFit.fitWidth,
           ),
           const FeaturedEventsWidget(),
-          //const UpcomingEventWidget()
+          const UpcomingEventsWidget()
 
           /* FutureBuilder(
             future: _eventsprovider.getFeaturedEvents(),
