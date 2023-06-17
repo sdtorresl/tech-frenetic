@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/events_model.dart';
-import 'package:techfrenetic/app/modules/events/widgets/featured_event_widget.dart';
+import 'package:techfrenetic/app/modules/events/featured_event_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 import '../../../providers/events_provider.dart';

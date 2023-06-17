@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/* import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
@@ -24,7 +24,7 @@ class _UpcomingEventsWidgetState extends State<UpcomingEventsWidget> {
 
   @override
   void initState() {
-    _eventsStore.fetchRecentEvents();
+    _eventsStore.recentEventsStore.fetchRecentEvents();
     super.initState();
     _upcommingEventsWidget = _upcommingEvents(context);
     _scrollController.addListener(
@@ -149,3 +149,4 @@ class _UpcomingEventsWidgetState extends State<UpcomingEventsWidget> {
 
   Future _refresh() => _eventsStore.fetchRecentEvents();
 }
+ */

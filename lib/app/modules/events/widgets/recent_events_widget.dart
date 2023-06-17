@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:mobx/mobx.dart';
 import 'package:techfrenetic/app/core/extensions/context_utils.dart';
+import 'package:techfrenetic/app/models/events_model.dart';
 import 'package:techfrenetic/app/modules/events/events_store.dart';
 import 'package:techfrenetic/app/modules/events/widgets/single_event_widget.dart';
 
-import '../../../models/events_model.dart';
 import '../../../widgets/highlighted_title_widget.dart';
+import '../recent_events_store.dart';
 
 class RecentEventsWidget extends StatefulWidget {
   const RecentEventsWidget({super.key});
@@ -17,21 +17,25 @@ class RecentEventsWidget extends StatefulWidget {
 }
 
 class _RecentEventsWidgetState extends State<RecentEventsWidget> {
-  final _eventsStore = Modular.get<EventsStore>();
+  final _eventsStore = Modular.get<RecentEventsStore>();
 
   double _scrollPosition = 0;
-  late Widget _upcommingEventsWidget;
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
-    _eventsStore.fetchRecentEvents();
+    if (_eventsStore.recentEvents.isEmpty) {
+      _eventsStore.fetchRecentEvents();
+    }
     super.initState();
-    _upcommingEventsWidget = _upcommingEvents(context);
     _scrollController.addListener(
       () => setState(() {
-        _scrollPosition = _scrollController.position.pixels /
-            _scrollController.position.maxScrollExtent;
+        if (_scrollController.position.maxScrollExtent > 0) {
+          _scrollPosition = _scrollController.position.pixels /
+              _scrollController.position.maxScrollExtent;
+        } else {
+          _scrollPosition = 0;
+        }
       }),
     );
   }
@@ -40,7 +44,11 @@ class _RecentEventsWidgetState extends State<RecentEventsWidget> {
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: [_searchForm(context), _upcommingEventsWidget, _progressBar()],
+      children: [
+        _searchForm(context),
+        _recentEvents(context),
+        _progressBar(),
+      ],
     );
   }
 
@@ -53,48 +61,29 @@ class _RecentEventsWidgetState extends State<RecentEventsWidget> {
     );
   }
 
-  Widget _upcommingEvents(BuildContext context) {
+  Widget _recentEvents(BuildContext context) {
     return Observer(builder: (builder) {
-      final future = _eventsStore.recentEventsFuture;
-
-      if (future == null) {
-        return const Center(
-          child: CircularProgressIndicator(),
-        );
-      }
-
-      switch (future.status) {
-        case FutureStatus.pending:
+      switch (_eventsStore.state) {
+        case StoreState.initial:
+        case StoreState.loading:
           return const Center(
             child: CircularProgressIndicator(),
           );
 
-        case FutureStatus.rejected:
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              const Text(
-                'Failed to load items.',
-                style: TextStyle(color: Colors.red),
-              ),
-              ElevatedButton(
-                child: const Text('Tap to try again'),
-                onPressed: _refresh,
-              )
-            ],
-          );
+        case StoreState.loaded:
+          List<EventsModel> _events =
+              _eventsStore.filteredRecentEvents.isNotEmpty
+                  ? _eventsStore.filteredRecentEvents
+                  : _eventsStore.recentEvents;
 
-        case FutureStatus.fulfilled:
-          List<EventsModel> events = future.result;
-          return Container(
-            padding: const EdgeInsets.symmetric(vertical: 25),
-            height: 470,
+          return SizedBox(
+            height: 410,
             child: SingleChildScrollView(
               controller: _scrollController,
               scrollDirection: Axis.horizontal,
               child: Row(
                 children: [
-                  ...events.map((e) => SingleEventWidget(event: e)).toList(),
+                  ..._events.map((e) => SingleEventWidget(event: e)).toList(),
                 ],
               ),
             ),
@@ -105,7 +94,7 @@ class _RecentEventsWidgetState extends State<RecentEventsWidget> {
 
   Widget _searchForm(BuildContext context) {
     final theme = context.theme;
-    var textTheme = context.textTheme;
+    final textTheme = context.textTheme;
 
     return Container(
       color: theme.primaryColorLight,
@@ -124,10 +113,26 @@ class _RecentEventsWidgetState extends State<RecentEventsWidget> {
             style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           TextFormField(
-            initialValue: "Write an event name",
-            autofocus: true,
-            textCapitalization: TextCapitalization.words,
+            controller: _eventsStore.nameEditingController,
+            decoration: InputDecoration(
+              label: Text(context.appLocalizations?.name ?? ''),
+              hintText: 'Drupalcon',
+            ),
           ),
+          const SizedBox(
+            height: 20,
+          ),
+          Center(
+            child: ElevatedButton(
+              onPressed: _eventsStore.search,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Text(
+                  context.appLocalizations?.search ?? '',
+                ),
+              ),
+            ),
+          )
         ],
       ),
     );
