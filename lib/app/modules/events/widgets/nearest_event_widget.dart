@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/core/extensions/context_utils.dart';
 
-class PlaceWidget extends StatelessWidget {
-  const PlaceWidget({super.key});
+class NearestEventWidget extends StatelessWidget {
+  const NearestEventWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +24,7 @@ class PlaceWidget extends StatelessWidget {
                       color: const Color.fromARGB(255, 245, 249, 255),
                     )),
               ),
-              Text("Nearest event",
+              Text(context.appLocalizations?.events_nearest ?? '',
                   textAlign: TextAlign.left,
                   style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: Colors.white,
@@ -93,7 +94,7 @@ class PlaceWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Text(
-                    "Learn more",
+                    context.appLocalizations?.events_learn_more ?? '',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Colors.white,
                           fontSize: 20,
@@ -112,7 +113,7 @@ class PlaceWidget extends StatelessWidget {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 10.0),
                   child: Text(
-                    "Buy tickets",
+                    context.appLocalizations?.events_buy ?? '',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
                           color: Colors.white,
                           fontSize: 20,

@@ -15,7 +15,7 @@ class SingleEventWidget extends StatelessWidget {
 
     return Container(
       width: MediaQuery.of(context).size.width * 0.8,
-      padding: const EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

@@ -1,6 +1,7 @@
 import 'package:techfrenetic/app/modules/articles/articles_store.dart';
 import 'package:techfrenetic/app/modules/chat/chat_module.dart';
 import 'package:techfrenetic/app/modules/courses/courses_module.dart';
+import 'package:techfrenetic/app/modules/events/events_module.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/followers/followers_page.dart';
 import 'package:techfrenetic/app/providers/followers_provider.dart';
 
@@ -17,7 +18,6 @@ import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/contact_us/contact_us_module.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_module.dart';
 import 'package:techfrenetic/app/modules/edit_avatar/edit_avatar_page.dart';
-import 'package:techfrenetic/app/modules/events/events_page.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
 import 'package:techfrenetic/app/modules/groups/groups_module.dart';
 import 'package:techfrenetic/app/modules/home/home_store.dart';
@@ -72,7 +72,13 @@ class HomeModule extends Module {
         OnboardingGuard(),
       ],
     ),
-    ChildRoute('/events', child: (context, args) => const EventsPage()),
+    ModuleRoute(
+      '/events',
+      module: EventsModule(),
+      guards: [
+        AuthGuard(),
+      ],
+    ),
     ChildRoute(
       '/vendors_search',
       child: (context, args) => const VendorsSearchPage(),

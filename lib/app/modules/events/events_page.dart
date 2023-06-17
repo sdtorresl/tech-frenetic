@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:techfrenetic/app/modules/events/widgets/featured_events_widget.dart';
 import 'package:techfrenetic/app/modules/events/widgets/header_widget.dart';
-import 'package:techfrenetic/app/modules/events/widgets/place_widget.dart';
+import 'package:techfrenetic/app/modules/events/widgets/nearest_event_widget.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 
-import 'widgets/upcoming_events_widget.dart';
+import 'widgets/recent_events_widget.dart';
 
 class EventsPage extends StatefulWidget {
   const EventsPage({Key? key}) : super(key: key);
@@ -34,13 +33,14 @@ class _EventsPageState extends State<EventsPage> {
       body: ListView(
         children: [
           const HeaderWidget(),
-          const PlaceWidget(),
+          const NearestEventWidget(),
           Image.network(
             "https://picsum.photos/700/300",
             fit: BoxFit.fitWidth,
           ),
-          const FeaturedEventsWidget(),
-          const UpcomingEventsWidget()
+          //const FeaturedEventsWidget(),
+          //const UpcomingEventsWidget(),
+          const RecentEventsWidget(),
 
           /* FutureBuilder(
             future: _eventsprovider.getFeaturedEvents(),
@@ -91,7 +91,7 @@ class _EventsPageState extends State<EventsPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              AppLocalizations.of(context)!.event_serch,
+              AppLocalizations.of(context)!.events_event,
               style: Theme.of(context).textTheme.headline1!.copyWith(
                   fontSize: 20, color: Theme.of(context).primaryColor),
             ),

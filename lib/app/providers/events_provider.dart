@@ -30,6 +30,23 @@ class EventsProvider extends TechFreneticProvider {
 
   Future<List<EventsModel>> getUpcomingEvents() async {
     try {
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/events-upcomming");
+      var response = await http.get(_url);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.jsonDecode(response.body);
+        return jsonResponse.map((e) => EventsModel.fromMap(e)).toList();
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return [];
+  }
+
+  Future<List<EventsModel>> getRecentEvents() async {
+    try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/v1/events-recent");
       var response = await http.get(_url);
 

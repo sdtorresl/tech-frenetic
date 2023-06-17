@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:techfrenetic/app/core/extensions/context_utils.dart';
 import 'package:techfrenetic/app/modules/events/events_store.dart';
 import 'package:techfrenetic/app/modules/events/widgets/single_event_widget.dart';
-import 'package:techfrenetic/app/widgets/highlight_container.dart';
 
 import '../../../models/events_model.dart';
+import '../../../widgets/highlighted_title_widget.dart';
 
-class UpcomingEventsWidget extends StatefulWidget {
-  const UpcomingEventsWidget({super.key});
+class RecentEventsWidget extends StatefulWidget {
+  const RecentEventsWidget({super.key});
 
   @override
-  State<UpcomingEventsWidget> createState() => _UpcomingEventsWidgetState();
+  State<RecentEventsWidget> createState() => _RecentEventsWidgetState();
 }
 
-class _UpcomingEventsWidgetState extends State<UpcomingEventsWidget> {
+class _RecentEventsWidgetState extends State<RecentEventsWidget> {
   final _eventsStore = Modular.get<EventsStore>();
 
   double _scrollPosition = 0;
@@ -103,39 +104,24 @@ class _UpcomingEventsWidgetState extends State<UpcomingEventsWidget> {
   }
 
   Widget _searchForm(BuildContext context) {
-    final theme = Theme.of(context);
-    var textTheme = Theme.of(context).textTheme;
+    final theme = context.theme;
+    var textTheme = context.textTheme;
+
     return Container(
       color: theme.primaryColorLight,
       padding: const EdgeInsets.all(36.0),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            children: [
-              HighlightContainer(
-                child: Text(
-                  "Upcoming",
-                  style: textTheme.headline2?.copyWith(
-                      color: theme.colorScheme.primary, fontSize: 26),
-                ),
-              ),
-              const SizedBox(
-                width: 5,
-              ),
-              Text(
-                "Events",
-                style: textTheme.headline2
-                    ?.copyWith(color: Colors.black, fontSize: 26),
-              ),
-            ],
-          ),
+          HighlightedTitleWidget(
+              text: context.appLocalizations?.events_recent ?? ''),
           const SizedBox(
             height: 25,
           ),
           Text(
-            "Search upcoming events by",
+            "${context.appLocalizations?.events_search_recent ?? ''}:",
             textAlign: TextAlign.left,
-            style: textTheme.bodyLarge?.copyWith(),
+            style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           TextFormField(
             initialValue: "Write an event name",

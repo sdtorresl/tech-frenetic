@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/core/extensions/context_utils.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
 
 class HeaderWidget extends StatelessWidget {
@@ -28,20 +29,20 @@ class HeaderWidget extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "Tech",
-            style: Theme.of(context).textTheme.headline1?.copyWith(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.w900,
-                ),
+            context.appLocalizations?.tech_events.split(" ")[0] ?? '',
+            style: context.textTheme.headline1?.copyWith(
+              color: Colors.white,
+              fontSize: 28,
+              fontWeight: FontWeight.w900,
+            ),
           ),
           Text(
-            "Events",
-            style: Theme.of(context).textTheme.headline1?.copyWith(
-                  color: Colors.white,
-                  fontSize: 36,
-                  fontWeight: FontWeight.w900,
-                ),
+            context.appLocalizations?.tech_events.split(" ")[1] ?? '',
+            style: context.textTheme.headline1?.copyWith(
+              color: Colors.white,
+              fontSize: 36,
+              fontWeight: FontWeight.w900,
+            ),
           ),
           const SizedBox(
             height: 25,
@@ -52,13 +53,24 @@ class HeaderWidget extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15.0),
-            child: Text(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit erat velit ornare aliquam, consect. Edit consectetum alit ediam venut!",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            child: Column(
+              children: [
+                Text(
+                  context.appLocalizations?.events_description ?? '',
+                  textAlign: TextAlign.center,
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  context.appLocalizations?.events_description_bold ?? '',
+                  textAlign: TextAlign.center,
+                  style: context.textTheme.bodyLarge?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+              ],
             ),
           ),
           SizedBox(
