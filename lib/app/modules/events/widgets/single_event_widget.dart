@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/extensions.dart';
 import 'package:techfrenetic/app/models/events_model.dart';
 import 'package:techfrenetic/app/modules/events/widgets/category_widget.dart';
@@ -20,16 +21,22 @@ class SingleEventWidget extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           event.image != null
-              ? ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Image.network(event.image!),
+              ? GestureDetector(
+                  onTap: () => Modular.to.pushNamed("/events/${event.nid}"),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5),
+                    child: Image.network(event.image!),
+                  ),
                 )
               : const SizedBox.shrink(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15.0),
-            child: Text(
-              event.eventName,
-              style: textTheme.headline2?.copyWith(height: 1.25),
+            child: InkWell(
+              onTap: () => Modular.to.pushNamed("/events/${event.nid}"),
+              child: Text(
+                event.eventName,
+                style: textTheme.headline2?.copyWith(height: 1.25),
+              ),
             ),
           ),
           CategoryWidget(
