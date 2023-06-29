@@ -6,8 +6,9 @@ import 'package:techfrenetic/app/models/detailed_event_model.dart';
 import 'package:techfrenetic/app/modules/events/event_store.dart';
 import 'package:techfrenetic/app/modules/events/widgets/header_event_widget.dart';
 import 'package:techfrenetic/app/modules/events/widgets/speakers_list_widget.dart';
-import 'package:techfrenetic/app/modules/events/widgets/sponsors_list_widget.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
+
+import 'widgets/sponsors_list_widget.dart';
 
 class EventPage extends StatefulWidget {
   final int eventId;

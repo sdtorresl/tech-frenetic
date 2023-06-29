@@ -20,6 +20,7 @@ class DateSelectorWidget extends StatelessWidget {
       readOnly: true,
       showCursor: true,
       decoration: InputDecoration(
+        label: Text(context.appLocalizations?.date ?? ''),
         suffixIcon: const Icon(Icons.date_range_outlined),
         hintText: "dd/mm/yyyy",
         hintStyle: context.textTheme.bodyText1!

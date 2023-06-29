@@ -74,16 +74,16 @@ class EventsProvider extends TechFreneticProvider {
 
   Future<DetailedEventModel?> getEvent(int eventId) {
     var speakers = List.generate(
-        3,
+        5,
         ((index) => SpeakerModel(
-              "Anita Jhonson ",
+              "Anita Jhonson $index",
               "At nunc ut et risus volutpat volutpat ullamcorper at pharetra. Diam ac vitae mollis nullam curabitur congue parturient venenatis, in. At sed massa ultricies et vivamus nulla mattis eu vulputate. Amet, purus, ridiculus scelerisque sapien, dictum viverra. A id orci, eleifend porttitor tristique feugiat feugiat pellentesque eu.",
               'https://dev-techfrenetic.us.seedcloud.co/api/sites/default/files/styles/thumbnail/public/2023-04/Rectangle%20705_0.png?itok=X8mbeCoQ',
               'Sidney, AU',
             )));
 
     var sponsors = List.generate(
-        6,
+        7,
         ((index) => SponsorModel(
               picture:
                   'https://dev-techfrenetic.us.seedcloud.co/api/sites/default/files/styles/thumbnail/public/2023-04/Rectangle%20705_0.png?itok=X8mbeCoQ',

@@ -4,6 +4,9 @@ import 'package:techfrenetic/app/modules/events/widgets/nearest_event_widget.dar
 import 'package:techfrenetic/app/modules/events/widgets/recent_events_widget.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 
+import 'widgets/featured_events_widget.dart';
+import 'widgets/upcoming_events_widget.dart';
+
 class EventsPage extends StatelessWidget {
   const EventsPage({Key? key}) : super(key: key);
 
@@ -19,8 +22,8 @@ class EventsPage extends StatelessWidget {
             "https://picsum.photos/700/300",
             fit: BoxFit.fitWidth,
           ),
-          //const FeaturedEventsWidget(),
-          //const UpcommingEventsWidget(),
+          const FeaturedEventsWidget(),
+          const UpcommingEventsWidget(),
           const RecentEventsWidget(),
         ],
       ),

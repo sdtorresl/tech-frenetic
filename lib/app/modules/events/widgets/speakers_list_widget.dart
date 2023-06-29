@@ -1,26 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/core/extensions/context_utils.dart';
+import 'package:techfrenetic/app/models/dtos/paginator_dto.dart';
 import 'package:techfrenetic/app/models/speaker_model.dart';
 import 'package:techfrenetic/app/widgets/highlighted_title_widget.dart';
+import 'package:techfrenetic/app/widgets/paginator_widget.dart';
 
-class SpeakersListWidget extends StatelessWidget {
+class SpeakersListWidget extends StatefulWidget {
   final List<SpeakerModel> speakers;
   const SpeakersListWidget({super.key, required this.speakers});
 
   @override
+  State<SpeakersListWidget> createState() => _SpeakersListWidgetState();
+}
+
+class _SpeakersListWidgetState extends State<SpeakersListWidget> {
+  late int _currentPage;
+  final int _itemsPerPage = 2;
+
+  @override
+  void initState() {
+    _currentPage = 0;
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 40),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          HighlightedTitleWidget(
-              text: context.appLocalizations?.events_speakers ?? ''),
-          const SizedBox(
-            height: 15,
-          ),
-          ...speakers.map((e) => _speakerView(context, e)).toList()
-        ],
+    int j = (_itemsPerPage * _currentPage) + _itemsPerPage;
+    int maxIndex = j > widget.speakers.length ? widget.speakers.length : j;
+
+    return Container(
+      color: const Color.fromARGB(255, 237, 244, 255),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 30.0, horizontal: 40),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            HighlightedTitleWidget(
+                text: context.appLocalizations?.events_speakers ?? ''),
+            const SizedBox(
+              height: 15,
+            ),
+            ...widget.speakers
+                .sublist(_itemsPerPage * _currentPage, maxIndex)
+                .map((e) => _speakerView(context, e))
+                .toList(),
+            PaginatorWidget(
+              paginator: PaginatorDto(
+                totalItems: widget.speakers.length,
+                itemsPerPage: _itemsPerPage,
+                totalPages: (widget.speakers.length / _itemsPerPage).ceil(),
+                currentPage: _currentPage,
+              ),
+              onPageChange: (i) {
+                setState(() {
+                  _currentPage = i;
+                });
+              },
+            )
+          ],
+        ),
       ),
     );
   }

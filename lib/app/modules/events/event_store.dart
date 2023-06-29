@@ -21,7 +21,7 @@ abstract class _EventStore with Store {
 
   @computed
   StoreState get state {
-    if (_eventFuture == null || _eventFuture?.status == FutureStatus.pending) {
+    if (_eventFuture == null || _eventFuture?.status == FutureStatus.rejected) {
       return StoreState.initial;
     }
 

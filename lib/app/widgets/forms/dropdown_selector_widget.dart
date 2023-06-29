@@ -21,7 +21,6 @@ class DropdownSelectorWidget<T extends SelectableItemI>
     return DropdownButtonFormField<String>(
       value: selectedValue?.value,
       items: options.map((T option) {
-        debugPrint(option.hashCode.toString());
         return DropdownMenuItem<String>(
           value: option.value,
           child: Text(
