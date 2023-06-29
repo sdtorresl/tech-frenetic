@@ -4,7 +4,7 @@ import 'package:techfrenetic/app/modules/events/widgets/header_widget.dart';
 import 'package:techfrenetic/app/modules/events/widgets/nearest_event_widget.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 
-import 'widgets/recent_events_widget.dart';
+import 'widgets/upcoming_events_widget.dart';
 
 class EventsPage extends StatefulWidget {
   const EventsPage({Key? key}) : super(key: key);
@@ -39,35 +39,7 @@ class _EventsPageState extends State<EventsPage> {
             fit: BoxFit.fitWidth,
           ),
           //const FeaturedEventsWidget(),
-          //const UpcomingEventsWidget(),
-          const RecentEventsWidget(),
-
-          /* FutureBuilder(
-            future: _eventsprovider.getFeaturedEvents(),
-            builder: (BuildContext context,
-                AsyncSnapshot<List<EventsModel>> snapshot) {
-              if (snapshot.hasData) {
-                List<EventsModel> events = snapshot.data ?? [];
-                List<Widget> postsEventWidgets = [];
-
-                for (EventsModel event in events) {
-                  postsEventWidgets.add(FeaturedEventWidget(event: event));
-                }
-
-                return Column(
-                  children: [
-                    ...postsEventWidgets,
-                    const SizedBox(height: 60),
-                  ],
-                );
-              } else {
-                return const Center(child: CircularProgressIndicator());
-              }
-            },
-          ), */
-          //const FeaturedEventsWidget(),
-          //eventSerch(),
-          //const UpcomingEventsWidget(),
+          const UpcommingEventsWidget(),
           //const RecentEventsWidget(),
         ],
       ),
