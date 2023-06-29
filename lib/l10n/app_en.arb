@@ -135,6 +135,7 @@
     "events_invitation": "Does it look good? Wait no more",
     "events_learn_more": "Learn more",
     "events_nearest": "Nearest event",
+    "events_no_events": "No events were found",
     "events_recent": "Recent",
     "events_register": "Register",
     "events_search_recent": "Search articles of past events by",

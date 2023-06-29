@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/detailed_event_model.dart';
+import 'package:techfrenetic/app/models/dtos/event_filter_dto.dart';
 import 'package:techfrenetic/app/models/events_model.dart';
 import 'package:techfrenetic/app/models/speaker_model.dart';
 import 'package:techfrenetic/app/models/sponsors_model.dart';
@@ -31,9 +32,12 @@ class EventsProvider extends TechFreneticProvider {
     return [];
   }
 
-  Future<List<EventsModel>> getUpcomingEvents() async {
+  Future<List<EventsModel>> getUpcomingEvents({EventFilterDto? filter}) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/v1/events-upcomming");
+      if (filter != null) {
+        _url = _url.replace(queryParameters: filter.getQueryParams);
+      }
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
@@ -48,9 +52,12 @@ class EventsProvider extends TechFreneticProvider {
     return [];
   }
 
-  Future<List<EventsModel>> getRecentEvents() async {
+  Future<List<EventsModel>> getRecentEvents({EventFilterDto? filter}) async {
     try {
       Uri _url = Uri.parse("$baseUrl/api/$locale/v1/events-recent");
+      if (filter != null) {
+        _url = _url.replace(queryParameters: filter.getQueryParams);
+      }
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {

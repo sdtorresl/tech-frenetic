@@ -20,18 +20,16 @@ class UpcommingEventsWidget extends StatefulWidget {
 }
 
 class _UpcommingEventsWidgetState extends State<UpcommingEventsWidget> {
-  final _eventsStore = Modular.get<UpcommingEventsStore>();
+  final _upcommingEventsStore = Modular.get<UpcommingEventsStore>();
+  final _eventsStore = Modular.get<EventsStore>();
 
   double _scrollPosition = 0;
   final ScrollController _scrollController = ScrollController();
 
   @override
   void initState() {
-    if (_eventsStore.upcommingEvents.isEmpty) {
-      _eventsStore.fetchUpcommingEvents();
-    }
-    if (_eventsStore.categories.isEmpty) {
-      _eventsStore.fetchCategories();
+    if (_upcommingEventsStore.upcommingEvents.isEmpty) {
+      _upcommingEventsStore.fetchUpcommingEvents();
     }
 
     super.initState();
@@ -70,7 +68,7 @@ class _UpcommingEventsWidgetState extends State<UpcommingEventsWidget> {
 
   Widget _upcommingEvents(BuildContext context) {
     return Observer(builder: (builder) {
-      switch (_eventsStore.upcommingEventsState) {
+      switch (_upcommingEventsStore.upcommingEventsState) {
         case StoreState.initial:
         case StoreState.loading:
           return const Center(
@@ -78,20 +76,31 @@ class _UpcommingEventsWidgetState extends State<UpcommingEventsWidget> {
           );
 
         case StoreState.loaded:
-          List<EventsModel> _events =
-              _eventsStore.filteredRecentEvents.isNotEmpty
-                  ? _eventsStore.filteredRecentEvents
-                  : _eventsStore.upcommingEvents;
+          List<EventsModel> _events = _upcommingEventsStore.upcommingEvents;
 
-          return SizedBox(
-            height: 410,
-            child: SingleChildScrollView(
-              controller: _scrollController,
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  ..._events.map((e) => SingleEventWidget(event: e)).toList(),
-                ],
+          if (_events.isNotEmpty) {
+            return SizedBox(
+              height: 410,
+              child: SingleChildScrollView(
+                controller: _scrollController,
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    ..._events.map((e) => SingleEventWidget(event: e)).toList(),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(
+              vertical: 20,
+            ),
+            child: Center(
+              child: Text(
+                context.appLocalizations?.events_no_events ?? '',
+                style: context.textTheme.bodyLarge,
               ),
             ),
           );
@@ -120,7 +129,7 @@ class _UpcommingEventsWidgetState extends State<UpcommingEventsWidget> {
             style: textTheme.bodyLarge?.copyWith(fontWeight: FontWeight.bold),
           ),
           TextFormField(
-            controller: _eventsStore.nameEditingController,
+            controller: _upcommingEventsStore.nameEditingController,
             decoration: InputDecoration(
               label: Text(context.appLocalizations?.name ?? ''),
               hintText: 'Drupalcon',
@@ -130,8 +139,8 @@ class _UpcommingEventsWidgetState extends State<UpcommingEventsWidget> {
             height: 10,
           ),
           DateSelectorWidget(
-            dateController: _eventsStore.dateEditingController,
-            onDateSelected: _eventsStore.changeDate,
+            dateController: _upcommingEventsStore.dateEditingController,
+            onDateSelected: _upcommingEventsStore.changeDate,
           ),
           const SizedBox(
             height: 10,
@@ -141,12 +150,12 @@ class _UpcommingEventsWidgetState extends State<UpcommingEventsWidget> {
               case StoreState.initial:
                 return const SizedBox.shrink();
               case StoreState.loaded:
-                if (_eventsStore.categories.isNotEmpty) {
+                if (_eventsStore.selectableCategories.isNotEmpty) {
                   return DropdownSelectorWidget<SelectableItemI>(
-                    onChanged: _eventsStore.changeCategory,
+                    onChanged: _upcommingEventsStore.changeCategory,
                     labelText: context.appLocalizations?.category ?? '',
                     options: _eventsStore.selectableCategories,
-                    selectedValue: _eventsStore.category,
+                    selectedValue: _upcommingEventsStore.category,
                   );
                 }
                 return const SizedBox.shrink();
@@ -159,7 +168,7 @@ class _UpcommingEventsWidgetState extends State<UpcommingEventsWidget> {
           ),
           Center(
             child: ElevatedButton(
-              onPressed: _eventsStore.search,
+              onPressed: _upcommingEventsStore.search,
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15.0),
                 child: Text(
@@ -173,5 +182,5 @@ class _UpcommingEventsWidgetState extends State<UpcommingEventsWidget> {
     );
   }
 
-  Future _refresh() => _eventsStore.fetchUpcommingEvents();
+  Future _refresh() => _upcommingEventsStore.fetchUpcommingEvents();
 }

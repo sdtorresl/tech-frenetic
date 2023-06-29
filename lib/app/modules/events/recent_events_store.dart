@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:techfrenetic/app/core/extensions.dart';
+import 'package:techfrenetic/app/core/extensions/datetime_utils.dart';
 import 'package:techfrenetic/app/modules/events/events_store.dart';
 
+import '../../core/utils/selectable_item.dart';
+import '../../models/dtos/event_filter_dto.dart';
 import '../../models/events_model.dart';
 import '../../providers/events_provider.dart';
 
@@ -25,7 +27,8 @@ abstract class _RecentEventsStore with Store {
 
   String? name;
   DateTime? date;
-  String? category;
+  @observable
+  SelectableItem? category;
 
   TextEditingController nameEditingController = TextEditingController();
   TextEditingController categoryEditingController = TextEditingController();
@@ -33,20 +36,22 @@ abstract class _RecentEventsStore with Store {
 
   _RecentEventsStore() {
     nameEditingController.addListener(_changeName);
-    categoryEditingController.addListener(_changeCategory);
-    dateEditingController.addListener(_changeDate);
   }
 
   void _changeName() {
     name = nameEditingController.text;
   }
 
-  void _changeDate() {
-    date = nameEditingController.text.toDateTime();
+  @action
+  void changeDate(DateTime? dateTime) {
+    if (dateTime != null) {
+      dateEditingController.text = dateTime.toDateString();
+      date = dateTime;
+    }
   }
 
-  void _changeCategory() {
-    category = nameEditingController.text;
+  void changeCategory(SelectableItemI? newCategory) {
+    category = newCategory as SelectableItem;
   }
 
   @computed
@@ -70,11 +75,10 @@ abstract class _RecentEventsStore with Store {
 
   @action
   search() async {
-    filteredRecentEvents = ObservableList();
-
-    if (name != null && name!.isNotEmpty) {
-      filteredRecentEvents = ObservableList.of(recentEvents.where((element) =>
-          element.eventName.toLowerCase().contains(name!.toLowerCase())));
-    }
+    var filter =
+        EventFilterDto(name: name, startDate: date, category: category?.label);
+    _recentEventsFuture =
+        ObservableFuture(_eventsProvider.getRecentEvents(filter: filter));
+    recentEvents = ObservableList.of(await _recentEventsFuture!);
   }
 }

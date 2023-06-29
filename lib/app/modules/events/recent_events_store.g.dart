@@ -66,6 +66,22 @@ mixin _$RecentEventsStore on _RecentEventsStore, Store {
     });
   }
 
+  late final _$categoryAtom =
+      Atom(name: '_RecentEventsStore.category', context: context);
+
+  @override
+  SelectableItem? get category {
+    _$categoryAtom.reportRead();
+    return super.category;
+  }
+
+  @override
+  set category(SelectableItem? value) {
+    _$categoryAtom.reportWrite(value, super.category, () {
+      super.category = value;
+    });
+  }
+
   late final _$fetchRecentEventsAsyncAction =
       AsyncAction('_RecentEventsStore.fetchRecentEvents', context: context);
 
@@ -82,11 +98,26 @@ mixin _$RecentEventsStore on _RecentEventsStore, Store {
     return _$searchAsyncAction.run(() => super.search());
   }
 
+  late final _$_RecentEventsStoreActionController =
+      ActionController(name: '_RecentEventsStore', context: context);
+
+  @override
+  void changeDate(DateTime? dateTime) {
+    final _$actionInfo = _$_RecentEventsStoreActionController.startAction(
+        name: '_RecentEventsStore.changeDate');
+    try {
+      return super.changeDate(dateTime);
+    } finally {
+      _$_RecentEventsStoreActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 recentEvents: ${recentEvents},
 filteredRecentEvents: ${filteredRecentEvents},
+category: ${category},
 state: ${state}
     ''';
   }

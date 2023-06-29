@@ -1,14 +1,14 @@
-abstract class SelectableItemI<T> {
-  late final T value;
+abstract class SelectableItemI {
+  late final String? value;
   late final String label;
 }
 
-class SelectableItem<T> implements SelectableItemI {
+class SelectableItem implements SelectableItemI {
   @override
   final String label;
 
   @override
-  final T value;
+  final String? value;
 
   SelectableItem({required this.label, required this.value});
 

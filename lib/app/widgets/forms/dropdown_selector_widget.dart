@@ -18,11 +18,12 @@ class DropdownSelectorWidget<T extends SelectableItemI>
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<T>(
-      value: selectedValue,
+    return DropdownButtonFormField<String>(
+      value: selectedValue?.value,
       items: options.map((T option) {
-        return DropdownMenuItem<T>(
-          value: option,
+        debugPrint(option.hashCode.toString());
+        return DropdownMenuItem<String>(
+          value: option.value,
           child: Text(
             option.toString(),
             softWrap: true,
@@ -30,7 +31,10 @@ class DropdownSelectorWidget<T extends SelectableItemI>
           ),
         );
       }).toList(),
-      onChanged: onChanged,
+      onChanged: (value) {
+        var newVal = options.firstWhere((element) => element.value == value);
+        onChanged(newVal);
+      },
       decoration: InputDecoration(
         labelText: labelText,
       ),
