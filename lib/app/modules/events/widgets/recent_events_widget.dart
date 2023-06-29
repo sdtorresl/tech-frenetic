@@ -35,7 +35,6 @@ class _RecentEventsWidgetState extends State<RecentEventsWidget> {
       _eventsStore.fetchCategories();
       _recentEventsStore.category = null;
     }
-    super.initState();
     _scrollController.addListener(
       () => setState(() {
         if (_scrollController.position.maxScrollExtent > 0) {
@@ -46,6 +45,7 @@ class _RecentEventsWidgetState extends State<RecentEventsWidget> {
         }
       }),
     );
+    super.initState();
   }
 
   @override

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/extensions.dart';
+import 'package:techfrenetic/app/core/extensions/context_utils.dart';
 import 'package:techfrenetic/app/models/events_model.dart';
 import 'package:techfrenetic/app/modules/events/widgets/category_widget.dart';
 
@@ -44,7 +46,7 @@ class FeaturedEventWidget extends StatelessWidget {
                     height: 10,
                   ),
                   Text(
-                    "Coming on: ${event.startDate.toHumanDate()}",
+                    "${context.appLocalizations?.events_comming_on}: ${event.startDate.toHumanDate()}",
                     style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.normal,
@@ -61,11 +63,11 @@ class FeaturedEventWidget extends StatelessWidget {
                         style: TextButton.styleFrom(
                           foregroundColor: Colors.white,
                         ),
-                        onPressed: () {
-                          debugPrint("Hello");
-                        },
+                        onPressed: () =>
+                            Modular.to.pushNamed("/events/${event.nid}"),
                         label: const Icon(Icons.arrow_forward),
-                        icon: const Text('Learn more'),
+                        icon: Text(
+                            context.appLocalizations?.events_learn_more ?? ''),
                       ),
                     ],
                   )

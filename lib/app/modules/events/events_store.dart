@@ -1,6 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:techfrenetic/app/models/events_model.dart';
 import 'package:techfrenetic/app/modules/events/recent_events_store.dart';
+import 'package:techfrenetic/app/providers/events_provider.dart';
 
 import '../../core/utils/selectable_item.dart';
 import '../../models/categories_model.dart';
@@ -14,6 +16,7 @@ enum StoreState { initial, loading, loaded }
 
 abstract class _EventsStore with Store {
   final _categoriesProvider = Modular.get<CategoriesProvider>();
+  final _eventsProvider = Modular.get<EventsProvider>();
 
   @observable
   RecentEventsStore recentEventsStore = Modular.get();
@@ -22,12 +25,36 @@ abstract class _EventsStore with Store {
   ObservableFuture<List<CategoriesModel>>? _categoriesFuture;
 
   @observable
+  ObservableFuture<List<EventsModel>>? _featuredEventsFuture;
+
+  @observable
   ObservableList<CategoriesModel> _categories = ObservableList.of([]);
+
+  @observable
+  ObservableList<EventsModel> featuredEvents = ObservableList.of([]);
+
+  @action
+  Future<void> fetchFeaturedEvents() async {
+    _featuredEventsFuture =
+        ObservableFuture(_eventsProvider.getFeaturedEvents());
+    featuredEvents = ObservableList.of(await _featuredEventsFuture!);
+  }
 
   @action
   Future<void> fetchCategories() async {
     _categoriesFuture = ObservableFuture(_categoriesProvider.getCategories());
     _categories = ObservableList.of(await _categoriesFuture!);
+  }
+
+  @computed
+  StoreState get featuredEventsState {
+    if (_featuredEventsFuture == null) {
+      return StoreState.initial;
+    }
+
+    return _featuredEventsFuture!.status == FutureStatus.pending
+        ? StoreState.loading
+        : StoreState.loaded;
   }
 
   @computed

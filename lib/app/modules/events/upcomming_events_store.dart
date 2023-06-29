@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:techfrenetic/app/core/extensions/datetime_utils.dart';
-import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/models/dtos/event_filter_dto.dart';
 import 'package:techfrenetic/app/modules/events/events_store.dart';
 
@@ -66,7 +65,7 @@ abstract class _UpcommingEventsStore with Store {
   @action
   Future fetchUpcommingEvents() async {
     _upcommingEventsFuture =
-        ObservableFuture(_eventsProvider.getRecentEvents());
+        ObservableFuture(_eventsProvider.getUpcomingEvents());
     upcommingEvents = ObservableList.of(await _upcommingEventsFuture!);
     return _upcommingEventsFuture;
   }
@@ -76,7 +75,7 @@ abstract class _UpcommingEventsStore with Store {
     var filter =
         EventFilterDto(name: name, startDate: date, category: category?.label);
     _upcommingEventsFuture =
-        ObservableFuture(_eventsProvider.getRecentEvents(filter: filter));
+        ObservableFuture(_eventsProvider.getUpcomingEvents(filter: filter));
     upcommingEvents = ObservableList.of(await _upcommingEventsFuture!);
   }
 }

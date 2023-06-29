@@ -31,6 +31,10 @@ class _UpcommingEventsWidgetState extends State<UpcommingEventsWidget> {
     if (_upcommingEventsStore.upcommingEvents.isEmpty) {
       _upcommingEventsStore.fetchUpcommingEvents();
     }
+    if (_eventsStore.selectableCategories.isEmpty) {
+      _eventsStore.fetchCategories();
+      _upcommingEventsStore.category = null;
+    }
 
     super.initState();
     _scrollController.addListener(
@@ -181,6 +185,4 @@ class _UpcommingEventsWidgetState extends State<UpcommingEventsWidget> {
       ),
     );
   }
-
-  Future _refresh() => _upcommingEventsStore.fetchUpcommingEvents();
 }

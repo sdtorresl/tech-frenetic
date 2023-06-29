@@ -8,7 +8,7 @@ part 'event_store.g.dart';
 
 class EventStore = _EventStore with _$EventStore;
 
-enum StoreState { initial, loading, loaded }
+enum StoreState { initial, loading, loaded, error }
 
 abstract class _EventStore with Store {
   @observable
