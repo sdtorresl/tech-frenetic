@@ -89,8 +89,9 @@ class EventsProvider extends TechFreneticProvider {
                   'https://dev-techfrenetic.us.seedcloud.co/api/sites/default/files/styles/thumbnail/public/2023-04/Rectangle%20705_0.png?itok=X8mbeCoQ',
             )));
 
-    return Future.value(
-      DetailedEventModel(
+    return Future.delayed(
+      const Duration(seconds: 2),
+      () => DetailedEventModel(
         nid: 12,
         eventName: 'My Event',
         image:

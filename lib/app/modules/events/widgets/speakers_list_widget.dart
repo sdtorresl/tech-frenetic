@@ -15,7 +15,7 @@ class SpeakersListWidget extends StatefulWidget {
 
 class _SpeakersListWidgetState extends State<SpeakersListWidget> {
   late int _currentPage;
-  final int _itemsPerPage = 2;
+  final int _itemsPerPage = 1;
 
   @override
   void initState() {

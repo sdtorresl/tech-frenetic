@@ -16,7 +16,7 @@ class SponsorsListWidget extends StatefulWidget {
 
 class _SponsorsListWidgetState extends State<SponsorsListWidget> {
   late int _currentPage;
-  final int _itemsPerPage = 2;
+  final int _itemsPerPage = 1;
 
   @override
   void initState() {
