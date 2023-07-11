@@ -104,7 +104,7 @@ class NearestEventWidget extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.transparent,
-                  side: const BorderSide(color: Colors.white, width: 1),
+                  side: const BorderSide(color: Colors.white, width: 2),
                 ),
               ),
               const Spacer(),

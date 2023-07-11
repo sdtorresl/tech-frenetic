@@ -8,5 +8,7 @@ extension ContextUtils on BuildContext {
 
   TextTheme get textTheme => Theme.of(this).textTheme;
 
+  MediaQueryData get mediaQuery => MediaQuery.of(this);
+
   AppLocalizations? get appLocalizations => AppLocalizations.of(this);
 }

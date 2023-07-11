@@ -3,6 +3,7 @@ import 'package:techfrenetic/app/modules/chat/chat_module.dart';
 import 'package:techfrenetic/app/modules/courses/courses_module.dart';
 import 'package:techfrenetic/app/modules/events/events_module.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/followers/followers_page.dart';
+import 'package:techfrenetic/app/modules/vendors/vendors_module.dart';
 import 'package:techfrenetic/app/providers/followers_provider.dart';
 
 import '../courses/course_page.dart';
@@ -34,8 +35,6 @@ import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
 import 'package:techfrenetic/app/modules/stories/stories_view_page.dart';
 import 'package:techfrenetic/app/modules/terms/terms_page.dart';
 import 'package:techfrenetic/app/modules/users_profiles/user_profile_module.dart';
-import 'package:techfrenetic/app/modules/vendors_search/vendors_search_page.dart';
-import 'package:techfrenetic/app/modules/vendors/vendors_page.dart';
 import 'package:techfrenetic/app/modules/videos/videos_module.dart';
 import 'package:techfrenetic/app/modules/welcome/welcome_page.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
@@ -64,7 +63,13 @@ class HomeModule extends Module {
             AuthGuard(),
           ],
         ),
-        ChildRoute('/vendors', child: (context, args) => const VendorsPage()),
+        ModuleRoute(
+          '/vendors',
+          module: VendorsModule(),
+          guards: [
+            AuthGuard(),
+          ],
+        ),
         ModuleRoute('/profile', module: ProfileModule()),
       ],
       guards: [
@@ -78,10 +83,6 @@ class HomeModule extends Module {
       guards: [
         AuthGuard(),
       ],
-    ),
-    ChildRoute(
-      '/vendors_search',
-      child: (context, args) => const VendorsSearchPage(),
     ),
     ModuleRoute(
       '/groups/',

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/core/extensions.dart';
 import 'package:techfrenetic/app/core/extensions/context_utils.dart';
 import 'package:techfrenetic/app/models/events_model.dart';
-import 'package:techfrenetic/app/modules/events/widgets/category_widget.dart';
+import 'package:techfrenetic/app/widgets/category_widget.dart';
 
 class HeaderEventWidget extends StatelessWidget {
   final Color backgroundColor;
@@ -130,7 +130,7 @@ class HeaderEventWidget extends StatelessWidget {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: Colors.white,
                   backgroundColor: Colors.transparent,
-                  side: const BorderSide(color: Colors.white, width: 1),
+                  side: const BorderSide(color: Colors.white, width: 2),
                 ),
               ),
               const Spacer(),

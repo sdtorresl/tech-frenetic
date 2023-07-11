@@ -99,6 +99,7 @@ flutter:
   assets:
     - assets/img/
     - assets/img/groups/
+    - assets/img/vendors/
     - assets/img/avatars/
     - assets/img/icons/
     - assets/cfg/
