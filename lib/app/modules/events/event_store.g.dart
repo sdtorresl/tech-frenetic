@@ -51,8 +51,8 @@ mixin _$EventStore on _EventStore, Store {
       AsyncAction('_EventStore.fetchEvent', context: context);
 
   @override
-  Future<dynamic> fetchEvent(int eventId) {
-    return _$fetchEventAsyncAction.run(() => super.fetchEvent(eventId));
+  Future<dynamic> fetchEvent(String slug) {
+    return _$fetchEventAsyncAction.run(() => super.fetchEvent(slug));
   }
 
   @override

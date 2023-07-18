@@ -31,8 +31,8 @@ abstract class _EventStore with Store {
   }
 
   @action
-  Future fetchEvent(int eventId) async {
-    _eventFuture = ObservableFuture(_eventsProvider.getEvent(eventId));
+  Future fetchEvent(String slug) async {
+    _eventFuture = ObservableFuture(_eventsProvider.getEvent(slug));
     event = await _eventFuture;
     return _eventFuture;
   }

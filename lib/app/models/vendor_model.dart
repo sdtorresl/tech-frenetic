@@ -1,44 +1,31 @@
-import 'package:techfrenetic/app/models/mappeable.dart';
 import 'package:techfrenetic/app/models/model.dart';
 
-class VendorModel implements Model {
+class VendorModel extends Model {
   final int id;
-  final String picture;
-  final String description;
-  final String? longDescription;
+  final List<String> socialNetworks;
   final String category;
+  final String description;
   final String title;
   final String? author;
-  final String? location;
-  final List<String> socialNetworks;
   final String? email;
+  final String? location;
+  final String? longDescription;
   final String? phone;
+  final String? picture;
   final String? webpage;
 
   VendorModel({
-    required this.id,
-    required this.picture,
-    required this.description,
     required this.category,
+    required this.description,
+    required this.id,
+    required this.socialNetworks,
     required this.title,
     this.author,
-    this.location,
-    required this.socialNetworks,
-    this.longDescription,
     this.email,
+    this.location,
+    this.longDescription,
     this.phone,
+    this.picture,
     this.webpage,
   });
-
-  @override
-  IMappeable fromJson(String json) {
-    // TODO: implement fromJson
-    throw UnimplementedError();
-  }
-
-  @override
-  IMappeable fromMap(Map<String, dynamic> map) {
-    // TODO: implement fromMap
-    throw UnimplementedError();
-  }
 }

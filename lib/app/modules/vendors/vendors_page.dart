@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:techfrenetic/app/core/extensions/context_utils.dart';
 import 'package:techfrenetic/app/modules/vendors/widgets/intro_widget.dart';
@@ -46,6 +47,7 @@ class VendorsPageState extends State<VendorsPage> {
         ],
       )),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             context.appLocalizations!.vendors_title,
@@ -58,25 +60,78 @@ class VendorsPageState extends State<VendorsPage> {
           ),
           const SizedBox(height: 20),
           Text(
-            context.appLocalizations!.expand_intro,
+            context.appLocalizations!.vendors_description,
             style: Theme.of(context)
                 .textTheme
                 .bodyText1!
                 .copyWith(color: Colors.white),
             textAlign: TextAlign.center,
           ),
-          const SizedBox(height: 30),
+          const SizedBox(height: 15),
+          Text(
+            context.appLocalizations?.vendors_name ?? '',
+            style: context.textTheme.bodyText1?.copyWith(color: Colors.white),
+          ),
+          const SizedBox(height: 10),
           TextFormField(
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              suffixIcon: Icon(Icons.search,
-                  color: Theme.of(context).unselectedWidgetColor),
-              hintText: context.appLocalizations!.looking,
-              hintStyle: Theme.of(context)
-                  .textTheme
-                  .bodyText1!
-                  .copyWith(color: Colors.black),
+              hintText: context.appLocalizations!.vendors_name_hint,
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 15),
+          Text(
+            context.appLocalizations?.vendors_location ?? '',
+            style: context.textTheme.bodyText1?.copyWith(color: Colors.white),
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              hintText: context.appLocalizations!.vendors_location_hint,
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 15),
+          Text(
+            context.appLocalizations?.vendors_location ?? '',
+            style: context.textTheme.bodyText1?.copyWith(color: Colors.white),
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              hintText: context.appLocalizations!.vendors_brand,
+              fillColor: Colors.white,
+              filled: true,
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+            ),
+          ),
+          const SizedBox(height: 15),
+          Text(
+            context.appLocalizations?.vendors_brand ?? '',
+            style: context.textTheme.bodyText1?.copyWith(color: Colors.white),
+          ),
+          const SizedBox(height: 10),
+          TextFormField(
+            decoration: InputDecoration(
+              contentPadding:
+                  const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+              hintText: context.appLocalizations!.vendors_brand_hint,
               fillColor: Colors.white,
               filled: true,
               border: OutlineInputBorder(
@@ -85,39 +140,23 @@ class VendorsPageState extends State<VendorsPage> {
             ),
           ),
           const SizedBox(height: 30),
-          TextFormField(
-            decoration: InputDecoration(
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              suffixIcon: Icon(Icons.search,
-                  color: Theme.of(context).unselectedWidgetColor),
-              hintText: context.appLocalizations!.where_you_from,
-              hintStyle: Theme.of(context)
-                  .textTheme
-                  .bodyText1!
-                  .copyWith(color: Colors.black),
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
+          Align(
+            alignment: Alignment.center,
+            child: OutlinedButton(
+              onPressed: () => null,
+              style: OutlinedButton.styleFrom(
+                foregroundColor: Colors.white,
+                backgroundColor: Colors.transparent,
+                side: const BorderSide(
+                  color: Colors.white,
+                  width: 2,
+                ),
               ),
-            ),
-          ),
-          const SizedBox(height: 20),
-          OutlinedButton(
-            onPressed: () => null,
-            style: OutlinedButton.styleFrom(
-              foregroundColor: Colors.white,
-              backgroundColor: Colors.transparent,
-              side: const BorderSide(
-                color: Colors.white,
-                width: 2,
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 25.0),
-              child: Text(
-                context.appLocalizations!.search,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                child: Text(
+                  context.appLocalizations!.search,
+                ),
               ),
             ),
           ),
@@ -158,7 +197,7 @@ class VendorsPageState extends State<VendorsPage> {
             height: 25,
           ),
           ElevatedButton(
-            onPressed: () => null,
+            onPressed: () => Modular.to.pushNamed('/contact_us'),
             child: Text(
               context.appLocalizations?.contact ?? '',
               style: context.textTheme.button

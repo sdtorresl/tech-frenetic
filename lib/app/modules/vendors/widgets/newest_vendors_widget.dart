@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/extensions/context_utils.dart';
 import 'package:techfrenetic/app/models/vendor_model.dart';
 import 'package:techfrenetic/app/modules/vendors/widgets/single_vendor_widget.dart';
 import 'package:techfrenetic/app/widgets/highlighted_title_widget.dart';
+
+import '../vendors_store.dart';
 
 class NewestVendorsWidget extends StatelessWidget {
   final String title;
@@ -11,6 +15,8 @@ class NewestVendorsWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final VendorsStore _vendorsStore = Modular.get<VendorsStore>();
+
     List<VendorModel> vendors = List<VendorModel>.generate(
       5,
       (index) => VendorModel(
@@ -39,10 +45,26 @@ class NewestVendorsWidget extends StatelessWidget {
         children: [
           HighlightedTitleWidget(
               text: context.appLocalizations?.vendors_newest ?? ''),
-          Column(
-            children:
-                vendors.map((e) => SingleVendorWidget(vendor: e)).toList(),
-          )
+          Observer(builder: (context) {
+            switch (_vendorsStore.recentVendorsState) {
+              case VendorsStoreState.initial:
+                return Center(
+                  child: Text(context.appLocalizations?.video_load ?? ''),
+                );
+              case VendorsStoreState.loaded:
+                return Column(
+                  children: _vendorsStore.recentVendors
+                      .map((e) => SingleVendorWidget(vendor: e))
+                      .toList(),
+                );
+              case VendorsStoreState.loading:
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              default:
+                return const SizedBox.shrink();
+            }
+          })
         ],
       ),
     );

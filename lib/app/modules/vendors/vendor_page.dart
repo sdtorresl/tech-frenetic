@@ -25,7 +25,14 @@ class VendorPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Image.network(vendor.picture),
+              vendor.picture != null
+                  ? Image.network(
+                      vendor.picture!,
+                      width: double.infinity,
+                      height: 200,
+                      fit: BoxFit.cover,
+                    )
+                  : const SizedBox.shrink(),
               const SizedBox(
                 height: 20,
               ),
@@ -85,8 +92,10 @@ class VendorPage extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(20.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Container(
+              width: double.infinity,
               child: Text(
                 vendor.description,
                 style: context.textTheme.bodyLarge

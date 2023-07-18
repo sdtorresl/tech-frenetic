@@ -11,8 +11,8 @@ import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'widgets/sponsors_list_widget.dart';
 
 class EventPage extends StatefulWidget {
-  final int eventId;
-  const EventPage({super.key, required this.eventId});
+  final String slug;
+  const EventPage({super.key, required this.slug});
 
   @override
   State<EventPage> createState() => _EventPageState();
@@ -26,7 +26,7 @@ class _EventPageState extends State<EventPage> {
   @override
   void initState() {
     super.initState();
-    _eventStore.fetchEvent(widget.eventId);
+    _eventStore.fetchEvent(widget.slug);
   }
 
   @override
@@ -79,16 +79,18 @@ class _EventPageState extends State<EventPage> {
   }
 
   _eventDescription(String description) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 25),
-      color: Colors.white,
-      child: Card(
-        elevation: 3,
-        child: Padding(
-          padding: const EdgeInsets.all(25.0),
-          child: Text(description),
-        ),
-      ),
-    );
+    return description.isEmpty
+        ? const SizedBox.shrink()
+        : Container(
+            padding: const EdgeInsets.symmetric(horizontal: 25.0, vertical: 25),
+            color: Colors.white,
+            child: Card(
+              elevation: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(25.0),
+                child: Text(description),
+              ),
+            ),
+          );
   }
 }

@@ -64,7 +64,7 @@ class FeaturedEventWidget extends StatelessWidget {
                           foregroundColor: Colors.white,
                         ),
                         onPressed: () =>
-                            Modular.to.pushNamed("/events/${event.nid}"),
+                            Modular.to.pushNamed("/events/${event.slug}"),
                         label: const Icon(Icons.arrow_forward),
                         icon: Text(
                             context.appLocalizations?.events_learn_more ?? ''),

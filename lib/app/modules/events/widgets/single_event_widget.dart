@@ -22,7 +22,7 @@ class SingleEventWidget extends StatelessWidget {
         children: [
           event.image != null
               ? GestureDetector(
-                  onTap: () => Modular.to.pushNamed("/events/${event.nid}"),
+                  onTap: () => Modular.to.pushNamed("/events/${event.slug}"),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5),
                     child: Image.network(event.image!),
@@ -32,7 +32,7 @@ class SingleEventWidget extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15.0),
             child: InkWell(
-              onTap: () => Modular.to.pushNamed("/events/${event.nid}"),
+              onTap: () => Modular.to.pushNamed("/events/${event.slug}"),
               child: Text(
                 event.eventName,
                 style: textTheme.headline2?.copyWith(height: 1.25),

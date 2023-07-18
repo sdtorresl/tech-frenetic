@@ -16,7 +16,14 @@ class SingleVendorWidget extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Image.network(vendor.picture),
+          vendor.picture != null
+              ? Image.network(
+                  vendor.picture!,
+                  width: double.infinity,
+                  height: 200,
+                  fit: BoxFit.cover,
+                )
+              : const SizedBox.shrink(),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 10.0),
             child: Text(
