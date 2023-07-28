@@ -74,7 +74,7 @@ class EventsProvider extends TechFreneticProvider {
 
   Future<DetailedEventModel?> getEvent(String slug) async {
     try {
-      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/events?alias=/$slug");
+      Uri _url = Uri.parse("$baseUrl/api/v1/events?alias=/$slug");
 
       debugPrint(_url.toString());
 
@@ -131,5 +131,23 @@ class EventsProvider extends TechFreneticProvider {
     }
 
     return [];
+  }
+
+  Future<EventsModel?> getRecentEvent() async {
+    try {
+      Uri _url = Uri.parse("$baseUrl/api/$locale/v1/last-event");
+      var response = await http.get(_url);
+
+      if (response.statusCode == 200) {
+        List<dynamic> jsonResponse = json.jsonDecode(response.body);
+
+        return EventsModel.fromMap(jsonResponse.first);
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+    return null;
   }
 }

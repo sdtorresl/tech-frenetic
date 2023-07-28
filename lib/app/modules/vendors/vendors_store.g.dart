@@ -9,13 +9,22 @@ part of 'vendors_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$VendorsStore on _VendorsStoreBase, Store {
-  Computed<VendorsStoreState>? _$recentVendorsStateComputed;
+  Computed<RecentVendorsStoreState>? _$recentVendorsStateComputed;
 
   @override
-  VendorsStoreState get recentVendorsState => (_$recentVendorsStateComputed ??=
-          Computed<VendorsStoreState>(() => super.recentVendorsState,
+  RecentVendorsStoreState get recentVendorsState =>
+      (_$recentVendorsStateComputed ??= Computed<RecentVendorsStoreState>(
+              () => super.recentVendorsState,
               name: '_VendorsStoreBase.recentVendorsState'))
-      .value;
+          .value;
+  Computed<SearchVendorsStoreState>? _$searchVendorsStateComputed;
+
+  @override
+  SearchVendorsStoreState get searchVendorsState =>
+      (_$searchVendorsStateComputed ??= Computed<SearchVendorsStoreState>(
+              () => super.searchVendorsState,
+              name: '_VendorsStoreBase.searchVendorsState'))
+          .value;
 
   late final _$_recentVendorsFutureAtom =
       Atom(name: '_VendorsStoreBase._recentVendorsFuture', context: context);
@@ -34,17 +43,49 @@ mixin _$VendorsStore on _VendorsStoreBase, Store {
     });
   }
 
+  late final _$_vendorsFutureAtom =
+      Atom(name: '_VendorsStoreBase._vendorsFuture', context: context);
+
+  @override
+  ObservableFuture<PaginatorDto<VendorModel>>? get _vendorsFuture {
+    _$_vendorsFutureAtom.reportRead();
+    return super._vendorsFuture;
+  }
+
+  @override
+  set _vendorsFuture(ObservableFuture<PaginatorDto<VendorModel>>? value) {
+    _$_vendorsFutureAtom.reportWrite(value, super._vendorsFuture, () {
+      super._vendorsFuture = value;
+    });
+  }
+
+  late final _$vendorsAtom =
+      Atom(name: '_VendorsStoreBase.vendors', context: context);
+
+  @override
+  ObservableList<VendorModel> get vendors {
+    _$vendorsAtom.reportRead();
+    return super.vendors;
+  }
+
+  @override
+  set vendors(ObservableList<VendorModel> value) {
+    _$vendorsAtom.reportWrite(value, super.vendors, () {
+      super.vendors = value;
+    });
+  }
+
   late final _$recentVendorsAtom =
       Atom(name: '_VendorsStoreBase.recentVendors', context: context);
 
   @override
-  List<VendorModel> get recentVendors {
+  ObservableList<VendorModel> get recentVendors {
     _$recentVendorsAtom.reportRead();
     return super.recentVendors;
   }
 
   @override
-  set recentVendors(List<VendorModel> value) {
+  set recentVendors(ObservableList<VendorModel> value) {
     _$recentVendorsAtom.reportWrite(value, super.recentVendors, () {
       super.recentVendors = value;
     });
@@ -154,6 +195,14 @@ mixin _$VendorsStore on _VendorsStoreBase, Store {
     return _$loadRecentVendorsAsyncAction.run(() => super.loadRecentVendors());
   }
 
+  late final _$searchVendorsAsyncAction =
+      AsyncAction('_VendorsStoreBase.searchVendors', context: context);
+
+  @override
+  Future<void> searchVendors() {
+    return _$searchVendorsAsyncAction.run(() => super.searchVendors());
+  }
+
   late final _$_VendorsStoreBaseActionController =
       ActionController(name: '_VendorsStoreBase', context: context);
 
@@ -215,6 +264,7 @@ mixin _$VendorsStore on _VendorsStoreBase, Store {
   @override
   String toString() {
     return '''
+vendors: ${vendors},
 recentVendors: ${recentVendors},
 currentPage: ${currentPage},
 name: ${name},
@@ -222,7 +272,8 @@ location: ${location},
 area: ${area},
 brand: ${brand},
 hasErrors: ${hasErrors},
-recentVendorsState: ${recentVendorsState}
+recentVendorsState: ${recentVendorsState},
+searchVendorsState: ${searchVendorsState}
     ''';
   }
 }

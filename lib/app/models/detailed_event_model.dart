@@ -4,6 +4,7 @@ import 'package:techfrenetic/app/models/sponsors_model.dart';
 
 class DetailedEventModel extends EventsModel {
   final String? longDescription;
+  final String? ticketLink;
   List<SpeakerModel> speakers;
   List<SponsorModel> sponsors;
 
@@ -17,6 +18,7 @@ class DetailedEventModel extends EventsModel {
     required super.location,
     required super.startDate,
     required super.endDate,
+    this.ticketLink,
     this.longDescription,
     this.speakers = const [],
     this.sponsors = const [],

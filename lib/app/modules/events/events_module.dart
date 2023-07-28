@@ -8,6 +8,8 @@ import 'package:techfrenetic/app/modules/events/upcomming_events_store.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/providers/events_provider.dart';
 
+import 'recent_event_store.dart';
+
 class EventsModule extends Module {
   @override
   final List<Bind> binds = [
@@ -15,6 +17,7 @@ class EventsModule extends Module {
     Bind.lazySingleton((i) => EventsProvider()),
     Bind.lazySingleton((i) => EventsStore()),
     Bind.factory((i) => EventStore()),
+    Bind.lazySingleton((i) => RecentEventStore()),
     Bind.lazySingleton((i) => RecentEventsStore()),
     Bind.lazySingleton((i) => UpcommingEventsStore()),
   ];

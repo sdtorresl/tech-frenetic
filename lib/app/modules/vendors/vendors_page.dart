@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:techfrenetic/app/core/extensions/context_utils.dart';
+import 'package:techfrenetic/app/modules/vendors/vendors_store.dart';
 import 'package:techfrenetic/app/modules/vendors/widgets/intro_widget.dart';
 import 'package:techfrenetic/app/modules/vendors/widgets/newest_vendors_widget.dart';
+import 'package:techfrenetic/app/modules/vendors/widgets/vendors_results_widget.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
 
 class VendorsPage extends StatefulWidget {
@@ -22,6 +24,7 @@ class VendorsPageState extends State<VendorsPage> {
           Column(
             children: [
               _searchBox(),
+              const VendorsResultsWidget(),
               const IntroWidget(),
               const NewestVendorsWidget(),
               _seeMore()
@@ -33,6 +36,8 @@ class VendorsPageState extends State<VendorsPage> {
   }
 
   Widget _searchBox() {
+    final VendorsStore _vendorsStore = Modular.get<VendorsStore>();
+
     return Container(
       padding: const EdgeInsets.only(top: 30, bottom: 30, left: 40, right: 40),
       decoration: const BoxDecoration(
@@ -74,6 +79,7 @@ class VendorsPageState extends State<VendorsPage> {
           ),
           const SizedBox(height: 10),
           TextFormField(
+            onChanged: _vendorsStore.setName,
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
@@ -105,7 +111,7 @@ class VendorsPageState extends State<VendorsPage> {
           ),
           const SizedBox(height: 15),
           Text(
-            context.appLocalizations?.vendors_location ?? '',
+            context.appLocalizations?.vendors_area ?? '',
             style: context.textTheme.bodyText1?.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 10),
@@ -113,7 +119,7 @@ class VendorsPageState extends State<VendorsPage> {
             decoration: InputDecoration(
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              hintText: context.appLocalizations!.vendors_brand,
+              hintText: context.appLocalizations!.vendors_area_hint,
               fillColor: Colors.white,
               filled: true,
               border: OutlineInputBorder(
@@ -143,7 +149,7 @@ class VendorsPageState extends State<VendorsPage> {
           Align(
             alignment: Alignment.center,
             child: OutlinedButton(
-              onPressed: () => null,
+              onPressed: _vendorsStore.search,
               style: OutlinedButton.styleFrom(
                 foregroundColor: Colors.white,
                 backgroundColor: Colors.transparent,
