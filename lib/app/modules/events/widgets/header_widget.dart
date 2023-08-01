@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/core/extensions/context_utils.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
 
+import '../../../widgets/separator_image_widget.dart';
+
 class HeaderWidget extends StatelessWidget {
   const HeaderWidget({super.key});
 
@@ -81,8 +83,8 @@ class HeaderWidget extends StatelessWidget {
                   child: SizedBox(
                     width: image1Width.toDouble(),
                     height: image1Height.toDouble(),
-                    child: Image.network(
-                      "https://picsum.photos/$image1Width/$image1Height",
+                    child: SeparatorImageWidget(
+                      image: 'assets/img/events/startupgrind.png',
                     ),
                   ),
                 ),
@@ -92,8 +94,8 @@ class HeaderWidget extends StatelessWidget {
                   child: SizedBox(
                     width: image2Width.toDouble(),
                     height: image2Height.toDouble(),
-                    child: Image.network(
-                      "https://picsum.photos/$image2Width/$image2Height",
+                    child: SeparatorImageWidget(
+                      image: 'assets/img/events/crunch1.jpg',
                     ),
                   ),
                 ),
@@ -103,8 +105,8 @@ class HeaderWidget extends StatelessWidget {
                   child: SizedBox(
                     width: image3Width.toDouble(),
                     height: image3Width.toDouble(),
-                    child: Image.network(
-                      "https://picsum.photos/$image2Width/$image2Width",
+                    child: SeparatorImageWidget(
+                      image: 'assets/img/events/grind2.jpg',
                     ),
                   ),
                 ),

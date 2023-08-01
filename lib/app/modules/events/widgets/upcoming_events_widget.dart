@@ -6,6 +6,7 @@ import 'package:techfrenetic/app/core/utils/selectable_item.dart';
 import 'package:techfrenetic/app/models/events_model.dart';
 import 'package:techfrenetic/app/modules/events/events_store.dart';
 import 'package:techfrenetic/app/modules/events/upcomming_events_store.dart';
+import 'package:techfrenetic/app/modules/events/widgets/no_events_widget.dart';
 import 'package:techfrenetic/app/modules/events/widgets/single_event_widget.dart';
 import 'package:techfrenetic/app/widgets/forms/date_selector_widget.dart';
 import 'package:techfrenetic/app/widgets/forms/dropdown_selector_widget.dart';
@@ -97,16 +98,11 @@ class _UpcommingEventsWidgetState extends State<UpcommingEventsWidget> {
             );
           }
 
-          return Padding(
-            padding: const EdgeInsets.symmetric(
+          return const Padding(
+            padding: EdgeInsets.symmetric(
               vertical: 20,
             ),
-            child: Center(
-              child: Text(
-                context.appLocalizations?.events_no_events ?? '',
-                style: context.textTheme.bodyLarge,
-              ),
-            ),
+            child: NoEventsWidget(),
           );
       }
     });

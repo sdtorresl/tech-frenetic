@@ -22,8 +22,17 @@ class EventsPage extends StatelessWidget {
           children: [
             const HeaderWidget(),
             const RecentEventWidget(),
-            SeparatorImageWidget(
-              image: 'assets/img/events/crunch.jpg',
+            AspectRatio(
+              aspectRatio: 16 / 9,
+              child: ClipRRect(
+                child: Stack(
+                  children: [
+                    SeparatorImageWidget(
+                      image: 'assets/img/events/startco3.jpeg',
+                    ),
+                  ],
+                ),
+              ),
             ),
             const FeaturedEventsWidget(),
             const UpcommingEventsWidget(),
