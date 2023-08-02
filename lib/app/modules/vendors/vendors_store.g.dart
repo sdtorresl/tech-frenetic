@@ -9,6 +9,15 @@ part of 'vendors_store.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$VendorsStore on _VendorsStoreBase, Store {
+  Computed<VendorDescriptionStoreState>? _$vendorDescriptionStateComputed;
+
+  @override
+  VendorDescriptionStoreState get vendorDescriptionState =>
+      (_$vendorDescriptionStateComputed ??=
+              Computed<VendorDescriptionStoreState>(
+                  () => super.vendorDescriptionState,
+                  name: '_VendorsStoreBase.vendorDescriptionState'))
+          .value;
   Computed<RecentVendorsStoreState>? _$recentVendorsStateComputed;
 
   @override
@@ -25,6 +34,24 @@ mixin _$VendorsStore on _VendorsStoreBase, Store {
               () => super.searchVendorsState,
               name: '_VendorsStoreBase.searchVendorsState'))
           .value;
+
+  late final _$_vendorsDescriptionFutureAtom = Atom(
+      name: '_VendorsStoreBase._vendorsDescriptionFuture', context: context);
+
+  @override
+  ObservableFuture<VendorDescriptionModel>? get _vendorsDescriptionFuture {
+    _$_vendorsDescriptionFutureAtom.reportRead();
+    return super._vendorsDescriptionFuture;
+  }
+
+  @override
+  set _vendorsDescriptionFuture(
+      ObservableFuture<VendorDescriptionModel>? value) {
+    _$_vendorsDescriptionFutureAtom
+        .reportWrite(value, super._vendorsDescriptionFuture, () {
+      super._vendorsDescriptionFuture = value;
+    });
+  }
 
   late final _$_recentVendorsFutureAtom =
       Atom(name: '_VendorsStoreBase._recentVendorsFuture', context: context);
@@ -88,6 +115,22 @@ mixin _$VendorsStore on _VendorsStoreBase, Store {
   set recentVendors(ObservableList<VendorModel> value) {
     _$recentVendorsAtom.reportWrite(value, super.recentVendors, () {
       super.recentVendors = value;
+    });
+  }
+
+  late final _$descriptionAtom =
+      Atom(name: '_VendorsStoreBase.description', context: context);
+
+  @override
+  VendorDescriptionModel? get description {
+    _$descriptionAtom.reportRead();
+    return super.description;
+  }
+
+  @override
+  set description(VendorDescriptionModel? value) {
+    _$descriptionAtom.reportWrite(value, super.description, () {
+      super.description = value;
     });
   }
 
@@ -187,6 +230,14 @@ mixin _$VendorsStore on _VendorsStoreBase, Store {
     });
   }
 
+  late final _$loadDescriptionAsyncAction =
+      AsyncAction('_VendorsStoreBase.loadDescription', context: context);
+
+  @override
+  Future<void> loadDescription() {
+    return _$loadDescriptionAsyncAction.run(() => super.loadDescription());
+  }
+
   late final _$loadRecentVendorsAsyncAction =
       AsyncAction('_VendorsStoreBase.loadRecentVendors', context: context);
 
@@ -266,12 +317,14 @@ mixin _$VendorsStore on _VendorsStoreBase, Store {
     return '''
 vendors: ${vendors},
 recentVendors: ${recentVendors},
+description: ${description},
 currentPage: ${currentPage},
 name: ${name},
 location: ${location},
 area: ${area},
 brand: ${brand},
 hasErrors: ${hasErrors},
+vendorDescriptionState: ${vendorDescriptionState},
 recentVendorsState: ${recentVendorsState},
 searchVendorsState: ${searchVendorsState}
     ''';

@@ -5,9 +5,13 @@ import 'package:techfrenetic/app/models/dtos/vendor_filter_dto.dart';
 import 'package:techfrenetic/app/models/vendor_model.dart';
 import 'package:techfrenetic/app/providers/vendors_provider.dart';
 
+import '../../models/vendor_description.dart';
+
 part 'vendors_store.g.dart';
 
 class VendorsStore = _VendorsStoreBase with _$VendorsStore;
+
+enum VendorDescriptionStoreState { initial, loading, loaded, error }
 
 enum RecentVendorsStoreState { initial, loading, loaded, error }
 
@@ -15,6 +19,9 @@ enum SearchVendorsStoreState { initial, loading, loaded, error }
 
 abstract class _VendorsStoreBase with Store {
   final _vendorsProvider = Modular.get<VendorsProvider>();
+
+  @observable
+  ObservableFuture<VendorDescriptionModel>? _vendorsDescriptionFuture;
 
   @observable
   ObservableFuture<PaginatorDto<VendorModel>>? _recentVendorsFuture;
@@ -27,6 +34,9 @@ abstract class _VendorsStoreBase with Store {
 
   @observable
   ObservableList<VendorModel> recentVendors = ObservableList.of([]);
+
+  @observable
+  VendorDescriptionModel? description;
 
   @observable
   int currentPage = 0;
@@ -47,6 +57,7 @@ abstract class _VendorsStoreBase with Store {
   bool? hasErrors;
 
   _VendorsStoreBase() {
+    loadDescription();
     loadRecentVendors();
   }
 
@@ -71,6 +82,13 @@ abstract class _VendorsStoreBase with Store {
   }
 
   @action
+  Future<void> loadDescription() async {
+    _vendorsDescriptionFuture =
+        ObservableFuture(_vendorsProvider.getVendorDescription());
+    description = await _vendorsDescriptionFuture;
+  }
+
+  @action
   Future<void> loadRecentVendors() async {
     _recentVendorsFuture =
         ObservableFuture(_vendorsProvider.getRecentVendors(page: currentPage));
@@ -86,6 +104,24 @@ abstract class _VendorsStoreBase with Store {
       filter: _filter,
     ));
     vendors = ObservableList.of((await _recentVendorsFuture!).items);
+  }
+
+  @computed
+  VendorDescriptionStoreState get vendorDescriptionState {
+    if (_vendorsDescriptionFuture == null) {
+      return VendorDescriptionStoreState.initial;
+    }
+
+    switch (_vendorsDescriptionFuture!.status) {
+      case FutureStatus.pending:
+        return VendorDescriptionStoreState.loading;
+      case FutureStatus.fulfilled:
+        return VendorDescriptionStoreState.loaded;
+      case FutureStatus.rejected:
+        return VendorDescriptionStoreState.error;
+      default:
+        return VendorDescriptionStoreState.initial;
+    }
   }
 
   @computed
