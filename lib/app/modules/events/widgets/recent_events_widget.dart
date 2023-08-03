@@ -156,9 +156,11 @@ class _RecentEventsWidgetState extends State<RecentEventsWidget> {
                 if (_eventsStore.selectableCategories.isNotEmpty) {
                   return DropdownSelectorWidget<SelectableItemI>(
                     onChanged: _recentEventsStore.changeCategory,
-                    labelText: context.appLocalizations?.category ?? '',
                     options: _eventsStore.selectableCategories,
                     selectedValue: _recentEventsStore.category,
+                    inputDecoration: InputDecoration(
+                      labelText: context.appLocalizations?.category ?? '',
+                    ),
                   );
                 }
                 return const SizedBox.shrink();

@@ -46,13 +46,19 @@ class VendorsProvider extends TechFreneticProvider {
     required VendorFilterDto filter,
   }) async {
     Uri _url = Uri.parse("$baseUrl/api/$locale/v1/search-supplier");
-    _url = _url.replace(queryParameters: filter.getQueryParams);
+    Map<String, dynamic> queryParams = filter.getQueryParams;
+    queryParams['page'] = page.toString();
+    _url = _url.replace(queryParameters: queryParams);
     debugPrint(_url.toString());
     var response = await http.get(_url);
 
     if (response.statusCode == 200) {
       Map<String, dynamic> jsonResponse = json.jsonDecode(response.body);
-      var paginator = PaginatorDto.fromMap(jsonResponse, vendor_mapper.fromMap);
+      var paginator = PaginatorDto.fromMap(
+        jsonResponse,
+        vendor_mapper.fromMap,
+        startsWithZero: false,
+      );
       return paginator;
     } else {
       debugPrint('Request failed with status: ${response.statusCode}.');

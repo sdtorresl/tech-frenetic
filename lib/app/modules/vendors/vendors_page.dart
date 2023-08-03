@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:techfrenetic/app/core/extensions/context_utils.dart';
+import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/modules/vendors/vendors_store.dart';
 import 'package:techfrenetic/app/modules/vendors/widgets/intro_widget.dart';
 import 'package:techfrenetic/app/modules/vendors/widgets/newest_vendors_widget.dart';
 import 'package:techfrenetic/app/modules/vendors/widgets/vendors_results_widget.dart';
+import 'package:techfrenetic/app/widgets/forms/dropdown_selector_widget.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
 
 class VendorsPage extends StatefulWidget {
@@ -115,17 +118,30 @@ class VendorsPageState extends State<VendorsPage> {
             style: context.textTheme.bodyText1?.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 10),
-          TextFormField(
-            decoration: InputDecoration(
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              hintText: context.appLocalizations!.vendors_area_hint,
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-            ),
+          Observer(
+            builder: (_) {
+              switch (_vendorsStore.servicesState) {
+                case ServicesStoreState.loaded:
+                  return DropdownSelectorWidget<CategoriesModel>(
+                    selectorKey: _vendorsStore.serviceSelectorKey,
+                    options: _vendorsStore.services,
+                    selectedValue: _vendorsStore.service,
+                    onChanged: _vendorsStore.setService,
+                    inputDecoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 15),
+                      hintText: context.appLocalizations!.vendors_area_hint,
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                  );
+                default:
+                  return const SizedBox.shrink();
+              }
+            },
           ),
           const SizedBox(height: 15),
           Text(
@@ -133,39 +149,65 @@ class VendorsPageState extends State<VendorsPage> {
             style: context.textTheme.bodyText1?.copyWith(color: Colors.white),
           ),
           const SizedBox(height: 10),
-          TextFormField(
-            decoration: InputDecoration(
-              contentPadding:
-                  const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              hintText: context.appLocalizations!.vendors_brand_hint,
-              fillColor: Colors.white,
-              filled: true,
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-            ),
+          Observer(
+            builder: (_) {
+              switch (_vendorsStore.brandsState) {
+                case BrandsStoreState.loaded:
+                  return DropdownSelectorWidget<CategoriesModel>(
+                    selectorKey: _vendorsStore.brandSelectorKey,
+                    options: _vendorsStore.brands,
+                    selectedValue: _vendorsStore.brand,
+                    onChanged: _vendorsStore.setBrand,
+                    inputDecoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 15),
+                      hintText: context.appLocalizations!.vendors_brand_hint,
+                      fillColor: Colors.white,
+                      filled: true,
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                    ),
+                  );
+                default:
+                  return const SizedBox.shrink();
+              }
+            },
           ),
           const SizedBox(height: 30),
-          Align(
-            alignment: Alignment.center,
-            child: OutlinedButton(
-              onPressed: _vendorsStore.search,
-              style: OutlinedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.transparent,
-                side: const BorderSide(
-                  color: Colors.white,
-                  width: 2,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              OutlinedButton(
+                onPressed: _vendorsStore.search,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.transparent,
+                  side: const BorderSide(
+                    color: Colors.white,
+                    width: 2,
+                  ),
                 ),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 25.0),
                 child: Text(
                   context.appLocalizations!.search,
                 ),
               ),
-            ),
-          ),
+              OutlinedButton(
+                onPressed: _vendorsStore.clean,
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.transparent,
+                  side: const BorderSide(
+                    color: Colors.white,
+                    width: 2,
+                  ),
+                ),
+                child: Text(
+                  context.appLocalizations!.search_btn_clear,
+                ),
+              ),
+            ],
+          )
         ],
       ),
     );

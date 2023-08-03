@@ -18,8 +18,6 @@ VendorModel fromMap(Map<String, dynamic> json) {
   return VendorModel(
     description: json["field_title_body"] ?? "",
     longDescription: json["body"],
-    socialNetworks:
-        List<String>.from(json["custom_social_newtwork"].map((x) => x)),
     email: json["field_correo"],
     location: json["field_country"],
     category: json["field_services_vendors"],

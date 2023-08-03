@@ -1,8 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:techfrenetic/app/models/categories_model.dart';
 import 'package:techfrenetic/app/models/dtos/paginator_dto.dart';
 import 'package:techfrenetic/app/models/dtos/vendor_filter_dto.dart';
 import 'package:techfrenetic/app/models/vendor_model.dart';
+import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/providers/vendors_provider.dart';
 
 import '../../models/vendor_description.dart';
@@ -17,8 +20,13 @@ enum RecentVendorsStoreState { initial, loading, loaded, error }
 
 enum SearchVendorsStoreState { initial, loading, loaded, error }
 
+enum BrandsStoreState { initial, loading, loaded, error }
+
+enum ServicesStoreState { initial, loading, loaded, error }
+
 abstract class _VendorsStoreBase with Store {
   final _vendorsProvider = Modular.get<VendorsProvider>();
+  final _categoriesProvider = Modular.get<CategoriesProvider>();
 
   @observable
   ObservableFuture<VendorDescriptionModel>? _vendorsDescriptionFuture;
@@ -30,6 +38,18 @@ abstract class _VendorsStoreBase with Store {
   ObservableFuture<PaginatorDto<VendorModel>>? _vendorsFuture;
 
   @observable
+  ObservableFuture<List<CategoriesModel>>? _servicesFuture;
+
+  @observable
+  ObservableFuture<List<CategoriesModel>>? _brandsFuture;
+
+  @observable
+  ObservableList<CategoriesModel> services = ObservableList.of([]);
+
+  @observable
+  ObservableList<CategoriesModel> brands = ObservableList.of([]);
+
+  @observable
   ObservableList<VendorModel> vendors = ObservableList.of([]);
 
   @observable
@@ -39,7 +59,8 @@ abstract class _VendorsStoreBase with Store {
   VendorDescriptionModel? description;
 
   @observable
-  int currentPage = 0;
+  PaginatorDto<VendorModel> paginator = PaginatorDto(
+      totalItems: 0, itemsPerPage: 0, totalPages: 0, currentPage: 0);
 
   @observable
   String? name;
@@ -48,22 +69,28 @@ abstract class _VendorsStoreBase with Store {
   String? location;
 
   @observable
-  String? area;
+  CategoriesModel? service;
 
   @observable
-  String? brand;
+  CategoriesModel? brand;
+
+  GlobalKey<FormFieldState> brandSelectorKey = GlobalKey();
+
+  GlobalKey<FormFieldState> serviceSelectorKey = GlobalKey();
 
   @observable
   bool? hasErrors;
 
   _VendorsStoreBase() {
+    loadBrands();
+    loadServices();
     loadDescription();
     loadRecentVendors();
   }
 
   @action
-  setArea(String value) {
-    area = value;
+  setService(CategoriesModel? value) {
+    service = value;
   }
 
   @action
@@ -77,7 +104,7 @@ abstract class _VendorsStoreBase with Store {
   }
 
   @action
-  setBrand(String value) {
+  setBrand(CategoriesModel? value) {
     brand = value;
   }
 
@@ -91,19 +118,78 @@ abstract class _VendorsStoreBase with Store {
   @action
   Future<void> loadRecentVendors() async {
     _recentVendorsFuture =
-        ObservableFuture(_vendorsProvider.getRecentVendors(page: currentPage));
+        ObservableFuture(_vendorsProvider.getRecentVendors(page: 0));
     recentVendors = ObservableList.of((await _recentVendorsFuture!).items);
+  }
+
+  @action
+  Future<void> loadServices() async {
+    _servicesFuture = ObservableFuture(_categoriesProvider.getServices());
+    services = ObservableList.of(await _servicesFuture!);
+  }
+
+  @action
+  Future<void> loadBrands() async {
+    _brandsFuture = ObservableFuture(_categoriesProvider.getBrands());
+    brands = ObservableList.of(await _brandsFuture!);
   }
 
   @action
   Future<void> searchVendors() async {
     var _filter = VendorFilterDto(
-        name: name, brand: brand, area: area, location: location);
+      name: name,
+      brand: brand?.id,
+      area: service?.id,
+      location: location,
+    );
     _vendorsFuture = ObservableFuture(_vendorsProvider.searchVendors(
-      page: currentPage,
+      page: paginator.currentPage,
       filter: _filter,
     ));
-    vendors = ObservableList.of((await _recentVendorsFuture!).items);
+    paginator = await _vendorsFuture!;
+    vendors = ObservableList.of(paginator.items);
+  }
+
+  @action
+  void changePage(int page) {
+    paginator.currentPage = page;
+    searchVendors();
+  }
+
+  @computed
+  BrandsStoreState get brandsState {
+    if (_brandsFuture == null) {
+      return BrandsStoreState.initial;
+    }
+
+    switch (_brandsFuture!.status) {
+      case FutureStatus.pending:
+        return BrandsStoreState.loading;
+      case FutureStatus.fulfilled:
+        return BrandsStoreState.loaded;
+      case FutureStatus.rejected:
+        return BrandsStoreState.error;
+      default:
+        return BrandsStoreState.initial;
+    }
+  }
+
+  @computed
+  ServicesStoreState get servicesState {
+    if (_brandsFuture == null) {
+      return ServicesStoreState.initial;
+    }
+
+    switch (_brandsFuture!.status) {
+      case FutureStatus.pending:
+        return ServicesStoreState.loading;
+      case FutureStatus.fulfilled:
+        return ServicesStoreState.loaded;
+      case FutureStatus.rejected:
+        return ServicesStoreState.error;
+      default:
+        return ServicesStoreState.initial;
+    }
   }
 
   @computed
@@ -163,5 +249,15 @@ abstract class _VendorsStoreBase with Store {
   @action
   void search() {
     searchVendors();
+  }
+
+  @action
+  void clean() {
+    name = null;
+    location = null;
+    service = null;
+    brand = null;
+    serviceSelectorKey.currentState?.reset();
+    brandSelectorKey.currentState?.reset();
   }
 }

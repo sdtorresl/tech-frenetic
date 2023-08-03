@@ -153,9 +153,11 @@ class _UpcommingEventsWidgetState extends State<UpcommingEventsWidget> {
                 if (_eventsStore.selectableCategories.isNotEmpty) {
                   return DropdownSelectorWidget<SelectableItemI>(
                     onChanged: _upcommingEventsStore.changeCategory,
-                    labelText: context.appLocalizations?.category ?? '',
                     options: _eventsStore.selectableCategories,
                     selectedValue: _upcommingEventsStore.category,
+                    inputDecoration: InputDecoration(
+                      labelText: context.appLocalizations?.category ?? '',
+                    ),
                   );
                 }
                 return const SizedBox.shrink();

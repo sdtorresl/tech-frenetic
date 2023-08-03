@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/extensions/context_utils.dart';
+import 'package:techfrenetic/app/widgets/paginator_widget.dart';
 
 import '../vendors_store.dart';
 import 'single_vendor_widget.dart';
@@ -27,10 +28,15 @@ class VendorsResultsWidget extends StatelessWidget {
             );
           case SearchVendorsStoreState.loaded:
             return Column(children: [
-              Text("${_vendorsStore.vendors.length} resultados"),
+              Text(
+                  "${context.appLocalizations?.search_results}: ${_vendorsStore.vendors.length}"),
               ..._vendorsStore.vendors
                   .map((e) => SingleVendorWidget(vendor: e))
                   .toList(),
+              PaginatorWidget(
+                paginator: _vendorsStore.paginator,
+                onPageChange: _vendorsStore.changePage,
+              )
             ]);
           case SearchVendorsStoreState.loading:
             return const Center(
