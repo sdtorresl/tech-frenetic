@@ -62,6 +62,9 @@ abstract class _VendorsStoreBase with Store {
   PaginatorDto<VendorModel> paginator = PaginatorDto(
       totalItems: 0, itemsPerPage: 0, totalPages: 0, currentPage: 0);
 
+  TextEditingController nameController = TextEditingController();
+  TextEditingController locationController = TextEditingController();
+
   @observable
   String? name;
 
@@ -82,6 +85,7 @@ abstract class _VendorsStoreBase with Store {
   bool? hasErrors;
 
   _VendorsStoreBase() {
+    _initControllers();
     loadBrands();
     loadServices();
     loadDescription();
@@ -257,7 +261,13 @@ abstract class _VendorsStoreBase with Store {
     location = null;
     service = null;
     brand = null;
+    nameController.clear();
+    locationController.clear();
     serviceSelectorKey.currentState?.reset();
     brandSelectorKey.currentState?.reset();
+  }
+
+  void _initControllers() {
+    nameController.addListener(() {});
   }
 }
