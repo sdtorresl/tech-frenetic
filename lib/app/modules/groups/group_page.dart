@@ -5,7 +5,7 @@ import 'package:techfrenetic/app/modules/groups/widgets/members_widget.dart';
 import 'package:techfrenetic/app/modules/posts/post_box_widget.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
-import 'package:techfrenetic/app/widgets/post_widget.dart';
+import 'package:techfrenetic/app/modules/community/widgets/post_widget.dart';
 
 import '../../models/group_model.dart';
 import '../../widgets/rounded_image_widget.dart';
@@ -40,6 +40,7 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: TFAppBar(
         title: Text(
           AppLocalizations.of(context)!.groups,
@@ -73,7 +74,7 @@ class _GroupPageState extends ModularState<GroupPage, GroupController> {
       margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
       padding: const EdgeInsets.all(25),
       decoration: BoxDecoration(
-        color: Colors.white,
+        //color: Colors.white,
         border: Border(
           top: BorderSide(
             width: 1.90,

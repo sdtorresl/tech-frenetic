@@ -18,6 +18,7 @@ class _GroupsPageState extends State<GroupsPage> {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
+        backgroundColor: Colors.transparent,
         appBar: TabBar(
           tabs: [
             Tab(

@@ -4,7 +4,7 @@ import 'package:techfrenetic/app/core/extensions/context_utils.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/posts/post_box_widget.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
-import 'package:techfrenetic/app/widgets/post_widget.dart';
+import 'package:techfrenetic/app/modules/community/widgets/post_widget.dart';
 
 import '../../home/home_store.dart';
 import 'stories_view_widget.dart';
