@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/core/extensions/context_utils.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/modules/posts/post_box_widget.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
 import 'package:techfrenetic/app/widgets/post_widget.dart';
 
+import '../../home/home_store.dart';
 import 'stories_view_widget.dart';
 
 class FeedsWidget extends StatefulWidget {
@@ -15,6 +18,8 @@ class FeedsWidget extends StatefulWidget {
 
 class _FeedsWidgetState extends State<FeedsWidget> {
   final ArticlesProvider _articlesProvider = ArticlesProvider();
+  final HomeStore _homeStore = Modular.get();
+
   int _page = 0;
   List _posts = [];
   bool _isFirstLoading = true;
@@ -76,6 +81,7 @@ class _FeedsWidgetState extends State<FeedsWidget> {
         shrinkWrap: true,
         controller: _scrollController,
         children: [
+          _header(),
           PostBoxWidget(
             onPostLoaded: () {
               setState(() {
@@ -110,5 +116,23 @@ class _FeedsWidgetState extends State<FeedsWidget> {
   void dispose() {
     _scrollController.dispose();
     super.dispose();
+  }
+
+  Widget _header() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(context.appLocalizations?.community ?? ''),
+          _homeStore.loggedUser != null
+              ? Text(
+                  "${context.appLocalizations?.community_welcome}, ${_homeStore.loggedUser?.name.split(' ').first}",
+                  style: context.textTheme.headline1,
+                )
+              : const SizedBox.shrink(),
+        ],
+      ),
+    );
   }
 }

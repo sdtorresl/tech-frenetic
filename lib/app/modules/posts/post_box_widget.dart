@@ -57,7 +57,7 @@ class _PostBoxWidgetState extends State<PostBoxWidget> {
           Padding(
             padding: const EdgeInsets.only(top: 10.0),
             child: Text(
-              AppLocalizations.of(context)!.share_an_update,
+              AppLocalizations.of(context)!.community_share_description,
               style: context.textTheme.bodyLarge?.copyWith(fontSize: 20),
             ),
           ),
