@@ -19,10 +19,10 @@ class CommunityPageState extends State<CommunityPage> {
         height: 35,
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              border: Border.all(
-                  color: Theme.of(context).chipTheme.backgroundColor!,
-                  width: 1)),
+            borderRadius: BorderRadius.circular(50),
+            border: Border.all(
+                color: Theme.of(context).chipTheme.backgroundColor!, width: 1),
+          ),
           child: Align(
             alignment: Alignment.center,
             child: Text(AppLocalizations.of(context)!.feed),
@@ -72,7 +72,13 @@ class CommunityPageState extends State<CommunityPage> {
           }
         });
         return Container(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          decoration: BoxDecoration(
+            image: const DecorationImage(
+              image: AssetImage('assets/img/bg_community.png'),
+              fit: BoxFit.fitHeight,
+            ),
+            color: Theme.of(context).scaffoldBackgroundColor,
+          ),
           child: Column(
             children: [
               Padding(
