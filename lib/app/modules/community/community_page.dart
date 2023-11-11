@@ -47,10 +47,12 @@ class CommunityPageState extends State<CommunityPage> {
         height: 35,
         child: Container(
           decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(50),
-              border: Border.all(
-                  color: Theme.of(context).chipTheme.backgroundColor!,
-                  width: 1)),
+            borderRadius: BorderRadius.circular(50),
+            border: Border.all(
+              color: Theme.of(context).chipTheme.backgroundColor!,
+              width: 1,
+            ),
+          ),
           child: Align(
             alignment: Alignment.center,
             child: Text(AppLocalizations.of(context)!.groups),
