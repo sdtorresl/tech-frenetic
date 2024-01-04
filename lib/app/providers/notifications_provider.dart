@@ -79,7 +79,6 @@ class NotificationsProvider extends TechFreneticProvider {
   }
 
   Future<bool> postNotification({
-    String? contentId,
     required NotificationType type,
     required int targetId,
   }) async {
@@ -90,7 +89,6 @@ class NotificationsProvider extends TechFreneticProvider {
         ..addAll(authHeader)
         ..addAll(sessionHeader)
         ..addAll(halHeader);
-      debugPrint(_url.toString());
 
       Map<String, dynamic> body =
           NotificationsMapper.toMap(type, prefs.userId, targetId);

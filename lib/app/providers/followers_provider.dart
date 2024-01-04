@@ -99,7 +99,9 @@ class FollowersProvider extends TechFreneticProvider {
 
       if (response.statusCode == 200) {
         _notificatonsProvider.postNotification(
-            type: NotificationType.follow, targetId: followedUserId);
+          type: NotificationType.follow,
+          targetId: followedUserId,
+        );
 
         return true;
       } else {

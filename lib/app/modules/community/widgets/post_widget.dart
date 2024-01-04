@@ -412,7 +412,6 @@ class _PostWidgetState extends State<PostWidget> {
           _comments++;
         });
         _notificationsProvider.postNotification(
-          contentId: widget.article.id,
           type: NotificationType.comment,
           targetId: commentId,
         );

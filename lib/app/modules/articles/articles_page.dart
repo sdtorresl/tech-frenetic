@@ -379,7 +379,6 @@ class ArticlesPageState extends State<ArticlesPage> {
           articleId = widget.article.id;
         });
         _notificationsProvider.postNotification(
-          contentId: widget.article.id,
           type: NotificationType.comment,
           targetId: commentId,
         );
