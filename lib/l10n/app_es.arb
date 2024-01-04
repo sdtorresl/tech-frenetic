@@ -266,6 +266,16 @@
     "notifications_group_joined": "se ha unido al grupo",
     "notifications_group_leaved": "ha abandonado el grupo",
     "notifications_shared": "ha compartido tu publicación",
+    "notifications_mark_as_read": "{notifications, plural, =1{Marcar como leída} other{Marcar {notifications} notificaciones como leídas}}",
+    "@notifications_mark_as_read": {
+        "description": "Marcar # notificaciones como leídas",
+        "placeholders": {
+            "notifications": {
+            "type": "num",
+            "format": "compact"
+            }
+        }
+    },
     "only_for_you": "Solo para ti",
     "password_changed": "Tu contraseña ha sido cambiada",
     "password_confirm": "Confirmar contraseña",

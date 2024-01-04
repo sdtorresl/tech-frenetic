@@ -113,4 +113,40 @@ class NotificationsProvider extends TechFreneticProvider {
 
     return false;
   }
+
+  Future<bool> readNotification(
+      {required NotificationModel notification}) async {
+    try {
+      Uri _url = Uri.parse(
+          "$baseUrl/api/custom-notifications/update/${notification.id}");
+
+      Map<String, String> headers = {}
+        ..addAll(authHeader)
+        ..addAll(sessionHeader)
+        ..addAll(halHeader);
+
+      Map<String, dynamic> body = {
+        "read": 1,
+      };
+
+      var response = await http.patch(
+        _url,
+        headers: headers,
+        body: json.encode(body),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        debugPrint("Notification was marked as read");
+        return true;
+      } else {
+        debugPrint('Request failed with status: ${response.statusCode}.');
+      }
+    } on SocketException {
+      debugPrint('No Internet connection 😑');
+    } on FormatException {
+      debugPrint("Bad response format 👎");
+    }
+
+    return false;
+  }
 }

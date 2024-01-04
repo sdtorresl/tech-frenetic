@@ -262,10 +262,20 @@
     "name": "Name",
     "no_groups": "You have no groups yet",
     "notification_button": "Notifications",
-    "notifications_comment": "has commenter your publication",
+    "notifications_comment": "has commented your publication",
     "notifications_group_joined": "has joined the group",
     "notifications_group_leaved": "has leave the group",
     "notifications_shared": "has shared your publication",
+    "notifications_mark_as_read": "{notifications, plural, =1{Mark as read} other{Mark {notifications} notifications as read}}",
+    "@notifications_mark_as_read": {
+        "description": "Mark # notifications as read",
+        "placeholders": {
+            "notifications": {
+            "type": "num",
+            "format": "compact"
+            }
+        }
+    },
     "only_for_you": "Solo para ti",
     "password_changed": "Your password has been changed",
     "password_confirm": "Confirm password",
