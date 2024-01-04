@@ -73,7 +73,7 @@ class _SpeakersListWidgetState extends State<SpeakersListWidget> {
           Padding(
             padding: const EdgeInsets.only(top: 10.0, bottom: 5),
             child: Text(
-              e.name,
+              e.title,
               style: context.textTheme.headline2?.copyWith(
                 color: context.colorScheme.primary,
               ),

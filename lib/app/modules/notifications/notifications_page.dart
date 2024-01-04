@@ -123,7 +123,7 @@ class _NotificationsPageState
                           ),
                           contentPadding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 10),
-                          title: Text(notification.name),
+                          title: Text(notification.title),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [

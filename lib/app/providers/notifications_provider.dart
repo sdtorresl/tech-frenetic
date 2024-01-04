@@ -3,9 +3,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
+import 'package:techfrenetic/app/models/mappers/notifications_mapper.dart';
 import 'package:techfrenetic/app/models/notification_model.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 import 'package:http/http.dart' as http;
+
+import '../models/enums/notification_type_enum.dart';
 
 class NotificationsProvider extends TechFreneticProvider {
   Future<List<NotificationModel>> getNotifications() async {
@@ -13,8 +16,8 @@ class NotificationsProvider extends TechFreneticProvider {
     List<NotificationModel> notifications = [];
 
     try {
-      Uri _url = Uri.parse(
-          "$baseUrl/api/$locale/notifications?uid=${prefs.userId}&uid_group=${prefs.userId}");
+      Uri _url =
+          Uri.parse("$baseUrl/api/custom-notifications/get/${prefs.userId}");
 
       Map<String, String> headers = {};
       headers.addAll(authHeader);
@@ -27,11 +30,14 @@ class NotificationsProvider extends TechFreneticProvider {
       );
 
       if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = jsonDecode(response.body);
+        var jsonResponse = jsonDecode(response.body);
         debugPrint(jsonResponse.toString());
-        notifications = jsonResponse
-            .map((item) => NotificationModel.fromMap(item))
-            .toList();
+
+        if (jsonResponse is List<dynamic>) {
+          notifications = jsonResponse
+              .map((item) => NotificationsMapper.fromMap(item))
+              .toList();
+        }
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
@@ -44,7 +50,7 @@ class NotificationsProvider extends TechFreneticProvider {
   Future<bool> deleteNotification(NotificationModel notification) async {
     try {
       Uri _url = Uri.parse(
-          "$baseUrl/api/$locale/admin/structure/notification/${notification.id}?_format=hal_json");
+          "$baseUrl/api/custom-notifications/delete/${notification.id}");
 
       Map<String, String> headers = {}
         ..addAll(authHeader)
@@ -57,7 +63,7 @@ class NotificationsProvider extends TechFreneticProvider {
         headers: headers,
       );
 
-      if (response.statusCode == 204) {
+      if (response.statusCode == 204 || response.statusCode == 200) {
         debugPrint("Notification ${notification.id} was deleted");
         return true;
       } else {
@@ -72,13 +78,13 @@ class NotificationsProvider extends TechFreneticProvider {
     return false;
   }
 
-  Future<bool> postNotification(
-      {String? contentId,
-      required NotificationType type,
-      required int targetId}) async {
+  Future<bool> postNotification({
+    String? contentId,
+    required NotificationType type,
+    required int targetId,
+  }) async {
     try {
-      Uri _url = Uri.parse(
-          "$baseUrl/api/$locale/entity/notification?_format=hal_json");
+      Uri _url = Uri.parse("$baseUrl/api/custom-notifications/post");
 
       Map<String, String> headers = {}
         ..addAll(authHeader)
@@ -86,76 +92,8 @@ class NotificationsProvider extends TechFreneticProvider {
         ..addAll(halHeader);
       debugPrint(_url.toString());
 
-      Map<String, dynamic> body = {
-        "_links": {
-          "type": {
-            "href":
-                "http://dev-techfrenetic.us.seedcloud.co/api/rest/type/notification/notification"
-          }
-        },
-        "name": [
-          {"value": targetId}
-        ],
-      };
-
-      switch (type) {
-        case NotificationType.commentNotification:
-          body.addAll({
-            "field_content": [
-              {"target_id": contentId}
-            ],
-            "field_comment": [
-              {"target_id": targetId}
-            ],
-            "field_type": [
-              {"value": "comment"}
-            ]
-          });
-          break;
-        case NotificationType.videoNotification:
-        case NotificationType.contentNotification:
-          body.addAll({
-            "field_content": [
-              {"target_id": targetId}
-            ],
-            "field_type": [
-              {"value": "video"}
-            ]
-          });
-          break;
-        case NotificationType.sharedNotification:
-          body.addAll({
-            "field_content": [
-              {"target_id": targetId}
-            ],
-            "field_type": [
-              {"value": "shared"}
-            ]
-          });
-          break;
-        case NotificationType.groupNotification:
-          body.addAll({
-            "field_group": [
-              {"target_id": targetId}
-            ],
-            "field_type": [
-              {"value": "group"}
-            ]
-          });
-          break;
-        default:
-          body.addAll({
-            "field_content": [
-              {"target_id": targetId}
-            ],
-            "field_type": [
-              {"value": "video"}
-            ]
-          });
-          break;
-      }
-
-      debugPrint(body.toString());
+      Map<String, dynamic> body =
+          NotificationsMapper.toMap(type, prefs.userId, targetId);
 
       var response = await http.post(
         _url,
@@ -163,7 +101,7 @@ class NotificationsProvider extends TechFreneticProvider {
         body: json.encode(body),
       );
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200 || response.statusCode == 201) {
         debugPrint("Notification was created");
         return true;
       } else {

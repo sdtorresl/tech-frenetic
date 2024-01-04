@@ -6,7 +6,6 @@ import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/core/extensions.dart';
 import 'package:techfrenetic/app/core/extensions/context_utils.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
-import 'package:techfrenetic/app/models/notification_model.dart';
 import 'package:techfrenetic/app/models/video_model.dart';
 import 'package:techfrenetic/app/modules/community/widgets/post_action_button_widget.dart';
 import 'package:techfrenetic/app/providers/comments_provider.dart';
@@ -20,6 +19,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:global_configuration/global_configuration.dart';
 import 'package:intl/intl.dart';
 
+import '../../../models/enums/notification_type_enum.dart';
 import '../../../widgets/comments_widget.dart';
 
 class PostWidget extends StatefulWidget {
@@ -413,7 +413,7 @@ class _PostWidgetState extends State<PostWidget> {
         });
         _notificationsProvider.postNotification(
           contentId: widget.article.id,
-          type: NotificationType.commentNotification,
+          type: NotificationType.comment,
           targetId: commentId,
         );
       }
