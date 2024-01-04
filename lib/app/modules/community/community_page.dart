@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:techfrenetic/app/modules/community/community_store.dart';
 import 'package:techfrenetic/app/modules/community/widgets/feeds_widget.dart';
+import 'package:techfrenetic/app/modules/community/widgets/video_advertisement_widget.dart';
 import 'package:techfrenetic/app/modules/meetups/meetups_page.dart';
 import 'package:techfrenetic/app/modules/groups/groups_page.dart';
 
@@ -12,8 +16,44 @@ class CommunityPage extends StatefulWidget {
 }
 
 class CommunityPageState extends State<CommunityPage> {
+  final CommunityStore _communityStore = Modular.get();
+
   @override
   Widget build(BuildContext context) {
+    return _buildBody();
+  }
+
+  @override
+  void initState() {
+    _communityStore.fetchVideo();
+    super.initState();
+  }
+
+  Widget _buildBody() {
+    return Observer(builder: (context) {
+      switch (_communityStore.state) {
+        case StoreState.loading:
+          return const Center(
+            child: CircularProgressIndicator(),
+          );
+        case StoreState.initial:
+          return _buildTabs();
+        default:
+          if (_communityStore.advertisement != null) {
+            return Stack(
+              children: [
+                Positioned(child: _buildTabs()),
+                VideoAdvertisementWidget(video: _communityStore.advertisement!),
+              ],
+            );
+          }
+
+          return _buildTabs();
+      }
+    });
+  }
+
+  DefaultTabController _buildTabs() {
     final List<Tab> tabs = <Tab>[
       Tab(
         height: 35,

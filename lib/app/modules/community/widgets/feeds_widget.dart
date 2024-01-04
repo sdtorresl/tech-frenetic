@@ -36,7 +36,6 @@ class _FeedsWidgetState extends State<FeedsWidget> {
   void _firsLoad() async {
     List<ArticlesModel> articles = await _articlesProvider.getWall();
     _advertisements = await _advertisementProvider.getAdvertisements();
-    _advertisements = _advertisements.where((a) => !a.isVideo).toList();
     setState(() {
       _isFirstLoading = false;
       _posts = articles;
@@ -130,14 +129,18 @@ class _FeedsWidgetState extends State<FeedsWidget> {
     // Create a new list by interleaving 1 AdvertisementWidget for each 4 PostWidgets
     List<Widget> interleavedList = [];
 
-    for (int i = 0; i < posts.length; i++) {
-      interleavedList.add(posts[i]);
+    if (advertisements.isEmpty) {
+      interleavedList = posts;
+    } else {
+      for (int i = 0; i < posts.length; i++) {
+        interleavedList.add(posts[i]);
 
-      // Add an AdvertisementWidget after every 4th PostWidget
-      if ((i + 1) % 4 == 0 && (i + 1) < posts.length) {
-        int adIndex = (i + 1) ~/ 4 - 1;
-        // Repeat the advertisements if required
-        interleavedList.add(advertisements[adIndex % advertisements.length]);
+        // Add an AdvertisementWidget after every 4th PostWidget
+        if ((i + 1) % 4 == 0 && (i + 1) < posts.length) {
+          int adIndex = (i + 1) ~/ 4 - 1;
+          // Repeat the advertisements if required
+          interleavedList.add(advertisements[adIndex % advertisements.length]);
+        }
       }
     }
 

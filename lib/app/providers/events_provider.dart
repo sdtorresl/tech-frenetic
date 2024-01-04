@@ -110,7 +110,7 @@ class EventsProvider extends TechFreneticProvider {
       var response = await http.get(_url);
 
       if (response.statusCode == 200) {
-        List<dynamic> jsonResponse = json.jsonDecode(response.body);
+        //List<dynamic> jsonResponse = json.jsonDecode(response.body);
 
         /* PaginatorDto paginator =
             PaginatorDto.fromMap(jsonResponse, DetailedEventMapper.fromMap); */

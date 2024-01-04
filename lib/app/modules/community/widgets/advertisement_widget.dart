@@ -22,9 +22,11 @@ class _AdvertisementWidgetState extends State<AdvertisementWidget> {
         child: Stack(
           children: [
             GestureDetector(
-              child: CachedNetworkImage(
-                imageUrl: widget.advertisement.picture!,
-                width: double.infinity,
+              child: Center(
+                child: CachedNetworkImage(
+                  imageUrl: widget.advertisement.picture!,
+                  fit: BoxFit.fitHeight,
+                ),
               ),
             ),
             Positioned(

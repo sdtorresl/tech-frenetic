@@ -47,15 +47,15 @@ class _SingleVideoItemState extends State<SingleVideoItem>
   }
 
   void initializePlayer() {
-    _videoPlayerController =
-        VideoPlayerController.network(widget.videoItem.playback!.hls)
-          ..initialize().then((value) {
-            _videoPlayerController.play();
-            _videoPlayerController.setLooping(true);
-            setState(() {
-              isMuted = _videoPlayerController.value.volume == 0;
-            });
-          });
+    _videoPlayerController = VideoPlayerController.networkUrl(
+        Uri.parse(widget.videoItem.playback!.hls))
+      ..initialize().then((value) {
+        _videoPlayerController.play();
+        _videoPlayerController.setLooping(true);
+        setState(() {
+          isMuted = _videoPlayerController.value.volume == 0;
+        });
+      });
   }
 
   @override

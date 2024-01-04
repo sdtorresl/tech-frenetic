@@ -19,8 +19,10 @@ class AdvertisementProvider extends TechFreneticProvider {
 
       if (response.statusCode == 200) {
         List<dynamic> jsonResponse = json.decode(response.body);
-        advertisements =
-            jsonResponse.map((a) => AdvertisementMapper.fromMap(a)).toList();
+        advertisements = jsonResponse
+            .map((a) => AdvertisementMapper.fromMap(a))
+            .where((a) => !a.isVideo)
+            .toList();
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
       }
@@ -30,5 +32,29 @@ class AdvertisementProvider extends TechFreneticProvider {
     }
 
     return advertisements;
+  }
+
+  Future<AdvertisementModel?> getVideoAdvertisement() async {
+    Uri _url = Uri.parse("$baseUrl/api/$locale/v1/advertisement");
+    var response = await http.get(_url);
+
+    debugPrint("Getting advertisements...");
+    debugPrint(_url.toString());
+
+    if (response.statusCode == 200) {
+      List<dynamic> jsonResponse = json.decode(response.body);
+
+      return jsonResponse.isNotEmpty
+          ? jsonResponse
+              .map((a) => AdvertisementMapper.fromMap(a))
+              .where((a) => a.isVideo)
+              .toList()
+              .first
+          : null;
+    } else {
+      debugPrint('Request failed with status: ${response.statusCode}.');
+    }
+
+    return null;
   }
 }

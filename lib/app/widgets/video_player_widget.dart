@@ -4,13 +4,13 @@ import 'package:techfrenetic/app/core/utils.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
-  const VideoPlayerWidget(
-      {Key? key,
-      required this.url,
-      this.advertisement =
-          "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
-      this.autoplay = true})
-      : super(key: key);
+  const VideoPlayerWidget({
+    Key? key,
+    required this.url,
+    this.advertisement =
+        "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
+    this.autoplay = true,
+  }) : super(key: key);
 
   final String url;
   final String? advertisement;
@@ -28,17 +28,13 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
   bool _isAdvertisement = false;
   bool _canSkip = false;
   int elapsedSeconds = 0;
-  final minAddDuration = 3;
+  final minAddDuration = 2;
 
   @override
   void initState() {
     super.initState();
 
-    if (widget.advertisement != null) {
-      _initializeAd();
-    } else {
-      _initializeVideo();
-    }
+    widget.advertisement != null ? _initializeAd() : _initializeVideo();
 
     _animationController = AnimationController(
       vsync: this,
@@ -107,7 +103,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
       onDoubleTap: () => _togglePlay(),
       child: _controller.value.isInitialized
           ? Container(
-              height: 200,
+              height: 250,
               width: double.infinity,
               color: Colors.black,
               child: Stack(
@@ -203,7 +199,7 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
             top: 5,
             right: 5,
             child: ElevatedButton(
-              onPressed: _initializeVideo,
+              onPressed: _skipAd(),
               child: Text(
                 "Skip",
                 style:
@@ -215,6 +211,11 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
             ),
           )
         : const SizedBox.shrink();
+  }
+
+  _skipAd() {
+    _controller.pause();
+    _initializeVideo();
   }
 
   void _togglePlay() {
