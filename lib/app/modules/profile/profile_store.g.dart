@@ -25,22 +25,6 @@ mixin _$ProfileStore on _ProfileStoreBase, Store {
     });
   }
 
-  late final _$loggedUserAtom =
-      Atom(name: '_ProfileStoreBase.loggedUser', context: context);
-
-  @override
-  UserModel? get loggedUser {
-    _$loggedUserAtom.reportRead();
-    return super.loggedUser;
-  }
-
-  @override
-  set loggedUser(UserModel? value) {
-    _$loggedUserAtom.reportWrite(value, super.loggedUser, () {
-      super.loggedUser = value;
-    });
-  }
-
   late final _$followingAtom =
       Atom(name: '_ProfileStoreBase.following', context: context);
 
@@ -77,7 +61,6 @@ mixin _$ProfileStore on _ProfileStoreBase, Store {
   String toString() {
     return '''
 index: ${index},
-loggedUser: ${loggedUser},
 following: ${following},
 followers: ${followers}
     ''';

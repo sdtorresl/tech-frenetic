@@ -6,7 +6,7 @@ class MeetupsWallModel {
     required this.articles,
   });
 
-  final String results;
+  final int results;
   final List<MeetupsModel> articles;
 
   factory MeetupsWallModel.fromJson(String str) =>
@@ -16,14 +16,15 @@ class MeetupsWallModel {
 
   factory MeetupsWallModel.fromMap(Map<String, dynamic> json) {
     return MeetupsWallModel(
-      results: json["results"],
+      results:
+          json["results"] is String ? int.tryParse(json["results"]) ?? 0 : 0,
       articles: List<MeetupsModel>.from(
         json["articles"].map((x) => MeetupsModel.fromMap(x)),
       ),
     );
   }
   factory MeetupsWallModel.empty() => MeetupsWallModel(
-        results: "0",
+        results: 0,
         articles: [],
       );
   Map<String, dynamic> toMap() => {

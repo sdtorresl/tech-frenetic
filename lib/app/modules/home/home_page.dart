@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/core/user_preferences.dart';
-import 'package:techfrenetic/app/modules/articles/add_articles_page.dart';
+import 'package:techfrenetic/app/modules/articles/add_article_page.dart';
 import 'package:techfrenetic/app/modules/home/home_store.dart';
 import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/modules/videos/video_source.dart';
@@ -23,12 +23,14 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends ModularState<HomePage, HomeStore> {
+class _HomePageState extends State<HomePage> {
+  final HomeStore _homeStore = Modular.get();
   final ProfileStore _profileStore = Modular.get();
+  final UserProvider _userProvider = Modular.get();
 
   final List<String> _pages = [
     '/community',
-    '/skills',
+    '/courses',
     '/vendors',
     '/profile/profile'
   ];
@@ -36,7 +38,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
 
   @override
   void initState() {
-    store.selectedPage = 0;
+    _homeStore.selectedPage = 0;
     super.initState();
   }
 
@@ -44,33 +46,48 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
   Widget build(BuildContext context) {
     final _scaffoldKey = GlobalKey<ScaffoldState>();
 
-    return Scaffold(
-      key: _scaffoldKey,
-      appBar: AppBar(
-        title: Row(
-          children: [
-            const SizedBox(width: 20),
-            GestureDetector(
-              onTap: () {
-                store.selectedPage = 0;
-                Modular.to.navigate(_pages[store.selectedPage]);
-              },
-              child: Image.asset('assets/img/main-logo.png', fit: BoxFit.fill),
+    return FutureBuilder(
+      future: _userProvider.getLoggedUser(),
+      builder: (BuildContext context, AsyncSnapshot snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return Container(
+            color: Colors.white,
+            child: const Center(
+              child: CircularProgressIndicator(),
             ),
-          ],
-        ),
-        backgroundColor: Colors.white,
-        iconTheme: const IconThemeData(color: Colors.black),
-        actions: [
-          _searchMenu(),
-          _userMenu(),
-          _openDrawer(_scaffoldKey),
-        ],
-      ),
-      endDrawer: CustomDrawer(),
-      body: const RouterOutlet(),
-      floatingActionButton: _floatingActionButton(),
-      bottomNavigationBar: _bottomNavigationBar(),
+          );
+        }
+
+        return Scaffold(
+          key: _scaffoldKey,
+          appBar: AppBar(
+            title: Row(
+              children: [
+                const SizedBox(width: 20),
+                GestureDetector(
+                  onTap: () {
+                    _homeStore.selectedPage = 0;
+                    Modular.to.navigate(_pages[_homeStore.selectedPage]);
+                  },
+                  child:
+                      Image.asset('assets/img/main-logo.png', fit: BoxFit.fill),
+                ),
+              ],
+            ),
+            backgroundColor: Colors.white,
+            iconTheme: const IconThemeData(color: Colors.black),
+            actions: [
+              _searchMenu(),
+              _userMenu(),
+              _openDrawer(_scaffoldKey),
+            ],
+          ),
+          endDrawer: CustomDrawer(),
+          body: const RouterOutlet(),
+          floatingActionButton: _floatingActionButton(),
+          bottomNavigationBar: _bottomNavigationBar(),
+        );
+      },
     );
   }
 
@@ -100,9 +117,14 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         child: Observer(
           name: 'avatarObserver',
           builder: (context) {
-            return AvatarWidget(
-              userId: _profileStore.loggedUser?.uid.toString() ?? prefs.userId!,
-            );
+            debugPrint("Logged user: ${_homeStore.loggedUser.toString()}");
+            if (_homeStore.loggedUser != null) {
+              return AvatarWidget(
+                userId: _homeStore.loggedUser!.uid.toString(),
+              );
+            } else {
+              return const SizedBox.shrink();
+            }
           },
         ),
       ),
@@ -120,7 +142,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
         PopupMenuItem<int>(
           onTap: () {
             _profileStore.index = 0;
-            store.selectedPage = 3;
+            _homeStore.selectedPage = 3;
             Modular.to.navigate('/profile/profile');
           },
           value: 1,
@@ -171,17 +193,26 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
           showDialog(
             context: context,
             builder: (BuildContext context) {
-              return const AddArticlesPage();
+              return const AddArticlePage();
             },
           );
         },
         icon: const Icon(TechFreneticIcons.article),
       ),
+      ActionButton(
+        onPressed: () {
+          if (_key.currentState != null) {
+            _key.currentState!.toggle();
+          }
+          Modular.to.pushNamed('/chat');
+        },
+        icon: const Icon(Icons.chat_rounded),
+      ),
     ];
 
     return ExpandableFab(
       key: _key,
-      distance: 70.0,
+      distance: 110.0,
       children: actions,
     );
   }
@@ -190,10 +221,10 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
     return Observer(
       builder: (context) => TitledBottomNavigationBar(
         reverse: true,
-        currentIndex: store.selectedPage,
+        currentIndex: _homeStore.selectedPage,
         onTap: (index) {
-          store.selectedPage = index;
-          Modular.to.navigate(_pages[store.selectedPage]);
+          _homeStore.selectedPage = index;
+          Modular.to.navigate(_pages[_homeStore.selectedPage]);
         },
         curve: Curves.easeInBack,
         items: [
@@ -202,7 +233,7 @@ class _HomePageState extends ModularState<HomePage, HomeStore> {
               icon: const Icon(Icons.people_alt_outlined)),
           TitledNavigationBarItem(
               title: Text(AppLocalizations.of(context)!.skills),
-              icon: const Icon(Icons.home)),
+              icon: const Icon(Icons.school)),
           TitledNavigationBarItem(
               title: Text(AppLocalizations.of(context)!.vendors),
               icon: const Icon(Icons.card_travel)),

@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/common/alert_dialog.dart';
-import 'package:techfrenetic/app/modules/profile/profile_store.dart';
+import 'package:techfrenetic/app/modules/home/home_store.dart';
 import 'package:techfrenetic/app/widgets/appbar_widget.dart';
 import 'package:techfrenetic/app/widgets/select_avatar_widget.dart';
 
 class EditAvatarPage extends StatelessWidget {
   EditAvatarPage({Key? key}) : super(key: key);
-  final ProfileStore _profileStore = Modular.get();
+  final HomeStore _homeStore = Modular.get();
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class EditAvatarPage extends StatelessWidget {
                         fontSize: 12, color: Theme.of(context).primaryColor),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pop();
+                    Modular.to.pop();
                   },
                 ),
                 TextButton(
@@ -39,8 +39,8 @@ class EditAvatarPage extends StatelessWidget {
                         fontSize: 12, color: Theme.of(context).primaryColor),
                   ),
                   onPressed: () {
-                    Modular.to
-                        .pushNamedAndRemoveUntil("/profile/", (p0) => false);
+                    Modular.to.pushNamedAndRemoveUntil(
+                        "/profile/profile", (p0) => false);
                   },
                 ),
               ],
@@ -55,7 +55,7 @@ class EditAvatarPage extends StatelessWidget {
       body: SelectAvatarWidget(
         title: AppLocalizations.of(context)!.say_hi,
         subtitle: AppLocalizations.of(context)!.change_avatar,
-        defaultAvatar: _profileStore.loggedUser?.avatar ?? "avatar-01",
+        defaultAvatar: _homeStore.loggedUser?.avatar ?? "avatar-01",
       ),
     );
   }

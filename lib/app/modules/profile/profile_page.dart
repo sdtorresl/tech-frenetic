@@ -16,7 +16,7 @@ class ProfilePage extends StatefulWidget {
 
 class ProfilePageState extends State<ProfilePage>
     with TickerProviderStateMixin {
-  final ProfileStore store = Modular.get();
+  final ProfileStore _profileStore = Modular.get();
   final List<String> _routes = [
     '/profile/profile',
     '/profile/content',
@@ -64,7 +64,7 @@ class ProfilePageState extends State<ProfilePage>
             child: Observer(
               builder: (BuildContext context) {
                 return GNav(
-                  selectedIndex: store.index,
+                  selectedIndex: _profileStore.index,
                   tabBorderRadius: 50,
                   tabActiveBorder: Border.all(
                     color: Theme.of(context).chipTheme.backgroundColor!,
@@ -82,14 +82,14 @@ class ProfilePageState extends State<ProfilePage>
                       const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                   tabs: tabs,
                   onTabChange: (index) {
-                    store.index = index;
+                    _profileStore.index = index;
                     Modular.to.navigate(_routes[index]);
                   },
                 );
               },
             ),
           ),
-          Expanded(
+          const Expanded(
             child: RouterOutlet(),
           ),
         ],

@@ -3,8 +3,8 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/errors.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/modules/home/home_store.dart';
 import 'package:techfrenetic/app/modules/profile/my_profile/edit_summary/edit_summary_store.dart';
-import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -17,7 +17,7 @@ class EditSummaryPage extends StatefulWidget {
 }
 
 class _EditSummaryPageState extends State<EditSummaryPage> {
-  final ProfileStore _profileStore = Modular.get();
+  final HomeStore _homeStore = Modular.get();
   final SummaryStore _summaryStore = SummaryStore();
   final TextEditingController _controller = TextEditingController();
   final UserProvider _userProvider = UserProvider();
@@ -169,7 +169,7 @@ class _EditSummaryPageState extends State<EditSummaryPage> {
     UserModel? user = await _summaryStore.updateBiografy();
 
     if (user != null) {
-      _profileStore.loggedUser = user;
+      _homeStore.loggedUser = user;
     }
 
     setState(() {

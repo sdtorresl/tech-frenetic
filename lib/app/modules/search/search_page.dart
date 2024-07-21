@@ -14,7 +14,7 @@ import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/save_content_widget.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
 
-enum SEARCH_CATEGORIES { content, users, groups, vendors }
+enum SearchCategories { content, users, groups, vendors }
 
 class SearchPage extends StatefulWidget {
   final String title;
@@ -68,21 +68,21 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
 
   Widget _searchTabs() {
     List<Tab> tabs = List.generate(
-      SEARCH_CATEGORIES.values.length,
+      SearchCategories.values.length,
       (index) {
-        List<SEARCH_CATEGORIES> categories = SEARCH_CATEGORIES.values;
+        List<SearchCategories> categories = SearchCategories.values;
         String tabTitle;
         switch (categories[index]) {
-          case SEARCH_CATEGORIES.content:
+          case SearchCategories.content:
             tabTitle = AppLocalizations.of(context)!.search_tab_content;
             break;
-          case SEARCH_CATEGORIES.groups:
+          case SearchCategories.groups:
             tabTitle = AppLocalizations.of(context)!.search_tab_groups;
             break;
-          case SEARCH_CATEGORIES.users:
+          case SearchCategories.users:
             tabTitle = AppLocalizations.of(context)!.search_tab_users;
             break;
-          case SEARCH_CATEGORIES.vendors:
+          case SearchCategories.vendors:
             tabTitle = AppLocalizations.of(context)!.search_tab_vendors;
             break;
         }
@@ -203,18 +203,18 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
 
     Widget results;
 
-    List<SEARCH_CATEGORIES> categories = SEARCH_CATEGORIES.values;
+    List<SearchCategories> categories = SearchCategories.values;
     switch (categories[selected]) {
-      case SEARCH_CATEGORIES.content:
+      case SearchCategories.content:
         results = _articleResults();
         break;
-      case SEARCH_CATEGORIES.groups:
+      case SearchCategories.groups:
         results = _groupResults();
         break;
-      case SEARCH_CATEGORIES.users:
+      case SearchCategories.users:
         results = _userResults();
         break;
-      case SEARCH_CATEGORIES.vendors:
+      case SearchCategories.vendors:
         results = _vendorResults();
         break;
     }
@@ -232,7 +232,7 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
     );
   }
 
-  FutureBuilder<List<ArticlesModel>> _vendorResults() {
+  Widget _vendorResults() {
     return FutureBuilder(
       future: searchResults.getArticleByTitle(searchText),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
@@ -367,31 +367,35 @@ class SearchPageState extends ModularState<SearchPage, SearchController> {
   }
 
   Widget _userItem(UserModel user, BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 10),
-      child: Card(
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          child: Row(
-            children: [
-              AvatarWidget(userId: user.uid.toString()),
-              const SizedBox(
-                width: 20,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    user.name,
-                    style: Theme.of(context).textTheme.headline3,
-                  ),
-                  Text(
-                    user.userName,
-                    style: Theme.of(context).textTheme.bodyText2,
-                  )
-                ],
-              )
-            ],
+    return GestureDetector(
+      onTap: () => Modular.to
+          .pushNamed("/users_profiles", arguments: user.uid.toString()),
+      child: Container(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        child: Card(
+          child: Container(
+            padding: const EdgeInsets.all(20),
+            child: Row(
+              children: [
+                AvatarWidget(userId: user.uid.toString()),
+                const SizedBox(
+                  width: 20,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      user.name,
+                      style: Theme.of(context).textTheme.headline3,
+                    ),
+                    Text(
+                      user.userName,
+                      style: Theme.of(context).textTheme.bodyText2,
+                    )
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),

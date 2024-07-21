@@ -74,6 +74,17 @@ class Validators {
     },
   );
 
+  static final validatePhone = StreamTransformer<String, String>.fromHandlers(
+    handleData: (data, sink) {
+      RegExp regex = RegExp(r'^(?:[+0][1-9])?[0-9]{10,12}$');
+      if (regex.hasMatch(data)) {
+        sink.add(data);
+      } else {
+        sink.addError(ErrorType.phoneInvalid);
+      }
+    },
+  );
+
   static final validateProfession =
       StreamTransformer<String, String>.fromHandlers(
     handleData: (name, sink) {
@@ -174,6 +185,16 @@ class Validators {
         sink.addError(
           'Las contraseñas no coinciden',
         );
+      }
+    },
+  );
+
+  static final validateCode = StreamTransformer<String, String>.fromHandlers(
+    handleData: (code, sink) {
+      if (code.toString().length >= 6) {
+        sink.add(code);
+      } else {
+        sink.addError(ErrorType.fieldRequired);
       }
     },
   );

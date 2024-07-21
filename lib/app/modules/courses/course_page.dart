@@ -25,8 +25,10 @@ class CoursePage extends StatelessWidget {
             return CustomScrollView(
               slivers: [
                 SliverList(
-                  delegate: SliverChildListDelegate(
-                      [_courseHeader(course), LessonsList(classId: id)]),
+                  delegate: SliverChildListDelegate([
+                    _courseHeader(course),
+                    LessonsList(classId: id),
+                  ]),
                 ),
               ],
             );

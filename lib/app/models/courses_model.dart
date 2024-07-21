@@ -24,7 +24,7 @@ class CourseModel extends Model {
   String description;
   List<LessonModel>? lessons;
 
-  factory CourseModel.fromJson(Map<String, dynamic> json) {
+  factory CourseModel.fromMap(Map<String, dynamic> json) {
     final String baseUrl = GlobalConfiguration().getValue("api_url");
 
     return CourseModel(

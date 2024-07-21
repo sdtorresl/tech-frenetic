@@ -77,8 +77,9 @@ class _FeaturedEventWidgetState extends State<FeaturedEventWidget> {
                             .copyWith(color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor, // background
-                        onPrimary: Colors.white, // foreground
+                        foregroundColor: Colors.white,
+                        backgroundColor:
+                            Theme.of(context).primaryColor, // foreground
                         elevation: 0,
                         side: const BorderSide(width: 1.5, color: Colors.white),
                         shape: const RoundedRectangleBorder(
@@ -102,8 +103,6 @@ class _FeaturedEventWidgetState extends State<FeaturedEventWidget> {
                             .copyWith(color: Colors.white),
                       ),
                       style: ElevatedButton.styleFrom(
-                        primary: Theme.of(context).primaryColor, // background
-                        onPrimary: Colors.white, // foreground
                         elevation: 0,
                         side: const BorderSide(width: 1.5, color: Colors.white),
                         shape: const RoundedRectangleBorder(

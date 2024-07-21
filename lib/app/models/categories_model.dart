@@ -22,7 +22,7 @@ class CategoriesModel {
   factory CategoriesModel.fromMap(Map<String, dynamic> json) {
     final String _baseUrl = GlobalConfiguration().getValue("api_url");
     return CategoriesModel(
-      id: json["id"],
+      id: json["id"].toString(),
       category: json["category"],
       featured: json["featured"],
       link: json["link"] != null ? _baseUrl + json["link"] : "",
@@ -37,7 +37,8 @@ class CategoriesModel {
       );
 
   Map<String, dynamic> toMap() => {
-        "target_id": id,
+        "id": id,
+        "category": category,
       };
 
   @override
