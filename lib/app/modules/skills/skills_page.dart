@@ -3,7 +3,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:techfrenetic/app/providers/categories_provider.dart';
 import 'package:techfrenetic/app/widgets/featured_content_widget.dart';
-import 'package:techfrenetic/app/widgets/featured_events_widget.dart';
 import 'package:techfrenetic/app/widgets/highlight_container.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
 import 'package:techfrenetic/app/providers/articles_provider.dart';
@@ -13,6 +12,7 @@ import 'package:techfrenetic/app/widgets/section_header_widget.dart';
 
 import '../../models/categories_model.dart';
 import '../../widgets/category_button_widget.dart';
+import '../events/widgets/featured_events_widget.dart';
 
 class SkillsPage extends StatefulWidget {
   const SkillsPage({Key? key}) : super(key: key);

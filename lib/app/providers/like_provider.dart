@@ -2,16 +2,20 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:techfrenetic/app/models/like_model.dart';
+import 'package:techfrenetic/app/providers/notifications_provider.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
+
+import '../models/enums/notification_type_enum.dart';
 
 class LikeProvider extends TechFreneticProvider {
   String? dislikeId;
 
-  Future<LikeModel> like(
+  Future<LikeModel?> like(
     String id,
   ) async {
     LikeModel? likeModel;
-    LikeValueModel? value;
+
+    NotificationsProvider _notificationsProvider = NotificationsProvider();
 
     try {
       Uri _url = Uri.parse("$baseUrl/api/entity/vote/?_format=json");
@@ -51,9 +55,12 @@ class LikeProvider extends TechFreneticProvider {
 
       if (response.statusCode == 201) {
         likeModel = LikeModel.fromJson(response.body);
-        value = LikeValueModel.fromMap(likeModel.id);
-        dislikeId = value.value.toString();
-        debugPrint(value.toString());
+
+        _notificationsProvider.postNotification(
+          type: NotificationType.like,
+          targetId: likeModel.id,
+        );
+
         return likeModel;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');
@@ -61,7 +68,7 @@ class LikeProvider extends TechFreneticProvider {
     } catch (e) {
       debugPrint(e.toString());
     }
-    return LikeModel.empty();
+    return null;
   }
 
   Future<bool> dislike() async {

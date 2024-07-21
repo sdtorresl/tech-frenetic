@@ -18,6 +18,7 @@ class _MetupsPageState extends State<MetupsPage> {
   Widget build(BuildContext context) {
     MeetupsProvider meetupsProvideer = MeetupsProvider();
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: ListView(
         children: [
           Padding(

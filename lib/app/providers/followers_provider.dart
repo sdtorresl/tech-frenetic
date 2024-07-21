@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:techfrenetic/app/models/user_model.dart';
+import 'package:techfrenetic/app/providers/notifications_provider.dart';
 import 'package:techfrenetic/app/providers/tf_provider.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as json;
 
 import 'package:techfrenetic/app/providers/user_provider.dart';
 
+import '../models/enums/notification_type_enum.dart';
+
 class FollowersProvider extends TechFreneticProvider {
   final UserProvider _userProvider = UserProvider();
+  final NotificationsProvider _notificatonsProvider = NotificationsProvider();
 
   Future<List<UserModel>> getFollowing(int userId) async {
     List<UserModel> following = [];
@@ -94,6 +98,11 @@ class FollowersProvider extends TechFreneticProvider {
       );
 
       if (response.statusCode == 200) {
+        _notificatonsProvider.postNotification(
+          type: NotificationType.follow,
+          targetId: followedUserId,
+        );
+
         return true;
       } else {
         debugPrint('Request failed with status: ${response.statusCode}.');

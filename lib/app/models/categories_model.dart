@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'package:global_configuration/global_configuration.dart';
+import 'package:techfrenetic/app/core/utils/selectable_item.dart';
 
-class CategoriesModel {
+class CategoriesModel extends SelectableItem {
   CategoriesModel({
     required this.id,
     required this.category,
     required this.featured,
     required this.link,
-  });
+  }) : super(label: category, value: category);
 
   final String id;
   final String category;
@@ -42,5 +43,5 @@ class CategoriesModel {
       };
 
   @override
-  String toString() => toJson();
+  String toString() => category;
 }

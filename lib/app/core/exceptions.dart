@@ -17,3 +17,7 @@ class BadRequestException implements Exception {
 class InvalidCodeException implements Exception {
   String errMsg() => 'Invalid code';
 }
+
+class ServerException implements Exception {
+  String errMsg() => 'Server exception';
+}

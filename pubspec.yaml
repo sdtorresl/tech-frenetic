@@ -15,10 +15,10 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 1.11.6+32
+version: 1.12.1+34
 
 environment:
-  sdk: ">=2.17.0 <3.0.0"
+  sdk: ">=2.18.0 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -59,7 +59,7 @@ dependencies:
   mobx: ^2.0.6+1
   flutter_mobx: ^2.0.4
   card_swiper: ^2.0.1
-  video_player: ^2.3.0
+  video_player: ^2.7.0
   camera: ^0.9.4+16
   path_provider: ^2.0.9
   path: ^1.8.0
@@ -70,8 +70,8 @@ dependencies:
   flutter_modular: ^5.0.3
   webview_flutter: ^2.8.0
   intl_phone_number_input: ^0.7.1
-  firebase_auth: ^4.2.0
-  firebase_core: ^2.4.0
+  firebase_auth: ^4.13.0
+  firebase_core: ^2.22.0
   cometchat: ^3.0.5
 
 dev_dependencies:
@@ -99,8 +99,10 @@ flutter:
   assets:
     - assets/img/
     - assets/img/groups/
+    - assets/img/vendors/
     - assets/img/avatars/
     - assets/img/icons/
+    - assets/img/events/
     - assets/cfg/
 
   # An image asset can refer to one or more resolution-specific "variants", see

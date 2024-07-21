@@ -9,7 +9,6 @@ import 'package:intl/intl.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:techfrenetic/app/common/icons.dart';
 import 'package:techfrenetic/app/models/articles_model.dart';
-import 'package:techfrenetic/app/models/notification_model.dart';
 import 'package:techfrenetic/app/models/video_model.dart';
 import 'package:techfrenetic/app/modules/articles/articles_controller.dart';
 import 'package:techfrenetic/app/modules/articles/articles_image_page.dart';
@@ -23,6 +22,8 @@ import 'package:techfrenetic/app/widgets/avatar_widget.dart';
 import 'package:techfrenetic/app/widgets/comments_widget.dart';
 import 'package:techfrenetic/app/widgets/video_player_widget.dart';
 import 'package:timeago/timeago.dart' as timeago;
+
+import '../../models/enums/notification_type_enum.dart';
 
 class ArticlesPage extends StatefulWidget {
   final ArticlesModel article;
@@ -378,8 +379,7 @@ class ArticlesPageState extends State<ArticlesPage> {
           articleId = widget.article.id;
         });
         _notificationsProvider.postNotification(
-          contentId: widget.article.id,
-          type: NotificationType.commentNotification,
+          type: NotificationType.comment,
           targetId: commentId,
         );
       }

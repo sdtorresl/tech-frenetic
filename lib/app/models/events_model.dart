@@ -5,7 +5,8 @@ import 'package:global_configuration/global_configuration.dart';
 
 class EventsModel extends Model {
   EventsModel({
-    required this.nid,
+    required this.id,
+    required this.slug,
     required this.eventName,
     required this.image,
     required this.category,
@@ -13,10 +14,10 @@ class EventsModel extends Model {
     required this.location,
     required this.startDate,
     required this.endDate,
-    required this.filePath,
   });
 
-  int nid;
+  final id;
+  final String slug;
   String eventName;
   String? image;
   String category;
@@ -24,7 +25,6 @@ class EventsModel extends Model {
   String location;
   DateTime startDate;
   DateTime endDate;
-  String filePath;
 
   factory EventsModel.fromJson(String str) =>
       EventsModel.fromMap(json.decode(str));
@@ -37,7 +37,8 @@ class EventsModel extends Model {
     debugPrint(image);
 
     return EventsModel(
-      nid: int.tryParse(json["nid"]) ?? -1,
+      id: int.tryParse(json["nid"]) ?? -1,
+      slug: (json["field_path"] as String).split('/').last,
       eventName: json["field_name_evente"],
       image: _baseUrl + json["field_image"],
       category: json["field_principal_category"],
@@ -45,23 +46,11 @@ class EventsModel extends Model {
       location: json["field_location"],
       startDate: DateTime.parse(json["field_start_date"]),
       endDate: DateTime.parse(json["field_end_date"]),
-      filePath: json["field_path"],
     );
   }
-  factory EventsModel.empty() => EventsModel(
-        nid: -1,
-        eventName: "",
-        image: "",
-        category: "",
-        summary: "",
-        location: "",
-        startDate: DateTime.now(),
-        endDate: DateTime.now(),
-        filePath: "",
-      );
 
   Map<String, dynamic> toMap() => {
-        "nid": nid,
+        "nid": id,
         "field_name_evente": eventName,
         "field_image": image,
         "field_principal_category": category,
@@ -69,6 +58,5 @@ class EventsModel extends Model {
         "field_location": location,
         "field_start_date": startDate.toIso8601String(),
         "field_end_date": endDate.toIso8601String(),
-        "field_path": filePath,
       };
 }

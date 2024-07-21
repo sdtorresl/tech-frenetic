@@ -5,7 +5,7 @@ import 'package:techfrenetic/app/models/image_model.dart';
 import 'package:techfrenetic/app/providers/group_providers.dart';
 import 'package:techfrenetic/app/providers/notifications_provider.dart';
 import '../../common/validators.dart';
-import '../../models/notification_model.dart';
+import '../../models/enums/notification_type_enum.dart';
 
 class CreateGroupsController extends Disposable {
   final _nameController = BehaviorSubject<String>();
@@ -69,7 +69,7 @@ class CreateGroupsController extends Disposable {
 
     if (created) {
       _notificationsProvider.postNotification(
-        type: NotificationType.groupNotification,
+        type: NotificationType.group,
         targetId: 15, // TODO; Use group ID
       );
       return true;

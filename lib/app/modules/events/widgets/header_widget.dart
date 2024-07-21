@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/core/extensions/context_utils.dart';
 import 'package:techfrenetic/app/widgets/separator.dart';
+
+import '../../../widgets/separator_image_widget.dart';
 
 class HeaderWidget extends StatelessWidget {
   const HeaderWidget({super.key});
@@ -13,6 +16,7 @@ class HeaderWidget extends StatelessWidget {
     var image2Width = (screenWidth * 0.7 / 2).round();
     var image2Height = (screenWidth * 0.7 / 3).round();
     var image3Width = (screenWidth / 4).round();
+
     return Container(
       padding: const EdgeInsets.all(30),
       decoration: const BoxDecoration(
@@ -27,20 +31,20 @@ class HeaderWidget extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "Tech",
-            style: Theme.of(context).textTheme.headline1?.copyWith(
-                  color: Colors.white,
-                  fontSize: 28,
-                  fontWeight: FontWeight.w900,
-                ),
+            context.appLocalizations?.tech_events.split(" ")[0] ?? '',
+            style: context.textTheme.headline1?.copyWith(
+              color: Colors.white,
+              fontSize: 28,
+              fontWeight: FontWeight.w900,
+            ),
           ),
           Text(
-            "Events",
-            style: Theme.of(context).textTheme.headline1?.copyWith(
-                  color: Colors.white,
-                  fontSize: 36,
-                  fontWeight: FontWeight.w900,
-                ),
+            context.appLocalizations?.tech_events.split(" ")[1] ?? '',
+            style: context.textTheme.headline1?.copyWith(
+              color: Colors.white,
+              fontSize: 36,
+              fontWeight: FontWeight.w900,
+            ),
           ),
           const SizedBox(
             height: 25,
@@ -51,13 +55,24 @@ class HeaderWidget extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 15.0),
-            child: Text(
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Velit erat velit ornare aliquam, consect. Edit consectetum alit ediam venut!",
-              textAlign: TextAlign.center,
-              style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            child: Column(
+              children: [
+                Text(
+                  context.appLocalizations?.events_description ?? '',
+                  textAlign: TextAlign.center,
+                  style: context.textTheme.bodyLarge?.copyWith(
+                    color: Colors.white,
+                  ),
+                ),
+                Text(
+                  context.appLocalizations?.events_description_bold ?? '',
+                  textAlign: TextAlign.center,
+                  style: context.textTheme.bodyLarge?.copyWith(
                     color: Colors.white,
                     fontWeight: FontWeight.bold,
                   ),
+                ),
+              ],
             ),
           ),
           SizedBox(
@@ -68,8 +83,8 @@ class HeaderWidget extends StatelessWidget {
                   child: SizedBox(
                     width: image1Width.toDouble(),
                     height: image1Height.toDouble(),
-                    child: Image.network(
-                      "https://picsum.photos/$image1Width/$image1Height",
+                    child: SeparatorImageWidget(
+                      image: 'assets/img/events/startupgrind.png',
                     ),
                   ),
                 ),
@@ -79,8 +94,8 @@ class HeaderWidget extends StatelessWidget {
                   child: SizedBox(
                     width: image2Width.toDouble(),
                     height: image2Height.toDouble(),
-                    child: Image.network(
-                      "https://picsum.photos/$image2Width/$image2Height",
+                    child: SeparatorImageWidget(
+                      image: 'assets/img/events/crunch1.jpg',
                     ),
                   ),
                 ),
@@ -90,8 +105,8 @@ class HeaderWidget extends StatelessWidget {
                   child: SizedBox(
                     width: image3Width.toDouble(),
                     height: image3Width.toDouble(),
-                    child: Image.network(
-                      "https://picsum.photos/$image2Width/$image2Width",
+                    child: SeparatorImageWidget(
+                      image: 'assets/img/events/grind2.jpg',
                     ),
                   ),
                 ),
