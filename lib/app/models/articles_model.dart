@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:global_configuration/global_configuration.dart';
+import 'package:techfrenetic/app/core/extensions.dart';
 
 class WallModel {
   WallModel({
@@ -112,6 +113,9 @@ class ArticlesModel {
         ? (json["field_cloudflare_id"] as String).isNotEmpty
         : json["is_video"] == "True";
 
+    DateTime date =
+        (json["date"] as String).toDateTimeFromRegex() ?? DateTime.now();
+
     return ArticlesModel(
         id: json["id"],
         title: json["title"],
@@ -120,7 +124,7 @@ class ArticlesModel {
         role: json["role"],
         summary: json["summary"],
         type: type,
-        date: DateTime.parse(json["date"]),
+        date: date,
         url: json["url"],
         comments: int.tryParse(json["comments"]) ?? 0,
         views: json["views"],

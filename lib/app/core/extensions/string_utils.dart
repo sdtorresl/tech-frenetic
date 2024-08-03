@@ -1,5 +1,5 @@
-import 'package:html/parser.dart' as parser;
 import 'package:html/dom.dart';
+import 'package:html/parser.dart' as parser;
 
 extension StringUtils on String {
   String? getAttributeValue(String tag, String selector) {

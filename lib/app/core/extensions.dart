@@ -1,8 +1,9 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import 'package:libphonenumber_plugin/libphonenumber_plugin.dart' as p;
-import 'dart:ui' as ui;
 
 extension StringParsing on String {
   Future<PhoneNumber?> tryPhoneParse() async {
@@ -35,6 +36,19 @@ extension ParseUtils on String {
   DateTime toDateTime({DateFormat? format}) {
     format ??= DateFormat('dd/mm/yyyy');
     return format.parse(this);
+  }
+
+  DateTime? toDateTimeFromRegex() {
+    // Regular expression to extract the datetime in YYYY-MM-DD HH:MM:SS format
+    RegExp regex = RegExp(r'(\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2})');
+    Match? match = regex.firstMatch(this);
+
+    if (match != null) {
+      String dateTimeString = match.group(1)!;
+      return DateTime.parse(dateTimeString.replaceAll(' ', 'T'));
+    } else {
+      return null;
+    }
   }
 }
 
