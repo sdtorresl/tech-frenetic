@@ -1,24 +1,17 @@
-import 'package:techfrenetic/app/modules/articles/articles_store.dart';
-import 'package:techfrenetic/app/modules/chat/chat_module.dart';
-import 'package:techfrenetic/app/modules/courses/courses_module.dart';
-import 'package:techfrenetic/app/modules/events/events_module.dart';
-import 'package:techfrenetic/app/modules/profile/my_profile/followers/followers_page.dart';
-import 'package:techfrenetic/app/modules/vendors/vendors_module.dart';
-import 'package:techfrenetic/app/providers/followers_provider.dart';
-
-import '../courses/course_page.dart';
-import '../courses/lesson_page.dart';
-import 'home_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/core/auth_guard.dart';
 import 'package:techfrenetic/app/core/onboarding_guard.dart';
 import 'package:techfrenetic/app/modules/about_us/about_us_page.dart';
 import 'package:techfrenetic/app/modules/articles/articles_module.dart';
+import 'package:techfrenetic/app/modules/articles/articles_store.dart';
+import 'package:techfrenetic/app/modules/chat/chat_module.dart';
 import 'package:techfrenetic/app/modules/choose_avatar/choose_avatar_module.dart';
 import 'package:techfrenetic/app/modules/community/community_module.dart';
 import 'package:techfrenetic/app/modules/contact_us/contact_us_module.dart';
+import 'package:techfrenetic/app/modules/courses/courses_module.dart';
 import 'package:techfrenetic/app/modules/create_groups/create_groups_module.dart';
 import 'package:techfrenetic/app/modules/edit_avatar/edit_avatar_page.dart';
+import 'package:techfrenetic/app/modules/events/events_module.dart';
 import 'package:techfrenetic/app/modules/forgot_password/forgot_password_module.dart';
 import 'package:techfrenetic/app/modules/groups/groups_module.dart';
 import 'package:techfrenetic/app/modules/home/home_store.dart';
@@ -27,6 +20,7 @@ import 'package:techfrenetic/app/modules/meetups/meetups_module.dart';
 import 'package:techfrenetic/app/modules/not_implemented/not_implemented_page.dart';
 import 'package:techfrenetic/app/modules/notifications/notifications_module.dart';
 import 'package:techfrenetic/app/modules/privacy_policy/privacy_poicy_page.dart';
+import 'package:techfrenetic/app/modules/profile/my_profile/followers/followers_page.dart';
 import 'package:techfrenetic/app/modules/profile/profile_module.dart';
 import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/modules/search/search_module.dart';
@@ -35,9 +29,15 @@ import 'package:techfrenetic/app/modules/sign_up/sign_up_module.dart';
 import 'package:techfrenetic/app/modules/stories/stories_view_page.dart';
 import 'package:techfrenetic/app/modules/terms/terms_page.dart';
 import 'package:techfrenetic/app/modules/users_profiles/user_profile_module.dart';
+import 'package:techfrenetic/app/modules/vendors/vendors_module.dart';
 import 'package:techfrenetic/app/modules/videos/videos_module.dart';
 import 'package:techfrenetic/app/modules/welcome/welcome_page.dart';
+import 'package:techfrenetic/app/providers/followers_provider.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
+
+import '../courses/course_page.dart';
+import '../courses/lesson_page.dart';
+import 'home_page.dart';
 
 class HomeModule extends Module {
   @override
@@ -64,7 +64,7 @@ class HomeModule extends Module {
           ],
         ),
         ModuleRoute(
-          '/vendors',
+          '/vendors/',
           module: VendorsModule(),
           guards: [
             AuthGuard(),

@@ -2,9 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:global_configuration/global_configuration.dart';
-import 'package:techfrenetic/app/core/user_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:techfrenetic/app/core/user_preferences.dart';
 
 class TechFreneticProvider {
   final String baseUrl = GlobalConfiguration().getValue("api_url");
@@ -15,6 +15,8 @@ class TechFreneticProvider {
       GlobalConfiguration().getValue("cloudflare_email");
   final String cloudflareKey = GlobalConfiguration().getValue("cloudflare_key");
   final prefs = UserPreferences();
+
+  get entityBaseUrl => baseUrl.replaceFirst("https", "http");
 
   String authentication() {
     String username = 'kerlynhans@gmail.com';

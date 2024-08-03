@@ -7,8 +7,7 @@ class VideoPlayerWidget extends StatefulWidget {
   const VideoPlayerWidget({
     Key? key,
     required this.url,
-    this.advertisement =
-        "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4",
+    this.advertisement,
     this.autoplay = true,
   }) : super(key: key);
 
@@ -50,36 +49,45 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
   }
 
   void _initializeAd() {
-    _controller = VideoPlayerController.networkUrl(
-      Uri.parse(widget.advertisement!),
-    )..initialize().then((_) {
-        if (widget.autoplay) {
-          _controller.play();
-        }
-        _controller.addListener(_updateElapsedTime);
-        _controller.addListener(_checkAdvertisement);
-        setState(() {
-          _isAdvertisement = true;
-        });
-      }).catchError((error) {
-        debugPrint(error);
-      });
+    var uri = Uri.parse(widget.advertisement!);
+
+    _controller = VideoPlayerController.networkUrl(uri)
+      ..initialize().then(
+        (_) {
+          if (widget.autoplay) {
+            _controller.play();
+          }
+          _controller.addListener(_updateElapsedTime);
+          _controller.addListener(_checkAdvertisement);
+          setState(() {
+            _isAdvertisement = true;
+          });
+        },
+      ).catchError(
+        (error) {
+          debugPrint(error);
+        },
+      );
   }
 
   void _initializeVideo() {
     _controller = VideoPlayerController.networkUrl(
       Uri.parse(widget.url),
-    )..initialize().then((_) {
-        _controller.addListener(_updateElapsedTime);
-        if (widget.autoplay) {
-          _controller.play();
-        }
-        setState(() {
-          _isAdvertisement = false;
-        });
-      }).catchError((error) {
-        debugPrint(error);
-      });
+    )..initialize().then(
+        (_) {
+          _controller.addListener(_updateElapsedTime);
+          if (widget.autoplay) {
+            _controller.play();
+          }
+          setState(() {
+            _isAdvertisement = false;
+          });
+        },
+      ).catchError(
+        (error) {
+          debugPrint(error);
+        },
+      );
   }
 
   @override
@@ -102,10 +110,9 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget>
       },
       onDoubleTap: () => _togglePlay(),
       child: _controller.value.isInitialized
-          ? Container(
-              height: 250,
-              width: double.infinity,
-              color: Colors.black,
+          ? SizedBox(
+              height: widget.advertisement != null ? double.maxFinite : 250,
+              width: double.maxFinite,
               child: Stack(
                 children: [
                   Positioned(

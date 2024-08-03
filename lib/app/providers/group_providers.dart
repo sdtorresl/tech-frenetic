@@ -1,4 +1,5 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:techfrenetic/app/models/group_model.dart';
@@ -156,7 +157,7 @@ class GroupsProvider extends TechFreneticProvider {
         "_links": {
           "type": {
             "href":
-                "http://dev-techfrenetic.us.seedcloud.co/api/rest/type/group/${isPublic ? "group" : "group_private"}"
+                "$entityBaseUrl/api/rest/type/group/${isPublic ? "group" : "group_private"}"
           }
         },
         "type": [
@@ -242,7 +243,7 @@ class GroupsProvider extends TechFreneticProvider {
         "_links": {
           "type": {
             "href":
-                "http://dev-techfrenetic.us.seedcloud.co/api/rest/type/group_content/group-group_membership"
+                "$entityBaseUrl/api/rest/type/group_content/group-group_membership"
           }
         },
         "type": [
@@ -409,7 +410,7 @@ class GroupsProvider extends TechFreneticProvider {
         "_links": {
           "type": {
             "href":
-                "http://dev-techfrenetic.us.seedcloud.co/api/rest/type/group_content/group-group_node-article"
+                "$entityBaseUrl/api/rest/type/group_content/group-group_node-article"
           }
         },
         "type": [

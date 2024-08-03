@@ -17,7 +17,7 @@ class AdvertisementMapper {
     return AdvertisementModel(
       picture: picture,
       link: json["field_enlace_1"],
-      url: json["field_videos"],
+      url: (json["field_videos"] as String).replaceAll("http", "https"),
       isVideo: json["field_videos"] != null &&
           (json["field_videos"] as String).isNotEmpty,
     );

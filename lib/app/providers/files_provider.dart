@@ -1,5 +1,6 @@
 import 'dart:convert' as json;
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:techfrenetic/app/models/image_model.dart';
@@ -22,10 +23,7 @@ class FilesProvider extends TechFreneticProvider {
     try {
       String body = json.jsonEncode({
         "_links": {
-          "type": {
-            "href":
-                "http://dev-techfrenetic.us.seedcloud.co/api/rest/type/file/image"
-          }
+          "type": {"href": "$entityBaseUrl/api/rest/type/file/image"}
         },
         "uri": [
           {"value": "public://article"}

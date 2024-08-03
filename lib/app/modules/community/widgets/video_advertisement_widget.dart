@@ -1,5 +1,5 @@
-import 'package:techfrenetic/app/models/advertisement_model.dart';
 import 'package:flutter/material.dart';
+import 'package:techfrenetic/app/models/advertisement_model.dart';
 import 'package:techfrenetic/app/widgets/video_player_widget.dart';
 
 class VideoAdvertisementWidget extends StatefulWidget {
@@ -23,33 +23,33 @@ class _VideoAdvertisementWidgetState extends State<VideoAdvertisementWidget> {
   Widget build(BuildContext context) {
     return isVisible
         ? Positioned(
-            child: Container(
-              margin: const EdgeInsets.all(25),
-              padding: const EdgeInsets.all(10),
-              color: Colors.black,
-              child: Stack(
-                children: [
-                  const Center(
+            child: Stack(
+              children: [
+                Container(
+                  margin: const EdgeInsets.all(25),
+                  padding: const EdgeInsets.all(10),
+                  color: Colors.black,
+                  child: Center(
                     child: VideoPlayerWidget(
-                      url:
-                          "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4", //widget._video.url!,
+                      url: widget._video.url!,
+                      advertisement: widget._video.url!,
                     ),
                   ),
-                  Positioned(
-                    child: IconButton(
-                      icon: const Icon(
-                        Icons.close,
-                        color: Colors.white,
-                      ),
-                      onPressed: () => {
-                        setState(() => isVisible = false),
-                      },
+                ),
+                Positioned(
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.close,
+                      color: Colors.white,
                     ),
-                    top: 20,
-                    right: 20,
-                  )
-                ],
-              ),
+                    onPressed: () => {
+                      setState(() => isVisible = false),
+                    },
+                  ),
+                  top: 20,
+                  right: 20,
+                )
+              ],
             ),
             top: 0,
             bottom: 0,

@@ -1,5 +1,7 @@
 import 'dart:convert';
+
 import 'package:global_configuration/global_configuration.dart';
+import 'package:techfrenetic/app/core/extensions.dart';
 import 'package:techfrenetic/app/models/model.dart';
 
 class UserModel extends Model {
@@ -71,11 +73,11 @@ class UserModel extends Model {
   factory UserModel.fromProfileMap(Map<String, dynamic> json) => UserModel(
         avatar: json["avatar"],
         biography: json["full_bio"],
-        birthdate: DateTime.parse(json["date"]),
+        birthdate: (json["date"] as String).toDateTimeFromRegex(),
         cellphone: json["cellphone"].toString(),
         certifications: [],
         country: json["field_country"],
-        created: DateTime.parse(json["date"]),
+        created: (json["date"] as String).toDateTimeFromRegex(),
         location: json["location"],
         mail: json["custom_user_email"],
         name: json["display_name"],

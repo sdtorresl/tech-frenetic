@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:techfrenetic/app/common/icons.dart';
@@ -9,10 +10,9 @@ import 'package:techfrenetic/app/modules/profile/profile_store.dart';
 import 'package:techfrenetic/app/modules/videos/video_source.dart';
 import 'package:techfrenetic/app/providers/user_provider.dart';
 import 'package:techfrenetic/app/widgets/avatar_widget.dart';
+import 'package:techfrenetic/app/widgets/drawer_widget.dart';
 import 'package:techfrenetic/app/widgets/expandable_fab.dart';
 import 'package:titled_navigation_bar/titled_navigation_bar.dart';
-import 'package:techfrenetic/app/widgets/drawer_widget.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({
@@ -29,9 +29,9 @@ class _HomePageState extends State<HomePage> {
   final UserProvider _userProvider = Modular.get();
 
   final List<String> _pages = [
-    '/community',
-    '/courses',
-    '/vendors',
+    '/community/',
+    '/courses/',
+    '/vendors/',
     '/profile/profile'
   ];
   final prefs = UserPreferences();
